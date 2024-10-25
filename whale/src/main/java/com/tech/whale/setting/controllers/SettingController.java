@@ -44,21 +44,10 @@ public class SettingController {
 	PageAccessDto pageAccessDto;
 	LikeListDto likeListDto;
 	CommentListDto commentListDto;
-	
-    // 매 페이지 요청마다 세션에 user_id 값을 저장하는 메서드
-    private void ensureUserIdInSession(HttpSession session) {
-        if (session.getAttribute("user_id") == null) {
-            // 세션에 user_id가 없을 경우 설정. 부모 창에 메세지를 보내 부모 창을 로그인 화면으로 리다이렉트 하는 방식 등.
-//        	session.setAttribute("user_id", "김민지");
-        }
-    }
 
     @RequestMapping("/settingHome")
     public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
-        System.out.println("settingHome");
-
-        // 세션에 user_id 저장
-        ensureUserIdInSession(session);
+        System.out.println("settingHome() ctr");
 
         return "setting/settingHome";
     }
@@ -77,7 +66,7 @@ public class SettingController {
         userinfoDto = settingDao.getProfile(session_user_id);
         
         model.addAttribute("profile", userinfoDto);
-//        System.out.println(userinfoDto.getUser_image_url()); // debug
+        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
 
         return "setting/profileEdit";
     }
@@ -87,21 +76,21 @@ public class SettingController {
                                 @RequestParam("user_password") String password, 
                                 @RequestParam("user_email") String email, 
                                 HttpSession session) {
+    	System.out.println("updateProfile() ctr");
     	
     	String session_user_id = (String) session.getAttribute("user_id");
     	
-    	if(session.getAttribute("user_profile_image") == null) { // session에 이미지가 저장 안 되어 있으면 
-    		session.setAttribute("user_profile_image", userinfoDto.getUser_image_url());
+    	if(session.getAttribute("user_profile_image") == null) { // 세션에 이미지가 저장 안 되어 있으면 
+    		session.setAttribute("user_profile_image", userinfoDto.getUser_image_url()); // DB에서 불러온 이미지 url을 세션에 user_profile_image라는 이름으로 저장
     		System.out.println("session에 이미지 저장 안 되어 있어서 새로 저장: " + userinfoDto.getUser_image_url()); // debug
     	}
     	
     	// 세션에 저장된 새로운 프로필 이미지 가져오기
-    	System.out.println("update image name: " + session.getAttribute("user_profile_image")); // debug
-        String newProfileImage = (String) session.getAttribute("user_profile_image");
+    	String newProfileImage = (String) session.getAttribute("user_profile_image");
+    	System.out.println("session_storaged_img_url: " + session.getAttribute("user_profile_image")); // debug
 
-        // DB에 새로운 프로필 정보 저장
+        // DB에 변경한 프로필 정보 저장
         settingDao.updateProfile(nickname, password, email, newProfileImage, session_user_id);
-        
 
         return "redirect:/profileEdit";
     }
@@ -109,6 +98,8 @@ public class SettingController {
     @PostMapping("/uploadProfileImage")
     @ResponseBody
     public Map<String, String> uploadProfileImage(MultipartHttpServletRequest mtfRequest, HttpSession session) {
+    	System.out.println("uploadProfileImage() ctr");
+    	
         Map<String, String> response = new HashMap<>();
         
         String session_user_id = (String) session.getAttribute("user_id");
@@ -129,9 +120,9 @@ public class SettingController {
                 File saveFile = new File(savePath);
                 mf.transferTo(saveFile);
 
-                // 세션에 이미지 파일명 저장
+                // 세션에 변경한 이미지 파일명 저장
                 session.setAttribute("user_profile_image", newFileName);
-                System.out.println(session.getAttribute("user_profile_image")); // debug
+                System.out.println("session_set_img_url" + session.getAttribute("user_profile_image")); // debug
                 response.put("fileName", newFileName);
                 response.put("status", "success");
 
@@ -223,8 +214,11 @@ public class SettingController {
         
         // debug
         for (LikeListDto likeListDto : currentPostLikeList) {
-        	System.out.println("postlike: " + likeListDto.getPost_title());
-			System.out.println("postlike: " + likeListDto.getPost_text());
+        	System.out.println("post_text: " + likeListDto.getPost_title());
+			System.out.println("post_title: " + likeListDto.getPost_text());
+			System.out.println("post_tag_text: " + likeListDto.getPost_text());
+			System.out.println("feed_id: " + likeListDto.getFeed_id());
+			System.out.println("feed_img_name: " + likeListDto.getFeed_img_name());
 		}
         
         model.addAttribute("currentPostLikeList", currentPostLikeList);
@@ -246,9 +240,13 @@ public class SettingController {
         
         // debug
         for (CommentListDto commentListDto : currentPostCommentList) {
-			System.out.println("postId: " + commentListDto.getPost_id());
-			System.out.println("postTitle: " + commentListDto.getPost_title());
-			System.out.println("postComment: " + commentListDto.getPost_comments_text());
+			System.out.println("post_id: " + commentListDto.getPost_id());
+			System.out.println("post_title: " + commentListDto.getPost_title());
+			System.out.println("post_comment: " + commentListDto.getPost_comments_text());
+			System.out.println("post_tag: " + commentListDto.getPost_tag_text());
+			System.out.println("feed_id: " + commentListDto.getFeed_id());
+			System.out.println("feed_img_name: " + commentListDto.getFeed_img_name());
+			System.out.println("feed_comments_text: " + commentListDto.getFeed_comments_text());
 		}
         
         model.addAttribute("currentPostCommentList", currentPostCommentList);
@@ -326,6 +324,7 @@ public class SettingController {
             @RequestParam("comment_notification_onoff") Optional<Integer> commentNotificationOnOff,
             @RequestParam("message_notification_onoff") Optional<Integer> messageNotificationOnOff,
             HttpSession session) {
+    	System.out.println("updateIndividualNotification() ctr");
     	
     	String session_user_id = (String) session.getAttribute("user_id");
     	
@@ -352,8 +351,15 @@ public class SettingController {
 //      DB의 block_user_id에 데이터가 콤마 형식으로 들어올 경우 DB 상에서 콤마를 구분자로 이름을 추출하고, 그 이름의 아이디, 이미지 사진을 가져올 수 있도록 수정해야 함
         
 //      차단된 회원의 아이디, 닉네임, 프로필 사진을 가져와서 blocklist에 저장하기
-        blockDto = settingDao.getBlockList(session_user_id);
-        model.addAttribute("blockList", blockDto);
+        List<BlockDto> bloclist = settingDao.getBlockList(session_user_id);
+        model.addAttribute("blockList", bloclist);
+        
+        // debug
+        for (BlockDto blockDto : bloclist) {
+			System.out.println(blockDto.getUser_id());
+			System.out.println(blockDto.getUser_image_url());
+			System.out.println(blockDto.getUser_nickname());
+		}
         
         return "setting/blockList";
     }
@@ -395,7 +401,7 @@ public class SettingController {
     @ResponseBody
     public String updateDarkmode(@RequestParam("darkmode_setting_onoff") int darkmodeOn, HttpSession session) {
     	System.out.println("updateDarkmode() ctr");
-    	System.out.println("darkmode_setting_onoff: " + darkmodeOn);
+    	System.out.println("darkmode_setting_onoff: " + darkmodeOn); // debug
     	
     	String session_user_id = (String) session.getAttribute("user_id");
     	System.out.println("session_user_id: " + session_user_id); // debug
@@ -444,6 +450,8 @@ public class SettingController {
     @PostMapping("/updateStartpageSetting")
     @ResponseBody
     public ResponseEntity<Map<String, String>> updateStartpageSetting(@RequestBody Map<String, String> request, @SessionAttribute("user_id") String userId) {
+    	System.out.println("updateStartpageSetting() ctr");
+    	
     	String left = request.get("left");
     	String right = request.get("right");
     	
@@ -492,6 +500,7 @@ public class SettingController {
     public ResponseEntity<Map<String, String>> updatePageAccessSetting(@RequestParam("settingType") String settingType,
             @RequestParam("selectedValue") String selectedValue,
             @SessionAttribute("user_id") String userId) {
+    	System.out.println("updatePageAccessSetting() ctr");
     	
     	try {
     		settingDao.updatePageAccessSetting(userId, settingType, selectedValue);

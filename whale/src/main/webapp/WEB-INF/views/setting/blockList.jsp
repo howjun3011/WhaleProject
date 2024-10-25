@@ -68,20 +68,20 @@
 			</c:when>
 			<c:otherwise>
 				<!-- 차단된 사용자 목록 출력 -->
-			    <%-- <c:forEach var="block" items="${blockList}"> --%>
+			    <c:forEach var="block" items="${blockList}">
 			        <div class="setting-item">
 			        	<div class="profile-info">
 				        	<!-- 프로필 이미지 누르면 그 사람의 프로필 페이지로 이동하도록 설정 -->
-				        	<a href="#####"><img src="static/images/setting/${blockList.user_image_url}" alt="프로필 이미지" /> </a>
+				        	<a href="/whale/profileHome?u=${block.user_id}"><img src="static/images/setting/${block.user_image_url}" alt="프로필 이미지" /> </a>
 				        	<div class="user-details">
-				        		<span id="user-nickname">${blockList.user_nickname }</span>
-				        		<span id="user-id">${blockList.user_id}</span>
+				        		<span id="user-nickname">${block.user_nickname }</span>
+				        		<span id="user-id">${block.user_id}</span>
 				        	</div>
 				        </div>
 				        <!-- 클릭이벤트로 보낼 때, 클릭된 사용자의 user_id(차단된 사용자)를 같이 전달 -->
-				        <button class="unblock-button" onclick="blockcancel('${blockList.user_id}');">차단 해제</button>
+				        <button class="unblock-button" onclick="blockcancel('${block.user_id}');">차단 해제</button>
 				    </div>
-			   <%--  </c:forEach> --%>
+			   </c:forEach>
 			</c:otherwise>
 		</c:choose>
 	</div>

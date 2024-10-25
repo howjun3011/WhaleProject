@@ -14,8 +14,14 @@
 		SELECT USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, USER_PASSWORD FROM USER_INFO WHERE USER_ID = #{session_user_id}
 	</select>
 	<update id="updateProfile">
-		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_PASSWORD = #{password}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
+		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_PASSWORD = #{encodedPassword}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
 	</update>
+	<update id="updateProfileNP">
+		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
+	</update>
+	<select id="getCurrentPassword" resultType="String">
+		SELECT USER_PASSWORD FROM USER_INFO WHERE USER_ID = #{session_user_id}
+	</select>
 	<update id="updateAccountPrivacy">
 		UPDATE USER_SETTING SET ACCOUNT_PRIVACY = #{accountPrivacy} WHERE USER_ID = #{session_user_id}
 	</update>

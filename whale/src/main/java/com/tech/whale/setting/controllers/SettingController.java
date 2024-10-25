@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.setting.dto.BlockDto;
@@ -35,6 +37,8 @@ import com.tech.whale.setting.dto.UserSettingDto;
 
 @Controller
 public class SettingController {
+	
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	UserInfoDto userinfoDto;
 	StartpageDto startpageDto;
@@ -89,9 +93,20 @@ public class SettingController {
     	String newProfileImage = (String) session.getAttribute("user_profile_image");
     	System.out.println("session_storaged_img_url: " + session.getAttribute("user_profile_image")); // debug
 
-        // DB에 변경한 프로필 정보 저장
-        settingDao.updateProfile(nickname, password, email, newProfileImage, session_user_id);
+    	// password 필드가 비어있으면 DB에 비밀번호 업데이트 X, 비밀번호를 변경해서 필드에 값이 있으면 필드에 입력한 값을 암호화 처리해서 DB 업데이트
+    	if(password.isEmpty()) {
+    		// DB에 변경한 프로필 정보 업데이트(PW 제외)
+            settingDao.updateProfileNP(nickname, email, newProfileImage, session_user_id);
+    	} else {
+    		// 비밀번호 암호화
+    		String encodedPassword = passwordEncoder.encode(password);
+    		System.out.println("encodedpassword: " + encodedPassword); // debug
+    		// DB에 변경한 프로필 정보 업데이트
+    		settingDao.updateProfile(nickname, encodedPassword, email, newProfileImage, session_user_id);
+    	}
 
+    	System.out.println("DB 업데이트 완료");
+    	
         return "redirect:/profileEdit";
     }
 

@@ -101,12 +101,21 @@ a:visited, a:hover, a:focus, a:active {
 	color: black;
 	text-decoration: none;
 }
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 </head>
 <body>
 <div class="setting-body">
     <div class="setting-container">
-        <div class="setting-header">좋아요</div>
+        <div class="setting-header">
+        <a href="activity" id="back"><img src="static/images/setting/back.png" alt="back"></a>
+        좋아요
+        </div>
         	<div class="scroll-content">
 		        <form id="filterForm" action="/whale/likeList" method="get">
 		            <!-- 숨겨진 필드에 드롭다운 선택 값을 저장 -->

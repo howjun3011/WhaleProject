@@ -43,6 +43,24 @@ label::after {
 	justify-content: space-between; 
 	padding: 10px;
 }
+a{
+	text-decoration: none;
+	color: black;
+}
+a:visited, a:hover, a:focus, a:active {
+	color: black;
+	text-decoration: none;
+}
+.setting-item{
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 <link rel="stylesheet" href="static/css/setting/settingStyle.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -51,13 +69,20 @@ label::after {
 <body>
 <div class="setting-body">
 	<div class="setting-container">
-		<div class="setting-header">접근성</div>
-		<div class="setting-item">
-			<a href="startpageSetting">시작페이지 설정</a>
+		<div class="setting-header">
+		<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
+		접근성
 		</div>
-		<div class="setting-item">
-			<a href="pageAccessSetting">페이지 접근 변경</a>
-		</div>
+		<a href="startpageSetting">
+			<div class="setting-item">
+				시작페이지 설정
+			</div>
+		</a>
+		<a href="pageAccessSetting">
+			<div class="setting-item">
+				페이지 접근 변경
+			</div>
+		</a>
 		<div class="setting-item">
 			다크모드
 			<input type="checkbox" id="toggle-slide" class="toggle-slide" />

@@ -57,19 +57,7 @@
 	overflow: hidden; /* 줄 바꿈 방지 */
 }
 
-/* ======== 중간 채팅창 ========== */
-
-.middle {
-	display: flex;
-	overflow-y: scroll;
-	position:absolute;
-	width:100%;
-	top:80px;
-	height: 63%;
-	background-color: white;
-}
-
-.profile-img {
+.room-img {
 	width: 50px;
 	height: 50px;
 	border-radius: 40%;
@@ -77,40 +65,123 @@
 	background-color: #f2f2f2;
 }
 
-.msg-name {
-	color: #424242;
-	font-size: 13px;
+/* ======== 중간 채팅창 ========== */
+.middle {
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
 	position: absolute;
-	top: -20px;
-	left: 5px;
+	width: 100%;
+	top: 80px;
+	height: 63%;
+	background-color: white;
+	top: 80px;
+}
+
+.other-msg {
+	display: flex;
+	flex-direction: column;
+	width: auto;
+	height:auto;
+	position: relative;
+	left: 10px;
+	margin: 20px;
+}
+
+
+.my-msg {
+	display: flex;
+	flex-direction: column;
+	width: auto;
+	height:auto;
+	position: relative;
+	right: 10px;
+	margin: 20px;
+}
+
+.context { /*세로 배치 요소*/
+	display: flex;
+	position: relative;
+	flex-direction: row;
+}
+
+.my-msg .context{ /*왼쪽정렬*/
+	justify-content: flex-end;
+}
+
+.msg-img {
+	width: 50px;
+	height: 50px;
+	border-radius: 40%;
+	float: left;
+	background-color: #f2f2f2;
+}
+
+.msg-time {
+	margin-bottom:15px;
+	margin-top: auto; /* 요소를 바닥에 붙이기 */
+	width:80px;
+	position:relative;
+	font-size: 1rem;
+	color: #D9D9D9;
+}
+
+.msg-name {
+	font-size: 1.5rem;
+}
+
+.msg-context {
+	display: inline-block;
+	padding: 10px;
+	margin: 10px;
+	border-radius: 10px;
+	max-width: 60%;
+	word-wrap: break-word; /* 단어가 넘칠 경우 줄 바꿈 */
+    overflow-wrap: break-word; /* 같은 기능을 가진 속성 */
+    white-space: normal; /* 줄 바꿈 허용 */
+	height: auto;
+}
+
+.msg-context {}
+
+
+.other-msg .msg-context {
+	background-color: #f2f2f2;
+}
+
+.my-msg .msg-context {
+	background-color: #99ffe2;
 }
 
 /* 스크롤바 설정*/
-.middle::-webkit-scrollbar{
-    background-color:transparent;
-    width:10px;
+.middle::-webkit-scrollbar {
+	background-color: transparent;
+	width: 10px;
 }
 
 /* 스크롤바 막대 설정*/
-.middle::-webkit-scrollbar-thumb{
-    background-color:#babac0;
-    border-radius:16px;
+.middle::-webkit-scrollbar-thumb {
+	background-color: #babac0;
+	border-radius: 16px;
 }
 
-
-.middle::-webkit-scrollbar-thumb:hover{
-    background-color:#a0a0a5;
+.middle::-webkit-scrollbar-thumb:hover {
+	background-color: #a0a0a5;
 }
 
 /* 스크롤바 뒷 배경 설정*/
-.middle::-webkit-scrollbar-track{
-  border-radius: 10px;
-  background-color:transparent;
+.middle::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: transparent;
 }
-.middle::-webkit-scrollbar-track:hover{
-  background-color:transparent;
+
+.middle::-webkit-scrollbar-track:hover {
+	background-color: transparent;
 }
-.middle::-webkit-scrollbar-button {display:none;}
+
+.middle::-webkit-scrollbar-button {
+	display: none;
+}
 /* ======== 하단 바 ========== */
 .bottom {
 	position: absolute;
@@ -204,5 +275,5 @@
 }
 
 .textarea::-webkit-scrollbar {
-    display: none; /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+	display: none; /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
 }

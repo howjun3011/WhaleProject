@@ -22,13 +22,14 @@ public class RegisterController {
     public HashMap<String, Object> registerUser(@RequestBody HashMap<String, Object> map, HttpSession session) {
         HashMap<String, Object> response = new HashMap<>();
 
+        //입력받은 값
         String username = (String) map.get("username");
         String password = (String) map.get("password");
         String email = (String) map.get("email");
         String nickname = (String) map.get("nickname");
 
         // User 객체를 통해 DB에 저장 사용자 등록 처리
-        boolean isRegistered = userService.registerUser(username, password, email, nickname);
+        boolean isRegistered = userService.registerUser(username, password, email, nickname, (String) session.getAttribute("spotifyId"));
 
         if (isRegistered) {
             response.put("success", true);

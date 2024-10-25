@@ -25,8 +25,8 @@
                 <th>아이디</th>
                 <th>이메일</th>
                 <th>게시글</th>
+                <th>피드</th>
                 <th>댓글</th>
-                <th>가입일</th>
                 <th>계정상태</th>
                 <th></th>
             </tr>
@@ -42,12 +42,12 @@
 				<tr>
 					<td>${dto.user_id }</td>
 					<td>${dto.user_email }</td>
-					<td>빈값</td>
-					<td>빈값</td>
-					<td>2055.12.32</td>
-					<td>빈값</td>
+					<td>${dto.post_count }</td>
+					<td>${dto.feed_count }</td>
+					<td>${dto.comments_count }</td>
+					<td>ㅁㄴㅇ</td>
 					<td>
-						<button onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick = "location.href = '#'" >수정</button>
+						<button onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }'" >수정</button>
 					</td>
 				</tr>
 			</c:forEach>

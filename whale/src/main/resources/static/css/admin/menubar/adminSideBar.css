@@ -9,14 +9,20 @@ body{
 }
 
 .adminSideBar {
-	
+	position: fixed;
+	overflow-x: auto;
+    overflow-y: hidden;
+    height: 100vh;
+    
+    
     width: 200px;
-    height: auto;
+    /* height: auto; */
     background-color: #293846;
     color: white;
     left: 0;
     top: 0;
     z-index: 100;
+    
 }
 .adminSideBar ul {
     list-style: none;

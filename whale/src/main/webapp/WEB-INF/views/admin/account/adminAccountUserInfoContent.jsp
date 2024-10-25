@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div>
-	<div>
-		<c:if test="${not empty AccountUserInfo.user_image_url }">
-			<img src="/whale/static/images/setting/${AccountUserInfo.user_image_url }" alt="프사" />
-		</c:if>
-		<c:if test="${empty AccountUserInfo.user_image_url }">
-			null
-		</c:if>
-	</div>
-	<table>
+<div class="content" name="content" id="content">
+	
+	<table class="userInfo">
 		<tr>
+			<td rowspan="7" class="proImg" style="">
+				<div>
+					<c:if test="${not empty AccountUserInfo.user_image_url }">
+						<img src="/whale/static/images/setting/${AccountUserInfo.user_image_url }" alt="프사" />
+					</c:if>
+					<c:if test="${empty AccountUserInfo.user_image_url }">
+						null
+					</c:if>
+				</div>
+			</td>
 			<td>아이디</td>
 			<td>${AccountUserInfo.user_id }</td>
 		</tr>

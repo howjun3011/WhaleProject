@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.service.AdminAccountUserListService;
+import com.tech.whale.admin.service.AdminAccountUserModifyService;
+import com.tech.whale.admin.service.AdminUserImgDeleteService;
 import com.tech.whale.admin.service.AdminUserInfoCommentService;
 import com.tech.whale.admin.service.AdminUserInfoFeedService;
 import com.tech.whale.admin.service.AdminUserInfoPostService;
+import com.tech.whale.admin.service.AdminUserNicknameModifyService;
 import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.vo.SearchVO;
 
@@ -50,12 +53,16 @@ public class AdminController {
 	private AdminUserInfoFeedService adminUserInfoFeedService;
 	@Autowired
 	private AdminUserInfoCommentService adminUserInfoCommentService;
-	
+	@Autowired
+	private AdminAccountUserModifyService adminAccountUserModifyService;
+	@Autowired
+	private AdminUserNicknameModifyService adminUserNicknameModifyService;
+	@Autowired
+	private AdminUserImgDeleteService adminUserImgDeleteService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
 	
-	private String userId;
 	
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
@@ -72,7 +79,7 @@ public class AdminController {
 			HttpSession session,
 			Model model) {
 		
-		userId = (String) session.getAttribute("user_id");
+		String userId = (String) session.getAttribute("user_id");
 		
 		model.addAttribute("request", request);
 		model.addAttribute("pname", "HOME");
@@ -198,6 +205,53 @@ public class AdminController {
 		
 		return "/admin/view/adminOutlineForm";
 	}
+	
+	@RequestMapping("/adminAccountUserModify")
+	public String adminAccountUserModify(
+			HttpServletRequest request,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "유저정보수정");
+		model.addAttribute("contentBlockJsp",
+				"../account/adminAccountUserModifyContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/account/adminAccountUserModifyContent.css");
+		accountSubBar(model);
+		
+		adminAccountUserModifyService.execute(model);
+		adminAccountUserInfoService.execute(model);
+		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminUserNicknameModify")
+	public String adminUserNicknameModify(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String userId = request.getParameter("userId");
+		
+		adminUserNicknameModifyService.execute(model);
+		
+				
+		return "redirect:adminAccountUserModify?userId="+userId;
+	}
+	
+	@RequestMapping("/adminUserImgDelete")
+	public String adminUserImgDelete(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String userId = request.getParameter("userId");
+		
+		adminUserImgDeleteService.execute(model);
+		
+		
+		return "redirect:adminAccountUserModify?userId="+userId;
+	}
+	
+	
 	
 	
 }

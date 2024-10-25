@@ -8,6 +8,12 @@
     height: 100%;
     min-width: 800px;
 }
+
+textarea {
+	resize: none;
+}
+
+
 .content {
 	display:flex;
 	flex-direction: column;
@@ -23,7 +29,7 @@
 
 table {
 	margin: 20px 0;
-    width: 1000px;
+    width: 800px;
     border-collapse: collapse;
     
 }
@@ -36,8 +42,6 @@ th, td {
 }
 .userInfo {
 	table-layout: fixed;
-	margin: 20px 0;
-    width: 800px;
     border-collapse: collapse;
     border-top: 1px solid #999;
 }

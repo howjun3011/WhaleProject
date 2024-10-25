@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("message")
 public class MessageController {
-//	@RequestMapping("/home")
+	@RequestMapping("/home")
 	public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println(">>[JAVA] MessageController : settingHome");
 		String[] test = new String[] { "A", "B","C","D","E","F","G"};
@@ -44,8 +44,8 @@ public class MessageController {
 			return "message/userTable";
 		}
 	}
-	@RequestMapping("/home")
-//	@RequestMapping("/messageRoom")
+	
+	@RequestMapping("/messageRoom")
 	public String messageRoom(HttpServletRequest request, HttpSession session, Model model) {
 		
 //		String tabId = request.getParameter("tabId");

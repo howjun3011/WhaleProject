@@ -39,13 +39,13 @@ public class UserService {
     }
 
     // 사용자 등록 메서드 (User 객체 기반)
-    public boolean registerUser(String username, String password, String email, String nickname) {
+    public boolean registerUser(String username, String password, String email, String nickname, String spotifyId) {
         try {
             // 비밀번호 암호화
             String encodedPassword = passwordEncoder.encode(password);
 
             // UserDto 객체 생성
-            UserDto userDto = new UserDto(username, encodedPassword, email, nickname);
+            UserDto userDto = new UserDto(username, encodedPassword, email, nickname, spotifyId);
 
             // DB에 유저 정보 저장
             userDao.insertUserInfo(userDto);

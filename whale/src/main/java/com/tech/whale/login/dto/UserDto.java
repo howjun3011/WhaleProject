@@ -14,4 +14,5 @@ public class UserDto {
     private String user_password;
     private String user_email;
     private String user_nickname;  // 닉네임 필드 추가
+    private String user_spotify_id;
 }

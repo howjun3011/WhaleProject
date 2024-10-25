@@ -10,6 +10,16 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
 <style>
+.setting-container {
+    display: flex;
+    flex-direction: column; /* 헤더와 스크롤 콘텐츠를 세로로 배치 */
+    overflow: hidden; /* 부모에서 스크롤 숨김 */
+}
+
+.scroll-content {
+    flex: 1; /* 남은 공간을 차지 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+}
 .setting-item{
 	display : inline-block;
 	border-bottom: none;
@@ -59,29 +69,37 @@
 .dropdown-content.show{
   display : block;
 }
+.like-list{
+	margin-left: 20px;
+	margin-right: 20px;
+}
 .post-list{
 	display: block;
 	margin-bottom: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
 	padding: 10px 10px;
 	border: 1px solid #ccc;
 	border-radius: 8px;
-	border
 }
 .feed-list{
-	display: inline;
-	margin-bottom: 5px;
-	margin-right: 2px;
-	padding: 15px 15px;
+	display: inline-flex;
+	padding: 5px 3px;
 }
 .feed-list img{
-	width: 200px;
-	height: 200px;
+	width: 205px;
+	height: 205px;
+	border-radius: 3px; /* 모서리 둥글게 */
 }
 .no-like-message{
 	margin-left: 20px;
 	color: #ccc;
+}
+a{
+	text-decoration: none;
+	color: black;
+}
+a:visited, a:hover, a:focus, a:active {
+	color: black;
+	text-decoration: none;
 }
 </style>
 </head>
@@ -89,60 +107,64 @@
 <div class="setting-body">
     <div class="setting-container">
         <div class="setting-header">좋아요</div>
-	        <form id="filterForm" action="/whale/likeList" method="get">
-	            <!-- 숨겨진 필드에 드롭다운 선택 값을 저장 -->
-	            <input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder}">
-	            <input type="hidden" name="postType" id="postType" value="${selectedPostType}">
-	
-	            <div class="setting-item">
-	                <!-- 정렬 순서 드롭다운 -->
-	                <div class="dropdown">
-	                    <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
-	                        <span class="dropbtn_content">${selectedSortOrder}</span>
-	                    </button>
-	                    <div class="dropdown-content">
-	                        <div onclick="updateSelection('sortOrder', '최신순', this)">최신순</div>
-	                        <div onclick="updateSelection('sortOrder', '오래된순', this)">오래된순</div>
-	                    </div>
-	                </div>
-	
-	                <!-- 게시물 유형 드롭다운 -->
-	                <div class="dropdown">
-	                    <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
-	                        <span class="dropbtn_content">${selectedPostType}</span>
-	                    </button>
-	                    <div class="dropdown-content">
-	                        <div onclick="updateSelection('postType', '게시글', this)">게시글</div>
-	                        <div onclick="updateSelection('postType', '피드', this)">피드</div>
-	                    </div>
-	                </div>
-	            </div>
-	        </form>
-        <!-- 좋아요 게시물 출력 -->
-        <div id="post-list">
-	    <c:choose>
-	        <c:when test="${empty currentPostLikeList}">
-	            <div class="no-like-message">좋아요 목록이 없습니다.</div>
-	        </c:when>
-	        <c:otherwise>
-	            <c:forEach var="like" items="${currentPostLikeList}">
-	                <c:choose>
-	                    <c:when test="${selectedPostType == '게시글'}">
-	                        <div class="post-list">
-	                            <div>태그: ${like.post_tag_text}</div>
-	                            <div>제목: ${like.post_title}</div>
-	                            <div>내용: ${like.post_text}</div>
-	                        </div>
-	                    </c:when>
-	                    <c:when test="${selectedPostType == '피드'}">
-	                        <div class="feed-list">
-	                            <img id="feed-img" src="static/images/feed/${like.feed_img_name}" alt="feed_img" >
-	                        </div>
-	                    </c:when>
-	                </c:choose>
-	            </c:forEach>
-	        </c:otherwise>
-	    </c:choose>
+        	<div class="scroll-content">
+		        <form id="filterForm" action="/whale/likeList" method="get">
+		            <!-- 숨겨진 필드에 드롭다운 선택 값을 저장 -->
+		            <input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder}">
+		            <input type="hidden" name="postType" id="postType" value="${selectedPostType}">
+		
+		            <div class="setting-item">
+		                <!-- 정렬 순서 드롭다운 -->
+		                <div class="dropdown">
+		                    <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
+		                        <span class="dropbtn_content">${selectedSortOrder}</span>
+		                    </button>
+		                    <div class="dropdown-content">
+		                        <div onclick="updateSelection('sortOrder', '최신순', this)">최신순</div>
+		                        <div onclick="updateSelection('sortOrder', '오래된순', this)">오래된순</div>
+		                    </div>
+		                </div>
+		
+		                <!-- 게시물 유형 드롭다운 -->
+		                <div class="dropdown">
+		                    <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
+		                        <span class="dropbtn_content">${selectedPostType}</span>
+		                    </button>
+		                    <div class="dropdown-content">
+		                        <div onclick="updateSelection('postType', '게시글', this)">게시글</div>
+		                        <div onclick="updateSelection('postType', '피드', this)">피드</div>
+		                    </div>
+		                </div>
+		            </div>
+		        </form>
+	        <!-- 좋아요 게시물 출력 -->
+	        <div class="like-list">
+		    <c:choose>
+		        <c:when test="${empty currentPostLikeList}">
+		            <div class="no-like-message">좋아요 목록이 없습니다.</div>
+		        </c:when>
+		        <c:otherwise>
+		            <c:forEach var="like" items="${currentPostLikeList}">
+		                <c:choose>
+		                    <c:when test="${selectedPostType == '게시글'}">
+		                        <a href="/whale/communityDetail?c=${like.community_id}&p=${like.post_id}">
+			                        <div class="post-list">
+		                        		<div>태그: ${like.post_tag_text}</div>
+			                            <div>제목: ${like.post_title}</div>
+			                            <div>내용: ${like.post_text}</div>
+			                        </div>
+		                       	</a>
+		                    </c:when>
+		                    <c:when test="${selectedPostType == '피드'}">
+		                        <div class="feed-list">
+		                        	<a href="/whale/feedDetail?f=${like.feed_id}"><img id="feed-img" src="static/images/feed/${like.feed_img_name}" alt="feed_img"></a>
+		                        </div>
+		                    </c:when>
+		                </c:choose>
+		            </c:forEach>
+		        </c:otherwise>
+		    </c:choose>
+		</div>
 	</div>
 </div>
 </div>

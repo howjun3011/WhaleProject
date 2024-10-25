@@ -10,6 +10,16 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
 <style>
+.setting-container {
+    display: flex;
+    flex-direction: column; /* 헤더와 스크롤 콘텐츠를 세로로 배치 */
+    overflow: hidden; /* 부모에서 스크롤 숨김 */
+}
+
+.scroll-content {
+    flex: 1; /* 남은 공간을 차지 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+}
 .setting-item{
 	display : inline-block;
 	border-bottom: none;
@@ -73,66 +83,83 @@
 	margin-left: 20px;
 	color: #ccc;
 }
+#feed-img{
+	width: 200px;
+	height: 200px;
+}
+a{
+	text-decoration: none;
+	color: black;
+}
+a:visited, a:hover, a:focus, a:active {
+	color: black;
+	text-decoration: none;
+}
 </style>
 </head>
 <body>
 <div class="setting-body">
 	<div class="setting-container">
 		<div class="setting-header">댓글</div>
-			<form id="filterForm" action="/whale/commentList" method="get">
-				<!-- 숨겨진 필드에 드롭다운 선택 값 저장 -->
-				<input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder }">
-				<input type="hidden" name="postType" id="postType" value="${selectedPostType }">
-			
-				<div class="setting-item">
-				    <div class="dropdown">
-				        <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
-				            <span class="dropbtn_content">${selectedSortOrder}</span>
-				        </button>
-				        <div class="dropdown-content">
-				            <div onclick="updateSelection('sortOrder', '최신순', this)">최신순</div>
-				            <div onclick="updateSelection('sortOrder', '오래된순', this)">오래된순</div>
-				        </div>
-				    </div>
-	
-			    	<div class="dropdown">
-				        <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
-				            <span class="dropbtn_content">${selectedPostType}</span>
-				        </button>
-				        <div class="dropdown-content">
-				            <div onclick="updateSelection('postType', '게시글', this)">게시글</div>
-				            <div onclick="updateSelection('postType', '피드', this)">피드</div>
-				        </div>
-				    </div>
-				</div>
-			</form>
-		<!-- 댓글 목록 출력 -->
-		<div id="comment-list">
-			<c:choose>
-				<c:when test="${empty currentPostCommentList }">
-					<div class="no-comment-message">댓글 목록이 없습니다.</div>
-				</c:when>
-				<c:otherwise>
-					<c:forEach var="comment" items="${currentPostCommentList }">
-						<c:choose>
-							<c:when test="${selectedPostType == '게시글'}">
-								<div class="post-list">
-									<div>태그: ${comment.post_tag_text }</div>
-									<div>제목: ${comment.post_title }</div>
-									<div>댓글: ${comment.post_comments_text }</div>
-								</div>
-							</c:when>
-							<c:when test="${selectedPostType == '피드'}">
-								<div class="post-list">
-									<div>피드번호: ${comment.feed_id }</div>
-									<div>피드 이미지 번호: ${comment.feed_img_name }</div>
-									<div>댓글: ${comment.feed_comments_text }</div>
-								</div>
-							</c:when>
-						</c:choose>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
+			<div class="scroll-content">
+				<form id="filterForm" action="/whale/commentList" method="get">
+					<!-- 숨겨진 필드에 드롭다운 선택 값 저장 -->
+					<input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder }">
+					<input type="hidden" name="postType" id="postType" value="${selectedPostType }">
+				
+					<div class="setting-item">
+					    <div class="dropdown">
+					        <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
+					            <span class="dropbtn_content">${selectedSortOrder}</span>
+					        </button>
+					        <div class="dropdown-content">
+					            <div onclick="updateSelection('sortOrder', '최신순', this)">최신순</div>
+					            <div onclick="updateSelection('sortOrder', '오래된순', this)">오래된순</div>
+					        </div>
+					    </div>
+		
+				    	<div class="dropdown">
+					        <button type="button" class="dropbtn" onclick="toggleDropdown(this)">
+					            <span class="dropbtn_content">${selectedPostType}</span>
+					        </button>
+					        <div class="dropdown-content">
+					            <div onclick="updateSelection('postType', '게시글', this)">게시글</div>
+					            <div onclick="updateSelection('postType', '피드', this)">피드</div>
+					        </div>
+					    </div>
+					</div>
+				</form>
+			<!-- 댓글 목록 출력 -->
+			<div id="comment-list">
+				<c:choose>
+					<c:when test="${empty currentPostCommentList }">
+						<div class="no-comment-message">댓글 목록이 없습니다.</div>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="comment" items="${currentPostCommentList }">
+							<c:choose>
+								<c:when test="${selectedPostType == '게시글'}">
+									<a href="/whale/communityDetail?c=${comment.community_id}&p=${comment.post_id}">
+				                        <div class="post-list">
+			                        		<div>태그: ${comment.post_tag_text }</div>
+											<div>제목: ${comment.post_title }</div>
+											<div>댓글: ${comment.post_comments_text }</div>
+				                        </div>
+		                       		</a>
+								</c:when>
+								<c:when test="${selectedPostType == '피드'}">
+									<a href="/whale/feedDetail?f=${comment.feed_id}">
+										<div class="post-list">
+											<img id="feed-img" src="static/images/feed/${comment.feed_img_name }" alt="feed_img">
+											<div>댓글: ${comment.feed_comments_text }</div>
+										</div>
+									</a>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			</div>
 		</div>
 	</div>
 </div>

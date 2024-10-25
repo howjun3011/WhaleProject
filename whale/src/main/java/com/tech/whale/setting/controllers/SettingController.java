@@ -214,6 +214,8 @@ public class SettingController {
         
         // debug
         for (LikeListDto likeListDto : currentPostLikeList) {
+        	System.out.println("post_id: " + likeListDto.getPost_id());
+        	System.out.println("community_id: " + likeListDto.getCommunity_id());
         	System.out.println("post_text: " + likeListDto.getPost_title());
 			System.out.println("post_title: " + likeListDto.getPost_text());
 			System.out.println("post_tag_text: " + likeListDto.getPost_text());
@@ -241,6 +243,7 @@ public class SettingController {
         // debug
         for (CommentListDto commentListDto : currentPostCommentList) {
 			System.out.println("post_id: " + commentListDto.getPost_id());
+			System.out.println("community_id: " + commentListDto.getCommunity_id());
 			System.out.println("post_title: " + commentListDto.getPost_title());
 			System.out.println("post_comment: " + commentListDto.getPost_comments_text());
 			System.out.println("post_tag: " + commentListDto.getPost_tag_text());

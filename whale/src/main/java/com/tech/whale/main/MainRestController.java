@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tech.whale.main.models.ComNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.PageAccessDto;
@@ -67,5 +68,12 @@ public class MainRestController {
 	public List<LikeNotiDto> getLikeNotiMain(HttpSession session) {
 		List<LikeNotiDto> likeNotis = mainService.getLikeNotiMainService(session);
 		return likeNotis;
+	}
+	
+	// [ 좋아요 알림 값 ]
+	@GetMapping(value = "/commentsNoti", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<ComNotiDto> getCommentsNotiMain(HttpSession session) {
+		List<ComNotiDto> commentsNotis = mainService.getCommentsNotiMainService(session);
+		return commentsNotis;
 	}
 }

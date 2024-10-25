@@ -10,10 +10,8 @@ const contentsController = require('../../controllers/spotify/contentsController
 // [ 2. 라우터 사용 ]
 router.get('/', (req, res) => {
     // Spring 서버 로그인시 세션에 저장
-    if (!req.session.accessToken && !req.session.user_id) {
-        req.session.accessToken = req.query.accessToken;
-        req.session.user_id = req.query.userId;
-    }
+    req.session.accessToken = req.query.accessToken;
+    req.session.user_id = req.query.userId;
     res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
 

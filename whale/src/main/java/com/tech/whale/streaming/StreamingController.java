@@ -1,25 +1,18 @@
 package com.tech.whale.streaming;
 
-import java.util.HashMap;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tech.whale.streaming.models.StreamingTrackDao;
-
-@RestController
+@Controller
 public class StreamingController {
-	private StreamingTrackDao streamingTrackDao;
-	
-	public StreamingController(StreamingTrackDao streamingTrackDao) {
-		this.streamingTrackDao = streamingTrackDao;
-	}
-	
-	@PostMapping(value = "/streaming/insertTrack", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void insertTrack(@RequestBody HashMap<String, Object> map) {
-		streamingTrackDao.insertTrack((String)map.get("trackArtist"),(String)map.get("trackName"),(String)map.get("trackAlbum"),
-									  (String)map.get("trackCover"),(String)map.get("trackSpotifyId"));
+	// [ 프레임에 스트리밍 메인 구간 이동 ]
+	@RequestMapping("/streaming")
+	public String streaming(HttpSession session) {
+		// 노드 스트리밍 서버를 위한 리다이렉트
+		// return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");
+		// 스프링 스트리밍 서버를 위한 리다이렉트
+		return "streaming/streamingHome";
 	}
 }

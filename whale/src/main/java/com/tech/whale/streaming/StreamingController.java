@@ -11,8 +11,8 @@ public class StreamingController {
 	@RequestMapping("/streaming")
 	public String streaming(HttpSession session) {
 		// 노드 스트리밍 서버를 위한 리다이렉트
-		// return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");
+		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");
 		// 스프링 스트리밍 서버를 위한 리다이렉트
-		return "streaming/streamingHome";
+		// return "streaming/streamingHome";
 	}
 }

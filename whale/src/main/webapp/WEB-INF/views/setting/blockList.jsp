@@ -12,12 +12,12 @@
 <style>
 .setting-item{
 	justify-content: space-between;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 6px;
+	padding-bottom: 5px;
 }
 .setting-item img{
-	width: 55px;
-	height: 55px;
+	width: 40px;
+	height: 40px;
 	align-items: center;
 }
 .profile-info{
@@ -36,7 +36,7 @@
 	background-color: #121212;
 	color: white;
 	border: none;
-	padding: 10px 10px;
+	padding: 5px 10px;
 	border-radius: 4px;
 	cursor: pointer;
 }
@@ -44,24 +44,33 @@
 	background-color: #ccc;
 }
 #user-nickname{
-	font-size: 18px;
+	font-size: 15px;
 	font-weight: bold;
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 }
 #user-id{
-	font-size: 13px;
+	font-size: 11px;
 }
 .no-block-message{
 	margin-left: 15px;
 	margin-top: 15px;
 	color: #ccc;
 }
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 </head>
 <body>
 <div class="setting-body">
 	<div class="setting-container">
-		<div class="setting-header">차단 목록</div>
+		<div class="setting-header">
+		<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
+		차단 목록
+		</div>
 		<c:choose>
 			<c:when test="${empty blockList }">
 				<div class="no-block-message">차단 목록이 없습니다.</div>

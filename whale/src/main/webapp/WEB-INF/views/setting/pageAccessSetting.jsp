@@ -49,13 +49,21 @@ input[type='radio']:checked {
 	border: 3px solid #ccc; /* 테두리와 원 사이의 색상 */
 	box-shadow: 0 0 0 1.6px black; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
 }
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 </head>
 <body>
 <div class="setting-body">
 	<div class="setting-container">
-		<div class="setting-header">페이지 접근 변경</div>
-		
+		<div class="setting-header">
+		<a href="accessibility" id="back"><img src="static/images/setting/back.png" alt="back"></a>
+		페이지 접근 변경
+		</div>
 		<form>
 			<div class="setting-item">
 				<div class="section">

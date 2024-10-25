@@ -9,45 +9,54 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
 <style>
-    .setting-item{
-        justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
-    }
-    .toggle-slide {
-        display: none; /* 체크박스를 숨김 */
-    }
-    label {
-        width: 50px;
-        height: 25px;
-        background-color: #808080; /* 초기 배경색 */
-        text-indent: -9999px;
-        border-radius: 25px;
-        position: relative;
-        cursor: pointer;
-        transition: 0.5s;
-    }
-    label::after {
-        content: '';
-        position: absolute;
-        width: 17px;
-        height: 17px;
-        background-color: #e5e5e5; /* 슬라이더 기본 색상 */
-        border-radius: 25px; /* 원형 슬라이더 */
-        top: 4px;
-        left: 4px;
-        transition: 0.5s;
-    }
-    .toggle-slide:checked + label {
-        background-color: black; /* 토글 ON 상태일 때 배경색 */
-    }
-    .toggle-slide:checked + label::after {
-        left: 29px; /* 토글 ON 상태일 때 슬라이더 이동 */
-    }
+.setting-item{
+    justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
+}
+.toggle-slide {
+    display: none; /* 체크박스를 숨김 */
+}
+label {
+    width: 50px;
+    height: 25px;
+    background-color: #808080; /* 초기 배경색 */
+    text-indent: -9999px;
+    border-radius: 25px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.5s;
+}
+label::after {
+    content: '';
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    background-color: #e5e5e5; /* 슬라이더 기본 색상 */
+    border-radius: 25px; /* 원형 슬라이더 */
+    top: 4px;
+    left: 4px;
+    transition: 0.5s;
+}
+.toggle-slide:checked + label {
+    background-color: black; /* 토글 ON 상태일 때 배경색 */
+}
+.toggle-slide:checked + label::after {
+    left: 29px; /* 토글 ON 상태일 때 슬라이더 이동 */
+}
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 </head>
 <body>
 <div class="setting-body">
 	<div class="setting-container">
-	    <div class="setting-header">알림</div>
+	    <div class="setting-header">
+	    <a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
+	    알림
+	    </div>
 	    <div class="setting-item">
 	        모든 알림 해제
 	        <input type="checkbox" id="toggle-slide-1" class="toggle-slide" />

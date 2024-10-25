@@ -65,6 +65,12 @@ input[type="text"], input[type="password"], input[type="email"] {
 input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
 	border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
 }
+#back {
+    position: absolute; 
+    left: 15px; 
+    top: 55%; 
+    transform: translateY(-50%);
+}
 </style>
 <script>
 window.onload = function() {
@@ -123,13 +129,13 @@ window.onload = function() {
           document.getElementById("profileForm").submit();
       });
 };
-
 </script>
 </head>
 <body>
 	<div class="setting-body">
 		<div class="setting-container">
 			<div class="setting-header">
+				<a href="account" id="back"><img src="static/images/setting/back.png" alt="back"></a>
 				프로필 편집
 				<button type="button" id="completeBtn" class="complete-btn">완료</button> <!-- 버튼 클릭 시 폼 제출 -->
 			</div>
@@ -151,8 +157,8 @@ window.onload = function() {
 					</tr>
 					<tr>
 						<td>비밀번호</td>
-						<td><input type="password" name="user_password"
-							value="${profile.user_password}" /></td>
+						<td>
+						<input type="password" id="userPassword" name="user_password" placeholder="변경할 비밀번호 입력" />
 					</tr>
 					<tr>
 						<td>대표곡 설정</td>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.profile.dao.ProDao">
+	<select id="getUserProfile" resultType="com.tech.whale.profile.dto.ProfileDto">
+	SELECT USER_ID, USER_NICKNAME, USER_IMAGE_URL FROM USER_INFO WHERE USER_ID = #{param1} 
+	</select>
+    
+    <select id="followerCount" resultType="int">
+    SELECT 
+    (LENGTH(FOLLOW_USER_ID) - LENGTH(REPLACE(FOLLOW_USER_ID, ',', '')) + 1) AS FOLLOWER_COUNT
+	FROM FOLLOW WHERE USER_ID = #{param1}
+    </select>
+    
+    <select id="followingCount" resultType="int">
+    SELECT COUNT(*) AS FOLLOWING_COUNT
+	FROM FOLLOW 
+	WHERE INSTR(FOLLOW_USER_ID, #{param1}) > 0
+    </select>
+    
+    <select id="getFollowerList" resultType="com.tech.whale.profile.dto.ProfileDto">
+    SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID FROM USER_INFO U
+    WHERE U.USER_ID IN (SELECT REGEXP_SUBSTR(F.FOLLOW_USER_ID, '[^,]+', 1, LEVEL) AS FOLLOW_USER_ID
+    FROM FOLLOW F
+    WHERE F.USER_ID = #{param1}
+    CONNECT BY REGEXP_SUBSTR(F.FOLLOW_USER_ID, '[^,]+', 1, LEVEL) IS NOT NULL)
+    </select>
+    
+    <select id="getFollowingList" resultType="com.tech.whale.profile.dto.ProfileDto">
+    SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID FROM USER_INFO U
+    JOIN FOLLOW F ON U.USER_ID = F.USER_ID
+    WHERE INSTR(F.FOLLOW_USER_ID, #{param1}) > 0
+    </select>
+    
+	<update id="doUnfollowing">
+	    UPDATE follow
+	    SET follow_user_id = TRIM(',' FROM REPLACE(',' || follow_user_id || ',', ',' || #{param2, jdbcType=VARCHAR} || ',', ','))
+	    WHERE user_id = #{param1, jdbcType=VARCHAR}
+	    AND (follow_user_id LIKE '%,' || #{param2, jdbcType=VARCHAR} || ',%'
+	         OR follow_user_id LIKE #{param2, jdbcType=VARCHAR} || ',%'
+	         OR follow_user_id LIKE '%,' || #{param2, jdbcType=VARCHAR}
+	         OR follow_user_id = #{param2, jdbcType=VARCHAR})
+	</update>
+	
+	<update id="doFollowing">
+	    UPDATE follow
+	    SET follow_user_id = CASE 
+	        WHEN follow_user_id IS NULL THEN #{param2}
+	        ELSE follow_user_id || ',' || #{param2}
+	    END
+	    WHERE user_id = #{param1}
+	      AND (follow_user_id IS NULL OR INSTR(follow_user_id, #{param2}) = 0)
+	</update>
+	    
+</mapper>

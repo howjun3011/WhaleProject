@@ -1,0 +1,103 @@
+body{
+	background-color: #ddd;
+	
+}
+
+.mainContent {
+	display:flex;
+	position: relative;
+	flex-direction: row;
+	flex-grow: 1;
+    margin:0 5px;
+    height: 100%;
+	width:100%;
+    min-width: 800px;
+}
+#memo{
+	width:500px;
+	/* height:88vh; */
+	height: 88vh;
+	border-radius: 10px;
+	background-color: white;
+	padding: 10px;
+	text-align: center;
+	color: white;
+	background-color: #293846;
+	box-sizing: border-box;
+	margin:10px;
+}
+#memo textarea{
+	border: none;
+	resize: none;
+	width:450px;
+	height:80vh;
+	border-radius: 10px;
+	padding:5px;
+	outline: none;
+	font-size:20px;
+}
+.blockContainer{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin: 10px 5px 0 0;
+	align-items: flex-start;
+}
+.divStep{
+	display: flex;
+	flex-direction: row;
+	flex-grow: 1;
+}
+.block{
+	display: flex;
+	font-size: 25px;
+	background-color: white;
+	border-radius: 10px;
+	flex-grow: 1;
+	margin:5px;
+	padding: 5px 10px;
+	background-color: white;
+	
+}
+#block1{
+	width:290px;
+	height: 170px;
+}
+#block2{
+	width:190px;
+	height: 170px;
+}
+#block3{
+	width:190px;
+	height: 170px;
+}
+#block4{
+	width:190px;
+	height: 170px;
+}
+#block5{
+	width:350px;
+	height: 170px;
+}
+#block6{
+	width:270px;
+	height: 170px;
+}
+#block7{
+	width:270px;
+	height: 170px;
+}
+#block8{
+	width:950px;
+	height: 350px;
+}
+
+
+
+
+
+
+
+
+
+

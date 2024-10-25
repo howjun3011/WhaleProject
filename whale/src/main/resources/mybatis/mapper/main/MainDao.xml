@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.main.models.MainDao">
+	
+	<select id="selectLikeNoti" resultType="Integer">
+        SELECT LIKE_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM POST WHERE POST_ID = #{postId})
+    </select>
+    
+    <select id="selectCommentNoti" resultType="Integer">
+        SELECT COMMENT_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM POST WHERE POST_ID = #{postId})
+    </select>
+    
+    <select id="selectPostUserId" resultType="String">
+        SELECT USER_ID FROM POST WHERE POST_ID = #{postId}
+    </select>
+	
+	<insert id="insertPostLikeNoti">
+		INSERT INTO LIKE_NOTI (LIKE_NOTI_ID,LIKE_NOTI_TYPE,USER_ID,POST_LIKE_ID)
+		VALUES (LIKE_NOTI_SEQ.NEXTVAL,
+			   '게시글',
+			   (SELECT USER_ID FROM POST WHERE POST_ID = #{postId}),
+			   (SELECT POST_LIKE_ID FROM POST_LIKE WHERE POST_ID = #{postId} AND USER_ID = #{userId})
+		)
+	</insert>
+	
+	<select id="getLikeNoti" resultType="com.tech.whale.main.models.LikeNotiDto">
+		SELECT
+	        LN.LIKE_NOTI_ID AS LIKE_NOTI_ID,
+	        LN.LIKE_NOTI_CHECK AS LIKE_NOTI_CHECK,
+	        LN.LIKE_NOTI_DATE AS LIKE_NOTI_DATE,
+	        LN.LIKE_NOTI_TYPE AS LIKE_NOTI_TYPE,
+	        COALESCE(PL.USER_ID, PCL.USER_ID) AS TARGET_USER_ID,
+	        COALESCE(PL.POST_ID, PC.POST_ID) AS POST_ID,
+	        P.COMMUNITY_ID AS COMMUNITY_ID
+	    FROM
+	        LIKE_NOTI LN
+			    LEFT JOIN POST_LIKE PL ON PL.POST_LIKE_ID = LN.POST_LIKE_ID
+			    LEFT JOIN POST_COMMENTS_LIKE PCL ON PCL.POST_COMMENTS_LIKE_ID = LN.POST_COMMENTS_LIKE_ID
+			    LEFT JOIN POST_COMMENTS PC ON PC.POST_COMMENTS_ID = PCL.POST_COMMENTS_ID
+			    LEFT JOIN POST P ON P.POST_ID = COALESCE(PL.POST_ID, PC.POST_ID)
+	    WHERE
+	        LN.USER_ID = #{userId}
+	    ORDER BY LN.LIKE_NOTI_ID DESC
+	</select>
+	
+	<insert id="insertPostCommentsNoti">
+		INSERT INTO COMMENTS_NOTI (COMMENTS_NOTI_ID,USER_ID,POST_COMMENTS_ID)
+		VALUES (COMMENTS_NOTI_SEQ.NEXTVAL,
+			   (SELECT USER_ID FROM POST WHERE POST_ID = #{postId}),
+			   (SELECT MAX(POST_COMMENTS_ID) FROM POST_COMMENTS WHERE POST_ID = #{postId} AND USER_ID = #{userId} AND POST_COMMENTS_TEXT = #{commentText})
+		)
+	</insert>
+	
+</mapper>

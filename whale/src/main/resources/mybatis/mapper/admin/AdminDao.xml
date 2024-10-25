@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.admin.dao.AdminIDao">
+
+   <sql id="includeUserCnt">
+       <choose>
+           <when test="param2 == 1">
+               WHERE (USER_ID LIKE '%' || #{sk} || '%')
+           </when>
+           <when test="param2 == 2">
+               WHERE (USER_EMAIL LIKE '%' || #{sk} || '%')
+           </when>
+           <otherwise>
+           </otherwise>
+       </choose>
+   </sql>
+   <sql id="includeUserList">
+       <choose>
+           <when test="param4 == 1">
+               WHERE (USER_ID LIKE '%' || #{sk} || '%')
+           </when>
+           <when test="param4 == 2">
+               WHERE (USER_EMAIL LIKE '%' || #{sk} || '%')
+           </when>
+           <otherwise>
+           </otherwise>
+       </choose>
+   </sql>
+
+
+
+   <select id="selectUserCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM USER_INFO
+        <include refid="includeUserCnt" />
+    </select>
+    
+    <select id="adminUserList" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
+       SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
+              USER_ACCESS_ID, USER_SPOTIFY_ID
+       FROM (
+           SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
+                  USER_ACCESS_ID, USER_SPOTIFY_ID,
+                  ROW_NUMBER() OVER (ORDER BY USER_ID ASC) AS ROW_SEQ
+           FROM USER_INFO
+           <include refid="includeUserList"/>
+       )
+       WHERE ROW_SEQ BETWEEN #{start} AND #{end}
+   </select>
+    
+    <select id="userAccountInfoSelect" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
+       SELECT 
+          UI.USER_ID,
+          UI.USER_IMAGE_URL,
+           UI.USER_NICKNAME,
+           UI.USER_EMAIL,
+           UI.USER_ACCESS_ID,
+           COUNT(DISTINCT P.POST_ID) AS POST_COUNT,
+           COUNT(DISTINCT PC.POST_COMMENTS_ID) AS COMMENTS_COUNT,
+           COUNT(DISTINCT F.FEED_ID) AS FEED_COUNT
+       FROM 
+           USER_INFO UI
+       LEFT JOIN 
+           POST P ON UI.USER_ID = P.USER_ID
+       LEFT JOIN 
+           POST_COMMENTS PC ON UI.USER_ID = PC.USER_ID
+       LEFT JOIN 
+          FEED F ON UI.USER_ID = F.USER_ID 
+       WHERE 
+           UI.USER_ID = #{userId}
+       GROUP BY 
+          UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID
+   </select>
+   
+    <select id="userAccountFeedSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
+       SELECT *
+      FROM (
+          SELECT F.*, ROW_NUMBER() OVER (ORDER BY FEED_ID DESC) AS RNUM
+          FROM FEED F
+          WHERE USER_ID = #{userId}
+      )
+      WHERE RNUM BETWEEN #{start} AND #{end}
+   </select>
+   
+    <select id="userAccountPostSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
+       SELECT *
+      FROM (
+          SELECT P.*, ROW_NUMBER() OVER (ORDER BY POST_ID DESC) AS RNUM
+          FROM POST P
+          WHERE USER_ID = #{userId}
+      )
+      WHERE RNUM BETWEEN #{start} AND #{end}
+   </select>
+    <select id="userAccountCommentsSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
+       SELECT *
+      FROM (
+          SELECT 
+              FC.FEED_COMMENTS_ID,
+              FC.FEED_COMMENTS_TEXT,
+              PC.POST_COMMENTS_ID,
+              PC.POST_COMMENTS_TEXT, 
+              PC.POST_COMMENTS_DATE AS COMMENTS_DATE,
+              ROW_NUMBER() OVER (ORDER BY PC.POST_COMMENTS_DATE DESC) AS RNUM
+          FROM 
+              POST_COMMENTS PC
+          LEFT JOIN 
+              FEED_COMMENTS FC ON PC.POST_COMMENTS_DATE = FC.FEED_COMMENTS_DATE
+          WHERE 
+              FC.USER_ID = #{userId} OR PC.USER_ID = #{userId}
+      )
+      WHERE RNUM BETWEEN #{start} AND #{end}
+      ORDER BY RNUM
+
+   </select>
+   
+   <select id="selectPostCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM POST WHERE USER_ID=#{userId}
+    </select>
+   <select id="selectFeedCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM FEED WHERE USER_ID=#{userId}
+    </select>
+   <select id="selectCommentsCnt" parameterType="map" resultType="int">
+        SELECT 
+       COUNT(PC.POST_COMMENTS_DATE)
+      FROM 
+          POST_COMMENTS PC
+      LEFT JOIN 
+          FEED_COMMENTS FC ON PC.POST_COMMENTS_DATE  = FC.FEED_COMMENTS_DATE
+      WHERE 
+          FC.USER_ID = #{userId} OR PC.USER_ID = #{userId}
+    </select>
+    
+
+
+</mapper>

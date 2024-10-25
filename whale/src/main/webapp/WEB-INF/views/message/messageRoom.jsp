@@ -29,7 +29,7 @@
 
 		<div class="middle">
 			<div class="other-msg">
-				<div class="context">
+				<div class="user-info">
 					<img class="msg-img" src="../static/images/message/test/people.png" />
 					<!-- 메시지 출력점  -->
 					<div class="msg-name">내 친구</div>

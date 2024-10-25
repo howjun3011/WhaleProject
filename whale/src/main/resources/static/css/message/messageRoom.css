@@ -82,30 +82,42 @@
 	display: flex;
 	flex-direction: column;
 	width: auto;
-	height:auto;
-	position: relative;
+	height: auto; position : relative;
 	left: 10px;
 	margin: 20px;
+	position: relative;
 }
-
 
 .my-msg {
 	display: flex;
 	flex-direction: column;
 	width: auto;
-	height:auto;
+	height: auto;
 	position: relative;
 	right: 10px;
 	margin: 20px;
 }
 
-.context { /*세로 배치 요소*/
+.user-info { /*가로 배치 요소*/
+	display:flex;
+	flex-direction: row;
+	position: relative;
+}
+
+.context { /*가로 배치 요소*/
 	display: flex;
 	position: relative;
 	flex-direction: row;
 }
 
-.my-msg .context{ /*왼쪽정렬*/
+.other-msg .context {
+	display: flex;
+	position: relative;
+	flex-direction: row;
+	margin-left: 50px;
+}
+
+.my-msg .context { /*왼쪽정렬*/
 	justify-content: flex-end;
 }
 
@@ -118,16 +130,17 @@
 }
 
 .msg-time {
-	margin-bottom:15px;
+	margin-bottom: 15px;
 	margin-top: auto; /* 요소를 바닥에 붙이기 */
-	width:80px;
-	position:relative;
+	width: 80px;
+	position: relative;
 	font-size: 1rem;
 	color: #D9D9D9;
 }
 
 .msg-name {
 	font-size: 1.5rem;
+	margin-left: 10px;
 }
 
 .msg-context {
@@ -136,14 +149,12 @@
 	margin: 10px;
 	border-radius: 10px;
 	max-width: 60%;
+	font-size:1.5rem;
 	word-wrap: break-word; /* 단어가 넘칠 경우 줄 바꿈 */
-    overflow-wrap: break-word; /* 같은 기능을 가진 속성 */
-    white-space: normal; /* 줄 바꿈 허용 */
+	overflow-wrap: break-word; /* 같은 기능을 가진 속성 */
+	white-space: normal; /* 줄 바꿈 허용 */
 	height: auto;
 }
-
-.msg-context {}
-
 
 .other-msg .msg-context {
 	background-color: #f2f2f2;

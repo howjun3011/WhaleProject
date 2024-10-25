@@ -105,6 +105,8 @@ public class LoginController {
         String isRegistered = (String) session.getAttribute("authFlow");
         if ("register".equals(isRegistered)) {
             return "redirect:/register";
+        } else if (session.getAttribute("access_id").toString().equals("1")) {
+        	return "redirect:/admin/adminMainView";
         } else {
             return "redirect:/main";
         }

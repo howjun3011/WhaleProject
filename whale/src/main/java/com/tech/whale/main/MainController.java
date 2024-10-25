@@ -40,8 +40,8 @@ public class MainController {
 		session.setAttribute("access_id", queryParam.get("access_id"));
 		
 		// 관리자 번호에 따라 리다이렉트 지점 변경
-		if (session.getAttribute("access_id").toString().equals("0")) {return "redirect:main";}
-		else {return "redirect:/admin/adminMainView";}
+		if (session.getAttribute("access_id").toString().equals("1")) {return "redirect:/admin/adminMainView";}
+		else {return "redirect:main";}
 	}
 	
 	// [ 로그아웃 기능 ]

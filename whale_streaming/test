@@ -2,19 +2,15 @@ package com.tech.whale.login.service;
 
 import com.tech.whale.login.dto.UserDto;
 import com.tech.whale.login.dao.UserDao;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -22,10 +18,13 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private JavaMailSender mailSender;  // JavaMailSender 주입
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Autowired
-    private JavaMailSender mailSender; // JavaMailSender 의존성 주입
+    @Value("${spring.mail.username}")  // application.properties에 있는 발신자 이메일 주소
+    private String fromEmail;
 
     // 사용자 인증 메서드
     public boolean authenticate(String username, String password) {
@@ -80,26 +79,22 @@ public class UserService {
     // 비밀번호 재설정 이메일 전송
     public void sendResetPasswordEmail(String email) {
         String token = generateRandomToken();
-        String user_id = userDao.getUserIdByEmail(email);  // 이메일로 유저 아이디 가져오기
-        String resetLink = "http://localhost:9002/whale/reset-password?token=" + token;
-        userDao.saveResetToken(user_id,token);
+        String resetLink = "https://localhost:9002/whale/reset-password.html?token=" + token;
+        userDao.saveResetToken(email, token);
+        
+        // 유저 아이디 가져오기 (예를 들어 이메일로 조회)
+        String userId = userDao.getUserIdByEmail(email);
+
         // 이메일 전송 로직
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);  // 발신자 이메일 주소를 환경 변수에서 가져옴
         message.setTo(email);
         message.setSubject("Whale 계정 비밀번호 재설정");
-        message.setText("안녕하세요, " + user_id + "님,\n\n"
-                + "비밀번호를 재설정하려면 아래 링크를 클릭하세요:\n" + resetLink
-                + "\n\n만약 이 요청을 본인이 한 것이 아니라면, 이 메일을 무시해 주세요."
-                + "\n\n감사합니다.\nWhale 팀");
-        message.setFrom("Music Whale Support <" + System.getenv("EMAIL_USER") + ">");  // 보내는 사람 설정
-
-        try {
-            mailSender.send(message);  // 이메일 전송
-            System.out.println("비밀번호 재설정 이메일이 성공적으로 전송되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("이메일 전송에 실패했습니다.");
-        }
+        message.setText(String.format(
+                "안녕하세요, %s님.\n\n비밀번호 재설정을 위해 다음 링크를 클릭하세요:\n%s\n\n해당 링크는 1시간 동안 유효합니다.\n\n감사합니다.\nWhale 팀",
+                userId, resetLink
+        ));
+        mailSender.send(message);
     }
 
     // 비밀번호 재설정 토큰 검증
@@ -114,13 +109,8 @@ public class UserService {
         userDao.updatePasswordByToken(hashedPassword, token);
     }
 
-    // 랜덤 상태 값 생성
-    public String generateRandomState() {
-        return "randomStateString";  // 상태 값 생성 로직
-    }
-
     // 랜덤 토큰 생성
     private String generateRandomToken() {
-        return UUID.randomUUID().toString();  // 토큰 생성 로직
+        return UUID.randomUUID().toString();  // UUID로 랜덤 토큰 생성
     }
 }

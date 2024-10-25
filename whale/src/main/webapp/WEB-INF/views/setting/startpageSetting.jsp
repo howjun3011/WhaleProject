@@ -11,20 +11,20 @@
 <script src="static/js/setting/setting.js"></script>
 <style>
 .setting-item{
-    padding: 20px 0px;
+    padding: 5px 10px;
     border-bottom: none;
     justify-content: space-between;
 }
 .option{
    text-align: left;
    flex: 1; /* 두 option을 동일한 크기도 만듦 */
-   margin: 0 20px;
+   margin: 20px;
 }
 .option img{
-   width: 270px;
-   height: 270px;
+   width: 300px;
+   height: 300px;
    max-width: 100%;
-   max-height: 270px;
+   max-height: 300px;
    object-fit: contain;
 }
 .radio-group{

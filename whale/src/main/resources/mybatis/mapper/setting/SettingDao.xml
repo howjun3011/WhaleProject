@@ -153,7 +153,7 @@
 	<select id="getFilteredPostLikeList" parameterType="map" resultType="com.tech.whale.setting.dto.LikeListDto">
 		<choose>
 			<when test="postType == '게시글'">
-				SELECT P.POST_ID, P.POST_TITLE, P.POST_TEXT, PT.POST_TAG_TEXT
+				SELECT P.POST_ID, P.COMMUNITY_ID, P.POST_TITLE, P.POST_TEXT, PT.POST_TAG_TEXT
 				FROM POST P JOIN POST_LIKE PL
 				ON P.POST_ID = PL.POST_ID
 				JOIN POST_TAG PT
@@ -174,7 +174,7 @@
 	<select id="getFilteredPostCommentList" parameterType="map" resultType="com.tech.whale.setting.dto.CommentListDto">
 		<choose>
 			<when test="postType == '게시글'">
-				SELECT P.POST_TITLE, PC.POST_COMMENTS_TEXT, PT.POST_TAG_TEXT
+				SELECT P.POST_ID, P.COMMUNITY_ID, P.POST_TITLE, PC.POST_COMMENTS_TEXT, PT.POST_TAG_TEXT
 				FROM POST_COMMENTS PC JOIN POST P
 				ON P.POST_ID = PC.POST_ID
 				JOIN POST_TAG PT

@@ -12,7 +12,7 @@
         <a href="">로그아웃</a>
     </div>
     <ul>
-		<li><a href="adminMainView">메인화면</a></li>
+		<li><a href="adminMainView">관리자메인</a></li>
 	    <li><a href="adminAccountOfficialListView">계정관리</a></li>
 	    <li><a href="">신고|문의</a></li>
 	    <li><a href="">광고현황</a></li>

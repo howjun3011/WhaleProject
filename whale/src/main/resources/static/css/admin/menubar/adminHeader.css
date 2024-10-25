@@ -8,6 +8,8 @@
 	margin-top:0;
 	padding-top:0;	
 	flex-direction: column;
+	
+	margin-left: 200px;
 }
 .contentview{
 	min-width: 1400px;

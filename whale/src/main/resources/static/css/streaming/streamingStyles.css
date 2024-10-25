@@ -1,0 +1,41 @@
+* {margin: 0; padding: 0; box-sizing: 0;}
+body {min-height: 100vh; -ms-overflow-style: none;}
+::-webkit-scrollbar {display: none;}
+
+.header {display: flex; justify-content: center; align-items: center; width: 100%; height: 58px; background-color: #1f1f1f; border-bottom: 1.5px solid #2e2e2e;}
+.headerItems {display: flex; justify-content: center; align-items: center; width: 300px; height: 100%;}
+.homeBtn {margin-right: 13px; background-color: transparent; border: none; opacity: 0.44;}
+.homeBtn:hover {opacity: 0.3;}
+.homeBtn:active {opacity: 0.1;}
+.headerSearch {display: flex; justify-content: center; align-items: center; width: 100%; height: 60%; border: 1.6px solid #3c3c3c; border-radius: 18px;}
+.searchBtn {margin-top: 2.5px; background-color: transparent; border: none; opacity: 0.7;}
+.searchBtn:hover {opacity: 0.4;}
+.searchBtn:active {opacity: 0.2;}
+.headerInput {width: 80%; height: 56%; background: transparent; border: none; outline: none; font-size: 13px; color: rgb(164, 164, 164); text-align: center; cursor: grab;}
+
+.main {display: flex; width: 100%; background-color: #1f1f1f;}
+
+.mainLibraryFrame {display: flex; justify-content: center; align-items: center; width: 110px; height: 100%; background-color: #1f1f1f;}
+.mainLibrary {width: 62%; height: 96%; background-color: #2e2e2e; border-radius: 12px;}
+
+.mainContentFrame {display: flex; justify-content: center; align-items: center; height: 100%;}
+.mainContent {width: 100%; height: 96%; background-color: #2e2e2e; border-radius: 16px;}
+.mainContentMargin {margin: 0 10px 0 10px; width: 96%; height: 100%;}
+
+.recommendationsHeader {width: 100%; height: 30px;}
+.recommendations {width: 100%; height: 240px;}
+.recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+.recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
+.recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
+.recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
+.recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; left: 19px; background: transparent;}
+.recommendationLike:hover{opacity: 0.7;}
+.recommendationLike:active{opacity: 0.6;}
+.recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}
+.recommendationInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
+.trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+.artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}
+
+.mainDetailFrame {display: flex; justify-content: center; align-items: center; width: 2%; height: 100%;}
+
+.footer {width: 100%; height: 10px; background-color: #1f1f1f;}

@@ -55,10 +55,4 @@ public class MainController {
 		// 스프링 서버 로그인 화면으로 리다이렉트
 		return "redirect:/";
 	}
-	
-	// [ 프레임에 스트리밍 메인 구간 이동 ]
-	@RequestMapping("/streaming")
-	public String streaming(HttpSession session) {
-		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");
-	}
 }

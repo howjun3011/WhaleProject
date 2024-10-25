@@ -11,13 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class LikeNotiDto {
-	private int like_noti_id;
-	private int like_noti_check;
-	private Date like_noti_date;
-	private String like_noti_type;
+public class ComNotiDto {
+	private int message_noti_id;
+	private int message_noti_check;
+	private Date message_noti_date;
 	private String target_user_id;
 	private int post_id;
-	private int community_id;
 	private int feed_id;
 }

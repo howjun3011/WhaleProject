@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
+import com.tech.whale.main.models.ComNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.models.MainDao;
 import com.tech.whale.setting.dao.SettingDao;
@@ -51,7 +52,13 @@ public class MainService {
 	
 	// [ 좋아요 알림 서비스 ]
 	public List<LikeNotiDto> getLikeNotiMainService(HttpSession session) {
-		List<LikeNotiDto> LikeNotis = mainDao.getLikeNoti((String) session.getAttribute("user_id"));
-		return LikeNotis;
+		List<LikeNotiDto> likeNotis = mainDao.getLikeNoti((String) session.getAttribute("user_id"));
+		return likeNotis;
+	}
+	
+	// [ 댓글 알림 서비스 ]
+	public List<ComNotiDto> getCommentsNotiMainService(HttpSession session) {
+		List<ComNotiDto> commentsNotis = mainDao.getCommentsNoti((String) session.getAttribute("user_id"));
+		return commentsNotis;
 	}
 }

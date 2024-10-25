@@ -9,7 +9,7 @@ const app = createApp({
 		return {
 			headerMenuCheck: [false, false, false],
 			frameNames: ['leftIframe','rightIframe'],
-			whaleAddress: ['streaming','message/home','communityHome','feedHome','profile','settingHome'],
+			whaleAddress: ['streaming','message/home','communityHome','feedHome','profile','settingHome','communityDetail'],
 			userInfo: [],
 			startPage: [ null, null ],
 			pageAccess: [],
@@ -36,10 +36,10 @@ const app = createApp({
 		closeMenu() {this.headerMenuCheck.forEach((element, index) => {if (element === true) {this.headerMenuCheck[index] = false;}})},
 		
 		// [ Main Header Menu ]
-		changeRedirectIndex(i,j) {this.replaceIframe(this.pageAccess[i],j); this.closeMenu();},
+		changeRedirectIndex(i,j,k) {this.replaceIframe(this.pageAccess[i],j,k); this.closeMenu();},
 		
 		// [ Main Center ]
-		replaceIframe(i,j) {$("#"+this.frameNames[i]).get(0).contentWindow.location.replace(this.whaleAddress[j]); if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}},
+		replaceIframe(i,j,k) {$("#"+this.frameNames[i]).get(0).contentWindow.location.replace(this.whaleAddress[j]+k); if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}},
 		
 		// [ User Info ]
 		checkUserInfo() {

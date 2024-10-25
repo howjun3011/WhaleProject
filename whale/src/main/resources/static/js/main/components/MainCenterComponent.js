@@ -6,7 +6,7 @@ const MainCenterComponent = {
 				<Transition name="menuTransition" mode="out-in">
 					<div class="menu-style menuBtn flexCenter" v-if="menuBtnTriggers[i]" :key="keyBtns[i]" @click="menuBtnTriggers[i] = !menuBtnTriggers[i]"><div class="menuBtn-square"></div></div>
 	        		<div class="menu-style menuDock flexCenter" v-else :key="keyDocks[i]" @click="menuBtnTriggers[i] = !menuBtnTriggers[i]">
-	        			<img class="menuDock-icon" :src="dockIcon" alt="Streaming Icon" style="height: 55%;" v-for="(dockIcon, j) in dockIcons" :key="j" @click.stop="replaceIframe(i,j)">
+	        			<img class="menuDock-icon" :src="dockIcon" alt="Streaming Icon" style="height: 55%;" v-for="(dockIcon, j) in dockIcons" :key="j" @click.stop="replaceIframe(i,j,'')">
 	        		</div>
         		</Transition>
         	</div>

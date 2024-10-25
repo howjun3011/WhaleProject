@@ -30,7 +30,7 @@ public class ComLikeCommentService {
             // 좋아요를 누르지 않았다면 좋아요 추가
             comDao.insertLike(postId, userId);
             // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 게시물이 아니라면 알람 테이블 추가 ]
-            Integer likeNoti = mainDao.selectLikeNoti(postId);
+            Integer likeNoti = mainDao.selectLikeNotiPostId(postId);
             String postUserId = mainDao.selectPostUserId(postId);
             if (likeNoti == 1 && !postUserId.equals(userId)) {
                 mainDao.insertPostLikeNoti(postId, userId);
@@ -45,7 +45,7 @@ public class ComLikeCommentService {
     public void insertComment(String postId, String userId, String commentText) {
         comDao.insertComments(postId, userId, commentText);
         // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 게시물이 아니라면 알람 테이블 추가 ]
-        Integer commentNoti = mainDao.selectCommentNoti(postId);
+        Integer commentNoti = mainDao.selectCommentsNotiPostId(postId);
         String postUserId = mainDao.selectPostUserId(postId);
         if (commentNoti == 1 && !postUserId.equals(userId)) {
             mainDao.insertPostCommentsNoti(postId, userId, commentText);

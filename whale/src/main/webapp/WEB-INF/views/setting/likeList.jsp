@@ -69,6 +69,16 @@
 	border-radius: 8px;
 	border
 }
+.feed-list{
+	display: inline;
+	margin-bottom: 5px;
+	margin-right: 2px;
+	padding: 15px 15px;
+}
+.feed-list img{
+	width: 200px;
+	height: 200px;
+}
 .no-like-message{
 	margin-left: 20px;
 	color: #ccc;
@@ -110,21 +120,31 @@
 	        </form>
         <!-- 좋아요 게시물 출력 -->
         <div id="post-list">
-        	<c:choose>
-        		<c:when test="${empty currentPostLikeList }">
-        			<div class="no-like-message">좋아요 목록이 없습니다.</div>
-        		</c:when>
-	        	<c:otherwise>
-		            <c:forEach var="like" items="${currentPostLikeList}">
-		                <div class="post-list">
-		                    <div>제목: ${like.post_title}</div>
-		                    <div>내용: ${like.post_text}</div>
-		                </div>
-		            </c:forEach>
-	        	</c:otherwise>
-        	</c:choose>
-        </div>
-    </div>
+	    <c:choose>
+	        <c:when test="${empty currentPostLikeList}">
+	            <div class="no-like-message">좋아요 목록이 없습니다.</div>
+	        </c:when>
+	        <c:otherwise>
+	            <c:forEach var="like" items="${currentPostLikeList}">
+	                <c:choose>
+	                    <c:when test="${selectedPostType == '게시글'}">
+	                        <div class="post-list">
+	                            <div>태그: ${like.post_tag_text}</div>
+	                            <div>제목: ${like.post_title}</div>
+	                            <div>내용: ${like.post_text}</div>
+	                        </div>
+	                    </c:when>
+	                    <c:when test="${selectedPostType == '피드'}">
+	                        <div class="feed-list">
+	                            <img id="feed-img" src="static/images/feed/${like.feed_img_name}" alt="feed_img" >
+	                        </div>
+	                    </c:when>
+	                </c:choose>
+	            </c:forEach>
+	        </c:otherwise>
+	    </c:choose>
+	</div>
+</div>
 </div>
 <script>
 	//드롭다운 토글 함수

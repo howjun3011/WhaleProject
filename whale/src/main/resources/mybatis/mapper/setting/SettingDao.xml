@@ -55,15 +55,37 @@
 		SELECT ACCOUNT_PRIVACY FROM USER_SETTING WHERE USER_ID = #{session_user_id}
 	</select>
 	<select id="getBlockList" parameterType="String" resultType="com.tech.whale.setting.dto.BlockDto">
-	    SELECT UI.USER_ID, UI.USER_NICKNAME, UI.USER_IMAGE_URL
-		FROM BLOCK B
-		JOIN USER_INFO UI
-		ON B.BLOCK_USER_ID = UI.USER_ID
-		WHERE B.USER_ID = (SELECT USER_ID FROM USER_INFO WHERE USER_ID = #{session_user_id})
+	  	<![CDATA[
+		    SELECT
+		      UI.USER_ID,
+		      UI.USER_NICKNAME,
+		      UI.USER_IMAGE_URL
+		    FROM (
+		      SELECT REGEXP_SUBSTR(BLOCK_USER_ID, '[^,]+', 1, LEVEL) AS BLOCK_USER_ID
+		      FROM (
+		        SELECT BLOCK_USER_ID
+		        FROM BLOCK
+		        WHERE USER_ID = #{session_user_id}
+		      )
+		      CONNECT BY LEVEL <= LENGTH(BLOCK_USER_ID) 
+		                      - LENGTH(REPLACE(BLOCK_USER_ID, ',', '')) + 1
+		    ) B
+		    JOIN USER_INFO UI
+		    ON B.BLOCK_USER_ID = UI.USER_ID
+	  	]]>
 	</select>
-	<delete id="unblockUser" parameterType="map">
-		DELETE FROM BLOCK WHERE USER_ID = #{session_user_id} AND BLOCK_USER_ID = #{block_userId}
-	</delete>
+	<update id="unblockUser" parameterType="map">
+		UPDATE BLOCK
+		SET BLOCK_USER_ID = NULLIF(
+    		TRIM(BOTH ',' FROM REPLACE(
+        		',' || BLOCK_USER_ID || ',', 
+        		',' || #{block_userId} || ',', 
+        		','
+    		)), 
+    		''
+		)
+		WHERE USER_ID = #{session_user_id}
+	</update>
 	<select id="getDarkmode" resultType="com.tech.whale.setting.dto.UserSettingDto">
 		SELECT DARKMODE_SETTING_ONOFF FROM USER_SETTING WHERE USER_ID = #{session_user_id}
 	</select>
@@ -131,16 +153,19 @@
 	<select id="getFilteredPostLikeList" parameterType="map" resultType="com.tech.whale.setting.dto.LikeListDto">
 		<choose>
 			<when test="postType == '게시글'">
-				SELECT P.POST_ID, P.POST_TITLE, P.POST_TEXT
+				SELECT P.POST_ID, P.POST_TITLE, P.POST_TEXT, PT.POST_TAG_TEXT
 				FROM POST P JOIN POST_LIKE PL
 				ON P.POST_ID = PL.POST_ID
+				JOIN POST_TAG PT
+				ON P.POST_TAG_ID = PT.POST_TAG_ID
 				WHERE PL.USER_ID = #{session_user_id}
 				ORDER BY PL.POST_LIKE_ID ${orderBy }
 			</when>
 			<otherwise>
-				SELECT F.FEED_ID, F.FEED_TITLE, F.FEED_TEXT
-				FROM FEED F JOIN FEED_LIKE FL
-				ON F.FEED_ID = FL.FEED_ID
+				SELECT FL.FEED_ID, FI.FEED_IMG_NAME
+				FROM FEED_LIKE FL 
+				JOIN FEED_IMG FI
+				ON FL.FEED_ID = FI.FEED_ID
 				WHERE FL.USER_ID = #{session_user_id}
 				ORDER BY FL.FEED_LIKE_ID ${orderBy }
 			</otherwise>
@@ -149,18 +174,21 @@
 	<select id="getFilteredPostCommentList" parameterType="map" resultType="com.tech.whale.setting.dto.CommentListDto">
 		<choose>
 			<when test="postType == '게시글'">
-				SELECT P.POST_TITLE, PC.POST_COMMENTS_TEXT
+				SELECT P.POST_TITLE, PC.POST_COMMENTS_TEXT, PT.POST_TAG_TEXT
 				FROM POST_COMMENTS PC JOIN POST P
 				ON P.POST_ID = PC.POST_ID
+				JOIN POST_TAG PT
+				ON P.POST_TAG_ID = PT.POST_TAG_ID
 				WHERE PC.USER_ID = #{session_user_id}
 				ORDER BY POST_COMMENTS_ID ${orderBy }
 			</when>
 			<otherwise>
-				SELECT F.FEED_ID, F.FEED_TEXT, F.FEED_COMMENTS_TEXT
-				FROM FEED F JOIN FEED_COMMENTS FC
-				ON F.FEED_ID = FC.FEED_ID
+				SELECT FI.FEED_ID, FI.FEED_IMG_NAME, FC.FEED_COMMENTS_TEXT
+				FROM FEED_COMMENTS FC 
+				JOIN FEED_IMG FI
+				ON FC.FEED_ID = FI.FEED_ID
 				WHERE FC.USER_ID = #{session_user_id}
-				ORDER BY FC.FEED_LIKE_ID ${orderBy }
+				ORDER BY FC.FEED_COMMENTS_ID ${orderBy }
 			</otherwise>
 		</choose>
 	</select>

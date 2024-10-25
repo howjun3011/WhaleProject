@@ -114,10 +114,22 @@
 				</c:when>
 				<c:otherwise>
 					<c:forEach var="comment" items="${currentPostCommentList }">
-						<div class="post-list">
-							<div>제목: ${comment.post_title }</div>
-							<div>댓글: ${comment.post_comments_text }</div>
-						</div>
+						<c:choose>
+							<c:when test="${selectedPostType == '게시글'}">
+								<div class="post-list">
+									<div>태그: ${comment.post_tag_text }</div>
+									<div>제목: ${comment.post_title }</div>
+									<div>댓글: ${comment.post_comments_text }</div>
+								</div>
+							</c:when>
+							<c:when test="${selectedPostType == '피드'}">
+								<div class="post-list">
+									<div>피드번호: ${comment.feed_id }</div>
+									<div>피드 이미지 번호: ${comment.feed_img_name }</div>
+									<div>댓글: ${comment.feed_comments_text }</div>
+								</div>
+							</c:when>
+						</c:choose>
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>

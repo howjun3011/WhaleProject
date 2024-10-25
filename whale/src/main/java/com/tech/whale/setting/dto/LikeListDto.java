@@ -14,4 +14,8 @@ public class LikeListDto {
 	private int post_id;
 	private String post_text;
 	private String post_title;
+	private String post_tag_text;
+	
+	private int feed_id;
+	private String feed_img_name;
 }

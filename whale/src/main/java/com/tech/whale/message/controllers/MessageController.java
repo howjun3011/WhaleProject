@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("message")
 public class MessageController {
-	@RequestMapping("/home")
+//	@RequestMapping("/home")
 	public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println(">>[JAVA] MessageController : settingHome");
-		String[] test = new String[] { "A", "B" };
+		String[] test = new String[] { "A", "B","C","D","E","F","G"};
 		model.addAttribute("list", test);
 		return "message/messageHome";
 	}
@@ -33,9 +33,6 @@ public class MessageController {
 	public String search(HttpServletRequest request, HttpSession session, Model model) {
 		String tabId = request.getParameter("tabId");
 		System.out.println(">>[JAVA] MessageController : search : "+tabId);
-		
-		String[] selectedIds = request.getParameterValues("selectedIds");
-		System.out.println(">>>>>온거 확인 : "+selectedIds);
 				
 		if (tabId.equals("msg")) {
 			String[] test = new String[] { "가", "나" };
@@ -46,6 +43,24 @@ public class MessageController {
 			model.addAttribute("list", test);
 			return "message/userTable";
 		}
+	}
+	@RequestMapping("/home")
+//	@RequestMapping("/messageRoom")
+	public String messageRoom(HttpServletRequest request, HttpSession session, Model model) {
+		
+//		String tabId = request.getParameter("tabId");
+		System.out.println(">>[JAVA] MessageController : messageRoom : ");
+		
+//		String[] selectedIds = request.getParameterValues("selectedIds");
+		
+		String[] selectedIds = new String[] {"a","b","c"};
+		String ids = String.join(", ", selectedIds);
+		
+		System.out.println(">>>>>온거 확인 : "+ids);	
+		
+		
+		model.addAttribute("ids",ids);
+			return "message/messageRoom";
 	}
 
 }

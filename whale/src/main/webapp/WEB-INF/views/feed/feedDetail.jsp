@@ -54,8 +54,31 @@
         .post-actions {
             display: flex;
             justify-content: space-around;
+            align-items: center; /* 아이템들을 수직 가운데 정렬 */
             margin-top: 10px;
             font-size: 1em;
+        }
+
+        .post-actions .like-btn,
+        .post-actions .comments {
+            display: flex; /* 수평 배치 */
+            align-items: center; /* 수직 가운데 정렬 */
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .post-actions .likebtn,
+        .post-actions .commentbtn {
+            width: 30px; /* 아이콘 크기 조정 */
+            height: 30px;
+            margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .like-count,
+        .comment-count {
+            font-size: 1em; /* 글자 크기 통일 */
+            color: #333;    /* 필요 시 색상 지정 */
         }
 
         .post-text {
@@ -67,19 +90,65 @@
             color: gray;
         }
 
-        /* 게시글 삭제 아이콘 버튼 */
-        .delete-post-btn {
+        .other-btn {
             position: absolute;
-            top: 25px;
-            right: 10px;
+            top: 20px;
+            right: 15px;
             background: none;
             border: none;
             cursor: pointer;
         }
 
-        .delete-post-btn img {
-            width: 25px;
-            height: 25px;
+        .other-btn img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .modal {
+            display: none; /* 기본적으로 숨김 상태 */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 모달 내용 */
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* 모달 항목 스타일 */
+        .modal-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal-item.red {
+            color: red;
+        }
+
+        .modal-item.gray {
+            color: gray;
+        }
+
+        .modal-item:last-child {
+            border-bottom: none;
+        }
+
+        .modal-item:hover {
+            background-color: #f9f9f9;
         }
 
         /* 댓글 스타일 */
@@ -169,7 +238,7 @@
 </head>
 <body>
 
-    <div class="post">
+    <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}">
         <div class="user-info">
             <a href="profileHome?u=${feedDetail.user_id}">
                 <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
@@ -177,12 +246,9 @@
             <span class="username">${feedDetail.user_id}</span>
         </div>
 
-        <!-- 게시글 삭제 아이콘 (작성자에게만 표시) -->
-        <c:if test="${feedDetail.user_id eq now_id}">
-            <button class="delete-post-btn" onclick="location.href='feedDel?f=${feedDetail.feed_id}'">
-                <img src="static/images/setting/delete_button.png" alt="Delete Button">
-            </button>
-        </c:if>
+        <button class="other-btn">
+            <img src="static/images/btn/other_btn.png" alt="Other Button">
+        </button>
 
         <!-- 이미지가 존재할 때만 출력 -->
         <c:if test="${not empty feedDetail.feed_img_name}">
@@ -193,11 +259,16 @@
             <p>${feedDetail.feed_text}</p>
             <span class="post-time">${feedDetail.feed_date}</span>
         </div>
+
         <div class="post-actions">
             <button type="button" class="like-btn" data-feed-id="${feedDetail.feed_id}" data-now-id="${now_id}">
-                ❤ <span class="likes">${feedDetail.likeCount}</span>
+                <img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
+                <span class="like-count">${feedDetail.likeCount}</span>
             </button>
-            <span class="comments">💬 ${feedDetail.commentsCount}</span>
+            <div class="comments">
+                <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="comments" />
+                <span class="comment-count">${feedDetail.commentsCount}</span>
+            </div>
         </div>
     </div>
 
@@ -206,9 +277,11 @@
         <h3>댓글</h3>
         <c:forEach var="comment" items="${feedDetail.feedComments}">
             <div class="comment">
-                <a href="profileHome?u=${comment.user_id}"><img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic"></a>
+                <a href="profileHome?u=${comment.user_id}">
+                    <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+                </a>
                 <div class="comment-info">
-                    <span class="username">${comment.user_id}</span>  <!-- 아이디를 사진 아래에 위치 -->
+                    <span class="username">${comment.user_id}</span>
                     <p>${comment.feed_comments_text}</p>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: auto;">
@@ -237,6 +310,74 @@
         </div>
     </div>
 
+    <div id="otherModal" class="modal">
+        <div class="modal-content">
+            <div id="deletePost" class="modal-item red" style="display: none;">게시글 삭제</div>
+            <div id="hidePost" class="modal-item" style="display: none;">게시글 숨기기</div>
+            <div id="reportPost" class="modal-item red" style="display: none;">게시글 신고</div>
+            <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPostId = null;
+        let isOwner = false;
+
+        function openOtherModal(postId, postOwnerId, currentUserId) {
+            selectedPostId = postId;
+            isOwner = (postOwnerId === currentUserId);
+
+            document.getElementById("deletePost").style.display = isOwner ? "block" : "none";
+            document.getElementById("hidePost").style.display = isOwner ? "block" : "none";
+            document.getElementById("reportPost").style.display = isOwner ? "none" : "block";
+
+            document.getElementById("otherModal").style.display = "flex";
+        }
+
+        function closeOtherModal() {
+            document.getElementById("otherModal").style.display = "none";
+            selectedPostId = null;
+        }
+
+        document.getElementById("deletePost").addEventListener("click", function() {
+            if (confirm("정말로 게시글을 삭제하시겠습니까?")) {
+                window.location.href = `feedDel?f=\${selectedPostId}`;
+            }
+            closeOtherModal();
+        });
+
+        document.getElementById("hidePost").addEventListener("click", function() {
+            alert("게시글을 숨깁니다.");
+            window.location.href = `feedHide?f=\${selectedPostId}`;
+            closeOtherModal();
+        });
+
+        document.getElementById("reportPost").addEventListener("click", function() {
+            alert("게시글을 신고했습니다.");
+            closeOtherModal();
+        });
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById("otherModal");
+            if (event.target === modal) {
+                closeOtherModal();
+            }
+        });
+
+        // other-btn 클릭 시 모달 열기
+        document.querySelectorAll('.other-btn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();  // 부모로의 클릭 이벤트 전파 방지
+                const postElement = this.closest('.post');
+                const postId = postElement.getAttribute('data-post-id');
+                const postOwnerId = postElement.getAttribute('data-user-id');
+                const currentUserId = '${now_id}'; // 현재 사용자 ID
+
+                openOtherModal(postId, postOwnerId, currentUserId);
+            });
+        });
+    </script>
+
     <script>
         // 좋아요 처리 로직
         document.querySelector('.like-btn').addEventListener('click', function() {
@@ -256,7 +397,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    this.querySelector('.likes').textContent = data.newLikeCount;
+                    this.querySelector('.like-count').textContent = data.newLikeCount;
                 } else {
                     alert("좋아요 처리에 실패했습니다.");
                 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.feed.dao.FeedDao;
 import com.tech.whale.feed.dto.FeedDto;
+import com.tech.whale.main.models.MainDao;
 import com.tech.whale.profile.dao.ProDao;
 import com.tech.whale.profile.dto.ProfileDto;
 
@@ -25,6 +26,10 @@ public class ProfileController {
 	
 	@Autowired
 	private FeedDao feedDao;
+	
+	// [ 메인 알람 기능]
+    @Autowired
+    private MainDao mainDao;
 	
 	@RequestMapping("/profile")
 	public String profile(HttpSession session) {
@@ -87,6 +92,11 @@ public class ProfileController {
 		System.out.println("now_id : " + now_id);
 		System.out.println("userId : " + userId);
 		proDao.doUnfollowing(userId, now_id);
+		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 삭제 ]
+		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
+		if (followNoti != null) {
+			mainDao.deleteFollowNoti(userId, now_id);
+        }
 		
 		return "redirect:/profileHome?u=" + userId;
 	}
@@ -95,6 +105,11 @@ public class ProfileController {
 	public String doFollowing(HttpServletRequest request, HttpSession session, @RequestParam("u") String userId, Model model) {
 		String now_id = (String) session.getAttribute("user_id");
 		proDao.doFollowing(userId, now_id);
+		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 추가 ]
+		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
+		if (followNoti == null) {
+			mainDao.insertFollowNoti(0, userId, now_id);
+        }
 		
 		return "redirect:/profileHome?u=" + userId;
 	}
@@ -105,6 +120,11 @@ public class ProfileController {
 		System.out.println("now_id : " + now_id);
 		System.out.println("userId : " + userId);
 		proDao.doUnfollowing(userId, now_id);
+		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 삭제 ]
+		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
+		if (followNoti != null) {
+			mainDao.deleteFollowNoti(userId, now_id);
+        }
 		
 		return "redirect:/following?u=" + now_id;
 	}
@@ -115,6 +135,11 @@ public class ProfileController {
 		System.out.println("now_id : " + now_id);
 		System.out.println("userId : " + userId);
 		proDao.doUnfollowing(now_id, userId);
+		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 삭제 ]
+		Integer followNoti = mainDao.selectFollowNotiId(now_id, userId);
+		if (followNoti != null) {
+			mainDao.deleteFollowNoti(now_id, userId);
+        }
 		
 		return "redirect:/followers?u=" + now_id;
 	}
@@ -123,6 +148,11 @@ public class ProfileController {
 	public String dosecretFollowing(HttpServletRequest request, HttpSession session, @RequestParam("u") String userId, Model model) {
 		String now_id = (String) session.getAttribute("user_id");
 		//비공개계정 팔로우 요청
+		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 추가 ]
+		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
+		if (followNoti == null) {
+			mainDao.insertFollowNoti(1, userId, now_id);
+        }
 		
 		return "redirect:/profileHome?u=" +userId;
 	}

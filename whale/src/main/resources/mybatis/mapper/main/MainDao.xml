@@ -29,6 +29,10 @@
         SELECT USER_ID FROM FEED WHERE FEED_ID = #{feedId}
     </select>
     
+    <select id="selectFollowNotiId" resultType="Integer">
+        SELECT FOLLOW_NOTI_ID FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI_USER_ID = #{targetId}
+    </select>
+    
     <select id="getLikeNoti" resultType="com.tech.whale.main.models.LikeNotiDto">
 		SELECT
 	        LN.LIKE_NOTI_ID AS LIKE_NOTI_ID,
@@ -74,6 +78,21 @@
 	    ORDER BY CN.COMMENTS_NOTI_ID DESC
 	</select>
 	
+	<select id="getFollowNoti" resultType="com.tech.whale.main.models.FollowNotiDto">
+		SELECT
+	        FOLLOW_NOTI_ID,
+	        FOLLOW_NOTI_CHECK,
+	        FOLLOW_NOTI_DATE,
+	        FOLLOW_NOTI,
+	        USER_ID,
+	        FOLLOW_NOTI_USER_ID AS TARGET_USER_ID
+	    FROM
+	        FOLLOW_NOTI
+	    WHERE
+	        USER_ID = #{userId}
+	    ORDER BY FOLLOW_NOTI_ID DESC
+	</select>
+	
 	<insert id="insertPostLikeNoti">
 		INSERT INTO LIKE_NOTI (LIKE_NOTI_ID,LIKE_NOTI_TYPE,USER_ID,POST_LIKE_ID)
 		VALUES (LIKE_NOTI_SEQ.NEXTVAL,
@@ -108,12 +127,25 @@
 		)
 	</insert>
 	
+	<insert id="insertFollowNoti">
+		INSERT INTO FOLLOW_NOTI (FOLLOW_NOTI_ID,FOLLOW_NOTI,USER_ID,FOLLOW_NOTI_USER_ID)
+		VALUES (FOLLOW_NOTI_SEQ.NEXTVAL,
+			   #{followNotiType},
+			   #{userId},
+			   #{targetId}
+		)
+	</insert>
+	
 	<update id="updateLikeNoti">
 		UPDATE LIKE_NOTI SET LIKE_NOTI_CHECK = 1 WHERE LIKE_NOTI_ID = #{like_noti_id}
 	</update>
 	
 	<update id="updateCommentsNoti">
 		UPDATE COMMENTS_NOTI SET COMMENTS_NOTI_CHECK = 1 WHERE COMMENTS_NOTI_ID = #{comments_noti_id}
+	</update>
+	
+	<update id="updateFollowNoti">
+		UPDATE FOLLOW_NOTI SET FOLLOW_NOTI_CHECK = 1 WHERE FOLLOW_NOTI_ID = #{followNotiId}
 	</update>
 	
 	<delete id="deleteLikeNoti">
@@ -123,5 +155,13 @@
     <delete id="deleteCommentsNoti">
     	DELETE FROM COMMENTS_NOTI WHERE COMMENTS_NOTI_ID = #{comments_noti_id}
     </delete>
+    
+    <delete id="deleteFollowNoti">
+		DELETE FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI_USER_ID = #{targetId}
+	</delete>
+	
+	<delete id="deleteFollowNotiSetting">
+		DELETE FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI = 1
+	</delete>
 	
 </mapper>

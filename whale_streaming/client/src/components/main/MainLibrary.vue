@@ -33,9 +33,9 @@ export default {
 </script>
 
 <style scoped>
-    .mainLibraryFrame {display: flex; justify-content: center; align-items: center; width: 110px; min-width: 110px; height: 100%; background-color: #1f1f1f; transition: width 0.5s ease;}
+    .mainLibraryFrame {display: flex; justify-content: center; align-items: center; width: 100px; min-width: 100px; height: 100%; background-color: #1f1f1f; transition: width 0.5s ease;}
     .mainLibraryFrame.expanded {width: 240px; max-width: 240px;}
-    .mainLibrary {display: flex; justify-content: center; width: 62%; height: 96%; background-color: #2e2e2e; border-radius: 12px; transition: width 0.5s ease;}
+    .mainLibrary {display: flex; justify-content: center; width: 72%; height: 96%; background-color: #2e2e2e; border-radius: 12px; transition: width 0.5s ease;}
     .mainLibraryFrame.expanded .mainLibrary {width: 88%;}
     .libraryBtn {height: 22px; fill: #9f9f9f; margin-top: 15px;}
     .libraryBtn:hover {opacity: 0.8; cursor: grab;}

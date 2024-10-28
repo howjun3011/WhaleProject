@@ -167,65 +167,102 @@
 <body>
 
 <div class="container">
+    <%-- 팔로워 상태 체크 --%>
+    <c:set var="isFollower" value="false" />
+    <c:forEach items="${followerList}" var="follower">
+        <c:if test="${follower.user_id == now_id}">
+            <c:set var="isFollower" value="true" />
+        </c:if>
+    </c:forEach>
 
-    <!-- 상단 프로필 정보 영역 -->
+    <%-- 프로필 정보 영역 --%>
     <div class="profile-header">
         <div class="profile-info">
             <div>
                 <img src="static/images/setting/${profile.user_image_url}" alt="User Profile Image">
-                <div class="user-id">@${userId}</div> <!-- 유저 아이디를 이미지 아래에 배치 -->
+                <div class="user-id">@${userId}</div>
             </div>
             <div class="details">
-                <div class="username">${profile.user_nickname}</div> <!-- 유저 닉네임은 이미지 오른쪽에 유지 -->
+                <div class="username">${profile.user_nickname}</div>
                 <div class="stats">
-                    <div><span>${post_count}</span> posts</div>
-                    <div><a href="followers?u=${userId}"><span>${frCount}</span> followers</a></div>
-                    <div><a href="following?u=${userId}"><span>${fnCount}</span> following</a></div>
+                    <div>게시물 <span>${fdCount}</span></div>
+
+                    <%-- 본인 또는 팔로우 상태/공개 계정일 때만 팔로워 및 팔로잉 목록 링크 표시 --%>
+                    <div>
+                        <c:choose>
+                            <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
+                                <a href="followers?u=${userId}">팔로워 <span>${frCount}</span></a>
+                            </c:when>
+                            <c:otherwise>
+                                <span>팔로워 <span>${frCount}</span></span>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                    <div>
+                        <c:choose>
+                            <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
+                                <a href="following?u=${userId}">팔로우 <span>${fnCount}</span></a>
+                            </c:when>
+                            <c:otherwise>
+                                <span>팔로우 <span>${fnCount}</span></span>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
             </div>
         </div>
-        <c:if test="${now_id != userId}">
-			    <c:set var="isFollower" value="false" />
-				<c:forEach items="${followerList}" var="follower">
-				    <c:if test="${follower.user_id == now_id}">
-				        <c:set var="isFollower" value="true" />
-				    </c:if>
-				</c:forEach>
-			<div class="profile-actions">
-			    <!-- isFollower 값에 따라 버튼을 다르게 표시 -->
-			    <c:choose>
-			        <c:when test="${isFollower}">
-			            <a href="DoUnfollowing?u=${userId}"><button>Unfollow</button></a>
-			        </c:when>
-			        <c:otherwise>
-			            <a href="DoFollowing?u=${userId}"><button>Follow</button></a>
-			        </c:otherwise>
-			    </c:choose>
-			    <button class="message">Message</button>
-			</div>
-		</c:if>
-   	</div>
 
-    <!-- Bio 정보 -->
+        <%-- 팔로우/팔로우 요청 버튼 --%>
+        <c:if test="${now_id != userId}">
+            <div class="profile-actions">
+                <c:choose>
+                    <c:when test="${isFollower}">
+                        <a href="DoUnfollowing?u=${userId}"><button>팔로우 취소</button></a>
+                    </c:when>
+                    <c:otherwise>
+                        <%-- 비공개 계정의 경우 팔로우 요청 링크를 사용 --%>
+                        <c:choose>
+                            <c:when test="${profile.account_privacy == 1}">
+                                <a href="DosecretFollowing?u=${userId}"><button>팔로우 요청</button></a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="DoFollowing?u=${userId}"><button>팔로우</button></a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
+                <button class="message">메시지</button>
+            </div>
+        </c:if>
+    </div>
+
+    <%-- Bio 정보 --%>
     <div class="bio">
         <p>${bio}</p>
         <a href="${website_url}" class="website">${website_url}</a>
     </div>
 
-    <!-- 중하단 피드 목록 영역 -->
-	<c:choose>
-	    <c:when test="${empty feedList}">
-	        <div class="no-feed-message">작성한 피드가 없습니다</div>
-	    </c:when>
-	    <c:otherwise>
-	        <div class="feed-grid">
-	            <c:forEach items="${feedList}" var="feed">
-	                <a href="feedDetail?f=${feed.feed_id}"><img src="static/images/feed/${feed.feed_img_name}" onerror="this.style.display='none'"></a>
-	            </c:forEach>
-	        </div>
-	    </c:otherwise>
-	</c:choose>
-
+    <%-- 피드 표시 영역 --%>
+    <c:choose>
+        <%-- 비공개 계정이며 본인이 아닌 경우 접근 제한 --%>
+        <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
+            <div>비공개 계정입니다.</div>
+        </c:when>
+        <%-- 피드가 없는 경우 --%>
+        <c:when test="${empty feedList}">
+            <div class="no-feed-message">작성한 피드가 없습니다</div>
+        </c:when>
+        <%-- 피드 목록 표시 --%>
+        <c:otherwise>
+            <div class="feed-grid">
+                <c:forEach items="${feedList}" var="feed">
+                    <a href="feedDetail?f=${feed.feed_id}">
+                        <img src="static/images/feed/${feed.feed_img_name}" onerror="this.style.display='none'">
+                    </a>
+                </c:forEach>
+            </div>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 </body>

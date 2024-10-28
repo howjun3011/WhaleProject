@@ -39,6 +39,8 @@ public class ProfileController {
 		int frcount = (followerCount != null) ? followerCount : 0;
 		Integer followingCount = proDao.followingCount(userId);
 		int fncount = (followingCount != null) ? followingCount : 0;
+		Integer feedCount = proDao.feedCount(userId);
+		int fdcount = (feedCount != null) ? feedCount : 0;
 		String now_id = (String) session.getAttribute("user_id");
 		
 		List<ProfileDto> followerList = proDao.getFollowerList(userId);
@@ -49,6 +51,7 @@ public class ProfileController {
 		model.addAttribute("followerList", followerList);
 		model.addAttribute("frCount", frcount);
 		model.addAttribute("fnCount", fncount);
+		model.addAttribute("fdCount", fdcount);
 		model.addAttribute("profile", profile);
 		model.addAttribute("userId", userId);
 		model.addAttribute("feedList", feedList);
@@ -114,5 +117,13 @@ public class ProfileController {
 		proDao.doUnfollowing(now_id, userId);
 		
 		return "redirect:/followers?u=" + now_id;
+	}
+	
+	@RequestMapping("/DosecretFollowing")
+	public String dosecretFollowing(HttpServletRequest request, HttpSession session, @RequestParam("u") String userId, Model model) {
+		String now_id = (String) session.getAttribute("user_id");
+		//비공개계정 팔로우 요청
+		
+		return "redirect:/profileHome?u=" +userId;
 	}
 }

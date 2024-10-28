@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -88,6 +88,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 15px;
+            position: relative;
         }
 
         .user-info {
@@ -106,6 +107,20 @@
             font-weight: bold;
             font-size: 1.2em;
         }
+
+		.other-btn {
+		    position: absolute;
+		    top: 20px;
+		    right: 15px;
+		    background: none;
+		    border: none;
+		    cursor: pointer;
+		}
+		
+		.other-btn img {
+		    width: 30px;
+		    height: 30px;
+		}
 
         .post-image {
             width: 100%;
@@ -133,51 +148,182 @@
             font-size: 0.8em;
             color: gray;
         }
+        
+	    .modal {
+	        display: none; /* 기본적으로 숨김 상태 */
+	        position: fixed;
+	        z-index: 1000;
+	        left: 0;
+	        top: 0;
+	        width: 100%;
+	        height: 100%;
+	        background-color: rgba(0, 0, 0, 0.6);
+	        justify-content: center;
+	        align-items: center;
+	    }
+	
+	    /* 모달 내용 */
+	    .modal-content {
+	        background-color: white;
+	        border-radius: 12px;
+	        width: 80%;
+	        max-width: 300px;
+	        text-align: center;
+	        overflow: hidden;
+	    }
+	
+	    /* 모달 항목 스타일 */
+	    .modal-item {
+	        padding: 15px;
+	        border-bottom: 1px solid #eee;
+	        font-size: 16px;
+	        cursor: pointer;
+	    }
+	
+	    .modal-item.red {
+	        color: red;
+	    }
+	
+	    .modal-item.gray {
+	        color: gray;
+	    }
+	
+	    .modal-item:last-child {
+	        border-bottom: none;
+	    }
+	
+	    .modal-item:hover {
+	        background-color: #f9f9f9;
+	    }
     </style>
 </head>
 <body>
 
-<!-- 상단 바 -->
-<div class="top-bar">
-    <img src="static/images/feed/pencel.png" alt="Apple Pencil" id="writeButton">
-</div>
+    <!-- 상단 바 -->
+    <div class="top-bar">
+        <img src="static/images/feed/pencel.png" alt="Apple Pencil" id="writeButton">
+    </div>
 
-<!-- 글 작성 영역 (jsp:include로 가져옴) -->
-<div class="write-area-container" id="writeAreaContainer">
-    <jsp:include page="feedWrite.jsp" />
-</div>
+    <!-- 글 작성 영역 (jsp:include로 가져옴) -->
+    <div class="write-area-container" id="writeAreaContainer">
+        <jsp:include page="feedWrite.jsp" />
+    </div>
 
-<!-- 피드 섹션 -->
-<div class="feed">
-    <!-- 반복문으로 글 출력 -->
-    <c:forEach var="feed" items="${feedList}">
-        <div class="post">
-            <div class="user-info">
-                <a href="profileHome?u=${feed.user_id}"><img src="static/images/setting/${feed.user_image_url}" alt="User Profile" class="profile-pic"></a>
-                <span class="username">${feed.user_id}</span>
+    <!-- 피드 섹션 -->
+    <div class="feed">
+        <!-- 반복문으로 글 출력 -->
+        <c:forEach var="feed" items="${feedList}">
+            <div class="post" data-post-id="${feed.feed_id}" data-user-id="${feed.user_id}">
+                <div class="user-info">
+                    <a href="profileHome?u=${feed.user_id}"><img src="static/images/setting/${feed.user_image_url}" alt="User Profile" class="profile-pic"></a>
+                    <span class="username">${feed.user_id}</span>
+                </div>
+
+				    <button class="other-btn">
+				        <img src="static/images/btn/other_btn.png" alt="Other Button">
+				    </button>
+
+
+                <!-- 이미지가 존재할 때만 출력 -->
+                <c:if test="${not empty feed.feed_img_name}">
+                    <a href="feedDetail?f=${feed.feed_id}"><img src="static/images/feed/${feed.feed_img_name}" alt="Post Image" class="post-image"></a>
+                </c:if>
+
+                <div class="post-text">
+                    <p>${feed.feed_text}</p>
+                    <span class="post-time">${feed.feed_date}</span>
+                </div>
+                <div class="post-actions">
+				    <button type="button" class="like-btn" data-feed-id="${feed.feed_id}" data-now-id="${now_id}">
+				        ❤ <span class="likes">${feed.likeCount}</span>
+				    </button>
+				    <span class="comments">💬 ${feed.commentsCount}</span>
+                </div>
             </div>
+        </c:forEach>
+    </div>
 
-            <!-- 이미지가 존재할 때만 출력 -->
-            <c:if test="${not empty feed.feed_img_name}">
-                <a href="feedDetail?f=${feed.feed_id}"><img src="static/images/feed/${feed.feed_img_name}" alt="Post Image" class="post-image"></a>
-            </c:if>
+	<div id="otherModal" class="modal">
+	    <div class="modal-content">
+	        <div id="goToPost" class="modal-item">게시글로 이동</div>
+	        <div id="deletePost" class="modal-item red" style="display: none;">게시글 삭제</div>
+	        <div id="hidePost" class="modal-item" style="display: none;">게시글 숨기기</div>
+	        <div id="reportPost" class="modal-item red" style="display: none;">게시글 신고</div>
+	        <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
+	    </div>
+	</div>
+	
+	<script>
+	    let selectedPostId = null;
+	    let isOwner = false;
+	
+	    function openOtherModal(postId, postOwnerId, currentUserId) {
+	        selectedPostId = postId;
+	        isOwner = (postOwnerId === currentUserId);
+	
 
-            <div class="post-text">
-                <p>${feed.feed_text}</p>
-                <span class="post-time">${feed.feed_date}</span>
-            </div>
-            <div class="post-actions">
-                <button type="button" class="like-btn" data-feed-id="${feed.feed_id}" data-now-id="${now_id}">
-                    ❤ <span class="likes">${feed.likeCount}</span>
-                </button>
-                <span class="comments">💬 ${feed.commentsCount}</span>
-            </div>
-        </div>
-    </c:forEach>
-</div>
+	        console.log("postId:", postId); // 추가
+	        console.log("postOwnerId:", postOwnerId); // 추가
+	        console.log("currentUserId:", currentUserId); // 추가
+	        
+	        
+	        document.getElementById("deletePost").style.display = isOwner ? "block" : "none";
+	        document.getElementById("hidePost").style.display = isOwner ? "block" : "none";
+	        document.getElementById("reportPost").style.display = isOwner ? "none" : "block";
+	
+	        document.getElementById("otherModal").style.display = "flex";
+	    }
+	
+	    function closeOtherModal() {
+	        document.getElementById("otherModal").style.display = "none";
+	        selectedPostId = null;
+	    }
+	
+	    document.getElementById("goToPost").addEventListener("click", function() {
+	        window.location.href = `feedDetail?f=\${selectedPostId}`;
+	        closeOtherModal();
+	    });
+	
+	    document.getElementById("deletePost").addEventListener("click", function() {
+	        if (confirm("정말로 게시글을 삭제하시겠습니까?")) {
+	            window.location.href = `feedDel?f=\${selectedPostId}`;
+	        }
+	        closeOtherModal();
+	    });
+	
+	    document.getElementById("hidePost").addEventListener("click", function() {
+	        alert("게시글을 숨깁니다.");
+	        window.location.href = `feedHide?f=\${selectedPostId}`;
+	        closeOtherModal();
+	    });
+	
+	    document.getElementById("reportPost").addEventListener("click", function() {
+	        alert("게시글을 신고했습니다.");
+	        closeOtherModal();
+	    });
+	
+	    window.addEventListener('click', function(event) {
+	        const modal = document.getElementById("otherModal");
+	        if (event.target === modal) {
+	            closeOtherModal();
+	        }
+	    });
 
-<script>
+	    // other-btn 클릭 시 모달 열기
+	    document.querySelectorAll('.other-btn').forEach(button => {
+	        button.addEventListener('click', function(event) {
+	            event.stopPropagation();  // 부모로의 클릭 이벤트 전파 방지
+	            const postElement = this.closest('.post');
+	            const postId = postElement.getAttribute('data-post-id');
+	            const postOwnerId = postElement.getAttribute('data-user-id');
+	            const currentUserId = '${now_id}'; // 현재 사용자 ID
 
+	            openOtherModal(postId, postOwnerId, currentUserId);
+	        });
+	    });
+	</script>
+
+    <script>
     document.querySelectorAll('.like-btn').forEach(button => {
         button.addEventListener('click', function() {
             const feedId = this.getAttribute('data-feed-id');
@@ -193,19 +339,18 @@
                     'now_id': nowId
                 })
             })
-                .then(response => response.json()) // 서버에서 JSON 응답을 기대
-                .then(data => {
-                    if (data.success) {
-                        // 좋아요 수 업데이트
-                        this.querySelector('.likes').textContent = data.newLikeCount;
-                    } else {
-                        alert("좋아요 처리에 실패했습니다.");
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+            .then(response => response.json()) // 서버에서 JSON 응답을 기대
+            .then(data => {
+                if (data.success) {
+                    // 좋아요 수 업데이트
+                    this.querySelector('.likes').textContent = data.newLikeCount;
+                } else {
+                    alert("좋아요 처리에 실패했습니다.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
     });
-
 
     var offset = 10;  // 첫 로딩에서 시작하는 offset 값
     const size = 10;  // 한 번에 가져올 피드 수

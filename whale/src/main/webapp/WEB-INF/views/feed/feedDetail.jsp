@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -17,6 +17,7 @@
         }
 
         .post {
+            position: relative;
             background-color: white;
             width: 90%;
             max-width: 600px;
@@ -66,6 +67,21 @@
             color: gray;
         }
 
+        /* 게시글 삭제 아이콘 버튼 */
+        .delete-post-btn {
+            position: absolute;
+            top: 25px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-post-btn img {
+            width: 25px;
+            height: 25px;
+        }
+
         /* 댓글 스타일 */
         .comments-section {
             margin-top: 30px;
@@ -80,7 +96,6 @@
 
         .comment {
             display: flex;
-            align-items: center;
             padding: 10px 0;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -94,6 +109,17 @@
             height: 30px;
             border-radius: 50%;
             margin-right: 10px;
+        }
+
+        .comment-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-info .username {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
         .comment .comment-text {
@@ -127,83 +153,106 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* 댓글 삭제 아이콘 버튼 */
+        .delete-comment-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-comment-btn img {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
 <body>
 
-<div class="post">
-    <div class="user-info">
-        <a href="profileHome?u=${feedDetail.user_id}">
-            <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
-        </a>
-        <span class="username">${feedDetail.user_id}</span>
-    </div>
-
-    <!-- 이미지가 존재할 때만 출력 -->
-    <c:if test="${not empty feedDetail.feed_img_name}">
-        <img src="static/images/feed/${feedDetail.feed_img_name}" alt="Post Image" class="post-image">
-    </c:if>
-
-    <div class="post-text">
-        <p>${feedDetail.feed_text}</p>
-        <span class="post-time">${feedDetail.feed_date}</span>
-    </div>
-    <div class="post-actions">
-        <button type="button" class="like-btn" data-feed-id="${feedDetail.feed_id}" data-now-id="${now_id}">
-            ❤ <span class="likes">${feedDetail.likeCount}</span>
-        </button>
-        <span class="comments">💬 ${feedDetail.commentsCount}</span>
-    </div>
-</div>
-
-<!-- 댓글 섹션 -->
-<div class="comments-section">
-    <h3>댓글</h3>
-    <c:forEach var="comment" items="${feedDetail.feedComments}">
-        <div class="comment">
-                <%-- <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic"> --%>
-            <div class="comment-text">
-                <strong>${comment.user_id}</strong>
-                <p>${comment.feed_comments_text}</p>
-            </div>
-            <div class="comment-date">${comment.feed_comments_date}</div>
-            <c:if test="${comment.user_id eq now_id}">
-                <form action="feedDetail/deleteComment" method="post" style="margin-left: 10px;">
-                    <input type="hidden" name="feedCommentsId" value="${comment.feed_comments_id}" />
-                    <input type="hidden" name="feedId" value="${feedDetail.feed_id}" />
-                    <button type="submit" class="btn">삭제</button>
-                </form>
-            </c:if>
+    <div class="post">
+        <div class="user-info">
+            <a href="profileHome?u=${feedDetail.user_id}">
+                <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
+            </a>
+            <span class="username">${feedDetail.user_id}</span>
         </div>
-    </c:forEach>
 
-    <!-- 코멘트 입력 폼 -->
-    <div class="comment-form">
-        <form action="feedDetail/comments" method="post">
-            <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
-            <input type="hidden" name="userId" value="${now_id}">
-            <input type="text" name="comments" placeholder="댓글을 입력하세요" />
-            <button type="submit" class="btn">입력</button>
-        </form>
+        <!-- 게시글 삭제 아이콘 (작성자에게만 표시) -->
+        <c:if test="${feedDetail.user_id eq now_id}">
+            <button class="delete-post-btn" onclick="location.href='feedDel?f=${feedDetail.feed_id}'">
+                <img src="static/images/setting/delete_button.png" alt="Delete Button">
+            </button>
+        </c:if>
+
+        <!-- 이미지가 존재할 때만 출력 -->
+        <c:if test="${not empty feedDetail.feed_img_name}">
+            <img src="static/images/feed/${feedDetail.feed_img_name}" alt="Post Image" class="post-image">
+        </c:if>
+
+        <div class="post-text">
+            <p>${feedDetail.feed_text}</p>
+            <span class="post-time">${feedDetail.feed_date}</span>
+        </div>
+        <div class="post-actions">
+            <button type="button" class="like-btn" data-feed-id="${feedDetail.feed_id}" data-now-id="${now_id}">
+                ❤ <span class="likes">${feedDetail.likeCount}</span>
+            </button>
+            <span class="comments">💬 ${feedDetail.commentsCount}</span>
+        </div>
     </div>
-</div>
 
-<script>
-    // 좋아요 처리 로직
-    document.querySelector('.like-btn').addEventListener('click', function() {
-        const feedId = this.getAttribute('data-feed-id');
-        const nowId = this.getAttribute('data-now-id');
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+        <h3>댓글</h3>
+        <c:forEach var="comment" items="${feedDetail.feedComments}">
+            <div class="comment">
+                <a href="profileHome?u=${comment.user_id}"><img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic"></a>
+                <div class="comment-info">
+                    <span class="username">${comment.user_id}</span>  <!-- 아이디를 사진 아래에 위치 -->
+                    <p>${comment.feed_comments_text}</p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: auto;">
+                    <c:if test="${comment.user_id eq now_id}">
+                        <form action="feedDetail/deleteComment" method="post" style="margin: 0;">
+                            <input type="hidden" name="feedCommentsId" value="${comment.feed_comments_id}" />
+                            <input type="hidden" name="feedId" value="${feedDetail.feed_id}" />
+                            <button type="submit" class="delete-comment-btn">
+                                <img src="static/images/setting/delete_button.png" alt="Delete Button">
+                            </button>
+                        </form>
+                    </c:if>
+                    <div class="comment-date" style="font-size: 0.8em; color: gray; margin-top: 5px;">${comment.feed_comments_date}</div>
+                </div>
+            </div>
+        </c:forEach>
 
-        fetch('/whale/feedLike', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'feedId': feedId,
-                'now_id': nowId
+        <!-- 코멘트 입력 폼 -->
+        <div class="comment-form">
+            <form action="feedDetail/comments" method="post">
+                <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
+                <input type="hidden" name="userId" value="${now_id}">
+                <input type="text" name="comments" placeholder="댓글을 입력하세요" />
+                <button type="submit" class="btn">입력</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 좋아요 처리 로직
+        document.querySelector('.like-btn').addEventListener('click', function() {
+            const feedId = this.getAttribute('data-feed-id');
+            const nowId = this.getAttribute('data-now-id');
+
+            fetch('/whale/feedLike', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'feedId': feedId,
+                    'now_id': nowId
+                })
             })
-        })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -213,8 +262,8 @@
                 }
             })
             .catch(error => console.error('Error:', error));
-    });
-</script>
+        });
+    </script>
 
 </body>
 </html>

@@ -81,7 +81,7 @@ export default {
     .recommendations {width: 100%; height: 240px;}
     .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
     .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
-    .recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
+    .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
     .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
     .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; left: 19px; background: transparent;}
     .recommendationLike:hover{opacity: 0.7;}

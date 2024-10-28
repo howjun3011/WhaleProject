@@ -21,6 +21,12 @@
 	FROM FOLLOW 
 	WHERE INSTR(FOLLOW_USER_ID, #{param1}) > 0
     </select>
+    <select id="getNotiId" resultType="com.tech.whale.main.models.FollowNotiDto">
+    SELECT FOLLOW_NOTI_USER_ID AS TARGET_USER_ID
+    FROM FOLLOW_NOTI
+    WHERE USER_ID = #{user_id}
+	AND FOLLOW_NOTI_USER_ID = #{now_id}
+    </select>
     
     <select id="feedCount" resultType="int">
     SELECT COUNT(*) AS FEED_COUNT

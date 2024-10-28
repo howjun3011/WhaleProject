@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.feed.dao.FeedDao;
 import com.tech.whale.feed.dto.FeedDto;
+import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.MainDao;
 import com.tech.whale.profile.dao.ProDao;
 import com.tech.whale.profile.dto.ProfileDto;
@@ -49,7 +50,7 @@ public class ProfileController {
 		String now_id = (String) session.getAttribute("user_id");
 		
 		List<ProfileDto> followerList = proDao.getFollowerList(userId);
-		
+		FollowNotiDto profile2 = proDao.getNotiId(userId, now_id);
 		List<FeedDto> feedList = feedDao.getFeedsProfile(userId);
 		
 		model.addAttribute("now_id", now_id);
@@ -58,6 +59,7 @@ public class ProfileController {
 		model.addAttribute("fnCount", fncount);
 		model.addAttribute("fdCount", fdcount);
 		model.addAttribute("profile", profile);
+		model.addAttribute("profile2", profile2);
 		model.addAttribute("userId", userId);
 		model.addAttribute("feedList", feedList);
 		return "profile/profileHome";
@@ -152,6 +154,17 @@ public class ProfileController {
 		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
 		if (followNoti == null) {
 			mainDao.insertFollowNoti(1, userId, now_id);
+        }
+		
+		return "redirect:/profileHome?u=" +userId;
+	}
+	
+	@RequestMapping("/CancelFollowingPlease")
+	public String cancelFollowingPlease(HttpServletRequest request, HttpSession session, @RequestParam("u") String userId, Model model) {
+		String now_id = (String) session.getAttribute("user_id");
+		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
+		if (followNoti != null) {
+			mainDao.deleteFollowNoti(userId, now_id);
         }
 		
 		return "redirect:/profileHome?u=" +userId;

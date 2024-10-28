@@ -17,5 +17,4 @@ public class ProfileDto {
 	private int account_privacy;
 	private int profile_id;
 	private int follow_id;
-	private String follow_user_id;
 }

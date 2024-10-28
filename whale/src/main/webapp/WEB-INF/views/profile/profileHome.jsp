@@ -246,7 +246,14 @@
                         <%-- 비공개 계정의 경우 팔로우 요청 링크를 사용 --%>
                         <c:choose>
                             <c:when test="${profile.account_privacy == 1}">
-                                <a href="DosecretFollowing?u=${userId}"><button>팔로우 요청</button></a>
+                            	<c:choose>
+                            		<c:when test="${profile2.target_user_id == now_id}">
+                            			<a href="CancelFollowingPlease?u=${userId}"><button>요청됨</button></a>
+                            		</c:when>
+                            		<c:otherwise>
+		                                <a href="DosecretFollowing?u=${userId}"><button>팔로우 요청</button></a>
+                            		</c:otherwise>
+                            	</c:choose>
                             </c:when>
                             <c:otherwise>
                                 <a href="DoFollowing?u=${userId}"><button>팔로우</button></a>

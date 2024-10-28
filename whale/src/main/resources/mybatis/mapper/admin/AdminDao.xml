@@ -20,16 +20,18 @@
 	<sql id="includeUserList">
 	    <choose>
 	        <when test="param4 == 1">
-	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
+	            WHERE (UI.USER_ID LIKE '%' || #{sk} || '%')
+	            
 	        </when>
 	        <when test="param4 == 2">
-	            WHERE (USER_EMAIL LIKE '%' || #{sk} || '%')
+	            WHERE (UI.USER_EMAIL LIKE '%' || #{sk} || '%')
 	        </when>
 	        <otherwise>
 	        </otherwise>
 	    </choose>
 	</sql>
-
+	
+	
 
 
 	<select id="selectUserCnt" parameterType="map" resultType="int">
@@ -38,16 +40,39 @@
     </select>
     
     <select id="adminUserList" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
-	    SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
-	           USER_ACCESS_ID, USER_SPOTIFY_ID
-	    FROM (
-	        SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
-	               USER_ACCESS_ID, USER_SPOTIFY_ID,
-	               ROW_NUMBER() OVER (ORDER BY USER_ID ASC) AS ROW_SEQ
-	        FROM USER_INFO
-	        <include refid="includeUserList"/>
-	    )
-	    WHERE ROW_SEQ BETWEEN #{start} AND #{end}
+	    SELECT *
+		FROM (
+		    SELECT 
+		        UI.USER_ID,
+		        UI.USER_IMAGE_URL,
+		        UI.USER_NICKNAME,
+		        UI.USER_EMAIL,
+		        UI.USER_ACCESS_ID,
+		        UI.USER_STATUS,
+		        UI.USER_DATE,
+		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
+		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
+		        (
+		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
+		            FROM POST_COMMENTS pc 
+		            WHERE pc.USER_ID = UI.USER_ID
+		        ) +
+		        (
+		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
+		            FROM FEED_COMMENTS fc 
+		            WHERE fc.USER_ID = UI.USER_ID
+		        ) AS COMMENTS_COUNT,
+		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
+		    FROM 
+		        USER_INFO UI
+		    <include refid="includeUserList" />
+		    GROUP BY 
+		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE
+		) 
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+
+
 	</select>
     
     <select id="userAccountInfoSelect" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
@@ -56,6 +81,8 @@
 	    	UI.USER_IMAGE_URL,
 	        UI.USER_NICKNAME,
 	        UI.USER_EMAIL,
+	        UI.USER_STATUS,
+	        UI.USER_DATE,
 	        UI.USER_ACCESS_ID,
 	        COUNT(DISTINCT P.POST_ID) AS POST_COUNT,
 	        COUNT(DISTINCT PC.POST_COMMENTS_ID) AS COMMENTS_COUNT,
@@ -71,7 +98,7 @@
 	    WHERE 
 	        UI.USER_ID = #{userId}
 	    GROUP BY 
-	       UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID
+	       UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_DATE,UI.USER_STATUS
 	</select>
 	
     <select id="userAccountFeedSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
@@ -137,9 +164,58 @@
     	WHERE USER_ID = #{userId}
     </update>
     <update id="userImgDelete" >
-    	UPDATE USER_INFO SET USER_IMAGE_URL = NULL
+    	UPDATE USER_INFO SET USER_IMAGE_URL = 'PRO.PNG'
     	WHERE USER_ID = #{userId} AND USER_IMAGE_URL = #{userImgUrl}
     </update>
+    
+    
+    <sql id="accessIdAdd">
+	    <choose>
+	        <when test="userAccess == 1">
+	            INSERT INTO ADMIN_INFO VALUES(ADMIN_INFO_SEQ.NEXTVAL, #{userId}, #{userAccess} )
+	        </when>
+	        <when test="userAccess == 2">
+	            INSERT INTO ADVERTISER_INFO VALUES(ADVERTISER_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
+	        </when>
+	        <when test="userAccess == 3">
+	            INSERT INTO OFFICIAL_INFO VALUES(OFFICIAL_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+    
+    
+    <insert id="accessInfoAdd">
+    	<include refid="accessIdAdd" />
+    </insert>
+    <insert id="userAccessLog">
+    	INSERT INTO ACCESS_LOG VALUES(ACCESS_LOG_SEQ.NEXTVAL, #{userId}, #{accessReason}, #{userAccess}, SYSDATE )
+    </insert>
+    
+    <update id="userInfoAccessModify" >
+    	UPDATE USER_INFO SET USER_ACCESS_ID = #{userAccess} WHERE USER_ID = #{userId}
+    </update>
+    
+    <sql id="accessIdDelete">
+	    <choose>
+	        <when test="userAccessNow == 1">
+	            DELETE FROM ADMIN_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <when test="userAccessNow == 2">
+	            DELETE FROM ADVERTISER_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <when test="userAccessNow == 3">
+	            DELETE FROM OFFICIAL_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+    
+    <delete id="userAccessDrop" >
+    	<include refid="accessIdDelete" />
+    </delete>
 
 
 </mapper>

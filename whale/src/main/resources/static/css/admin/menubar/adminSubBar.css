@@ -5,14 +5,16 @@
     margin-left:0;
     background-color: white;
     font-size: 22px;
-    border-right: 1px solid #ccc;
     height:auto;
     min-width: 200px;
+    /* border-right: 1px solid #ccc; */
 }
 
 .adminSubBar ul {
     list-style: none;
     padding-left:10px;
+    width: 190px;
+    
 }
 
 .adminSubBar ul li {

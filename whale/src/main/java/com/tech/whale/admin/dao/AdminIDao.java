@@ -29,4 +29,11 @@ public interface AdminIDao {
 	public void userNicknameModyfy(String userId, String userNickname);
 	public void userImgDelete(String userId, String userImgUrl);
 	
+	public void userInfoAccessModify(String userId, int userAccess);
+	public void accessInfoAdd(
+			String userId, int userAccess, String companyName);
+	public void userAccessLog(
+			String userId, int userAccess, String accessReason);
+	public void userAccessDrop(String userId, int userAccessNow);
+	
 }

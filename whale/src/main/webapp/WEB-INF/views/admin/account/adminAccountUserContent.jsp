@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <div class="content" name="content" id="content">
 
@@ -27,6 +27,7 @@
                 <th>게시글</th>
                 <th>피드</th>
                 <th>댓글</th>
+                <th>가입일</th>
                 <th>계정상태</th>
                 <th></th>
             </tr>
@@ -45,7 +46,8 @@
 					<td>${dto.post_count }</td>
 					<td>${dto.feed_count }</td>
 					<td>${dto.comments_count }</td>
-					<td>ㅁㄴㅇ</td>
+					<td><fmt:formatDate value="${dto.user_date}" pattern="yyyy.MM.dd" /></td>
+					<td>${dto.user_status_str }</td>
 					<td>
 						<button onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }'" >수정</button>
 					</td>

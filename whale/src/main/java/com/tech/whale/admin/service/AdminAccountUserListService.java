@@ -89,8 +89,6 @@ public class AdminAccountUserListService implements AdminServiceInter{
 			list = adminIDao.adminUserList(rowStart,rowEnd,searchKeyword,"2");
 		}
 		
-
-		
 		model.addAttribute("list", list);
 		model.addAttribute("ultotRowcnt", total);
 		model.addAttribute("ulsearchVO", searchVO);

@@ -74,6 +74,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
 </style>
 <script>
 window.onload = function() {
+	// 프로필 수정시 메인에 반영하는 기능
+	window.parent.postMessage('profileEdit', 'http://localhost:9002');
+	
     var fileInput = document.getElementById("fileInput");
 
     // 사진 수정 버튼 클릭 시 파일 선택 창 열기

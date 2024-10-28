@@ -60,10 +60,14 @@
 	        CN.COMMENTS_NOTI_DATE AS COMMENTS_NOTI_DATE,
 	        COALESCE(PC.USER_ID, FC.USER_ID) AS TARGET_USER_ID,
 	        PC.POST_ID AS POST_ID,
-	        FC.FEED_ID AS FEED_ID
+	        P.COMMUNITY_ID AS COMMUNITY_ID,
+	        FC.FEED_ID AS FEED_ID,
+	        PC.POST_COMMENTS_TEXT AS POST_COMMENTS_TEXT,
+	        FC.FEED_COMMENTS_TEXT AS FEED_COMMENTS_TEXT
 	    FROM
 	        COMMENTS_NOTI CN
 			    LEFT JOIN POST_COMMENTS PC ON PC.POST_COMMENTS_ID = CN.POST_COMMENTS_ID
+			    LEFT JOIN POST P ON P.POST_ID = PC.POST_ID
 		        LEFT JOIN FEED_COMMENTS FC ON FC.FEED_COMMENTS_ID = CN.FEED_COMMENTS_ID
 	    WHERE
 	        CN.USER_ID = #{userId}
@@ -103,5 +107,21 @@
 			   (SELECT MAX(FEED_COMMENTS_ID) FROM FEED_COMMENTS WHERE FEED_ID = #{feedId} AND USER_ID = #{userId} AND FEED_COMMENTS_TEXT = #{commentText})
 		)
 	</insert>
+	
+	<update id="updateLikeNoti">
+		UPDATE LIKE_NOTI SET LIKE_NOTI_CHECK = 1 WHERE LIKE_NOTI_ID = #{like_noti_id}
+	</update>
+	
+	<update id="updateCommentsNoti">
+		UPDATE COMMENTS_NOTI SET COMMENTS_NOTI_CHECK = 1 WHERE COMMENTS_NOTI_ID = #{comments_noti_id}
+	</update>
+	
+	<delete id="deleteLikeNoti">
+    	DELETE FROM LIKE_NOTI WHERE LIKE_NOTI_ID = #{like_noti_id}
+    </delete>
+    
+    <delete id="deleteCommentsNoti">
+    	DELETE FROM COMMENTS_NOTI WHERE COMMENTS_NOTI_ID = #{comments_noti_id}
+    </delete>
 	
 </mapper>

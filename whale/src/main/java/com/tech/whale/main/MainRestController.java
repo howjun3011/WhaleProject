@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tech.whale.main.models.ComNotiDto;
@@ -70,10 +71,34 @@ public class MainRestController {
 		return likeNotis;
 	}
 	
-	// [ 좋아요 알림 값 ]
+	// [ 댓글 알림 값 ]
 	@GetMapping(value = "/commentsNoti", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ComNotiDto> getCommentsNotiMain(HttpSession session) {
 		List<ComNotiDto> commentsNotis = mainService.getCommentsNotiMainService(session);
 		return commentsNotis;
+	}
+	
+	// [ 좋아요 알림 읽음 처리 ]
+	@GetMapping("/updateLikeNoti")
+	public void updateLikeNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.updateLikeNotiMainService((String) map.get("ln"));
+	}
+	
+	// [ 댓글 알림 읽음 처리 ]
+	@GetMapping("/updateCommentsNoti")
+	public void updateCommentsNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.updateCommentsNotiMainService((String) map.get("cn"));
+	}
+	
+	// [ 좋아요 알림 삭제 처리 ]
+	@GetMapping("/deleteLikeNoti")
+	public void deleteLikeNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.deleteLikeNotiMainService((String) map.get("ln"));
+	}
+	
+	// [ 댓글 알림 읽음 처리 ]
+	@GetMapping("/deleteCommentsNoti")
+	public void deleteCommentsNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.deleteCommentsNotiMainService((String) map.get("cn"));
 	}
 }

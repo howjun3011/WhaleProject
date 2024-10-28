@@ -8,7 +8,7 @@
                 <button class="searchBtn" @click="goSearch()">
                     <img src="../../../public/images/main/searchBtn.png" alt="Music Whale Search Button" height="14px">
                 </button>
-                <input class="headerInput" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'" v-model="this.query">
+                <input class="headerInput" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'" v-model="this.query" @click="goSearchHome()">
             </div>
         </div>
     </div>
@@ -23,6 +23,7 @@ export default {
     },
     methods: {
         goMain() {this.$router.replace('/whale/streaming/recommend');},
+        goSearchHome() {this.$router.replace(`/whale/streaming/searchHome`);},
         goSearch() {this.$router.replace(`/whale/streaming/search/${ this.query }`);},
     },
 };

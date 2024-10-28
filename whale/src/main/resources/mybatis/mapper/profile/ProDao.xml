@@ -5,7 +5,9 @@
 
 <mapper namespace="com.tech.whale.profile.dao.ProDao">
 	<select id="getUserProfile" resultType="com.tech.whale.profile.dto.ProfileDto">
-	SELECT USER_ID, USER_NICKNAME, USER_IMAGE_URL FROM USER_INFO WHERE USER_ID = #{param1} 
+	SELECT U.USER_ID, U.USER_NICKNAME, U.USER_IMAGE_URL, S.ACCOUNT_PRIVACY FROM USER_INFO U
+	JOIN USER_SETTING S ON U.USER_ID = S.USER_ID
+	WHERE U.USER_ID = #{param1} 
 	</select>
     
     <select id="followerCount" resultType="int">
@@ -18,6 +20,12 @@
     SELECT COUNT(*) AS FOLLOWING_COUNT
 	FROM FOLLOW 
 	WHERE INSTR(FOLLOW_USER_ID, #{param1}) > 0
+    </select>
+    
+    <select id="feedCount" resultType="int">
+    SELECT COUNT(*) AS FEED_COUNT
+    FROM FEED
+    WHERE USER_ID = #{param1}
     </select>
     
     <select id="getFollowerList" resultType="com.tech.whale.profile.dto.ProfileDto">

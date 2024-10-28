@@ -15,6 +15,7 @@ public interface ProDao {
 	
 	public Integer followerCount(String user_id);
 	public Integer followingCount(String user_id);
+	public Integer feedCount(String userId);
 	
 	public void doUnfollowing(String user_id, String now_id);
 	public void doFollowing(String user_id, String now_id);

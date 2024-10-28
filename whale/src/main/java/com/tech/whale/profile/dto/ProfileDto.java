@@ -14,7 +14,7 @@ public class ProfileDto {
 	private String user_id;
 	private String user_nickname;
 	private String user_image_url;
-	private int user_account_privacy;
+	private int account_privacy;
 	private int profile_id;
 	private int follow_id;
 	private String follow_user_id;

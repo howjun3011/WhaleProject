@@ -18,4 +18,8 @@ public interface MainDao {
 	public void insertFeedLikeNoti(String feedId, String userId);
 	public void insertPostCommentsNoti(String postId, String userId, String commentText);
 	public void insertFeedCommentsNoti(String feedId, String userId, String commentText);
+	public void updateLikeNoti(String like_noti_id);
+	public void updateCommentsNoti(String comments_noti_id);
+	public void deleteLikeNoti(String like_noti_id);
+	public void deleteCommentsNoti(String comments_noti_id);
 }

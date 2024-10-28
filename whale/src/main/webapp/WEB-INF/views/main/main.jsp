@@ -18,10 +18,10 @@
 </head>
 <body>
 	<div id="main">
-		<main-header-component :header-menu-check="headerMenuCheck" :user-image-url="userInfo[1]" @header-alarm-toggle="menuCheck" @header-profile-toggle="menuCheck"></main-header-component>
+		<main-header-component :header-menu-check="headerMenuCheck" :user-image-url="userInfo[1]" :noti-counts-sum="notiCounts.reduce((x,y) => (x+y))" @header-alarm-toggle="menuCheck" @header-profile-toggle="menuCheck"></main-header-component>
 		<div class="main">
 			<main-center-component :frame-names="frameNames" :replace-iframe="replaceIframe" :start-page="startPage"></main-center-component>
-			<main-header-menu-component :header-menu-check="headerMenuCheck" :user-nickname="userInfo[0]" @header-close-menu="closeMenu" @menu-redirect-iframe="changeRedirectIndex"></main-header-menu-component>
+			<main-header-menu-component :header-menu-check="headerMenuCheck" :user-nickname="userInfo[0]" :notifications="notifications" :noti-counts="notiCounts" :get-notification="getNotification" @header-close-menu="closeMenu" @menu-redirect-iframe="changeRedirectIndex"></main-header-menu-component>
 	    </div>
 	    <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage"></main-footer-component>
 	</div>

@@ -4,20 +4,65 @@ const MainHeaderMenuComponent = {
 			<div class="headerMenu-wrap" v-if="headerMenuCheck[0]" @click="closeMenu()">
 				<div class="headerMenu-containers" @click.stop="">
 					<div class="headerMenu-container" id="headerMenu-alarm" v-if="headerMenuCheck[1]">
-						<div class="header-contents flexCenter" @click="toggleExpand(0)" :style="{backgroundColor: notificationIndex === 0 && notifications[0].length !== 0 ? '#efefef' : '#FCFCFC'}"><p class="header-alarm-content">메시지</p></div>
+						<div class="header-contents flexCenter" @click="toggleExpand(0)" :style="{backgroundColor: notificationIndex === 0 && notifications[0].length !== 0 ? '#efefef' : '#FCFCFC'}">
+							<p class="header-alarm-content">메시지</p>
+							<div class="header-noti-menu-counts" v-if="notiCounts[0] !== 0">{{ notiCounts[0] }}</div>
+						</div>
 						<Transition name="menuTransition"><div v-if="notificationIndex === 0 && notifications[0].length !== 0" class="header-expanded-content"></div></Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(1)" :style="{backgroundColor: notificationIndex === 1 && notifications[1].length !== 0 ? '#efefef' : '#FCFCFC'}"><p class="header-alarm-content">좋아요</p></div>
+						<div class="header-contents flexCenter" @click="toggleExpand(1)" :style="{backgroundColor: notificationIndex === 1 && notifications[1].length !== 0 ? '#efefef' : '#FCFCFC'}">
+							<p class="header-alarm-content">좋아요</p>
+							<div class="header-noti-menu-counts" v-if="notiCounts[1] !== 0">{{ notiCounts[1] }}</div>
+						</div>
 						<Transition name="menuTransition">
 							<div v-if="notificationIndex === 1 && notifications[1].length !== 0" class="header-expanded-content">
-								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[1]" :key="j" @click="redirectIframe(1,6,'?c='+notification.community_id+'&p='+notification.post_id)"><p class="header-notification-content"><span style="font-weight: 400;">{{ notifications[1][j].target_user_id }}</span>님이 당신의 {{ notifications[1][j].like_noti_type }}에 <span style="font-weight: 400;">좋아요</span>를 눌렀습니다.</p></div>
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[1]" :key="j" @click="redirectIframeNoti(1,1,j,'updateLikeNoti?ln='+notification.like_noti_id)">
+									<div class="header-notification-content">
+										<span style="font-weight: 400;">{{ notifications[1][j].target_user_id }}</span>님이 당신의 {{ notifications[1][j].like_noti_type }}에 <span style="font-weight: 400;">좋아요</span>를 눌렀습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.like_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.like_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.like_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.like_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.like_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.like_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.like_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.like_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="deleteNoti('deleteLikeNoti?ln='+notification.like_noti_id)"><div>x</div></div>
+								</div>
 							</div>
 						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(2)" :style="{backgroundColor: notificationIndex === 2 && notifications[2].length !== 0 ? '#efefef' : '#FCFCFC'}"><p class="header-alarm-content">댓글</p></div>
-						<Transition name="menuTransition"><div v-if="notificationIndex === 2 && notifications[2].length !== 0" class="header-expanded-content"></div></Transition>
+						<div class="header-contents flexCenter" @click="toggleExpand(2)" :style="{backgroundColor: notificationIndex === 2 && notifications[2].length !== 0 ? '#efefef' : '#FCFCFC'}">
+							<p class="header-alarm-content">댓글</p>
+							<div class="header-noti-menu-counts" v-if="notiCounts[2] !== 0">{{ notiCounts[2] }}</div>
+						</div>
+						<Transition name="menuTransition">
+							<div v-if="notificationIndex === 2 && notifications[2].length !== 0" class="header-expanded-content">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[2]" :key="j" @click="redirectIframeNoti(1,2,j,'updateCommentsNoti?cn='+notification.comments_noti_id)">
+									<div class="header-notification-content">
+										<span style="font-weight: 400;">{{ notifications[2][j].target_user_id }}</span>님이 당신의 {{ notifications[2][j].feed_id !== 0 ? '피드' : '게시글' }}에 <span style="font-weight: 400;">댓글</span>을 달았습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											<div style="float: left; width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10px;">{{ notification.post_comments_text !== null ? '\"'+notification.post_comments_text+'\"' : '\"'+notification.feed_comments_text+'\"' }}&nbsp</div>
+											{{
+												(nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) < 60 * 1000 ? " | "+Math.floor((nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) < 60 * 60 * 1000 ? " | "+Math.floor((nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? " | "+Math.floor((nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												" | "+Math.floor((nowTime.getTime() - new Date(notification.comments_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.comments_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="deleteNoti('deleteCommentsNoti?cn='+notification.comments_noti_id)"><div>x</div></div>
+								</div>
+							</div>
+						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(3)" :style="{backgroundColor: notificationIndex === 3 && notifications[3].length !== 0 ? '#efefef' : '#FCFCFC'}"><p class="header-alarm-content">팔로우</p></div>
+						<div class="header-contents flexCenter" @click="toggleExpand(3)" :style="{backgroundColor: notificationIndex === 3 && notifications[3].length !== 0 ? '#efefef' : '#FCFCFC'}">
+							<p class="header-alarm-content">팔로우</p>
+							<div class="header-noti-menu-counts" v-if="notiCounts[3] !== 0">{{ notiCounts[3] }}</div>
+						</div>
 						<Transition name="menuTransition"><div v-if="notificationIndex === 3 && notifications[3].length !== 0" class="header-expanded-content"></div></Transition>
 					</div>
 					<div class="headerMenu-container" id="headerMenu-profile" v-if="headerMenuCheck[2]">
@@ -33,25 +78,29 @@ const MainHeaderMenuComponent = {
 	props: {
 		headerMenuCheck: Array,
 		userNickname: String,
+		notifications: Array,
+		notiCounts: Array,
+		getNotification: {type: Function, default() {return 'Default function'}},
 	},
 	data() {
 		return {
 			notificationIndex: null,
-			notifications: [],
+			nowTime: new Date(),
 		};
 	},
 	mounted() {
-		this.getNotification();
 	},
 	methods: {
 		closeMenu() {this.$emit('header-close-menu'); this.notificationIndex = null;},
 		redirectIframe(i,j,k) {this.$emit('menu-redirect-iframe',i,j,k); this.notificationIndex = null;},
-		redirectIframeNoti(i,j,k) {
+		redirectIframeNoti(i,j,k,l) {
 			let x;
-			if (this.notifications[1][k].post_id !== 0) {x = `?c=${notification.community_id}&p=${notification.post_id}`;}
-			else if (this.notifications[1][k].feed_id !== 0) {x = `?c=${notification.community_id}&p=${notification.post_id}`;}
-			this.$emit('menu-redirect-iframe',i,j,x);
+			let y;
+			if (this.notifications[j][k].post_id !== 0) {x = 6; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
+			else if (this.notifications[j][k].feed_id !== 0) {x = 7; y = `?f=${this.notifications[j][k].feed_id}`;}
+			this.$emit('menu-redirect-iframe',i,x,y);
 			this.notificationIndex = null;
+			fetch('main/'+l);
 		},
 		logoutWhale() {
 			// 스프링 클라이언트 정보 초기화
@@ -59,30 +108,8 @@ const MainHeaderMenuComponent = {
 			// 스프링 서버 정보 초기화
 			location.href='/whale/main/logout';
 		},
-		toggleExpand(i) {
-			this.notificationIndex = this.notificationIndex === i ? null : i;
-		},
-		// [ Like Notification ]
-		getNotification() {
-			// 메세지
-			this.notifications[0] = [];
-			// 좋아요
-			fetch('main/likeNoti')
-				.then(response => response.json())
-				.then(data => {
-					this.notifications[1] = data;
-					console.log(data);
-			});
-			// 댓글
-			fetch('main/commentsNoti')
-				.then(response => response.json())
-				.then(data => {
-					this.notifications[2] = data;
-					console.log(data);
-			});
-			// 팔로우
-			this.notifications[3] = [];
-		},
+		toggleExpand(i) {this.notificationIndex = this.notificationIndex === i ? null : i;},
+		deleteNoti(i) {fetch('main/'+i); setTimeout(() => {this.getNotification();}, 500);},
 	},
 };
 

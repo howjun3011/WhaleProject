@@ -36,19 +36,26 @@ public class AdminUserImgDeleteService implements AdminServiceInter{
 		String workPath = System.getProperty("user.dir");
         String root = workPath + "/src/main/resources/static/images/setting";
         String userImgPath = root + "/" + userImgUrl;
-        
         File file = new File(userImgPath);
-
-        // 파일 존재 여부 확인 후 삭제
-        if (file.exists()) {
-            if (file.delete()) {
-                System.out.println("파일이 삭제되었습니다: " + userImgPath);
-            } else {
-                throw new RuntimeException("파일 삭제에 실패했습니다: " + userImgPath);
-            }
-        } else {
-            throw new RuntimeException("삭제할 파일이 존재하지 않습니다: " + userImgPath);
+        
+        if(userImgUrl.equals("pro.png")) {
+        	
+        }else if(userImgUrl.trim().isEmpty() || userImgUrl == null) {
+        	
+        }else {
+        	
+        	if (file.exists()) {
+        		if (file.delete()) {
+        			System.out.println("파일이 삭제 성공: " + userImgPath);
+        		} else {
+        			throw new RuntimeException("파일 삭제 실패: " + userImgPath);
+        		}
+        	} else {
+        		throw new RuntimeException("삭제할 파일명 없음: " + userImgPath);
+        	}
         }
+        
+
 	}
 
 }

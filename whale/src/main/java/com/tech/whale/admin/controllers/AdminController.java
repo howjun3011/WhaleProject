@@ -144,7 +144,7 @@ public class AdminController {
 	    accountSubBar(model);
 	    
 	    adminAccountUserListService.execute(model);
-		
+	    adminAccountUserInfoService.excuteArray(model);
 		return "/admin/view/adminOutlineForm";
 	}
 	
@@ -225,6 +225,18 @@ public class AdminController {
 		return "/admin/view/adminOutlineForm";
 	}
 	
+	@RequestMapping("/adminUserAccessModify")
+	public String adminUserAccessModify(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String userId = request.getParameter("userId");
+		
+		adminAccountUserModifyService.modifyAccess(model);
+		
+		
+		return "redirect:adminAccountUserModify?userId="+userId;
+	}
 	@RequestMapping("/adminUserNicknameModify")
 	public String adminUserNicknameModify(
 			HttpServletRequest request,

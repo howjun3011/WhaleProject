@@ -11,6 +11,14 @@
             alert("취소되었습니다.");
         }
     }
+    function accessModify() {
+        var result = confirm("저장하시겠습니까?");
+        if (result) {
+            document.getElementById("accessForm").submit();
+        } else {
+            alert("취소되었습니다.");
+        }
+    }
 
     function confirmDelete() {
         var result = confirm("삭제하시겠습니까?");
@@ -28,7 +36,7 @@
 	<div calss="userInfoForm">
 		<table class="userInfo">
 			<tr>
-				<td rowspan="4" class="proImg" style="">
+				<td rowspan="5" class="proImg" style="">
 					<div>
 						<c:if test="${not empty AccountUserInfo.user_image_url }">
 							<img src="/whale/static/images/setting/${AccountUserInfo.user_image_url }" alt="프사" />
@@ -46,7 +54,7 @@
 				<td>닉네임</td>
 				<form id="nicknameForm" action="adminUserNicknameModify" method="post">
 				<td>
-					<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+					<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />&nbsp;
 					<input type="text" name="userNickname" value="${AccountUserInfo.user_nickname }" />
 					<button onclick="confirmUpdate()" >수정</button>
 				</td>
@@ -60,6 +68,13 @@
 				<td>등급</td>
 				<td>${AccountUserInfo.user_access_str }</td>
 			</tr>
+			<tr>
+				<td>계정상태</td>
+				<td>
+				${AccountUserInfo.user_status_str } &nbsp;
+				<input type="button" value="수정" />
+				</td>
+			</tr>
 		</table>
 	</div>
 	<br />
@@ -67,41 +82,41 @@
 	<br />
 	<br />
 	<div class="accessAddForm">
-		<form action="" method="post">
+		<form id="accessForm" action="adminUserAccessModify" method="post">
 			<table class="accessAddTable">
 				<tr>
 					<td class="tdName">상호명</td>
 					<td class="tdContent">
-						<input type="text" />
+						<input type="text" name="companyName" />
 					</td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td class="tdName">파트</td>
 					<td class="tdContent">
 						<input type="text" />
 					</td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td class="tdName">권한</td>
 					<td class="tdContent">
 						<label>
-					        <input type="radio" name="userAccess" value="user" />
+					        <input type="radio" name="userAccess" value="0" />
 					        유저
 					    </label>
 					    &nbsp;&nbsp;
 						<label>
-					        <input type="radio" name="userAccess" value="official" />
-					        오피셜
+					        <input type="radio" name="userAccess" value="1" />
+					        관리자
 					    </label>
 					    &nbsp;&nbsp;
 					    <label>
-					        <input type="radio" name="userAccess" value="advertiser" />
+					        <input type="radio" name="userAccess" value="2" />
 					        광고주
 					    </label>
 					    &nbsp;&nbsp;
 					    <label>
-					        <input type="radio" name="userAccess" value="admin" />
-					        관리자
+					        <input type="radio" name="userAccess" value="3" />
+					        오피셜
 					    </label>
 					</td>
 				</tr>
@@ -113,8 +128,10 @@
 				</tr>
 			</table>
 			<div class="submit">
+				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+				<input type="hidden" name="userAccessNow" value="${AccountUserInfo.user_access_id }" />
 				<input type="submit" value="저장" />
-				<button type="button" onclick="adminAccountUserListView">취소</button>
+				<button type="button" onclick="window.location.href='adminAccountUserListView'">취소</button>
 			</div>
 		</form>
 	</div>

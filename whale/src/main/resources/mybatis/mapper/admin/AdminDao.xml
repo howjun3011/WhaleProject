@@ -20,15 +20,17 @@
 	<sql id="includeUserList">
 	    <choose>
 	        <when test="param4 == 1">
-	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
+	            WHERE (UI.USER_ID LIKE '%' || #{sk} || '%')
+	            
 	        </when>
 	        <when test="param4 == 2">
-	            WHERE (USER_EMAIL LIKE '%' || #{sk} || '%')
+	            WHERE (UI.USER_EMAIL LIKE '%' || #{sk} || '%')
 	        </when>
 	        <otherwise>
 	        </otherwise>
 	    </choose>
 	</sql>
+	
 
 
 
@@ -38,16 +40,39 @@
     </select>
     
     <select id="adminUserList" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
-	    SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
-	           USER_ACCESS_ID, USER_SPOTIFY_ID
-	    FROM (
-	        SELECT USER_ID, USER_PASSWORD, USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, 
-	               USER_ACCESS_ID, USER_SPOTIFY_ID,
-	               ROW_NUMBER() OVER (ORDER BY USER_ID ASC) AS ROW_SEQ
-	        FROM USER_INFO
-	        <include refid="includeUserList"/>
-	    )
-	    WHERE ROW_SEQ BETWEEN #{start} AND #{end}
+	    SELECT *
+		FROM (
+		    SELECT 
+		        UI.USER_ID,
+		        UI.USER_IMAGE_URL,
+		        UI.USER_NICKNAME,
+		        UI.USER_EMAIL,
+		        UI.USER_ACCESS_ID,
+		        UI.USER_STATUS,
+		        UI.USER_DATE,
+		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
+		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
+		        (
+		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
+		            FROM POST_COMMENTS pc 
+		            WHERE pc.USER_ID = UI.USER_ID
+		        ) +
+		        (
+		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
+		            FROM FEED_COMMENTS fc 
+		            WHERE fc.USER_ID = UI.USER_ID
+		        ) AS COMMENTS_COUNT,
+		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
+		    FROM 
+		        USER_INFO UI
+		    <include refid="includeUserList" />
+		    GROUP BY 
+		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE
+		) 
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+
+
 	</select>
     
     <select id="userAccountInfoSelect" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
@@ -56,6 +81,8 @@
 	    	UI.USER_IMAGE_URL,
 	        UI.USER_NICKNAME,
 	        UI.USER_EMAIL,
+	        UI.USER_STATUS,
+	        UI.USER_DATE,
 	        UI.USER_ACCESS_ID,
 	        COUNT(DISTINCT P.POST_ID) AS POST_COUNT,
 	        COUNT(DISTINCT PC.POST_COMMENTS_ID) AS COMMENTS_COUNT,
@@ -71,7 +98,7 @@
 	    WHERE 
 	        UI.USER_ID = #{userId}
 	    GROUP BY 
-	       UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID
+	       UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_DATE,UI.USER_STATUS
 	</select>
 	
     <select id="userAccountFeedSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
@@ -137,8 +164,18 @@
     	WHERE USER_ID = #{userId}
     </update>
     <update id="userImgDelete" >
-    	UPDATE USER_INFO SET USER_IMAGE_URL = NULL
+    	UPDATE USER_INFO SET USER_IMAGE_URL = 'PRO.PNG'
     	WHERE USER_ID = #{userId} AND USER_IMAGE_URL = #{userImgUrl}
+    </update>
+    
+    
+    
+    <insert id="officialInfoAdd">
+    	insert into official_info values(official_info_seq.nextval, #{userId}, #{companyName}, 3 )
+    </insert>
+    
+    <update id="userInfoAccessModify" >
+    	UPDATE USER_INFO SET USER_ACCESS_ID = #{userAccess} WHERE USER_ID = #{userId}
     </update>
 
 

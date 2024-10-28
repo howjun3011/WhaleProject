@@ -31,7 +31,7 @@
 	    </choose>
 	</sql>
 	
-
+	
 
 
 	<select id="selectUserCnt" parameterType="map" resultType="int">
@@ -169,14 +169,53 @@
     </update>
     
     
+    <sql id="accessIdAdd">
+	    <choose>
+	        <when test="userAccess == 1">
+	            INSERT INTO ADMIN_INFO VALUES(ADMIN_INFO_SEQ.NEXTVAL, #{userId}, #{userAccess} )
+	        </when>
+	        <when test="userAccess == 2">
+	            INSERT INTO ADVERTISER_INFO VALUES(ADVERTISER_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
+	        </when>
+	        <when test="userAccess == 3">
+	            INSERT INTO OFFICIAL_INFO VALUES(OFFICIAL_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
     
-    <insert id="officialInfoAdd">
-    	insert into official_info values(official_info_seq.nextval, #{userId}, #{companyName}, 3 )
+    
+    <insert id="accessInfoAdd">
+    	<include refid="accessIdAdd" />
+    </insert>
+    <insert id="userAccessLog">
+    	INSERT INTO ACCESS_LOG VALUES(ACCESS_LOG_SEQ.NEXTVAL, #{userId}, #{accessReason}, #{userAccess}, SYSDATE )
     </insert>
     
     <update id="userInfoAccessModify" >
     	UPDATE USER_INFO SET USER_ACCESS_ID = #{userAccess} WHERE USER_ID = #{userId}
     </update>
+    
+    <sql id="accessIdDelete">
+	    <choose>
+	        <when test="userAccessNow == 1">
+	            DELETE FROM ADMIN_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <when test="userAccessNow == 2">
+	            DELETE FROM ADVERTISER_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <when test="userAccessNow == 3">
+	            DELETE FROM OFFICIAL_INFO WHERE USER_ID = #{userId}
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+    
+    <delete id="userAccessDrop" >
+    	<include refid="accessIdDelete" />
+    </delete>
 
 
 </mapper>

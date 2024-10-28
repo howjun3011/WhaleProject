@@ -34,6 +34,12 @@ public class AdminAccountUserInfoService implements AdminServiceInter{
 			dto.setUser_access_str("일반유저");
 		}else if(dto.getUser_access_id() == 1) {
 			dto.setUser_access_str("관리자");
+		}else if(dto.getUser_access_id() == 2) {
+			dto.setUser_access_str("광고주");
+		}else if(dto.getUser_access_id() == 3) {
+			dto.setUser_access_str("오피셜");
+		}else {
+			dto.setUser_access_str("오류");
 		}
 		
 		if(dto.getUser_status() == 0) {

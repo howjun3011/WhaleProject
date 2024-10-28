@@ -30,11 +30,10 @@ public interface AdminIDao {
 	public void userImgDelete(String userId, String userImgUrl);
 	
 	public void userInfoAccessModify(String userId, int userAccess);
-	public void officialInfoAdd(String userId, String companyName);
-	
-	
+	public void accessInfoAdd(
+			String userId, int userAccess, String companyName);
+	public void userAccessLog(
+			String userId, int userAccess, String accessReason);
 	public void userAccessDrop(String userId, int userAccessNow);
-	public void userAccessLog(String userId, String accessTitle);
-	public void userAccessModifyUser(String userId, String accessTitle);
 	
 }

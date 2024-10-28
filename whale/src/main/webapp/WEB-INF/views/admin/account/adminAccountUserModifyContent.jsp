@@ -11,6 +11,7 @@
             alert("취소되었습니다.");
         }
     }
+    
     function accessModify() {
         var result = confirm("저장하시겠습니까?");
         if (result) {
@@ -29,11 +30,68 @@
             alert("취소되었습니다.");
         }
     }
+    
+    function accessUpdate() {
+        var result = confirm("저장하시겠습니까?");
+        if (result) {
+            document.getElementById('accessAddForm').style.display = 'none';
+            document.getElementById("accessForm").submit();
+            alert('변경 사항 저장완료.');
+        } else {
+            alert("취소되었습니다.");
+        }
+    }
+    
+    function companyNameText(){
+		var selectedValue = document.querySelector('input[name="userAccess"]:checked').value;
+        var companyNameField = document.getElementById('companyName');
+        var submitButton = document.querySelector('#accessForm button[type="button"]');
+        if (selectedValue === '2' || selectedValue === '3') {
+            companyNameField.style.display = 'block';
+        } else {
+            companyNameField.style.display = 'none';
+        }
+        toggleSubmitButton();
+    	
+    }
+    
+    function toggleSubmitButton(){
+    	var selectedValue = document.querySelector('input[name="userAccess"]:checked');
+    	var submitButton = document.querySelector('#accessForm button[type="button"]');
+        
+        if (selectedValue) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleSubmitButton();
+    });
+    
+    function openStatus() {
+        document.getElementById('userStatus').style.display = 'block';
+    }
 
+    function closeStatus() {
+        document.getElementById('userStatus').style.display = 'none';
+    }
+
+    function statusUpdate() {
+    	//저장코드 추가 필요
+        alert('변경 사항 저장완료.');
+        closeModal();
+    }
+    function openAccess() {
+        document.getElementById('accessAddForm').style.display = 'block';
+    }
+    
 </script>
 
 <div class="content" name="content" id="content">
 	<div calss="userInfoForm">
+		<h2>유저상세</h2>
 		<table class="userInfo">
 			<tr>
 				<td rowspan="5" class="proImg" style="">
@@ -65,74 +123,94 @@
 				<td>${AccountUserInfo.user_email }</td>
 			</tr>
 			<tr>
-				<td>등급</td>
-				<td>${AccountUserInfo.user_access_str }</td>
+				<td>권한</td>
+				<td>
+					${AccountUserInfo.user_access_str }
+					<button type="button" onclick="openAccess()">수정하기</button>
+				</td>
 			</tr>
 			<tr>
 				<td>계정상태</td>
 				<td>
-				${AccountUserInfo.user_status_str } &nbsp;
-				<input type="button" value="수정" />
+					${AccountUserInfo.user_status_str } &nbsp;
+					<button type="button" onclick="openStatus()">수정하기</button>
 				</td>
 			</tr>
 		</table>
 	</div>
+	
+	<div id="userStatus" class="userStatus" style="display: none;">
+	    <div class="userStatusContent">
+	        <h2>계정상태 수정</h2>
+	        <form action="">
+	        	<table>
+	        		<tr>
+	        			<td></td>
+	        		</tr>
+	        	</table>
+	        </form>
+	        <div class="userStatusButton">
+	            <button onclick="statusUpdate()">저장</button>
+	            <button onclick="closeStatus()">취소</button>
+	        </div>
+	    </div>
+	</div>
+
 	<br />
 	<br />
 	<br />
 	<br />
-	<div class="accessAddForm">
+	<div id="accessAddForm" class="accessAddForm" style="display: none;">
+		<h2>권한 수정</h2>
 		<form id="accessForm" action="adminUserAccessModify" method="post">
 			<table class="accessAddTable">
 				<tr>
 					<td class="tdName">상호명</td>
 					<td class="tdContent">
-						<input type="text" name="companyName" />
+						<input type="text" name="companyName" id="companyName" style="display: none; margin: 0 auto; width:430px;"  />
 					</td>
 				</tr>
-				<!-- <tr>
-					<td class="tdName">파트</td>
-					<td class="tdContent">
-						<input type="text" />
-					</td>
-				</tr> -->
 				<tr>
 					<td class="tdName">권한</td>
 					<td class="tdContent">
 						<label>
-					        <input type="radio" name="userAccess" value="0" />
+					        <input type="radio" name="userAccess" value="0" onclick="companyNameText()"/>
 					        유저
 					    </label>
 					    &nbsp;&nbsp;
 						<label>
-					        <input type="radio" name="userAccess" value="1" />
+					        <input type="radio" name="userAccess" value="1" onclick="companyNameText()"/>
 					        관리자
 					    </label>
 					    &nbsp;&nbsp;
 					    <label>
-					        <input type="radio" name="userAccess" value="2" />
+					        <input type="radio" name="userAccess" value="2" onclick="companyNameText()"/>
 					        광고주
 					    </label>
 					    &nbsp;&nbsp;
 					    <label>
-					        <input type="radio" name="userAccess" value="3" />
+					        <input type="radio" name="userAccess" value="3" onclick="companyNameText()"/>
 					        오피셜
 					    </label>
 					</td>
 				</tr>
 				<tr>
-					<td class="tdName">변경내용</td>
+					<td class="tdName">변경사유</td>
 					<td class="tdContent">
-					<textarea name="" id="" cols="60" rows="20"></textarea>
+					<textarea name="accessReason" id="accessReason" cols="60" rows="20"></textarea>
+					</td>
+				</tr>
+				<tr style="border-bottom: none;">
+					<td colspan="2">
+						<div class="submit" style="margin: 0 auto;">
+							<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+							<input type="hidden" name="userAccessNow" value="${AccountUserInfo.user_access_id }" />
+							<button type="button" onclick="accessUpdate()" disabled>저장</button>
+							<button type="button" onclick="closeAccess()">취소</button>
+						</div>
 					</td>
 				</tr>
 			</table>
-			<div class="submit">
-				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
-				<input type="hidden" name="userAccessNow" value="${AccountUserInfo.user_access_id }" />
-				<input type="submit" value="저장" />
-				<button type="button" onclick="window.location.href='adminAccountUserListView'">취소</button>
-			</div>
 		</form>
 	</div>
 	<br />

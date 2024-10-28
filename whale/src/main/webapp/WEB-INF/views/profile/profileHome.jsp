@@ -13,23 +13,26 @@
         font-family: 'Noto Sans', sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #000;
-        color: #fff;
+        background-color: #fafafa;
+        color: #333;
     }
 
     .container {
         width: 100%;
-        max-width: 600px;
+        max-width: 650px;
         margin: 0 auto;
         padding: 20px;
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
     }
 
     /* 프로필 상단 */
     .profile-header {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         padding-bottom: 20px;
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid #dbdbdb;
     }
 
     .profile-info {
@@ -37,14 +40,53 @@
         align-items: center;
     }
 
-    .profile-info img {
+    .profile-image {
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         margin-right: 20px;
+        background-color: #eee;
     }
 
-    /* 유저 아이디를 이미지 아래에 작은 글씨로 배치 */
+    .details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Username and lock button container */
+    .username-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .lockbtn {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: none;
+        margin-right: 5px;
+    }
+
+    .username {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .stats {
+        display: flex;
+        gap: 20px;
+        font-size: 16px;
+        color: #777;
+        margin-top: 5px;
+    }
+
+    .stats div span {
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* User ID below image */
     .profile-info .user-id {
         font-size: 14px;
         color: #aaa;
@@ -52,63 +94,69 @@
         margin-top: 5px;
     }
 
-    .profile-info .details {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* 유저 닉네임을 이미지 오른쪽에 유지 */
-    .profile-info .details .username {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .profile-info .details .stats {
-        display: flex;
-        margin-top: 5px;
-    }
-
-    .profile-info .details .stats div {
-        margin-right: 20px;
-        font-size: 14px;
-    }
-
-    .profile-info .details .stats div span {
-        font-weight: bold;
-    }
-
-    /* 버튼 영역 */
+    /* 프로필 버튼 */
     .profile-actions {
         display: flex;
-        flex-direction: column;
         align-items: center;
+        gap: 10px;
+        flex-direction: column;
     }
 
     .profile-actions button {
-        padding: 8px 16px;
-        background-color: #3897f0;
+        padding: 6px 12px;
+        background-color: #0095f6;
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
+        transition: background-color 0.3s ease;
         margin-bottom: 8px;
         width: 100px;
     }
 
-    .profile-actions button.message {
-        background-color: #000;
-        border: 1px solid #fff;
+    .profile-actions button:hover {
+        background-color: #007ac1;
     }
 
-    .profile-actions button:hover {
-        background-color: #287bc9;
+    /* Message button */
+    .profile-actions button.message {
+        background-color: #fff;
+        color: #0095f6;
+        border: 1px solid #dbdbdb;
     }
 
     .profile-actions button.message:hover {
-        background-color: #333;
+        background-color: #f1f1f1;
+    }
+
+    /* Bio */
+    .bio {
+        padding: 10px 0;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .bio .website {
+        color: #3897f0;
+        text-decoration: none;
+    }
+
+    /* Stats links */
+    .stats a {
+        color: inherit;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .stats a:active {
+        opacity: 0.8;
+    }
+
+    .stats a:hover {
+        color: inherit;
+        text-decoration: none;
     }
 
     /* 피드 그리드 */
@@ -116,7 +164,7 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 2px;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .feed-grid img {
@@ -129,38 +177,8 @@
     .no-feed-message {
         text-align: center;
         font-size: 16px;
-        color: #ccc;
+        color: #aaa;
         margin-top: 20px;
-    }
-
-    /* 팔로우 정보 및 기타 설명 */
-    .bio {
-        padding: 10px 0;
-        font-size: 14px;
-        line-height: 1.4;
-    }
-
-    .bio .website {
-        color: #3897f0;
-        text-decoration: none;
-    }
-
-    /* 링크 기본 스타일 제거 (파란색과 밑줄) */
-    .profile-info .details .stats a {
-        color: inherit; /* 부모 요소의 글자 색상에 따라감 */
-        text-decoration: none; /* 밑줄 제거 */
-        font-weight: bold; /* 글자 강조 */
-    }
-
-    /* 클릭할 때만 클릭한 느낌 주기 */
-    .profile-info .details .stats a:active {
-        opacity: 0.8; /* 클릭할 때 살짝 어두워지도록 설정 */
-    }
-
-    /* 눌러도 색상이나 밑줄에 변화 없도록 설정 */
-    .profile-info .details .stats a:hover {
-        color: inherit;
-        text-decoration: none;
     }
 </style>
 </head>
@@ -179,11 +197,16 @@
     <div class="profile-header">
         <div class="profile-info">
             <div>
-                <img src="static/images/setting/${profile.user_image_url}" alt="User Profile Image">
+                <img class="profile-image" src="static/images/setting/${profile.user_image_url}" alt="User Profile Image">
                 <div class="user-id">@${userId}</div>
             </div>
             <div class="details">
-                <div class="username">${profile.user_nickname}</div>
+                <div class="username-container">
+                    <c:if test="${profile.account_privacy == 1}">
+                        <img class="lockbtn" src="static/images/btn/lock_btn.png" alt="secret" />
+                    </c:if>
+                    <div class="username">${profile.user_nickname}</div>
+                </div>
                 <div class="stats">
                     <div>게시물 <span>${fdCount}</span></div>
 

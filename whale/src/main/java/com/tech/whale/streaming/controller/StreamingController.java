@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;  // ResponseEntity 추가 필요
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
@@ -47,4 +49,18 @@ public class StreamingController {
 		// 임시로 예시 ID 반환 또는 원하는 처리를 여기에 작성
 		return ResponseEntity.ok("Device ID가 성공적으로 생성되었습니다.");
 	}
+
+	@PostMapping("/streaming/playTrack")
+	public ResponseEntity<String> playTrack(HttpSession session, @RequestBody Map<String, String> body) {
+		String trackId = body.get("trackId");
+
+		// 트랙 재생 메서드 호출
+		boolean isPlayed = streamingService.playTrack(session, trackId);
+		if (isPlayed) {
+			return ResponseEntity.ok("Track is playing");
+		} else {
+			return ResponseEntity.status(500).body("Failed to play track");
+		}
+	}
+
 }

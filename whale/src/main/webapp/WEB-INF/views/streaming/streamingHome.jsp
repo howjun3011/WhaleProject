@@ -45,7 +45,7 @@
 									<div class="recommendationLike" onclick="insertTrack('${track.id}')">
 										<img src="static/images/streaming/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
 									</div>
-									<div class="recommendationCover">
+									<div class="recommendationCover" onclick="playTrack('${track.id}')">
 										<img src="${track.album.images[0].url}" alt="${track.name}" width="120" height="120" style="border-radius: 8px;">
 									</div>
 									<div class="recommendationInfo">

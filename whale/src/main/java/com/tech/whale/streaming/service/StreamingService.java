@@ -13,6 +13,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
+
 
 @Service
 public class StreamingService {
@@ -81,4 +84,23 @@ public class StreamingService {
             return null;
         });
     }
+
+    public boolean playTrack(HttpSession session, String trackId) {
+        initializeSpotifyApi(session);
+
+        try {
+            JsonArray uris = new JsonArray();
+            uris.add(new JsonPrimitive("spotify:track:" + trackId)); // URI를 JsonArray에 추가
+
+            spotifyApi.startResumeUsersPlayback()
+                    .uris(uris)
+                    .build()
+                    .execute();
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play track: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

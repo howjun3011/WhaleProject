@@ -6,12 +6,14 @@ function resize() {
     var windowWidth = $(window).width();
     var libraryWidth = $(".mainLibrary").width();
 
+    console.log("Library Width:", libraryWidth);  // libraryWidth 값 확인
+
     var windowHeight = $(window).height();
     var headerHeight = $(".header").height();
     var footerHeight = $(".footer").height();
 
     $('.main').css({'height': (windowHeight-headerHeight-footerHeight-1)+'px'});
-    $('.mainContentFrame').css({'width': (windowWidth-libraryWidth)+'px'});
+    $('.mainContentFrame').css({'width': (windowWidth-((libraryWidth*2)-10))+'px'});
 
     var mainContentHeight = $(".mainContent").height();
     var mainContentHeaderHeight = $(".mainContentHeader").height();
@@ -48,4 +50,22 @@ async function sendDeviceId(event) {
         console.log("Success fetching device id to the Node js Wep App");
     })
     .catch((error) => console.error("Failed to fetch the device_id: ", error));
+}
+
+function playTrack(trackId) {
+    fetch('/whale/streaming/playTrack', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ trackId: trackId })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Track is now playing");
+            } else {
+                console.error("Failed to play track");
+            }
+        })
+        .catch(error => console.error("Error playing track:", error));
 }

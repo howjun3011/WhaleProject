@@ -86,6 +86,12 @@ public class FeedController {
 		FeedDto feedDetail = feedDao.getFeedOne(feedId);
 		
 		List<FeedCommentDto> commentsList = feedCommentsService.getCommentsForFeed(feedId);
+		
+	    for (FeedCommentDto comment : commentsList) {
+	        List<FeedCommentDto> replies = feedCommentsService.getRepliesForComment(comment.getFeed_comments_id());
+	        comment.setReplies(replies);
+	    }
+		
 		feedDetail.setFeedComments(commentsList);
 		
 		model.addAttribute("now_id", now_id);
@@ -175,6 +181,34 @@ public class FeedController {
         // 삭제 후 해당 게시글 디테일 페이지로 리다이렉트
         return "redirect:/feedDetail?f=" + feedId;
     }
+    
+    @PostMapping("/commentLike")
+    @ResponseBody
+    public Map<String, Object> commentLike(@RequestParam("commentId") String commentId, 
+                                           @RequestParam("now_id") String now_id) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            int newLikeCount = feedCommentsService.toggleCommentLike(commentId, now_id);
+            result.put("success", true);
+            result.put("newLikeCount", newLikeCount);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        
+        return result; // JSON 형식으로 응답
+    }
+    
+    @PostMapping("/feedDetail/reply")
+    public String replyToComment(@RequestParam("feedId") int feedId,
+                                 @RequestParam("parentCommentId") String parentCommentId,
+                                 @RequestParam("userId") String userId,
+                                 @RequestParam("replyText") String replyText) {
 
-	
+        feedCommentsService.addReply(feedId, parentCommentId, userId, replyText);
+
+        return "redirect:/feedDetail?f=" + feedId;
+    }
+
 }

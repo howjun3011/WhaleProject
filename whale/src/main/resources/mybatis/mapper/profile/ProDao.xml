@@ -26,12 +26,14 @@
     FROM FOLLOW_NOTI
     WHERE USER_ID = #{user_id}
 	AND FOLLOW_NOTI_USER_ID = #{now_id}
+	AND FOLLOW_NOTI = 1
     </select>
     
     <select id="feedCount" resultType="int">
     SELECT COUNT(*) AS FEED_COUNT
     FROM FEED
     WHERE USER_ID = #{param1}
+    AND FEED_OPEN = 0
     </select>
     
     <select id="getFollowerList" resultType="com.tech.whale.profile.dto.ProfileDto">

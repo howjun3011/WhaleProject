@@ -118,13 +118,25 @@
 		    fc.user_id, 
 		    fc.feed_comments_text, 
 		    TO_CHAR(fc.feed_comments_date, 'YYYY"년" MM"월" DD"일" HH24"시 "MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS feed_comments_date,
-		    ui.user_image_url -- 유저 이미지 URL 추가
+		    ui.user_image_url, -- 유저 이미지 URL
+		    COALESCE(COUNT(fcl.feed_comments_id), 0) AS likeCount, -- 좋아요 수
+		    (
+		        SELECT COUNT(*) 
+		        FROM feed_comments sub_fc 
+		        WHERE sub_fc.parent_comments_id = fc.feed_comments_id
+		    ) AS replyCount -- 답글 수
 		FROM 
 		    feed_comments fc
 		JOIN 
 		    user_info ui ON fc.user_id = ui.user_id -- user_info와 조인
+		LEFT JOIN 
+		    feed_comments_like fcl ON fc.feed_comments_id = fcl.feed_comments_id -- feed_comments_like와 LEFT JOIN
 		WHERE 
 		    fc.feed_id = #{feedId}
+		AND 
+		    fc.parent_comments_id IS NULL
+		GROUP BY 
+		    fc.feed_comments_id, fc.user_id, fc.feed_comments_text, fc.feed_comments_date, ui.user_image_url
 		ORDER BY 
 		    fc.feed_comments_date ASC
     </select>

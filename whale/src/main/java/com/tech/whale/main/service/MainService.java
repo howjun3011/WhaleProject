@@ -1,31 +1,31 @@
 package com.tech.whale.main.service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.main.models.ComNotiDto;
+import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.models.MainDao;
+import com.tech.whale.profile.dao.ProDao;
 import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.setting.dto.PageAccessDto;
 import com.tech.whale.setting.dto.StartpageDto;
 import com.tech.whale.setting.dto.UserInfoDto;
-import com.tech.whale.setting.dto.UserNotificationDto;
 
 @Service
 public class MainService {
 	private MainDao mainDao;
 	private SettingDao settingDao;
+	private ProDao proDao;
 	
-	public MainService(MainDao mainDao, SettingDao settingDao) {
+	public MainService(MainDao mainDao, SettingDao settingDao, ProDao proDao) {
 		this.mainDao = mainDao;
 		this.settingDao = settingDao;
+		this.proDao = proDao;
 	}
 	
 	// [ 유저 정보 설정 서비스 ]
@@ -64,6 +64,11 @@ public class MainService {
 		List<ComNotiDto> commentsNotis = mainDao.getCommentsNoti((String) session.getAttribute("user_id"));
 		return commentsNotis;
 	}
+	// [ 팔로우 알림 서비스 ]
+	public List<FollowNotiDto> getFollowNotiMainService(HttpSession session) {
+		List<FollowNotiDto> followNotis = mainDao.getFollowNoti((String) session.getAttribute("user_id"));
+		return followNotis;
+	}
 	
 	// [ 좋아요 알림 읽음 처리 ]
 	public void updateLikeNotiMainService(String likeNotiId) {
@@ -75,6 +80,11 @@ public class MainService {
 		mainDao.updateCommentsNoti(commentsNotiId);
 	}
 	
+	// [ 팔로우 알림 읽음 처리 ]
+	public void updateFollowNotiMainService(String followNotiId) {
+		mainDao.updateFollowNoti(followNotiId);
+	}
+	
 	// [ 좋아요 알림 삭제 처리 ]
 	public void deleteLikeNotiMainService(String likeNotiId) {
 		mainDao.deleteLikeNoti(likeNotiId);
@@ -83,5 +93,17 @@ public class MainService {
 	// [ 댓글 알림 삭제 처리 ]
 	public void deleteCommentsNotiMainService(String commentsNotiId) {
 		mainDao.deleteCommentsNoti(commentsNotiId);
+	}
+	
+	// [ 팔로우 알림 삭제 처리 ]
+	public void deleteFollowNotiMainService(String userId, String targetId) {
+		mainDao.deleteFollowNoti(userId, targetId);
+	}
+	
+	// [ 비공개 팔로우 알림 수락 처리 ]
+	public void privateFollowNotiMainService(String userId, String targetId) {
+		proDao.doFollowing(userId, targetId);
+		mainDao.deleteFollowNoti(userId, targetId);
+		mainDao.insertFollowNoti(2, targetId, userId);
 	}
 }

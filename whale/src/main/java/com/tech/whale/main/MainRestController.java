@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tech.whale.main.models.ComNotiDto;
+import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.PageAccessDto;
@@ -78,6 +79,13 @@ public class MainRestController {
 		return commentsNotis;
 	}
 	
+	// [ 팔로우 알림 값 ]
+	@GetMapping(value = "/followNoti", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<FollowNotiDto> getFollowNotiMain(HttpSession session) {
+		List<FollowNotiDto> followNotis = mainService.getFollowNotiMainService(session);
+		return followNotis;
+	}
+	
 	// [ 좋아요 알림 읽음 처리 ]
 	@GetMapping("/updateLikeNoti")
 	public void updateLikeNotiMain(@RequestParam HashMap<String, Object> map) {
@@ -90,6 +98,12 @@ public class MainRestController {
 		mainService.updateCommentsNotiMainService((String) map.get("cn"));
 	}
 	
+	// [ 팔로우 알림 읽음 처리 ]
+	@GetMapping("/updateFollowNoti")
+	public void updateFollowNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.updateFollowNotiMainService((String) map.get("fn"));
+	}
+	
 	// [ 좋아요 알림 삭제 처리 ]
 	@GetMapping("/deleteLikeNoti")
 	public void deleteLikeNotiMain(@RequestParam HashMap<String, Object> map) {
@@ -100,5 +114,17 @@ public class MainRestController {
 	@GetMapping("/deleteCommentsNoti")
 	public void deleteCommentsNotiMain(@RequestParam HashMap<String, Object> map) {
 		mainService.deleteCommentsNotiMainService((String) map.get("cn"));
+	}
+	
+	// [ 팔로우 알림 삭제 처리 ]
+	@GetMapping("/deleteFollowNoti")
+	public void deleteFollowNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.deleteFollowNotiMainService((String) map.get("ui"),(String) map.get("ti"));
+	}
+	
+	// [ 비공개 팔로우 알림 수락 처리 ]
+	@GetMapping("/privateFollowNoti")
+	public void privateFollowNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.privateFollowNotiMainService((String) map.get("ui"),(String) map.get("ti"));
 	}
 }

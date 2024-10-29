@@ -1,6 +1,7 @@
 package com.tech.whale.setting.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,6 +21,7 @@ public interface SettingDao {
 	public void updateProfile(String nickname, String  encodedPassword, String email, String newProfileImage, String session_user_id);
 	public void updateProfileNP(String nickname, String email, String newProfileImage, String session_user_id);
 	public String getCurrentPassword(String session_user_id);
+	public void updatePassword(String session_user_id, String encodedPassword);
 	public void updateAccountPrivacy(String session_user_id, int accountPrivacy);
 	public void updateNotificationSettings(String session_user_id, int allNotificationOff, int likeNotificationOnoff, int commentNotificationOnoff, int messageNotificationOnoff);
 	public UserNotificationDto getNotificationSettingsByUserId(String session_user_id);

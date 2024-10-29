@@ -110,6 +110,48 @@ public class SettingController {
         return "redirect:/profileEdit";
     }
 
+    @RequestMapping("/updatePassword")
+    public String updatePassword(HttpServletRequest request, HttpSession session, Model model) {
+        System.out.println("updatePassword() ctr");
+
+        return "setting/updatePassword";
+    }
+
+    @PostMapping("/checkCurrentPassword")
+    @ResponseBody
+    public Map<String, String> checkCurrentPassword(@RequestParam("current_password") String currentPassword, HttpSession session) {
+        System.out.println("checkCurrentPassword() ctr");
+
+        String session_user_id = (String) session.getAttribute("user_id");
+        String dbPassword = settingDao.getCurrentPassword(session_user_id);
+
+        Map<String, String> response = new HashMap<>();
+        if (passwordEncoder.matches(currentPassword, dbPassword)) {
+            response.put("status", "valid");
+        } else {
+            response.put("status", "invalid");
+        }
+
+        return response;
+    }
+
+    @PostMapping("/updateNewPassword")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> updateNewPassword(
+            @RequestParam("new_password") String newPassword, HttpSession session) {
+        System.out.println("updateNewPassword() ctr");
+
+        String session_user_id = (String) session.getAttribute("user_id");
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        settingDao.updatePassword(session_user_id, encodedPassword);
+
+        // JSON 응답으로 success 메시지 반환
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/uploadProfileImage")
     @ResponseBody
     public Map<String, String> uploadProfileImage(MultipartHttpServletRequest mtfRequest, HttpSession session) {

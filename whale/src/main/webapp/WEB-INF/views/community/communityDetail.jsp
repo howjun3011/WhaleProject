@@ -139,7 +139,7 @@
     </c:if>
 
     <a href="communityPost?c=${param.c }" class="btn">목록</a>
-
+	<a href="report?p=${postDetail.post_id }" class="btn">신고</a>
 <table class="table">
     <colgroup>
         <col style="width: 15%;"> <!-- 작성자 칸 -->

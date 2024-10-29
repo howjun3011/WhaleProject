@@ -321,7 +321,7 @@
         });
 
         document.getElementById("reportPost").addEventListener("click", function() {
-            alert("게시글을 신고했습니다.");
+            window.location.href = `report?f=\${selectedPostId}`;
             closeOtherModal();
         });
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.setting.dao.ReportDao">
+	<insert id="reportPost">
+		INSERT INTO REPORT
+		(REPORT_ID, USER_ID, POST_ID, REPORT_WHY,
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL)
+		VALUES 
+		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg})
+	</insert>
+	
+	<insert id="reportFeed">
+		INSERT INTO REPORT
+		(REPORT_ID, USER_ID, FEED_ID, REPORT_WHY,
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL)
+		VALUES 
+		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg})
+	</insert>
+	
+	<insert id="reportFeedComments">
+		INSERT INTO REPORT
+		(REPORT_ID, USER_ID, FEED_COMMENT_ID, REPORT_WHY,
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT)
+		VALUES
+		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText})
+	</insert>
+	
+	<select id="getReportPost" resultType="com.tech.whale.setting.dto.ReportDto">
+		SELECT P.POST_TEXT AS REPORT_TEXT, PI.POST_IMG_NAME AS REPORT_IMG_URL
+		FROM POST P
+		JOIN POST_IMG PI
+		ON P.POST_ID = PI.POST_ID
+		WHERE P.POST_ID = #{report_type_id}
+	</select>
+	
+	<select id="getReportFeed" resultType="com.tech.whale.setting.dto.ReportDto">
+		SELECT F.FEED_TEXT AS REPORT_TEXT, FI.FEED_IMG_NAME AS REPORT_IMG_URL
+		FROM FEED F
+		JOIN FEED_IMG FI
+		ON F.FEED_ID = FI.FEED_ID
+		WHERE F.FEED_ID = #{report_type_id}
+	</select>
+	
+	<select id="getReportFeedComments" resultType="com.tech.whale.setting.dto.ReportDto">
+		SELECT FEED_COMMENTS_TEXT AS REPORT_TEXT FROM FEED_COMMENTS
+		WHERE FEED_COMMENTS_ID = #{report_type_id}
+	</select>
+
+
+
+</mapper>

@@ -1,7 +1,9 @@
 package com.tech.whale.setting.controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -204,6 +207,21 @@ public class SettingController {
         System.out.println("representiceSong() ctr");
         
         return "setting/representiveSong";
+    }
+    
+    @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	System.out.println("updateRepresentive() ctr");
+    	
+    	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
+    	String trackName = map.get("name").toString();
+    	String albumName = ((Map<String, String>) map.get("album")).get("name");
+    	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
+    	String trackSpotifyId = map.get("id").toString();
+
+    	System.out.println("DB 업데이트 완료");
+    	
+        return "redirect:/representiveSong";
     }
 
     @RequestMapping("/account")

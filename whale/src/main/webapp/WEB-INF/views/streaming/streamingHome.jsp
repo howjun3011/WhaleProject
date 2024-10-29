@@ -108,6 +108,11 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 가사 출력 -->
+                        <div class="lyrics">
+                            <h3>가사</h3>
+                            <pre>${lyrics}</pre>
+                        </div>
                     </c:when>
                 </c:choose>
             </div>

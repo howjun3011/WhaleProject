@@ -27,12 +27,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.model_objects.specification.Artist;
 
+import com.tech.whale.streaming.service.LyricsService;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class StreamingController {
 
 	@Autowired
 	private StreamingService streamingService;
+
+	@Autowired
+	private LyricsService lyricsService;
 
 	// [ 프레임에 스트리밍 메인 구간 이동 ]
 	@RequestMapping("/streaming")
@@ -95,6 +101,12 @@ public class StreamingController {
 			String artistId = trackDetail.getArtists()[0].getId();
 			Artist artistDetail = streamingService.getArtistDetail(session, artistId);
 			model.addAttribute("artistDetail", artistDetail);
+
+			// 가사 추가
+			String artistName = trackDetail.getArtists()[0].getName();
+			String songTitle = trackDetail.getName();
+			String lyrics = lyricsService.getLyrics(artistName, songTitle);  // 가사 조회
+			model.addAttribute("lyrics", lyrics);
 		} else {
 			model.addAttribute("error", "Unable to retrieve track details");
 		}

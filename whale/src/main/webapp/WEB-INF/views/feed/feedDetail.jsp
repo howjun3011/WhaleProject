@@ -152,96 +152,129 @@
         }
 
         /* 댓글 스타일 */
-        .comments-section {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-
-        .comment {
-            display: flex;
-            padding: 10px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .comment:last-child {
-            border-bottom: none;
-        }
-
-        .comment .profile-pic {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .comment-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .comment-info .username {
-            font-size: 0.9em;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .comment .comment-text {
-            flex-grow: 1;
-        }
-
-        .comment .comment-date {
-            font-size: 0.8em;
-            color: gray;
-        }
-
-        .comment-form {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .comment-form input[type="text"] {
-            flex-grow: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        .comment-form button {
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* 댓글 삭제 아이콘 버튼 */
-        .delete-comment-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .delete-comment-btn img {
-            width: 20px;
-            height: 20px;
-        }
-        
-        .comment-actions {
-		    display: flex;
-		    align-items: center;
-		    margin-top: 5px;
+		.comment {
+		    position: relative;
+		    padding: 20px 0;
+		    margin-left: 10px;
+		    border-bottom: 1px solid #e0e0e0;
 		}
 		
-		.comment-like-btn {
+		.comment-form {
+			margin-left: 30px;
+		}
+		
+		.comment-header {
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.comment .profile-pic {
+		    width: 30px;
+		    height: 30px;
+		    border-radius: 50%;
+		}
+		
+		.comment-meta {
+		    display: flex;
+		    flex-direction: column;
+		    margin-left: 10px;
+		}
+		
+		.comment-meta .username {
+		    font-size: 0.9em;
+		    font-weight: bold;
+		}
+		
+		.comment-meta .comment-date {
+		    font-size: 0.8em;
+		    color: gray;
+		}
+		
+		.comment-other-btn {
+		    background: none;
+		    border: none;
+		    cursor: pointer;
+		    margin-left: auto;
+		}
+		
+		.comment-other-btn img {
+		    width: 20px;
+		    height: 20px;
+		}
+		
+		.comment-text {
+		    margin: 5px 0;
+		    padding-left: 40px;
+		}
+		
+		.comment-actions {
+		    display: flex;
+		    align-items: center;
+		    padding-left: 40px;
+		}
+		
+		/* 답글 스타일 */
+		.replies {
+		    margin-left: 40px;
+		}
+		
+		.reply {
+		    position: relative;
+		    padding: 10px 0;
+		    border-bottom: 1px solid #e0e0e0;
+		}
+		
+		.reply .comment-header {
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.reply .profile-pic {
+		    width: 25px;
+		    height: 25px;
+		    border-radius: 50%;
+		}
+		
+		.reply .comment-meta {
+		    display: flex;
+		    flex-direction: column;
+		    margin-left: 10px;
+		}
+		
+		.reply .username {
+		    font-size: 0.85em;
+		    font-weight: bold;
+		}
+		
+		.reply .comment-date {
+		    font-size: 0.75em;
+		    color: gray;
+		}
+		
+		.reply .comment-other-btn {
+		    background: none;
+		    border: none;
+		    cursor: pointer;
+		    margin-left: auto;
+		}
+		
+		.reply .comment-other-btn img {
+		    width: 18px;
+		    height: 18px;
+		}
+		
+		.reply .comment-text {
+		    margin: 5px 0;
+		    padding-left: 35px;
+		}
+		
+		.reply .comment-actions {
+		    display: flex;
+		    align-items: center;
+		    padding-left: 35px;
+		}
+        
+        .comment-like-btn {
 		    display: flex;
 		    align-items: center;
 		    background: none;
@@ -268,30 +301,6 @@
 		    height: 20px;
 		    margin-right: 5px;
         }
-        
-        .replies {
-		    margin-left: 40px; /* 들여쓰기 효과 */
-		}
-		
-		.reply {
-		    padding: 5px 0;
-		    border-bottom: 1px solid #e0e0e0;
-		}
-		
-		.reply-form {
-		    margin-top: 5px;
-		    margin-left: 40px; /* 부모 댓글과 동일한 들여쓰기 */
-		}
-		
-		.reply-form input[type="text"] {
-		    width: 80%;
-		    padding: 5px;
-		}
-		
-		.reply-form button {
-		    padding: 5px 10px;
-		    margin-left: 5px;
-		}
         
     </style>
 </head>
@@ -331,58 +340,73 @@
         </div>
     </div>
 
-    <!-- 댓글 섹션 -->
-    <div class="comments-section">
-        <h3>댓글</h3>
-        <c:forEach var="comment" items="${feedDetail.feedComments}">
-            <div class="comment" data-comment-id="${comment.feed_comments_id}">
-                <a href="profileHome?u=${comment.user_id}">
-                    <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
-                </a>
-                <div class="comment-info">
-                    <span class="username">${comment.user_id}</span>
-                    <p>${comment.feed_comments_text}</p>
-                	<div class="comment-actions">
-                	<button type="button" class="comment-like-btn" data-comment-id="${comment.feed_comments_id}" data-now-id="${now_id}">
-                    	<img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
-                    	<span class="comment-like-count">${comment.likeCount}</span>
-                	</button>
-                	<button type="button" class="reply-btn" onclick="toggleReplyForm(${comment.feed_comments_id})">
-                		<img class="commentbtn" src="static/images/btn/comment_btn.png" alt="답글" />
-                		<span class="comment-reply-count">${comment.replyCount}</span>
-                	</button>
-                </div>
-
+	<div class="comments-section">
+	    <c:forEach var="comment" items="${feedDetail.feedComments}">
+	        <div class="comment" data-comment-id="${comment.feed_comments_id}" data-user-id="${comment.user_id}">
+	            <!-- 댓글 헤더 -->
+	            <div class="comment-header">
+	                <!-- 프로필 사진 -->
+	                <a href="profileHome?u=${comment.user_id}">
+	                    <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+	                </a>
+	                <!-- 아이디와 날짜 -->
+	                <div class="comment-meta">
+	                    <span class="username">${comment.user_id}</span>
+	                    <span class="comment-date">${comment.feed_comments_date}</span>
+	                </div>
+	                <!-- other_btn -->
+	                <button class="comment-other-btn">
+	                    <img src="static/images/btn/other_btn.png" alt="Other Button">
+	                </button>
+	            </div>
+	            <!-- 댓글 내용 -->
+	            <p class="comment-text">${comment.feed_comments_text}</p>
+	            <!-- 좋아요 및 답글 아이콘 -->
+	            <div class="comment-actions">
+	                <button type="button" class="comment-like-btn" data-comment-id="${comment.feed_comments_id}" data-now-id="${now_id}">
+	                    <img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
+	                    <span class="comment-like-count">${comment.likeCount}</span>
+	                </button>
+	                <button type="button" class="reply-btn" onclick="toggleReplyForm(${comment.feed_comments_id})">
+	                    <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="답글" />
+	                    <span class="comment-reply-count">${comment.replyCount}</span>
+	                </button>
+	            </div>
 	            <!-- 답글 표시 -->
 	            <c:if test="${not empty comment.replies}">
 	                <div class="replies">
 	                    <c:forEach var="reply" items="${comment.replies}">
-	                        <a href="profileHome?u=${reply.user_id}">
-                    			<img src="static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
-                			</a>
-	                        <div class="reply">
-	                            <span class="username">${reply.user_id}</span>
-	                            <p>${reply.feed_comments_text}</p>
-	                            <!-- 답글에도 좋아요 버튼 추가 가능 -->
+	                        <div class="reply" data-comment-id="${reply.feed_comments_id}" data-user-id="${reply.user_id}">
+	                            <!-- 답글 헤더 -->
+	                            <div class="comment-header">
+	                                <!-- 프로필 사진 -->
+	                                <a href="profileHome?u=${reply.user_id}">
+	                                    <img src="static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+	                                </a>
+	                                <!-- 아이디와 날짜 -->
+	                                <div class="comment-meta">
+	                                    <span class="username">${reply.user_id}</span>
+	                                    <span class="comment-date">${reply.feed_comments_date}</span>
+	                                </div>
+	                                <!-- other_btn -->
+	                                <button class="comment-other-btn">
+	                                    <img src="static/images/btn/other_btn.png" alt="Other Button">
+	                                </button>
+	                            </div>
+	                            <!-- 답글 내용 -->
+	                            <p class="comment-text">${reply.feed_comments_text}</p>
+	                            <!-- 좋아요 아이콘 -->
 	                            <div class="comment-actions">
 	                                <button type="button" class="comment-like-btn" data-comment-id="${reply.feed_comments_id}" data-now-id="${now_id}">
 	                                    <img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
 	                                    <span class="comment-like-count">${reply.likeCount}</span>
 	                                </button>
-					                <c:if test="${reply.user_id eq now_id}">
-				                        <form action="feedDetail/deleteComment" method="post" style="margin: 0;">
-				                            <input type="hidden" name="feedCommentsId" value="${reply.feed_comments_id}" />
-				                            <input type="hidden" name="feedId" value="${feedDetail.feed_id}" />
-				                            <button type="submit" class="delete-comment-btn">
-				                                <img src="static/images/setting/delete_button.png" alt="Delete Button">
-				                            </button>
-				                        </form>
-				                    </c:if>
 	                            </div>
 	                        </div>
 	                    </c:forEach>
 	                </div>
 	            </c:if>
+	            <!-- 답글 입력 폼 -->
 	            <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;">
 	                <form action="feedDetail/reply" method="post">
 	                    <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
@@ -392,102 +416,127 @@
 	                    <button type="submit">답글 달기</button>
 	                </form>
 	            </div>
-            </div>
-            
-                <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: auto;">
-                    <c:if test="${comment.user_id eq now_id}">
-                        <form action="feedDetail/deleteComment" method="post" style="margin: 0;">
-                            <input type="hidden" name="feedCommentsId" value="${comment.feed_comments_id}" />
-                            <input type="hidden" name="feedId" value="${feedDetail.feed_id}" />
-                            <button type="submit" class="delete-comment-btn">
-                                <img src="static/images/setting/delete_button.png" alt="Delete Button">
-                            </button>
-                        </form>
-                    </c:if>
-                    <div class="comment-date" style="font-size: 0.8em; color: gray; margin-top: 5px;">${comment.feed_comments_date}</div>
-                </div>
-            </div>
-        </c:forEach>
-        
-        
-        <!-- 코멘트 입력 폼 -->
-        <div class="comment-form">
-            <form action="feedDetail/comments" method="post">
-                <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
-                <input type="hidden" name="userId" value="${now_id}">
-                <input type="text" name="comments" placeholder="댓글을 입력하세요" />
-                <button type="submit" class="btn">입력</button>
-            </form>
-        </div>
-    </div>
+	        </div>
+	    </c:forEach>
+	    <!-- 댓글 입력 폼 -->
+	    <div class="comment-form">
+	        <form action="feedDetail/comments" method="post">
+	            <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
+	            <input type="hidden" name="userId" value="${now_id}">
+	            <input type="text" name="comments" placeholder="댓글을 입력하세요" />
+	            <button type="submit" class="btn">입력</button>
+	        </form>
+	    </div>
+	</div>
 
-    <div id="otherModal" class="modal">
-        <div class="modal-content">
-            <div id="deletePost" class="modal-item red" style="display: none;">게시글 삭제</div>
-            <div id="hidePost" class="modal-item" style="display: none;">게시글 숨기기</div>
-            <div id="reportPost" class="modal-item red" style="display: none;">게시글 신고</div>
-            <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
-        </div>
-    </div>
+	<div id="otherModal" class="modal">
+	    <div class="modal-content">
+	        <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
+	        <div id="hidePostItem" class="modal-item" style="display: none;">게시글 숨기기</div>
+	        <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
+	        <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
+	    </div>
+	</div>
 
-    <script>
-        let selectedPostId = null;
-        let isOwner = false;
-
-        function openOtherModal(postId, postOwnerId, currentUserId) {
-            selectedPostId = postId;
-            isOwner = (postOwnerId === currentUserId);
-
-            document.getElementById("deletePost").style.display = isOwner ? "block" : "none";
-            document.getElementById("hidePost").style.display = isOwner ? "block" : "none";
-            document.getElementById("reportPost").style.display = isOwner ? "none" : "block";
-
-            document.getElementById("otherModal").style.display = "flex";
-        }
-
-        function closeOtherModal() {
-            document.getElementById("otherModal").style.display = "none";
-            selectedPostId = null;
-        }
-
-        document.getElementById("deletePost").addEventListener("click", function() {
-            if (confirm("정말로 게시글을 삭제하시겠습니까?")) {
-                window.location.href = `feedDel?f=\${selectedPostId}`;
+	<script>
+	    let selectedItemId = null;
+	    let selectedItemType = null; // 'post', 'comment', 'reply'
+	    let isOwner = false;
+	
+	    function openOtherModal(itemId, itemOwnerId, currentUserId, itemType) {
+	        selectedItemId = itemId;
+	        selectedItemType = itemType;
+	        isOwner = (itemOwnerId === currentUserId);
+	
+	        // 모든 모달 아이템을 초기화
+	        document.getElementById("deleteItem").style.display = "none";
+	        document.getElementById("hidePostItem").style.display = "none";
+	        document.getElementById("reportItem").style.display = "none";
+	
+	        if (itemType === 'post') {
+	            if (isOwner) {
+	                document.getElementById("deleteItem").style.display = "block";
+	                document.getElementById("hidePostItem").style.display = "block";
+	            } else {
+	                document.getElementById("reportItem").style.display = "block";
+	            }
+	        } else if (itemType === 'comment' || itemType === 'reply') {
+	            if (isOwner) {
+	                document.getElementById("deleteItem").style.display = "block";
+	            } else {
+	                document.getElementById("reportItem").style.display = "block";
+	            }
+	        }
+	
+	        document.getElementById("otherModal").style.display = "flex";
+	    }
+	
+	    function closeOtherModal() {
+	        document.getElementById("otherModal").style.display = "none";
+	        selectedItemId = null;
+	        selectedItemType = null;
+	    }
+	
+	    document.getElementById("deleteItem").addEventListener("click", function() {
+	        if (confirm("정말로 삭제하시겠습니까?")) {
+	            if (selectedItemType === 'post') {
+	                window.location.href = `feedDel?f=\${selectedItemId}`;
+	            } else if (selectedItemType === 'comment' || selectedItemType === 'reply') {
+	                window.location.href = `feedDetail/deleteComment?feedCommentsId=\${selectedItemId}&feedId=\${feedDetail.feed_id}`;
+	            }
+	        }
+	        closeOtherModal();
+	    });
+	
+	    document.getElementById("hidePostItem").addEventListener("click", function() {
+	        alert("게시글을 숨깁니다.");
+	        window.location.href = `feedHide?f=\${selectedItemId}`;
+	        closeOtherModal();
+	    });
+	
+	    document.getElementById("reportItem").addEventListener("click", function() {
+            if (selectedItemType === 'post') {
+                window.location.href = `report?f=\${selectedItemId}`;
+            } else if (selectedItemType === 'comment' || selectedItemType === 'reply') {
+                window.location.href = `report?fc=\${selectedItemId}`;
             }
-            closeOtherModal();
-        });
-
-        document.getElementById("hidePost").addEventListener("click", function() {
-            alert("게시글을 숨깁니다.");
-            window.location.href = `feedHide?f=\${selectedPostId}`;
-            closeOtherModal();
-        });
-
-        document.getElementById("reportPost").addEventListener("click", function() {
-            alert("게시글을 신고했습니다.");
-            closeOtherModal();
-        });
-
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById("otherModal");
-            if (event.target === modal) {
-                closeOtherModal();
-            }
-        });
-
-        // other-btn 클릭 시 모달 열기
-        document.querySelectorAll('.other-btn').forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.stopPropagation();  // 부모로의 클릭 이벤트 전파 방지
-                const postElement = this.closest('.post');
-                const postId = postElement.getAttribute('data-post-id');
-                const postOwnerId = postElement.getAttribute('data-user-id');
-                const currentUserId = '${now_id}'; // 현재 사용자 ID
-
-                openOtherModal(postId, postOwnerId, currentUserId);
-            });
-        });
-    </script>
+	        closeOtherModal();
+	    });
+	
+	    window.addEventListener('click', function(event) {
+	        const modal = document.getElementById("otherModal");
+	        if (event.target === modal) {
+	            closeOtherModal();
+	        }
+	    });
+	
+	    // 게시글의 other-btn 클릭 시 모달 열기
+	    document.querySelectorAll('.other-btn').forEach(button => {
+	        button.addEventListener('click', function(event) {
+	            event.stopPropagation();
+	            const postElement = this.closest('.post');
+	            const itemId = postElement.getAttribute('data-post-id');
+	            const itemOwnerId = postElement.getAttribute('data-user-id');
+	            const currentUserId = '${now_id}';
+	
+	            openOtherModal(itemId, itemOwnerId, currentUserId, 'post');
+	        });
+	    });
+	
+	    // 댓글 및 답글의 other-btn 클릭 시 모달 열기
+	    document.querySelectorAll('.comment-other-btn, .reply-other-btn').forEach(button => {
+	        button.addEventListener('click', function(event) {
+	            event.stopPropagation();
+	            const itemElement = this.closest('.comment, .reply');
+	            const itemId = itemElement.getAttribute('data-comment-id');
+	            const itemOwnerId = itemElement.getAttribute('data-user-id');
+	            const currentUserId = '${now_id}';
+	            const itemType = itemElement.classList.contains('reply') ? 'reply' : 'comment';
+	
+	            openOtherModal(itemId, itemOwnerId, currentUserId, itemType);
+	        });
+	    });
+	</script>
 
     <script>
         // 좋아요 처리 로직

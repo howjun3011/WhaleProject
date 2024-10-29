@@ -55,7 +55,7 @@ const app = createApp({
 		changeRedirectIndex(i,j,k) {this.replaceIframe(this.pageAccess[i],j,k); this.closeMenu(); setTimeout(() => {this.getNotification();}, 500);},
 		
 		// [ Main Center ]
-		replaceIframe(i,j,k) {$("#"+this.frameNames[i]).get(0).contentWindow.location.replace(this.whaleAddress[j]+k); if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}},
+		replaceIframe(i,j,k) {$("#"+this.frameNames[i]).get(0).src = this.whaleAddress[j]+k; if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}},
 		
 		// [ User Info ]
 		checkUserInfo() {

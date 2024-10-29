@@ -61,6 +61,8 @@ export default {
 
     async receiveMessage(event) {
         if (event.data === 'Full') {console.log(event.data);}
+        else if (event.data === 'albumDetail') {this.$router.replace('/whale/streaming/detail/album');}
+        else if (event.data === 'artistDetail') {this.$router.replace('/whale/streaming/detail/artist');}
         else {await this.sendDeviceId(event);}
     },
 

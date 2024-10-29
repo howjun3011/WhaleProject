@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
     // Spring 서버 로그인시 세션에 저장
     req.session.accessToken = req.query.accessToken;
     req.session.user_id = req.query.userId;
+    req.session.type = req.query.type;
     res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
 

@@ -25,17 +25,29 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .recommendationsHeader {width: 100%; height: 30px;}
 .recommendations {width: 100%; height: 240px;}
 .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
-.recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none; gap: 16px;}
-.recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
+.recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none; gap: 16px; overflow-x: scroll; scroll-behavior: smooth;}
+.recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer;}
 .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
 .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; left: 10px; background: transparent;}
 .recommendationLike:hover{opacity: 0.7;}
 .recommendationLike:active{opacity: 0.6;}
-.recommendationPlay{position: absolute; width: 30px; height: 30px; top: 100px; right: 10px; background: #1f1f1f;}
-.recommendationPlay.svg{filter: invert(1); opacity: .75;}
+.recommendationPlay{position: absolute; width: 30px; height: 30px; top: 100px; right: 10px; background: transparent;}
 .recommendationPlay:hover{opacity: 0.7;}
 .recommendationPlay:active{opacity: 0.6;}
+.recommendationLike,
+.recommendationPlay {opacity: 0; transition: all 0.3s ease;}
+.recommendationContent:hover .recommendationLike,
+.recommendationContent:hover .recommendationPlay {opacity: 1; cursor: pointer;}
 .recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}
+/* CSS로 recommendationContents를 가로 스크롤 가능하게 설정 */
+.recommendationWrapper {display: flex; align-items: center; position: relative;}
+.recommendationContents {display: flex; overflow: hidden; width: 100%; scroll-behavior: smooth;}
+.recommendationContent {margin: 0 10px; /* 카드 간 간격 */ transition: transform 0.3s ease;}
+.slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.slideButton.left {left: 0;}
+.slideButton.right {right: 0;}
+.slideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+
 .recommendationInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
 .trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
 .artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}

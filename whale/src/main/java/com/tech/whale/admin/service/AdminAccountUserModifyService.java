@@ -45,9 +45,6 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		int userAccess = Integer.parseInt(request.getParameter("userAccess"));
 		int userAccessNow = Integer.parseInt(request.getParameter("userAccessNow"));
 		
-		//권한변경
-		//유저인포, 관리테이블, 로그
-		
 		if(userAccessNow == 0) {
 			if(userAccess!= 0) {
 				adminIDao.userInfoAccessModify(userId, userAccess);
@@ -66,6 +63,21 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		}
 		
 		
+		
+	}
+	
+	
+	@Transactional
+	public void modifyStatus(Model model) {
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request =
+				(HttpServletRequest) map.get("request");
+		String userId = request.getParameter("userId");
+		String statusReason = request.getParameter("statusReason");
+		int userStatus = Integer.parseInt(request.getParameter("userStatus"));
+		
+		adminIDao.userStatusModify(userId, userStatus);
+		adminIDao.userStatusLog(userId, userStatus,statusReason);
 		
 	}
 

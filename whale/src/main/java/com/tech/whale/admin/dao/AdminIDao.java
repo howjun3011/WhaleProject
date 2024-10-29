@@ -36,4 +36,8 @@ public interface AdminIDao {
 			String userId, int userAccess, String accessReason);
 	public void userAccessDrop(String userId, int userAccessNow);
 	
+	public void userStatusModify(String userId, int userStatus);
+	public void userStatusLog(
+			String userId, int userStatus, String statusReason);
+	
 }

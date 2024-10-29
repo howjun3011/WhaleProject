@@ -216,6 +216,14 @@
     <delete id="userAccessDrop" >
     	<include refid="accessIdDelete" />
     </delete>
+    
+    <update id="userStatusModify" >
+    	UPDATE USER_INFO SET USER_STATUS = #{userStatus} WHERE USER_ID = #{userId}
+    </update>
+    
+    <insert id="userStatusLog">
+    	INSERT INTO USER_STATUS_LOG VALUES(USER_STATUS_LOG_SEQ.NEXTVAL, #{userId}, #{userStatus}, #{statusReason}, SYSDATE )
+    </insert>
 
 
 </mapper>

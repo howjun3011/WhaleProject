@@ -237,6 +237,20 @@ public class AdminController {
 		
 		return "redirect:adminAccountUserModify?userId="+userId;
 	}
+	
+	@RequestMapping("/adminUserStatusModify")
+	public String adminUserStatusModify(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String userId = request.getParameter("userId");
+		
+		adminAccountUserModifyService.modifyStatus(model);
+		
+		
+		return "redirect:adminAccountUserModify?userId="+userId;
+	}
+	
 	@RequestMapping("/adminUserNicknameModify")
 	public String adminUserNicknameModify(
 			HttpServletRequest request,

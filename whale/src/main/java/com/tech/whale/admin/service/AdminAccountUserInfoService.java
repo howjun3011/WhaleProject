@@ -43,7 +43,7 @@ public class AdminAccountUserInfoService implements AdminServiceInter{
 		}
 		
 		if(dto.getUser_status() == 0) {
-			dto.setUser_status_str("활동");
+			dto.setUser_status_str("일반");
 		}else if(dto.getUser_access_id() == 1) {
 			dto.setUser_status_str("정지");
 		}

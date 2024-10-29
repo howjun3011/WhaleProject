@@ -160,8 +160,7 @@ window.onload = function() {
 					</tr>
 					<tr>
 						<td>비밀번호</td>
-						<td>
-						<input type="password" id="userPassword" name="user_password" placeholder="변경할 비밀번호 입력" />
+						<td><a href="updatePassword">비밀번호 변경</a></td>
 					</tr>
 					<tr>
 						<td>대표곡 설정</td>

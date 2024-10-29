@@ -1,6 +1,10 @@
 // [ Resize ]
-$(document).ready(() => {resize();});
-$(window).resize(() => {resize();});
+$(document).ready(() => {
+    resize();
+});
+$(window).resize(() => {
+    resize();
+});
 
 function resize() {
     const libraryElement = document.querySelector(".mainLibraryFrame");
@@ -37,8 +41,11 @@ function resize() {
 window.addEventListener("message", receiveMessage, false);
 
 async function receiveMessage(event) {
-    if (event.data === 'Full') {console.log(event.data);}
-    else {await sendDeviceId(event);}
+    if (event.data === 'Full') {
+        console.log(event.data);
+    } else {
+        await sendDeviceId(event);
+    }
 }
 
 async function sendDeviceId(event) {
@@ -55,12 +62,12 @@ async function sendDeviceId(event) {
         method: 'POST',
         body: JSON.stringify(body)
     })
-    .then((response) => response.json())
-    .then((data) => {
-        sessionStorage.accessToken = data.accessToken;
-        console.log("Success fetching device id to the Node js Wep App");
-    })
-    .catch((error) => console.error("Failed to fetch the device_id: ", error));
+        .then((response) => response.json())
+        .then((data) => {
+            sessionStorage.accessToken = data.accessToken;
+            console.log("Success fetching device id to the Node js Wep App");
+        })
+        .catch((error) => console.error("Failed to fetch the device_id: ", error));
 }
 
 function playTrack(trackId) {
@@ -69,7 +76,7 @@ function playTrack(trackId) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ trackId: trackId })
+        body: JSON.stringify({trackId: trackId})
     })
         .then(response => {
             if (response.ok) {
@@ -81,11 +88,52 @@ function playTrack(trackId) {
         .catch(error => console.error("Error playing track:", error));
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     var isExpanded = false;
 
-    $('#toggleButton').click(function() {
+    $('#toggleButton').click(function () {
         isExpanded = !isExpanded; // 상태를 토글
         $('.mainLibraryFrame, .mainLibrary').toggleClass('expanded', isExpanded); // 두 요소에 클래스 추가/제거
     });
+});
+
+// 스크롤 이동 함수
+function updateScrollButtons() {
+    const container = document.getElementById('recommendationContents');
+    const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+    const scrollRightBtn = document.getElementById('scrollRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollLeftContent() {
+    const container = document.getElementById('recommendationContents');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRightContent() {
+    const container = document.getElementById('recommendationContents');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    updateScrollButtons(); // 초기 상태
+    const container = document.getElementById('recommendationContents');
+    container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
 });

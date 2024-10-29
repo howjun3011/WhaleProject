@@ -24,6 +24,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 
 
 @Controller
@@ -50,7 +52,9 @@ public class StreamingController {
 		} else {
 			model.addAttribute("error", "Unable to retrieve top tracks");
 		}
-
+		// 홈 페이지로 설정
+		model.addAttribute("page", "home");
+		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
 
@@ -74,4 +78,30 @@ public class StreamingController {
 		}
 	}
 
+	// 음악 상세 페이지로 이동
+	@RequestMapping("/streaming/detail")
+	public String musicDetail(@RequestParam("trackId") String trackId, HttpSession session, Model model) {
+		// 트랙 상세 정보 가져오기
+		Track trackDetail = streamingService.getTrackDetail(session, trackId);
+
+		if (trackDetail != null) {
+			model.addAttribute("trackDetail", trackDetail);
+
+			// Album 정보 추가
+			Album albumDetail = streamingService.getAlbumDetail(session, trackDetail.getAlbum().getId());
+			model.addAttribute("albumDetail", albumDetail);
+
+			// 첫 번째 아티스트의 정보 추가
+			String artistId = trackDetail.getArtists()[0].getId();
+			Artist artistDetail = streamingService.getArtistDetail(session, artistId);
+			model.addAttribute("artistDetail", artistDetail);
+		} else {
+			model.addAttribute("error", "Unable to retrieve track details");
+		}
+
+		// 디테일 페이지로 설정
+		model.addAttribute("page", "detail");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome"; // 같은 JSP 파일을 사용하지만 page 값이 "detail"로 설정됨
+	}
 }

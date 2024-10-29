@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
@@ -103,4 +105,42 @@ public class StreamingService {
         }
     }
 
+    public Track getTrackDetail(HttpSession session, String trackId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // Spotify API에서 트랙 상세 정보 가져오기
+            return spotifyApi.getTrack(trackId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch track details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Album getAlbumDetail(HttpSession session, String albumId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // Album 정보 가져오기
+            return spotifyApi.getAlbum(albumId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch album details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Artist getArtistDetail(HttpSession session, String artistId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 아티스트 정보 가져오기
+            return spotifyApi.getArtist(artistId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch artist details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

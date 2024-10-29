@@ -8,22 +8,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="static/images/main/whaleLogo.png">
-    <link rel="stylesheet" href="static/css/streaming/streamingStyles.css"/>
+    <link rel="icon" href="${pageContext.request.contextPath}/static/images/main/whaleLogo.png">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/streaming/streamingStyles.css"/>
     <title>Whale Streaming</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="static/js/streaming/mainFunction.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/streaming/mainFunction.js"></script>
 </head>
 <body>
 <div class="header">
     <div class="headerItems">
         <button class="homeBtn">
-            <img src="static/images/streaming/homeBtn.png" alt="Music Whale Search Button" height="20px"
+            <img src="${pageContext.request.contextPath}/static/images/streaming/homeBtn.png" alt="Music Whale Search Button" height="20px"
                  @click="goMain()">
         </button>
         <div class="headerSearch">
             <button class="searchBtn" @click="goSearch()">
-                <img src="static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
+                <img src="${pageContext.request.contextPath}/static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
             </button>
             <input class="headerInput" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''"
                    onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'" v-model="this.query">
@@ -50,44 +50,71 @@
         <div class="mainContent">
             <div class="mainContentMargin">
                 <div class="recommendationsHeader"></div>
-                <div class="recommendations">
-                    <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
-                    <div class="recommendationWrapper">
-                        <!-- 왼쪽 버튼 -->
-                        <button class="slideButton left" id="scrollLeftBtn" onclick="scrollLeftContent()">
-                            <img src="static/images/streaming/prev.png" alt="Like Button" width="30"
-                                 height="30" style="border-radius: 8px; opacity: 0.75;">
-                        </button>
-                        <div class="recommendationContents" id="recommendationContents">
-                            <!-- trackPaging 데이터를 반복문으로 출력 -->
-                            <c:forEach var="track" items="${trackPaging.items}">
-                                <div class="recommendationContent">
-                                    <div class="recommendationLike" onclick="insertTrack('${track.id}')">
-                                        <img src="static/images/streaming/like.png" alt="Like Button" width="30"
-                                             height="30" style="border-radius: 8px; opacity: 0.75;">
-                                    </div>
-                                    <div class="recommendationCover">
-                                        <img src="${track.album.images[0].url}" alt="${track.name}" width="120"
-                                             height="120" style="border-radius: 8px;">
-                                    </div>
-                                    <div class="recommendationPlay" onclick="playTrack('${track.id}')">
-                                        <img src="static/images/streaming/play.png" alt="Like Button" width="30"
-                                             height="30" style="border-radius: 8px; opacity: 0.75;">
-                                    </div>
-                                    <div class="recommendationInfo">
-                                        <p class="trackName">${track.name}</p>
-                                        <p class="artistName">${track.artists[0].name}</p>
-                                    </div>
+                <c:choose>
+                    <c:when test="${page == 'home'}">
+                        <div class="recommendations">
+                            <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
+                            <div class="recommendationWrapper">
+                                <!-- 왼쪽 버튼 -->
+                                <button class="slideButton left" id="scrollLeftBtn" onclick="scrollLeftContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png" alt="Like Button" width="30"
+                                         height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                                <div class="recommendationContents" id="recommendationContents">
+                                    <!-- trackPaging 데이터를 반복문으로 출력 -->
+                                    <c:forEach var="track" items="${trackPaging.items}">
+                                        <div class="recommendationContent">
+                                            <div class="recommendationLike" onclick="insertTrack('${track.id}')">
+                                                <img src="${pageContext.request.contextPath}/static/images/streaming/like.png" alt="Like Button" width="30"
+                                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                                            </div>
+                                            <div class="recommendationCover" onclick="navigateToDetail('${track.id}')">
+                                                <img src="${track.album.images[0].url}" alt="${track.name}" width="120"
+                                                     height="120" style="border-radius: 8px;">
+                                            </div>
+                                            <div class="recommendationPlay" onclick="playTrack('${track.id}')">
+                                                <img src="${pageContext.request.contextPath}/static/images/streaming/play.png" alt="Like Button" width="30"
+                                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                                            </div>
+                                            <div class="recommendationInfo">
+                                                <p class="trackName">${track.name}</p>
+                                                <p class="artistName">${track.artists[0].name}</p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
                                 </div>
-                            </c:forEach>
+                                <!-- 오른쪽 버튼 -->
+                                <button class="slideButton right" id="scrollRightBtn" onclick="scrollRightContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png" alt="Like Button" width="30"
+                                         height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                            </div>
                         </div>
-                        <!-- 오른쪽 버튼 -->
-                        <button class="slideButton right" id="scrollRightBtn" onclick="scrollRightContent()">
-                            <img src="static/images/streaming/next.png" alt="Like Button" width="30"
-                                 height="30" style="border-radius: 8px; opacity: 0.75;">
-                        </button>
-                    </div>
-                </div>
+                    </c:when>
+                    <c:when test="${page == 'detail'}">
+                        <div class="trackDetail">
+                            <div class="trackDetailContainer">
+                                <c:if test="${not empty trackDetail.album.images}">
+                                    <!-- 첫 번째 이미지를 불러옵니다 -->
+                                    <img src="${trackDetail.album.images[0].url}" alt="${trackDetail.name}" width="150" height="150" style="border-radius: 8px;">
+                                </c:if>
+                                <div class="trackDetailInfo">
+                                    <p>곡</p>
+                                    <p id="trackName" class="trackName">${trackDetail.name}</p>
+                                    <p><!-- 아티스트 이미지 표시 -->
+                                        <c:if test="${not empty artistDetail.images}">
+                                            <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}" width="24" height="24" style="border-radius: 50%; margin-top: 10px;">
+                                        </c:if> ${trackDetail.artists[0].name} • ${trackDetail.album.name} • ${albumDetail.releaseDate}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 가사 출력 -->
+                        <div class="lyrics">
+                            <h3>가사</h3>
+                            <pre>${lyrics}</pre>
+                        </div>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
     </div>

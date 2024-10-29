@@ -69,6 +69,8 @@ body {min-height: 100vh;}
 .playerRightStyle {display: flex; flex-direction: column; justify-content: center; margin: 0 15px;}
 .playerTrackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
 .playerArtistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}
+.playerInfo:hover {opacity: 0.6; cursor: grab;}
+.playerInfo:active {opacity: 0.4; cursor: grab;}
 .playerImg {border-radius: 50%;}
 .playerImg:hover {cursor: grab;}
 .playerImg:active {opacity: 0.3; cursor: grab;}

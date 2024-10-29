@@ -1,10 +1,11 @@
 const MainFooterComponent = {
 	template: `
+		<div>
 		<div class="footer flexCenter">
 	        <div class="player">
 	        	<div class="playerComponent" id="playerLeft">
-	        		<div class="flexCenter"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
-	        		<div class="playerRightStyle"><p class="playerTrackName">{{ trackInfo[1] }}</p><p class="playerArtistName">{{ trackInfo[2] }}</p></div>
+	        		<div class="playerInfo flexCenter" @click="sendStreaming('albumDetail','?type=album')"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
+	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','?type=album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','?type=artist')">{{ trackInfo[2] }}</p></div>
 	        		<div class="playerRightStyle" @click="insertTrack()"><img class="playerImg" src="static/images/streaming/player/like.png" alt="Music Whale Like Button" width="23px" height="23px" :style="{backgroundColor: trackInfo[3] ? '#efefef' : '#FCFCFC'}"></div>
 	        	</div>
 	            <div class="playerComponent flexCenter">
@@ -16,11 +17,12 @@ const MainFooterComponent = {
 	            </div>
 	            <div class="playerComponent" id="playerRight">
 	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
-	            	<div class="playerRightMargin"><img class="playerPlayListImg" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px"></div>
+	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
 	            </div>
 	        </div>
 	    </div>
 	    <div class="footerMargin"></div>
+	    </div>
 	`,
 	props: {
 		fetchIframe: {type: Function, default() {return 'Default function'}},
@@ -30,7 +32,6 @@ const MainFooterComponent = {
 	data() {
 		return {
 			player: null,
-			playbackState: null,
 			trackInfo: [],
 			playBtnSrc: ['static/images/streaming/player/play.png','static/images/streaming/player/pause.png'],
 			playBtnSrcIndex: 0,
@@ -166,6 +167,7 @@ const MainFooterComponent = {
 	        }
 		},
 		
+		// 플레이어 기능
 		async shufflePlay() {
 			if (this.isShuffled) {try {await this.fetchWebApi(`v1/me/player/shuffle?state=${false}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}}
 			else {try {await this.fetchWebApi(`v1/me/player/shuffle?state=${true}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}}
@@ -189,6 +191,15 @@ const MainFooterComponent = {
 			if (this.repeatBtnSrcIndex === 1 && this.isRepeated) {await this.repeatPlayFunction('off');}
 			else if (this.repeatBtnSrcIndex === 0 && this.isRepeated) {await this.repeatPlayFunction('track');}
 			else {await this.repeatPlayFunction('context');}
+		},
+		
+		// 플레이어 정보 송신 기능
+		sendStreaming(i,j) {
+			let x = $("#leftIframe").get(0).src;
+			let y = $("#rightIframe").get(0).src;
+			if (x === 'http://localhost:9002/whale/streaming') {this.fetchIframe('leftIframe',i);}
+			else if (y === 'http://localhost:9002/whale/streaming') {this.fetchIframe('rightIframe',i);}
+			else {this.$emit('footer-music-toggle', 3, 0, j);}
 		},
 	},
 };

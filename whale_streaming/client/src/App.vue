@@ -19,6 +19,7 @@ export default {
   mounted() {
     this.executeResize();
     this.receiveMessageMain();
+    this.checktype();
   },
   methods: {
     // [ Resize ]
@@ -61,6 +62,9 @@ export default {
 
     async receiveMessage(event) {
         if (event.data === 'Full') {console.log(event.data);}
+        else if (event.data === 'albumDetail') {this.$router.replace('/whale/streaming/detail/album');}
+        else if (event.data === 'artistDetail') {this.$router.replace('/whale/streaming/detail/artist');}
+        else if (event.data === 'current') {this.$router.replace('/whale/streaming/current-playlist');}
         else {await this.sendDeviceId(event);}
     },
 
@@ -84,7 +88,28 @@ export default {
             console.log("Success fetching device id to the Node js Wep App");
         })
         .catch((error) => console.error("Failed to fetch the device_id: ", error));
-    }
+    },
+
+    checktype() {
+      let type;
+
+      fetch(`/whale/streaming/getType`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            type = data.type;
+
+            if (type === 'album') {this.$router.replace('/whale/streaming/detail/album');}
+            else if (type === 'artist') {this.$router.replace('/whale/streaming/detail/artist');}
+            else if (type === 'current') {this.$router.replace('/whale/streaming/current-playlist');}
+            else {this.$router.replace('/whale/streaming/recommend');}
+        })
+    },
   },
 };
 </script>

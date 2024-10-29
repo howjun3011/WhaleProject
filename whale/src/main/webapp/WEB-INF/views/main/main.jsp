@@ -23,7 +23,7 @@
 			<main-center-component :frame-names="frameNames" :replace-iframe="replaceIframe" :start-page="startPage"></main-center-component>
 			<main-header-menu-component :header-menu-check="headerMenuCheck" :user-nickname="userInfo[0]" :notifications="notifications" :noti-counts="notiCounts" :get-notification="getNotification" @header-close-menu="closeMenu" @menu-redirect-iframe="changeRedirectIndex"></main-header-menu-component>
 	    </div>
-	    <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage"></main-footer-component>
+	    <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage" @footer-music-toggle="changeRedirectIndex"></main-footer-component>
 	</div>
 </body>
 </html>

@@ -29,7 +29,7 @@ const MainHeaderMenuComponent = {
 											{{ notification.like_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
 										</div>
 									</div>
-									<div class="hearder-delete-noti flexCenter" @click.stop="deleteNoti('deleteLikeNoti?ln='+notification.like_noti_id)"><div>x</div></div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="fetchNoti('deleteLikeNoti?ln='+notification.like_noti_id)"><div>x</div></div>
 								</div>
 							</div>
 						</Transition>
@@ -54,7 +54,7 @@ const MainHeaderMenuComponent = {
 											{{ notification.comments_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
 										</div>
 									</div>
-									<div class="hearder-delete-noti flexCenter" @click.stop="deleteNoti('deleteCommentsNoti?cn='+notification.comments_noti_id)"><div>x</div></div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="fetchNoti('deleteCommentsNoti?cn='+notification.comments_noti_id)"><div>x</div></div>
 								</div>
 							</div>
 						</Transition>
@@ -63,7 +63,55 @@ const MainHeaderMenuComponent = {
 							<p class="header-alarm-content">팔로우</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[3] !== 0">{{ notiCounts[3] }}</div>
 						</div>
-						<Transition name="menuTransition"><div v-if="notificationIndex === 3 && notifications[3].length !== 0" class="header-expanded-content"></div></Transition>
+						<Transition name="menuTransition">
+							<div v-if="notificationIndex === 3 && notifications[3].length !== 0" class="header-expanded-content">
+								<div class="header-notification" v-for="(notification, j) in notifications[3]" :key="j" @click="redirectIframeNoti(1,3,j,'updateFollowNoti?fn='+notification.follow_noti_id)">
+									<div class="header-notification-content" v-if="notification.follow_noti === 0">
+										<span style="font-weight: 400;">{{ notifications[3][j].target_user_id }}</span>님이 당신을 팔로우 했습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.follow_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 0" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)"><div>x</div></div>
+									<div class="header-notification-content" v-if="notification.follow_noti === 1" style="margin-bottom: 1.5px;">
+										<span style="font-weight: 400;">{{ notifications[3][j].target_user_id }}</span>님이 당신에게 팔로우를 요청했습니다. 
+										<div style="display: inline-block; width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+										</div>
+									</div>
+									<div class="hearder-follow-noti" v-if="notification.follow_noti === 1">
+										<div></div>
+										<div class="header-follow-select" @click.stop="fetchNoti('privateFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">수락</div>
+										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">거절</div>
+										<div></div>
+									</div>
+									<div class="header-notification-content" v-if="notification.follow_noti === 2">
+										<span style="font-weight: 400;">{{ notifications[3][j].target_user_id }}</span>님이 당신의 팔로우를 수락했습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.follow_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 2" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)"><div>x</div></div>
+								</div>
+							</div>
+						</Transition>
 					</div>
 					<div class="headerMenu-container" id="headerMenu-profile" v-if="headerMenuCheck[2]">
 						<div class="header-contents flexCenter" style="height: 60px; background-color: #f9f9f9; pointer-events: none;"><p class="header-nick-content">{{ userNickname }}님</p></div>
@@ -96,8 +144,9 @@ const MainHeaderMenuComponent = {
 		redirectIframeNoti(i,j,k,l) {
 			let x;
 			let y;
-			if (this.notifications[j][k].post_id !== 0) {x = 6; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
-			else if (this.notifications[j][k].feed_id !== 0) {x = 7; y = `?f=${this.notifications[j][k].feed_id}`;}
+			if (this.notifications[j][k].post_id > 0) {x = 6; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
+			else if (this.notifications[j][k].feed_id > 0) {x = 7; y = `?f=${this.notifications[j][k].feed_id}`;}
+			else if (this.notifications[j][k].follow_noti_id > 0) {x = 8; y = `?u=${this.notifications[j][k].target_user_id}`;}
 			this.$emit('menu-redirect-iframe',i,x,y);
 			this.notificationIndex = null;
 			fetch('main/'+l);
@@ -109,7 +158,7 @@ const MainHeaderMenuComponent = {
 			location.href='/whale/main/logout';
 		},
 		toggleExpand(i) {this.notificationIndex = this.notificationIndex === i ? null : i;},
-		deleteNoti(i) {fetch('main/'+i); setTimeout(() => {this.getNotification();}, 500);},
+		fetchNoti(i) {fetch('main/'+i); setTimeout(() => {this.getNotification();}, 500);},
 	},
 };
 

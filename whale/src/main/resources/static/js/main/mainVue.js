@@ -9,7 +9,7 @@ const app = createApp({
 		return {
 			headerMenuCheck: [false, false, false],
 			frameNames: ['leftIframe','rightIframe'],
-			whaleAddress: ['streaming','message/home','communityHome','feedHome','profile','settingHome','communityDetail','feedDetail'],
+			whaleAddress: ['streaming','message/home','communityHome','feedHome','profile','settingHome','communityDetail','feedDetail','profileHome'],
 			userInfo: [],
 			startPage: [ null, null ],
 			pageAccess: [],
@@ -101,8 +101,13 @@ const app = createApp({
 					console.log(data);
 			});
 			// 팔로우
-			this.notifications[3] = [];
-			this.notiCounts[3] = this.notifications[3].length;
+			fetch('main/followNoti')
+				.then(response => response.json())
+				.then(data => {
+					this.notifications[3] = data;
+					this.notiCounts[3] = this.notifications[3].filter(notification => notification.follow_noti_check === 0).length;
+					console.log(data);
+			});
 		},
 	},
 });

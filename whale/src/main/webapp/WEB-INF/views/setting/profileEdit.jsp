@@ -10,6 +10,17 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
 <style>
+a{
+	text-decoration: none;
+	color: black;
+}
+a:visited, a:focus, a:active {
+	color: black;
+	text-decoration: none;
+}
+a:hover{
+	color: #ccc;
+}
 .complete-btn {
 	font-size: 20px;
 	position: absolute;

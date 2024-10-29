@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tech.whale.feed.dao.FeedCommentDao;
 import com.tech.whale.feed.dao.FeedDao;
 import com.tech.whale.feed.dto.FeedCommentDto;
 import com.tech.whale.main.models.MainDao;
@@ -14,6 +15,9 @@ public class FeedCommentService {
 
 	@Autowired
 	private FeedDao feedDao;
+	
+	@Autowired
+	private FeedCommentDao feedCommentDao;
 	
 	// [ 메인 알람 기능]
     @Autowired
@@ -37,5 +41,34 @@ public class FeedCommentService {
 		// TODO Auto-generated method stub
 		return feedDao.getComments(feedId);
 	}
+
+    public int toggleCommentLike(String commentId, String userId) throws Exception {
+        int likeCount = feedCommentDao.isCommentLikedByUser(commentId, userId);
+        boolean isLiked = likeCount > 0;
+        if (isLiked) {
+            // 이미 좋아요를 누른 경우 좋아요 취소
+            feedCommentDao.deleteCommentLike(commentId, userId);
+        } else {
+            // 좋아요 추가
+            feedCommentDao.insertCommentLike(commentId, userId);
+        }
+        // 새로운 좋아요 수 반환
+        return feedCommentDao.getCommentLikeCount(commentId);
+    }
+
+    public void addReply(int feedId, String parentCommentId, String userId, String replyText) {
+        FeedCommentDto reply = new FeedCommentDto();
+        reply.setFeed_id(feedId);
+        reply.setParent_comments_id(parentCommentId);
+        reply.setUser_id(userId);
+        reply.setFeed_comments_text(replyText);
+        // 현재 날짜 설정 등 필요한 추가 설정
+
+        feedCommentDao.insertReply(reply);
+    }
+    
+    public List<FeedCommentDto> getRepliesForComment(int commentId) {
+        return feedCommentDao.getRepliesForComment(commentId);
+    }
 	
 }

@@ -234,6 +234,65 @@
             width: 20px;
             height: 20px;
         }
+        
+        .comment-actions {
+		    display: flex;
+		    align-items: center;
+		    margin-top: 5px;
+		}
+		
+		.comment-like-btn {
+		    display: flex;
+		    align-items: center;
+		    background: none;
+		    border: none;
+		    cursor: pointer;
+		}
+		
+		.comment-like-btn .likebtn {
+		    width: 20px;
+		    height: 20px;
+		    margin-right: 5px;
+		}
+        
+        .reply-btn {
+        	display: flex;
+		    align-items: center;
+		    background: none;
+		    border: none;
+		    cursor: pointer;
+        }
+        
+        .reply-btn .commentbtn {
+        	width: 20px;
+		    height: 20px;
+		    margin-right: 5px;
+        }
+        
+        .replies {
+		    margin-left: 40px; /* 들여쓰기 효과 */
+		}
+		
+		.reply {
+		    padding: 5px 0;
+		    border-bottom: 1px solid #e0e0e0;
+		}
+		
+		.reply-form {
+		    margin-top: 5px;
+		    margin-left: 40px; /* 부모 댓글과 동일한 들여쓰기 */
+		}
+		
+		.reply-form input[type="text"] {
+		    width: 80%;
+		    padding: 5px;
+		}
+		
+		.reply-form button {
+		    padding: 5px 10px;
+		    margin-left: 5px;
+		}
+        
     </style>
 </head>
 <body>
@@ -276,14 +335,65 @@
     <div class="comments-section">
         <h3>댓글</h3>
         <c:forEach var="comment" items="${feedDetail.feedComments}">
-            <div class="comment">
+            <div class="comment" data-comment-id="${comment.feed_comments_id}">
                 <a href="profileHome?u=${comment.user_id}">
                     <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
                 </a>
                 <div class="comment-info">
                     <span class="username">${comment.user_id}</span>
                     <p>${comment.feed_comments_text}</p>
+                	<div class="comment-actions">
+                	<button type="button" class="comment-like-btn" data-comment-id="${comment.feed_comments_id}" data-now-id="${now_id}">
+                    	<img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
+                    	<span class="comment-like-count">${comment.likeCount}</span>
+                	</button>
+                	<button type="button" class="reply-btn" onclick="toggleReplyForm(${comment.feed_comments_id})">
+                		<img class="commentbtn" src="static/images/btn/comment_btn.png" alt="답글" />
+                		<span class="comment-reply-count">${comment.replyCount}</span>
+                	</button>
                 </div>
+
+	            <!-- 답글 표시 -->
+	            <c:if test="${not empty comment.replies}">
+	                <div class="replies">
+	                    <c:forEach var="reply" items="${comment.replies}">
+	                        <a href="profileHome?u=${reply.user_id}">
+                    			<img src="static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+                			</a>
+	                        <div class="reply">
+	                            <span class="username">${reply.user_id}</span>
+	                            <p>${reply.feed_comments_text}</p>
+	                            <!-- 답글에도 좋아요 버튼 추가 가능 -->
+	                            <div class="comment-actions">
+	                                <button type="button" class="comment-like-btn" data-comment-id="${reply.feed_comments_id}" data-now-id="${now_id}">
+	                                    <img class="likebtn" src="static/images/btn/like_btn.png" alt="like" />
+	                                    <span class="comment-like-count">${reply.likeCount}</span>
+	                                </button>
+					                <c:if test="${reply.user_id eq now_id}">
+				                        <form action="feedDetail/deleteComment" method="post" style="margin: 0;">
+				                            <input type="hidden" name="feedCommentsId" value="${reply.feed_comments_id}" />
+				                            <input type="hidden" name="feedId" value="${feedDetail.feed_id}" />
+				                            <button type="submit" class="delete-comment-btn">
+				                                <img src="static/images/setting/delete_button.png" alt="Delete Button">
+				                            </button>
+				                        </form>
+				                    </c:if>
+	                            </div>
+	                        </div>
+	                    </c:forEach>
+	                </div>
+	            </c:if>
+	            <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;">
+	                <form action="feedDetail/reply" method="post">
+	                    <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
+	                    <input type="hidden" name="parentCommentId" value="${comment.feed_comments_id}">
+	                    <input type="hidden" name="userId" value="${now_id}">
+	                    <input type="text" name="replyText" placeholder="답글을 입력하세요" />
+	                    <button type="submit">답글 달기</button>
+	                </form>
+	            </div>
+            </div>
+            
                 <div style="display: flex; flex-direction: column; align-items: flex-end; margin-left: auto;">
                     <c:if test="${comment.user_id eq now_id}">
                         <form action="feedDetail/deleteComment" method="post" style="margin: 0;">
@@ -298,7 +408,8 @@
                 </div>
             </div>
         </c:forEach>
-
+        
+        
         <!-- 코멘트 입력 폼 -->
         <div class="comment-form">
             <form action="feedDetail/comments" method="post">
@@ -404,6 +515,42 @@
             })
             .catch(error => console.error('Error:', error));
         });
+        
+        document.querySelectorAll('.comment-like-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const nowId = this.getAttribute('data-now-id');
+
+                fetch('/whale/commentLike', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'commentId': commentId,
+                        'now_id': nowId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.querySelector('.comment-like-count').textContent = data.newLikeCount;
+                    } else {
+                        alert("좋아요 처리에 실패했습니다.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+        
+        function toggleReplyForm(commentId) {
+            const replyForm = document.getElementById(`reply-form-\${commentId}`);
+            if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+                replyForm.style.display = 'block';
+            } else {
+                replyForm.style.display = 'none';
+            }
+        }
     </script>
 
 </body>

@@ -45,7 +45,7 @@
         }
 
         .write-area-container.open {
-            max-height: 300px;
+            max-height: 2000px;
         }
 
         .write-area textarea {

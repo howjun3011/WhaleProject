@@ -30,7 +30,19 @@
     </div>
     <div class="main">
         <div class="mainLibraryFrame">
-	        <div class="mainLibrary"></div>
+	        <div class="mainLibrary">
+				<svg id="toggleButton"
+						data-encore-id="icon"
+						role="img"
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						class="libraryBtn"
+				>
+					<path
+							d="M14.5 2.134a1 1 0 0 1 1 0l6 3.464a1 1 0 0 1 .5.866V21a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1V3a1 1 0 0 1 .5-.866zM16 4.732V20h4V7.041l-4-2.309zM3 22a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1zm6 0a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1z"
+					></path>
+				</svg>
+			</div>
 	    </div>
 	    <div class="mainContentFrame">
 	        <div class="mainContent">
@@ -48,6 +60,10 @@
 									<div class="recommendationCover">
 										<img src="${track.album.images[0].url}" alt="${track.name}" width="120" height="120" style="border-radius: 8px;">
 									</div>
+									<div class="recommendationPlay" onclick="playTrack('${track.id}')">
+<%--										<img src="static/images/streaming/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">--%>
+										<svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" class="Svg-sc-ytk21e-0 dYnaPI"><path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path></svg>
+									</div>
 									<div class="recommendationInfo">
 										<p class="trackName">${track.name}</p>
 										<p class="artistName">${track.artists[0].name}</p>
@@ -59,6 +75,7 @@
 	            </div>
 	        </div>
 	    </div>
+		<div class="mainDetailFrame"></div>
         <MainDetail />
     </div>
     <div class="footer"></div>

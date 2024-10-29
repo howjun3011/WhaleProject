@@ -3,20 +3,33 @@ $(document).ready(() => {resize();});
 $(window).resize(() => {resize();});
 
 function resize() {
-    var windowWidth = $(window).width();
-    var libraryWidth = $(".mainLibrary").width();
+    const libraryElement = document.querySelector(".mainLibraryFrame");
+    const detailElement = document.querySelector(".mainDetailFrame");
+    const headerElement = document.querySelector(".header");
+    const footerElement = document.querySelector(".footer");
+    const mainElement = document.querySelector('.main');
+    const mainContentElement = document.querySelector('.mainContentFrame');
 
-    var windowHeight = $(window).height();
-    var headerHeight = $(".header").height();
-    var footerHeight = $(".footer").height();
+    const windowWidth = window.innerWidth;
+    const libraryWidth = libraryElement ? libraryElement.offsetWidth : 0;
+    const detailWidth = detailElement ? detailElement.offsetWidth : 0;
 
-    $('.main').css({'height': (windowHeight-headerHeight-footerHeight-1)+'px'});
-    $('.mainContentFrame').css({'width': (windowWidth-libraryWidth)+'px'});
+    const windowHeight = window.innerHeight;
+    const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+    const footerHeight = footerElement ? footerElement.offsetHeight : 0;
 
-    var mainContentHeight = $(".mainContent").height();
-    var mainContentHeaderHeight = $(".mainContentHeader").height();
+    if (mainElement) {
+        mainElement.style.height = `${windowHeight - headerHeight - footerHeight}px`;
+    }
 
-    $('.mainContentCenter').css({'height': (mainContentHeight-mainContentHeaderHeight-1)+'px'});
+    if (mainContentElement) {
+        const availableWidth = windowWidth - libraryWidth - detailWidth;
+        if (availableWidth > 200) { // Ensure minimum space for mainContentFrame
+            mainContentElement.style.width = `${availableWidth}px`;
+        } else {
+            mainContentElement.style.width = `200px`; // Assign minimum width to avoid collapsing
+        }
+    }
 }
 
 
@@ -49,3 +62,30 @@ async function sendDeviceId(event) {
     })
     .catch((error) => console.error("Failed to fetch the device_id: ", error));
 }
+
+function playTrack(trackId) {
+    fetch('/whale/streaming/playTrack', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ trackId: trackId })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Track is now playing");
+            } else {
+                console.error("Failed to play track");
+            }
+        })
+        .catch(error => console.error("Error playing track:", error));
+}
+
+$(document).ready(function() {
+    var isExpanded = false;
+
+    $('#toggleButton').click(function() {
+        isExpanded = !isExpanded; // 상태를 토글
+        $('.mainLibraryFrame, .mainLibrary').toggleClass('expanded', isExpanded); // 두 요소에 클래스 추가/제거
+    });
+});

@@ -30,6 +30,7 @@
         padding: 80px 80px;
         border-radius: 40px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		height: calc(100vh - 200px);
     }
     h3 {
     	margin-bottom: 40px;

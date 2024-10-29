@@ -4,8 +4,8 @@ const MainFooterComponent = {
 		<div class="footer flexCenter">
 	        <div class="player">
 	        	<div class="playerComponent" id="playerLeft">
-	        		<div class="playerInfo flexCenter" @click="sendStreaming('albumDetail','album')"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
-	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','artist')">{{ trackInfo[2] }}</p></div>
+	        		<div class="playerInfo flexCenter" @click="sendStreaming('albumDetail','?type=album')"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
+	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','?type=album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','?type=artist')">{{ trackInfo[2] }}</p></div>
 	        		<div class="playerRightStyle" @click="insertTrack()"><img class="playerImg" src="static/images/streaming/player/like.png" alt="Music Whale Like Button" width="23px" height="23px" :style="{backgroundColor: trackInfo[3] ? '#efefef' : '#FCFCFC'}"></div>
 	        	</div>
 	            <div class="playerComponent flexCenter">
@@ -17,7 +17,7 @@ const MainFooterComponent = {
 	            </div>
 	            <div class="playerComponent" id="playerRight">
 	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
-	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px"></div>
+	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
 	            </div>
 	        </div>
 	    </div>

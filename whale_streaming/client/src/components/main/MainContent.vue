@@ -13,7 +13,6 @@ export default {
     components: {
     },
     mounted() {
-        this.$router.replace('/whale/streaming/recommend');
     },
     methods: {
     },

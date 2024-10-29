@@ -28,6 +28,10 @@ router.get('/getContents', async (req, res) => {
     res.json(results);
 });
 
+router.get('/getType', async (req, res) => {
+    res.json({ type: req.session.type });
+});
+
 
 // [ 3. Module로 사용하기 위한 설정 ]
 module.exports = router;

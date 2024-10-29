@@ -39,18 +39,21 @@
 				    <div class="recommendations">
 				        <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
 				        <div class="recommendationContents">
-				            <div class="recommendationContent" v-for="(recommendation, i) in recommendations" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false">
-				                <div class="recommendationLike" v-if="addIsShow(i)" @click="insertTrack(i)">
-				                    <img src="static/images/streaming/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
-				                </div>
-				                <div class="recommendationCover">
-				                    <img :src="recommendation.album.images[0].url" :alt="recommendation.name" width="120" height="120" style="border-radius: 8px;">
-				                </div>
-				                <div class="recommendationInfo">
-				                    <p class="trackName">{{ recommendation.name }}</p>
-				                    <p class="artistName">{{ recommendation.artists[0].name }}</p>
-				                </div>
-				            </div>
+							<!-- trackPaging 데이터를 반복문으로 출력 -->
+							<c:forEach var="track" items="${trackPaging.items}">
+								<div class="recommendationContent">
+									<div class="recommendationLike" onclick="insertTrack('${track.id}')">
+										<img src="static/images/streaming/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+									</div>
+									<div class="recommendationCover">
+										<img src="${track.album.images[0].url}" alt="${track.name}" width="120" height="120" style="border-radius: 8px;">
+									</div>
+									<div class="recommendationInfo">
+										<p class="trackName">${track.name}</p>
+										<p class="artistName">${track.artists[0].name}</p>
+									</div>
+								</div>
+							</c:forEach>
 				        </div>
 				    </div>
 	            </div>

@@ -1,4 +1,4 @@
-package com.tech.whale.streaming;
+package com.tech.whale.streaming.controller;
 
 import java.util.HashMap;
 

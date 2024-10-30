@@ -3,6 +3,7 @@ package com.tech.whale.admin.service;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 	}
 	
 	@Transactional
-	public void modifyAccess(Model model) {
+	public void modifyAccess(Model model,
+			HttpSession session) {
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
@@ -45,20 +47,19 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		int userAccess = Integer.parseInt(request.getParameter("userAccess"));
 		int userAccessNow = Integer.parseInt(request.getParameter("userAccessNow"));
 		
-		//권한변경
-		//유저인포, 관리테이블, 로그
+		String adminId = (String) session.getAttribute("user_id");
 		
 		if(userAccessNow == 0) {
 			if(userAccess!= 0) {
 				adminIDao.userInfoAccessModify(userId, userAccess);
 				adminIDao.accessInfoAdd(userId, userAccess, companyName);
-				adminIDao.userAccessLog(userId, userAccess,accessReason);
+				adminIDao.userAccessLog(userId, userAccess,accessReason,adminId);
 				model.addAttribute("권한설정 완료", "accessMsg");
 			}
 		}else {
 			adminIDao.userAccessDrop(userId, userAccessNow);
 			adminIDao.userInfoAccessModify(userId, userAccess);
-			adminIDao.userAccessLog(userId, userAccess,accessReason);
+			adminIDao.userAccessLog(userId, userAccess,accessReason,adminId);
 			if(userAccess!= 0) {
 				adminIDao.accessInfoAdd(userId, userAccess, companyName);
 			}
@@ -66,6 +67,22 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		}
 		
 		
+		
+	}
+	
+	
+	@Transactional
+	public void modifyStatus(Model model,
+			HttpSession session) {
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request =
+				(HttpServletRequest) map.get("request");
+		String userId = request.getParameter("userId");
+		String statusReason = request.getParameter("statusReason");
+		int userStatus = Integer.parseInt(request.getParameter("userStatus"));
+		String adminId = (String) session.getAttribute("user_id");
+		adminIDao.userStatusModify(userId, userStatus);
+		adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
 		
 	}
 

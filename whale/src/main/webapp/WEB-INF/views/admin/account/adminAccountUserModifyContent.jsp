@@ -41,6 +41,16 @@
             alert("취소되었습니다.");
         }
     }
+    function statusUpdate() {
+        var result = confirm("저장하시겠습니까?");
+        if (result) {
+            document.getElementById('userStatus').style.display = 'none';
+            document.getElementById("userStatusForm").submit();
+            alert('변경 사항 저장완료.');
+        } else {
+            alert("취소되었습니다.");
+        }
+    }
     
     function companyNameText(){
 		var selectedValue = document.querySelector('input[name="userAccess"]:checked').value;
@@ -51,11 +61,21 @@
         } else {
             companyNameField.style.display = 'none';
         }
-        toggleSubmitButton();
+        toggleAccessButton();
+    	
+    }
+    function statusUpdateButton(){
+		var selectedValue = document.querySelector('input[name="userStatus"]:checked').value;
+        if (selectedValue) {
+            companyNameField.style.display = 'block';
+        } else {
+            companyNameField.style.display = 'none';
+        }
+        toggleAccessButton();
     	
     }
     
-    function toggleSubmitButton(){
+    function toggleAccessButton(){
     	var selectedValue = document.querySelector('input[name="userAccess"]:checked');
     	var submitButton = document.querySelector('#accessForm button[type="button"]');
         
@@ -65,10 +85,17 @@
             submitButton.disabled = true;
         }
     }
+    function toggleStatusButton(){
+    	var selectedValue = document.querySelector('input[name="userStatus"]:checked');
+    	var submitButton = document.querySelector('#userStatusForm button[type="button"]');
+        
+        if (selectedValue) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    }
     
-    document.addEventListener('DOMContentLoaded', function() {
-        toggleSubmitButton();
-    });
     
     function openStatus() {
         document.getElementById('userStatus').style.display = 'block';
@@ -77,15 +104,19 @@
     function closeStatus() {
         document.getElementById('userStatus').style.display = 'none';
     }
-
-    function statusUpdate() {
-    	//저장코드 추가 필요
-        alert('변경 사항 저장완료.');
-        closeModal();
+    function closeAccess() {
+        document.getElementById('accessAddForm').style.display = 'none';
     }
+
     function openAccess() {
         document.getElementById('accessAddForm').style.display = 'block';
     }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    	toggleAccessButton();
+    	toggleStatusButton();
+    });
+    
     
 </script>
 
@@ -142,16 +173,39 @@
 	<div id="userStatus" class="userStatus" style="display: none;">
 	    <div class="userStatusContent">
 	        <h2>계정상태 수정</h2>
-	        <form action="">
+	        <form id="userStatusForm" action="adminUserStatusModify" method="post">
 	        	<table>
 	        		<tr>
-	        			<td></td>
+	        			<td>계정상태변경</td>
+	        			<td>
+	        				<label>
+	        					<input type="radio" name="userStatus" value="0" onclick="toggleStatusButton()"/>
+	        					활동
+	        				</label>
+	        				&nbsp;&nbsp;
+	        				<label>
+	        					<input type="radio" name="userStatus" value="1" onclick="toggleStatusButton()"/>
+	        					정지
+	        				</label>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>변경사유</td>
+	        			<td>
+	        				<textarea name="statusReason" id="statusReason" cols="60" rows="20"></textarea>
+	        			</td>
+	        		</tr>
+	        		<tr style="border-bottom: none;">
+	        			<td colspan="2" style="margin: 0 auto;">
+	        				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+	        				<button type="button" onclick="statusUpdate()">저장</button>
+	            			<button type="button" onclick="closeStatus()">취소</button>
+	        			</td>
 	        		</tr>
 	        	</table>
 	        </form>
-	        <div class="userStatusButton">
-	            <button onclick="statusUpdate()">저장</button>
-	            <button onclick="closeStatus()">취소</button>
+	        <div>
+	            
 	        </div>
 	    </div>
 	</div>
@@ -197,7 +251,7 @@
 				<tr>
 					<td class="tdName">변경사유</td>
 					<td class="tdContent">
-					<textarea name="accessReason" id="accessReason" cols="60" rows="20"></textarea>
+						<textarea name="accessReason" id="accessReason" cols="60" rows="20"></textarea>
 					</td>
 				</tr>
 				<tr style="border-bottom: none;">

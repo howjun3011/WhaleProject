@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminUserInfoDto{
+public class AdminOfficialInfoDto{
 	private String user_id;
 	private String user_password;
 	private String user_nickname;
@@ -23,6 +23,9 @@ public class AdminUserInfoDto{
 	private int feed_count;
 	private Date user_date;
 	
+	private int official_id;
+	private String official_name;
+	private int access_id;
 	private int follow;
 	private int follower;
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.tech.whale.admin.dto.AdminAdInfoDto;
+import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 
@@ -11,7 +13,13 @@ import com.tech.whale.admin.dto.AdminUserInfoDto;
 public interface AdminIDao {
 	
 	public int selectUserCnt(String sk, String selNum);
+	public int selectAdvertiserCnt(String sk, String selNum);
+	public int selectOfficialCnt(String sk, String selNum);
 	public ArrayList<AdminUserInfoDto> adminUserList(
+			int start, int end, String sk, String selNum);
+	public ArrayList<AdminOfficialInfoDto> adminOfficialList(
+			int start, int end, String sk, String selNum);
+	public ArrayList<AdminAdInfoDto> adminAdvertiserList(
 			int start, int end, String sk, String selNum);
 	public AdminUserInfoDto userAccountInfoSelect(String userId);
 	
@@ -33,7 +41,15 @@ public interface AdminIDao {
 	public void accessInfoAdd(
 			String userId, int userAccess, String companyName);
 	public void userAccessLog(
-			String userId, int userAccess, String accessReason);
+			String userId, int userAccess, String accessReason, String adminId);
 	public void userAccessDrop(String userId, int userAccessNow);
+	
+	public void userStatusModify(String userId, int userStatus);
+	public void userStatusLog(
+			String userId, int userStatus, String statusReason, String adminId);
+	/////////////////////////////////////////////
+	public ArrayList<AdminPFCDto> adminBoardList(
+			int start, int end, String sk, String selNum);
+	public int selectBoardCnt(String sk, String selNum);
 	
 }

@@ -16,7 +16,6 @@
 	        <input type="text" name="sk" size="50" value="${not empty sk ? sk : ''}" />
 	        <input type="submit" value="검색" />
 		</form>
-		<a href="adminAccountAddView" id="add">+ 추가</a>
     </div>
 	
     <table>

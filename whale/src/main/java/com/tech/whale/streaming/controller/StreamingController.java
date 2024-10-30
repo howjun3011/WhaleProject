@@ -116,4 +116,21 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome"; // 같은 JSP 파일을 사용하지만 page 값이 "detail"로 설정됨
 	}
+
+	// 검색 결과를 받아오는 메서드 추가
+	@RequestMapping("/streaming/search")
+	public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
+		// Spotify API로 검색 요청
+		Paging<Track> searchResults = streamingService.searchTracks(session, query);
+		if (searchResults != null && searchResults.getItems().length > 0) {
+			model.addAttribute("searchResults", searchResults.getItems());
+		} else {
+			model.addAttribute("error", "No search results found.");
+		}
+
+		// 검색 결과 페이지로 이동
+		model.addAttribute("page", "search");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
+	}
 }

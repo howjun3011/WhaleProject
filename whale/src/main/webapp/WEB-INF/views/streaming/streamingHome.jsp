@@ -18,15 +18,16 @@
 <div class="header">
     <div class="headerItems">
         <button class="homeBtn">
-            <img src="${pageContext.request.contextPath}/static/images/streaming/homeBtn.png" alt="Music Whale Search Button" height="20px"
-                 @click="goMain()">
+            <button class="homeBtn" onclick="goMain()">
+                <img src="${pageContext.request.contextPath}/static/images/streaming/homeBtn.png" alt="Music Whale Search Button" height="20px">
+            </button>
         </button>
         <div class="headerSearch">
-            <button class="searchBtn" @click="goSearch()">
+            <button class="searchBtn" onclick="goSearch()">
                 <img src="${pageContext.request.contextPath}/static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
             </button>
-            <input class="headerInput" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''"
-                   onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'" v-model="this.query">
+            <input class="headerInput" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="placeholder=''"
+                   onblur="placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
         </div>
     </div>
 </div>
@@ -112,6 +113,22 @@
                         <div class="lyrics">
                             <h3>가사</h3>
                             <pre>${lyrics}</pre>
+                        </div>
+                    </c:when>
+                    <c:when test="${page == 'search'}">
+                        <div class="searchResults">
+                            <h3>검색 결과</h3>
+                            <c:forEach var="track" items="${searchResults}">
+                                <div class="searchResult">
+                                    <div class="searchCover" onclick="navigateToDetail('${track.id}'); playTrack('${track.id}')">
+                                        <img src="${track.album.images[0].url}" alt="${track.name}" width="120" height="120" style="border-radius: 8px;">
+                                    </div>
+                                    <div class="searchInfo">
+                                        <p class="trackName">${track.name}</p>
+                                        <p class="artistName">${track.artists[0].name}</p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
                     </c:when>
                 </c:choose>

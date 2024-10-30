@@ -19,6 +19,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import com.tech.whale.streaming.models.StreamingDao;
 import com.tech.whale.streaming.models.TrackDto;
+import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 
 
 @Service
@@ -148,6 +149,26 @@ public class StreamingService {
             return null;
         }
     }
+
+    // Spotify에서 트랙 검색
+    public Paging<Track> searchTracks(HttpSession session, String query) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 검색 요청 생성
+            SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(query)
+                    .limit(50)  // 최대 50개까지 가져올 수 있음
+                    .build();
+
+            // 결과 반환
+            return searchTracksRequest.execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to search tracks: " + e.getMessage());
+            return null;
+        }
+    }
+
+//    -----------------------------------------------------------------------------------------------------
     
     // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
     public Integer selectTrackIdService(String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {

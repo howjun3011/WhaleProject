@@ -155,3 +155,31 @@ document.addEventListener("DOMContentLoaded", function() {
         trackNameElement.classList.add("large-font");
     }
 });
+
+// 스트리밍 홈 화면으로 돌아가는 버튼
+function goMain() {
+    window.location.href = "/whale/streaming";
+}
+
+// 스트리밍 서치 기능
+function goSearch() {
+    window.location.href = "/whale/streaming/search";
+    const query = document.querySelector('.headerInput').value;
+    if (query) {
+        window.location.href = `/whale/streaming/search?query=${encodeURIComponent(query)}`;
+    } else {
+        alert("검색어를 입력해주세요.");
+        window.location.href = `/whale/streaming`;
+    }
+}
+
+// 엔터 키 입력 시 검색 실행
+document.addEventListener("DOMContentLoaded", () => {
+    const headerInput = document.querySelector('.headerInput');
+
+    headerInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {  // Enter 키 확인
+            goSearch();
+        }
+    });
+});

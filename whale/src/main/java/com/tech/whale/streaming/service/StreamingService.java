@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
+import com.tech.whale.streaming.models.StreamingDao;
 
 
 @Service
@@ -24,6 +25,9 @@ public class StreamingService {
 
     @Autowired
     private SpotifyApi spotifyApi;
+    
+    @Autowired
+    private StreamingDao streamingDao;
 
     // Spotify API 초기화 메서드
     private void initializeSpotifyApi(HttpSession session) {
@@ -142,5 +146,17 @@ public class StreamingService {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
+    public Integer selectTrackIdService(String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {
+    	Integer trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	
+    	if(trackId != null) {return trackId;}
+    	else {
+    		streamingDao.insertTrack(track_artist, track_name, track_album, track_cover, trackSpotifyId);
+    		trackId = streamingDao.selectTrackId(trackSpotifyId);
+    		return trackId;
+    	}
     }
 }

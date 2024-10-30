@@ -8,11 +8,23 @@
 export default {
     data() {
         return {
+            playlist: null,
         }
     },
     mounted() {
+        this.getUserPlaylists();
     },
     methods: {
+        async getUserPlaylists() {
+            const result = await fetch(`/whale/streaming/getPlaylist?id=${this.$route.params.id}`);
+            if (await result.ok) {
+                const data = await result.json();
+                this.playlist = data;
+                console.log('Complete: ',this.playlist);
+            } else {
+                console.error('Failed to fetch user top items:', result.statusText);
+            }
+        },
     },
 };
 </script>

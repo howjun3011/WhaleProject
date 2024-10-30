@@ -5,6 +5,8 @@ const path = require('path');
 
 // 컨트롤러 객체 생성
 const contentsController = require('../../controllers/spotify/contentsController');
+const libraryController = require('../../controllers/spotify/libraryController');
+const playlistController = require('../../controllers/spotify/playlistController');
 
 
 // [ 2. 라우터 사용 ]
@@ -30,6 +32,16 @@ router.get('/getContents', async (req, res) => {
 
 router.get('/getType', async (req, res) => {
     res.json({ type: req.session.type });
+});
+
+router.get('/getLibraries', async (req, res) => {
+    const results = await libraryController.libraryController(req, res);
+    res.json(results);
+});
+
+router.get('/getPlaylist', async (req, res) => {
+    const results = await playlistController.playlistController(req, res);
+    res.json(results);
 });
 
 

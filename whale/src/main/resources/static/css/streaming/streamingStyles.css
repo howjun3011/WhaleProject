@@ -74,5 +74,14 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .lyrics h3{font-size: 1.5rem;}
 .lyrics pre{max-height: 160px; margin-top: 15px; font-family: 'Noto Sans', sans-serif; line-height: 1.5;}
 
-.searchResults{display: flex; flex-wrap: wrap;}
+.searchResults{display: flex; overflow-x: auto; scroll-behavior: smooth;}
 .searchResults .searchResult{width: fit-content; flex: 1 1 20%; padding: 10px;}
+
+.resultContainer{position: relative;}
+.searchSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%); top: 50%;}
+.searchSlideButton.left {left: 0;}
+.searchSlideButton.right {right: 0;}
+.searchSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+
+.searchInfo .trackName,
+.searchInfo .artistName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;}

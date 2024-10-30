@@ -197,43 +197,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// 스크롤 이동 함수
+
+// 검색 결과 스크롤 이동 함수
 function updateSearchScrollButtons() {
-    const container = document.getElementById('recommendationContents');
-    const scrollLeftBtn = document.getElementById('scrollLeftBtn');
-    const scrollRightBtn = document.getElementById('scrollRightBtn');
+    const container = document.querySelector('.searchResults');
+    const searchScrollLeftBtn = document.getElementById('searchScrollLeftBtn');
+    const searchScrollRightBtn = document.getElementById('searchScrollRightBtn');
 
     // 왼쪽 버튼 보이기/숨기기
     if (container.scrollLeft > 0) {
-        scrollLeftBtn.classList.remove('hidden');
+        searchScrollLeftBtn.classList.remove('hidden');
     } else {
-        scrollLeftBtn.classList.add('hidden');
+        searchScrollLeftBtn.classList.add('hidden');
     }
 
     // 오른쪽 버튼 보이기/숨기기
     const maxScrollLeft = container.scrollWidth - container.clientWidth;
-    if (container.scrollLeft < maxScrollLeft) {
-        scrollRightBtn.classList.remove('hidden');
+    if (container.scrollLeft < maxScrollLeft - 1) { // 약간의 여유를 두어 숨김 처리
+        searchScrollRightBtn.classList.remove('hidden');
     } else {
-        scrollRightBtn.classList.add('hidden');
+        searchScrollRightBtn.classList.add('hidden');
     }
 }
 
-function scrollLeftContent() {
-    const container = document.getElementById('recommendationContents');
+function scrollLeftSearchContent() {
+    const container = document.querySelector('.searchResults');
     container.scrollBy({ left: -210, behavior: 'smooth' });
-    setTimeout(updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
+    setTimeout(updateSearchScrollButtons, 300); // 스크롤 후 버튼 업데이트
 }
 
-function scrollRightContent() {
-    const container = document.getElementById('recommendationContents');
+function scrollRightSearchContent() {
+    const container = document.querySelector('.searchResults');
     container.scrollBy({ left: 210, behavior: 'smooth' });
-    setTimeout(updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
+    setTimeout(updateSearchScrollButtons, 300); // 스크롤 후 버튼 업데이트
 }
 
 // 스크롤 및 초기 버튼 상태 설정
 document.addEventListener("DOMContentLoaded", () => {
-    updateScrollButtons(); // 초기 상태
-    const container = document.getElementById('recommendationContents');
-    container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
+    updateSearchScrollButtons(); // 초기 상태
+    const container = document.querySelector('.searchResults');
+    container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
 });
+

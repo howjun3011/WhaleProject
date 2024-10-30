@@ -129,7 +129,7 @@
                             <h3>곡</h3>
                             <div class="searchResults">
                                 <!-- 왼쪽 버튼 -->
-                                <button class="searchSlideButton left" id="scrollLeftBtn" onclick="scrollLeftContent()">
+                                <button class="searchSlideButton left" id="searchScrollLeftBtn" onclick="scrollLeftSearchContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -147,7 +147,7 @@
                                     </div>
                                 </c:forEach>
                                 <!-- 오른쪽 버튼 -->
-                                <button class="searchSlideButton right" id="scrollRightBtn" onclick="scrollRightContent()">
+                                <button class="searchSlideButton right" id="searchScrollRightBtn" onclick="scrollRightSearchContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">

@@ -157,7 +157,7 @@ public class StreamingService {
         try {
             // 검색 요청 생성
             SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(query)
-                    .limit(50)  // 최대 50개까지 가져올 수 있음
+                    .limit(10)  // 최대 50개까지 가져올 수 있음
                     .build();
 
             // 결과 반환

@@ -14,7 +14,7 @@ const routes = [
     { path: '/whale/streaming/search/:query', component: MainSearch },
     { path: '/whale/streaming/detail/artist', component: MainDetailArtist },
     { path: '/whale/streaming/detail/album', component: MainDetailAlbum },
-    { path: '/whale/streaming/playlist', component: MainPlaylist },
+    { path: '/whale/streaming/playlist/:id', component: MainPlaylist },
     { path: '/whale/streaming/current-playlist', component: MainCurrentPlaylist },
 ];
 

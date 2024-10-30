@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="communityRegDo" method="post" enctype="multipart/form-data">
+	<form action="communityRegDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
 	<br />
 		태그 : <select name = "post_tag_id">
 <c:forEach items="${postTag}" var="p">
@@ -34,5 +34,19 @@
 		<input type="submit" value="Save" />
 		<input type="button" value="Cancel" class="cancel" onClick="location.href='communityPost?c=${param.c}'" />
 	</form>
+	
+	<script type="text/javascript">
+	    function validateForm(event) {
+	        var post_title = document.getElementsByName("post_title")[0].value.trim();
+	        var post_text = document.getElementsByName("post_text")[0].value.trim();
+	        
+	        if (post_title === "" || post_text === "") {
+	            alert("제목과 내용을 모두 작성해 주세요.");
+	            event.preventDefault();  // 폼 제출을 중단
+	            return false;
+	        }
+	        return true;
+	    }
+	</script>
 </body>
 </html>

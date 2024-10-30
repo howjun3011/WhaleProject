@@ -342,7 +342,7 @@
 
 	<div class="comments-section">
 	    <c:forEach var="comment" items="${feedDetail.feedComments}">
-	        <div class="comment" data-comment-id="${comment.feed_comments_id}" data-user-id="${comment.user_id}">
+	        <div class="comment" data-feed-id="${comment.feed_id}" data-comment-id="${comment.feed_comments_id}" data-user-id="${comment.user_id}">
 	            <!-- 댓글 헤더 -->
 	            <div class="comment-header">
 	                <!-- 프로필 사진 -->
@@ -376,7 +376,7 @@
 	            <c:if test="${not empty comment.replies}">
 	                <div class="replies">
 	                    <c:forEach var="reply" items="${comment.replies}">
-	                        <div class="reply" data-comment-id="${reply.feed_comments_id}" data-user-id="${reply.user_id}">
+	                        <div class="reply" data-feed-id="${reply.feed_id}" data-comment-id="${reply.feed_comments_id}" data-user-id="${reply.user_id}">
 	                            <!-- 답글 헤더 -->
 	                            <div class="comment-header">
 	                                <!-- 프로필 사진 -->
@@ -407,7 +407,7 @@
 	                </div>
 	            </c:if>
 	            <!-- 답글 입력 폼 -->
-	            <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;">
+	            <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;" onsubmit="validateReplyForm(event)">
 	                <form action="feedDetail/reply" method="post">
 	                    <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
 	                    <input type="hidden" name="parentCommentId" value="${comment.feed_comments_id}">
@@ -420,7 +420,7 @@
 	    </c:forEach>
 	    <!-- 댓글 입력 폼 -->
 	    <div class="comment-form">
-	        <form action="feedDetail/comments" method="post">
+	        <form action="feedDetail/comments" method="post" onsubmit="validateCommentForm(event)">
 	            <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
 	            <input type="hidden" name="userId" value="${now_id}">
 	            <input type="text" name="comments" placeholder="댓글을 입력하세요" />
@@ -438,13 +438,36 @@
 	    </div>
 	</div>
 
+	<script type="text/javascript">
+	    function validateCommentForm(event) {
+	        var comments = document.getElementsByName("comments")[0].value.trim();
+	        if (comments === "") {
+	            alert("댓글 내용을 작성해 주세요.");
+	            event.preventDefault();  // 폼 제출을 중단
+	            return false;
+	        }
+	        return true;
+	    }
+	    function validateReplyForm(event) {
+	        var replyText = event.target.querySelector("[name='replyText']").value.trim();
+	        if (replyText === "") {
+	            alert("답글 내용을 작성해 주세요.");
+	            event.preventDefault();  // 폼 제출을 중단
+	            return false;
+	        }
+	        return true;
+	    }
+	</script>
+
 	<script>
 	    let selectedItemId = null;
+	    let selectedItemFeedId = null;
 	    let selectedItemType = null; // 'post', 'comment', 'reply'
 	    let isOwner = false;
 	
-	    function openOtherModal(itemId, itemOwnerId, currentUserId, itemType) {
+	    function openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType) {
 	        selectedItemId = itemId;
+	        selectedItemFeedId = itemFeedId;
 	        selectedItemType = itemType;
 	        isOwner = (itemOwnerId === currentUserId);
 	
@@ -482,7 +505,7 @@
 	            if (selectedItemType === 'post') {
 	                window.location.href = `feedDel?f=\${selectedItemId}`;
 	            } else if (selectedItemType === 'comment' || selectedItemType === 'reply') {
-	                window.location.href = `feedDetail/deleteComment?feedCommentsId=\${selectedItemId}&feedId=\${feedDetail.feed_id}`;
+	                window.location.href = `feedDetail/deleteComment?feedCommentsId=\${selectedItemId}&feedId=\${selectedItemFeedId}`;
 	            }
 	        }
 	        closeOtherModal();
@@ -516,10 +539,11 @@
 	            event.stopPropagation();
 	            const postElement = this.closest('.post');
 	            const itemId = postElement.getAttribute('data-post-id');
+	            const itemFeedId = itemElement.getAttribute('data-feed-id');
 	            const itemOwnerId = postElement.getAttribute('data-user-id');
 	            const currentUserId = '${now_id}';
 	
-	            openOtherModal(itemId, itemOwnerId, currentUserId, 'post');
+	            openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, 'post');
 	        });
 	    });
 	
@@ -529,11 +553,12 @@
 	            event.stopPropagation();
 	            const itemElement = this.closest('.comment, .reply');
 	            const itemId = itemElement.getAttribute('data-comment-id');
+	            const itemFeedId = itemElement.getAttribute('data-feed-id');
 	            const itemOwnerId = itemElement.getAttribute('data-user-id');
 	            const currentUserId = '${now_id}';
 	            const itemType = itemElement.classList.contains('reply') ? 'reply' : 'comment';
 	
-	            openOtherModal(itemId, itemOwnerId, currentUserId, itemType);
+	            openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType);
 	        });
 	    });
 	</script>

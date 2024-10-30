@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <div class="write-area">
-    <form action="feedWriteDo" method="post" enctype="multipart/form-data">
+    <form action="feedWriteDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
         <div class="form-content">
             <br />
 			<label for="file-upload" class="file-upload-btn">
@@ -26,6 +26,16 @@
             output.style.display = 'block';
         };
         reader.readAsDataURL(event.target.files[0]);
+    }
+    
+    function validateForm(event) {
+        var feedText = document.getElementsByName("feedText")[0].value.trim();
+        if (feedText === "") {
+            alert("글 내용을 작성해 주세요.");
+            event.preventDefault();  // 폼 제출을 중단
+            return false;
+        }
+        return true;
     }
 </script>
 

@@ -137,3 +137,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('recommendationContents');
     container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
 });
+
+// 트랙 이미지 누르면 트랙 디테일 페이지로 리다이렉트
+function navigateToDetail(trackId) {
+    window.location.href = `/whale/streaming/detail?trackId=${trackId}`;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const trackNameElement = document.getElementById("trackName");
+    const textLength = trackNameElement.innerText.length;
+
+    if (textLength > 16) {
+        trackNameElement.classList.add("small-font");
+    } else if (textLength > 8) {
+        trackNameElement.classList.add("medium-font");
+    } else {
+        trackNameElement.classList.add("large-font");
+    }
+});

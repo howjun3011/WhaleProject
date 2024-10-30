@@ -1,6 +1,7 @@
 package com.tech.whale.setting.controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -36,20 +38,25 @@ import com.tech.whale.setting.dto.StartpageDto;
 import com.tech.whale.setting.dto.UserInfoDto;
 import com.tech.whale.setting.dto.UserNotificationDto;
 import com.tech.whale.setting.dto.UserSettingDto;
+import com.tech.whale.streaming.service.StreamingService;
 
 @Controller
 public class SettingController {
-
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    UserInfoDto userinfoDto;
-    StartpageDto startpageDto;
-    UserSettingDto userSettingDto;
-    UserNotificationDto userNotificationDto;
-    BlockDto blockDto;
-    PageAccessDto pageAccessDto;
-    LikeListDto likeListDto;
-    CommentListDto commentListDto;
+	
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	
+	UserInfoDto userinfoDto;
+	StartpageDto startpageDto;
+	UserSettingDto userSettingDto;
+	UserNotificationDto userNotificationDto;
+	BlockDto blockDto;
+	PageAccessDto pageAccessDto;
+	LikeListDto likeListDto;
+	CommentListDto commentListDto;
+	
+	// [ 스트리밍 검색 기능 ]
+    @Autowired
+    private StreamingService streamingService;
 
     @RequestMapping("/settingHome")
     public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
@@ -204,6 +211,24 @@ public class SettingController {
         System.out.println("representiceSong() ctr");
 
         return "setting/representiveSong";
+    }
+    
+    @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	System.out.println("updateRepresentive() ctr");
+    	
+    	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
+    	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
+    	String trackName = map.get("name").toString();
+    	String albumName = ((Map<String, String>) map.get("album")).get("name");
+    	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
+    	String trackSpotifyId = map.get("id").toString();
+    	
+    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+
+    	System.out.println("DB 업데이트 완료");
+    	
+        return "redirect:/representiveSong";
     }
 
     @RequestMapping("/account")

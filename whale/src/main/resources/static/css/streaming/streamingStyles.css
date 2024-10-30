@@ -26,7 +26,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .recommendations {width: 100%; height: 240px;}
 .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
 .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none; gap: 16px; overflow-x: scroll; scroll-behavior: smooth;}
-.recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer;}
+.recommendationContent {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; padding: 0 10px; /* 카드 간 간격 */ transition: transform 0.3s ease;}
 .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
 .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; left: 10px; background: transparent;}
 .recommendationLike:hover{opacity: 0.7;}
@@ -42,7 +42,6 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 /* CSS로 recommendationContents를 가로 스크롤 가능하게 설정 */
 .recommendationWrapper {display: flex; align-items: center; position: relative;}
 .recommendationContents {display: flex; overflow: hidden; width: 100%; scroll-behavior: smooth;}
-.recommendationContent {margin: 0 10px; /* 카드 간 간격 */ transition: transform 0.3s ease;}
 .slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
 .slideButton.left {left: 0;}
 .slideButton.right {right: 0;}
@@ -63,3 +62,10 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .libraryBtn {height: 22px; fill: #9f9f9f; margin-top: 15px;}
 .libraryBtn:hover {opacity: 0.8; cursor: grab;}
 .libraryBtn:active {opacity: 0.6; cursor: grab;}
+
+.trackDetail{margin-left: 5px;}
+.trackDetailContainer{display: flex; gap: 20px; color: white; align-items: end;}
+
+#trackName.small-font {font-size: 2rem; /* 글자가 길 때 작은 폰트 */}
+#trackName.medium-font {font-size: 4rem; /* 글자가 중간 정도 길 때 중간 폰트 */}
+#trackName.large-font {font-size: 5.5rem; /* 글자가 짧을 때 큰 폰트 */}

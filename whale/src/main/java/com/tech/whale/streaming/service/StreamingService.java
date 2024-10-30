@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
@@ -15,6 +17,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
+import com.tech.whale.streaming.models.StreamingDao;
+import com.tech.whale.streaming.models.TrackDto;
 
 
 @Service
@@ -22,6 +26,9 @@ public class StreamingService {
 
     @Autowired
     private SpotifyApi spotifyApi;
+    
+    @Autowired
+    private StreamingDao streamingDao;
 
     // Spotify API 초기화 메서드
     private void initializeSpotifyApi(HttpSession session) {
@@ -103,4 +110,59 @@ public class StreamingService {
         }
     }
 
+    public Track getTrackDetail(HttpSession session, String trackId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // Spotify API에서 트랙 상세 정보 가져오기
+            return spotifyApi.getTrack(trackId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch track details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Album getAlbumDetail(HttpSession session, String albumId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // Album 정보 가져오기
+            return spotifyApi.getAlbum(albumId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch album details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Artist getArtistDetail(HttpSession session, String artistId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 아티스트 정보 가져오기
+            return spotifyApi.getArtist(artistId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch artist details: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
+    public Integer selectTrackIdService(String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {
+    	Integer trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	
+    	if(trackId != null) {return trackId;}
+    	else {
+    		streamingDao.insertTrack(track_artist, track_name, track_album, track_cover, trackSpotifyId);
+    		trackId = streamingDao.selectTrackId(trackSpotifyId);
+    		return trackId;
+    	}
+    }
+    
+    public TrackDto selectTrackDtoService(String trackId) {
+    	TrackDto trackDto = streamingDao.selectTrackDto(trackId);
+    	return trackDto;
+    }
 }

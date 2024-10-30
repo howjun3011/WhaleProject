@@ -180,7 +180,7 @@
         <tr>
             <td>${now_id}</td> <!-- 작성자 열 -->
             <td>
-                <form action="communityDetail/comments" method="post">
+                <form action="communityDetail/comments" method="post" onsubmit="validateForm(event)">
                     <input type="hidden" name="postId" value="${postDetail.post_id}">
                     <input type="hidden" name="userId" value="${now_id}">
                     <input type="hidden" name="c" value="${param.c}"> <!-- 커뮤니티 ID -->
@@ -192,7 +192,17 @@
         </tr>
     </tbody>
 </table>
-	
+	<script type="text/javascript">
+	    function validateForm(event) {
+	        var comments = document.getElementsByName("comments")[0].value.trim();
+	        if (comments === "") {
+	            alert("댓글 내용을 작성해 주세요.");
+	            event.preventDefault();  // 폼 제출을 중단
+	            return false;
+	        }
+	        return true;
+	    }
+	</script>
 	<!-- 코멘트 입력 폼 -->
 </body>
 </html>

@@ -114,7 +114,7 @@
 
     <select id="getComments" resultType="com.tech.whale.feed.dto.FeedCommentDto">
 		SELECT 
-		    fc.feed_comments_id, 
+		    fc.feed_comments_id, fc.feed_id,
 		    fc.user_id, 
 		    fc.feed_comments_text, 
 		    TO_CHAR(fc.feed_comments_date, 'YYYY"년" MM"월" DD"일" HH24"시 "MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS feed_comments_date,
@@ -136,7 +136,7 @@
 		AND 
 		    fc.parent_comments_id IS NULL
 		GROUP BY 
-		    fc.feed_comments_id, fc.user_id, fc.feed_comments_text, fc.feed_comments_date, ui.user_image_url
+		    fc.feed_comments_id, fc.feed_id, fc.user_id, fc.feed_comments_text, fc.feed_comments_date, ui.user_image_url
 		ORDER BY 
 		    fc.feed_comments_date ASC
     </select>

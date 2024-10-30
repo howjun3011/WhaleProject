@@ -8,9 +8,23 @@
 	<select id="selectTrackId" resultType="Integer">
         SELECT TRACK_ID FROM TRACK WHERE TRACK_SPOTIFY_ID = #{trackSpotifyId}
     </select>
+    
+    <select id="selectTrackDto" resultType="com.tech.whale.streaming.models.TrackDto">
+		SELECT
+	        TRACK_ARTIST,
+	        TRACK_NAME,
+	        TRACK_ALBUM,
+	        TRACK_COVER,
+	        TRACK_SPOTIFY_ID
+	    FROM
+	        TRACK
+	    WHERE
+	        TRACK_SPOTIFY_ID = #{trackSpotifyId}
+	</select>
 	
 	<insert id="insertTrack">
-		INSERT INTO TRACK VALUES (TRACK_SEQ.NEXTVAL,#{param1},#{param2},#{param3},#{param4},#{param5})
+		INSERT INTO TRACK (TRACK_ID, TRACK_ARTIST, TRACK_NAME, TRACK_ALBUM, TRACK_COVER, TRACK_SPOTIFY_ID) VALUES
+						  (TRACK_SEQ.NEXTVAL,#{param1},#{param2},#{param3},#{param4},#{param5})
 	</insert>
 	
 </mapper>

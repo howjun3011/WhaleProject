@@ -5,5 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StreamingDao {
 	public Integer selectTrackId(String trackSpotifyId);
-	public void insertTrack(String trackArtist, String trackName, String trackAlbum, String trackCover, String trackSpotifyId);
+	public TrackDto selectTrackDto(String trackSpotifyId);
+	public void insertTrack(String track_artist, String track_name, String track_album, String track_cover, String track_spotify_id);
 }

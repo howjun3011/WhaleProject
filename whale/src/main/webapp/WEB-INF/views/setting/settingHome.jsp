@@ -59,12 +59,6 @@ a:visited, a:hover, a:focus, a:active {
 					접근성
 				</div>
 			</a>
-			<a href="reportList">
-				<div class="setting-item">
-					<img src="static/images/setting/report.png" alt="신고내역" />
-					신고 내역
-				</div>
-			</a>
 		</div>
 	</div>
 </body>

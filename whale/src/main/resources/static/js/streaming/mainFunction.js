@@ -71,22 +71,35 @@ async function sendDeviceId(event) {
 }
 
 function playTrack(trackId) {
-    fetch('/whale/streaming/playTrack', {
+    return fetch('/whale/streaming/playTrack', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({trackId: trackId})
+        body: JSON.stringify({ trackId: trackId })
     })
         .then(response => {
             if (response.ok) {
                 console.log("Track is now playing");
+                return Promise.resolve(); // 성공 시 Promise 반환
             } else {
                 console.error("Failed to play track");
+                return Promise.reject(new Error("Failed to play track")); // 실패 시 에러 반환
             }
         })
-        .catch(error => console.error("Error playing track:", error));
+        .catch(error => {
+            console.error("Error playing track:", error);
+            return Promise.reject(error);
+        });
 }
+
+function playAndNavigate(trackId) {
+    // 트랙을 재생하고 성공 시 navigateToDetail 호출
+    playTrack(trackId).then(() => {
+        navigateToDetail(trackId);
+    }).catch(error => console.error("Error during play and navigate:", error));
+}
+
 
 $(document).ready(function () {
     var isExpanded = false;

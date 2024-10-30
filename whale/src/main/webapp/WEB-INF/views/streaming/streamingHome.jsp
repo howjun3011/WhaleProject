@@ -120,7 +120,7 @@
                             <h3>검색 결과</h3>
                             <c:forEach var="track" items="${searchResults}">
                                 <div class="searchResult">
-                                    <div class="searchCover" onclick="navigateToDetail('${track.id}'); playTrack('${track.id}')">
+                                    <div class="searchCover" onclick="playAndNavigate('${track.id}');">
                                         <img src="${track.album.images[0].url}" alt="${track.name}" width="120" height="120" style="border-radius: 8px;">
                                     </div>
                                     <div class="searchInfo">

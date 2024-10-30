@@ -3,16 +3,8 @@ package com.tech.whale.setting.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.tech.whale.setting.dto.*;
 import org.apache.ibatis.annotations.Mapper;
-
-import com.tech.whale.setting.dto.BlockDto;
-import com.tech.whale.setting.dto.CommentListDto;
-import com.tech.whale.setting.dto.LikeListDto;
-import com.tech.whale.setting.dto.PageAccessDto;
-import com.tech.whale.setting.dto.StartpageDto;
-import com.tech.whale.setting.dto.UserInfoDto;
-import com.tech.whale.setting.dto.UserNotificationDto;
-import com.tech.whale.setting.dto.UserSettingDto;
 
 @Mapper
 public interface SettingDao {
@@ -39,4 +31,5 @@ public interface SettingDao {
 	public void updatePageAccessSetting(String userId, String settingType, String selectedValue);
 	public List<LikeListDto> getFilteredPostLikeList(String session_user_id, String orderBy, String postType);
 	public List<CommentListDto> getFilteredPostCommentList(String session_user_id, String orderBy, String postType);
+	public List<HiddenFeedDto> getHiddenFeedList(String session_user_id);
 }

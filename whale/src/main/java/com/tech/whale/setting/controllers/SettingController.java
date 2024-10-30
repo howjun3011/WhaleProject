@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.tech.whale.setting.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,15 +29,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.tech.whale.setting.dao.ReportDao;
 import com.tech.whale.setting.dao.SettingDao;
-import com.tech.whale.setting.dto.BlockDto;
-import com.tech.whale.setting.dto.CommentListDto;
-import com.tech.whale.setting.dto.LikeListDto;
-import com.tech.whale.setting.dto.PageAccessDto;
-import com.tech.whale.setting.dto.ReportDto;
-import com.tech.whale.setting.dto.StartpageDto;
-import com.tech.whale.setting.dto.UserInfoDto;
-import com.tech.whale.setting.dto.UserNotificationDto;
-import com.tech.whale.setting.dto.UserSettingDto;
 import com.tech.whale.streaming.service.StreamingService;
 
 @Controller
@@ -52,6 +44,7 @@ public class SettingController {
 	PageAccessDto pageAccessDto;
 	LikeListDto likeListDto;
 	CommentListDto commentListDto;
+    HiddenFeedDto hiddenFeedDto;
 	
 	// [ 스트리밍 검색 기능 ]
     @Autowired
@@ -278,6 +271,12 @@ public class SettingController {
     public String hiddenFeed(HttpSession session, Model model) {
         System.out.println("hiddenFeed() ctr");
 
+        String session_user_id = (String) session.getAttribute("user_id");
+
+        List<HiddenFeedDto> hiddenFeedList = settingDao.getHiddenFeedList(session_user_id);
+
+        model.addAttribute("hiddenFeedList", hiddenFeedList);
+
         return "setting/hiddenFeed";
     }
 
@@ -335,6 +334,12 @@ public class SettingController {
             System.out.println("post_tag: " + commentListDto.getPost_tag_text());
             System.out.println("feed_id: " + commentListDto.getFeed_id());
             System.out.println("feed_img_name: " + commentListDto.getFeed_img_name());
+            System.out.println("feed_text: " + commentListDto.getFeed_text());
+            System.out.println("feed_owner_image: " + commentListDto.getFeed_owner_image());
+            System.out.println("feed_comments_id: " + commentListDto.getFeed_comments_id());
+            System.out.println("parent_comments_id: " + commentListDto.getParent_comments_id());
+            System.out.println("commenter_image: " + commentListDto.getCommenter_image());
+            System.out.println("commenter_id: " + commentListDto.getCommenter_id());
             System.out.println("feed_comments_text: " + commentListDto.getFeed_comments_text());
         }
 

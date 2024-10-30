@@ -6,6 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/streaming/searchView.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <title>Feed Page</title>
     <style>
         body {
@@ -58,6 +60,24 @@
             font-size: 1em;
             margin-top: 10px;
         }
+
+		.music-info {
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between; /* 양 끝에 요소 배치 */
+		    padding: 10px;
+		    background-color: #f9f9f9;
+		    border-radius: 5px;
+		    margin-bottom: 10px;
+		}
+		
+		.music-info > div {
+		    flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */
+		}
+		
+		.music-info label {
+		    margin-left: 10px; /* 버튼 간 간격 조정 */
+		}
 
         .submit-btn {
             display: block;
@@ -253,7 +273,22 @@
                 <c:if test="${not empty feed.feed_img_name}">
                     <img src="static/images/feed/${feed.feed_img_name}" alt="Post Image" class="post-image">
                 </c:if>
-
+                
+                <c:if test="${not empty feed.track_id}">
+                    <div id="music-info" class="music-info">
+		                <img id="album-icon" src="${feed.track_cover}" alt="Album Icon" style="width: 50px; height: 50px;">
+		                <div>
+		                    <span id="music-title">${feed.track_name}</span> - <span id="artist-name">${feed.track_artist}</span>
+		                </div>
+ 				        <label class="play-button" onclick="playMusic(this, '${feed.track_spotify_id}')" style="display: inline-block;">
+				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;" />
+				        </label>
+				        <!-- Pause 버튼 -->
+				        <label class="pause-button" onclick="pauseMusic(this, '${feed.track_spotify_id}')" style="display: none;">
+				            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;" />
+				        </label>
+		            </div>
+                </c:if>
                 <div class="post-text">
                     <p>${feed.feed_text}</p>
                     <span class="post-time">${feed.feed_date}</span>
@@ -382,13 +417,19 @@
                 window.location.href = `feedDetail?f=\${postId}`;
             });
         });
-
-        // 내부 요소 클릭 시 이벤트 전파 방지
-        document.querySelectorAll('.post .other-btn, .post .like-btn, .post .comments, .post .user-info a').forEach(element => {
+        
+        document.querySelectorAll('label[onclick^="playMusic"], label[onclick^="pauseMusic"]').forEach(element => {
             element.addEventListener('click', function(event) {
-                event.stopPropagation();
+                event.stopPropagation(); // 이벤트 전파 방지
             });
         });
+        
+        // 내부 요소 클릭 시 이벤트 전파 방지
+		document.querySelectorAll('.post .other-btn, .post .like-btn, .post .comments, .post .user-info a').forEach(element => {
+		    element.addEventListener('click', function(event) {
+		        event.stopPropagation();
+		    });
+		});
 
         var offset = 10;  // 첫 로딩에서 시작하는 offset 값
         const size = 10;  // 한 번에 가져올 피드 수
@@ -437,6 +478,48 @@
             const writeAreaContainer = document.getElementById('writeAreaContainer');
             writeAreaContainer.classList.toggle('open'); // 클릭 시 open 클래스를 토글
         });
+        
+        
+        function playMusic(element, spotifyId) {
+        	fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
+	            .then(response => {
+	                if (response.ok) {
+	                    // Play 버튼 숨기고 Pause 버튼 보이기
+	                    element.style.display = 'none';
+	                    const pauseBtn = element.parentElement.querySelector('label[onclick^="pauseMusic"]');
+	                    if (pauseBtn) {
+	                        pauseBtn.style.display = 'inline-block';
+	                    }
+	                } else {
+	                    alert('음악 재생에 실패했습니다.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('에러 발생:', error);
+	                alert('음악 재생 중 오류가 발생했습니다.');
+	            });
+	    }
+	
+	    function pauseMusic(element, spotifyId) {
+	        fetch('/whale/feedPauseMusic?id=${spotifyId}')
+	            .then(response => {
+	                if (response.ok) {
+	                    // Pause 버튼 숨기고 Play 버튼 보이기
+	                    element.style.display = 'none';
+	                    const playBtn = element.parentElement.querySelector('label[onclick^="playMusic"]');
+	                    if (playBtn) {
+	                        playBtn.style.display = 'inline-block';
+	                    }
+	                } else {
+	                    alert('음악 일시정지에 실패했습니다.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('에러 발생:', error);
+	                alert('음악 일시정지 중 오류가 발생했습니다.');
+	            });
+	    }
+        
     </script>
 
 </body>

@@ -18,6 +18,7 @@ import java.util.concurrent.CompletionException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import com.tech.whale.streaming.models.StreamingDao;
+import com.tech.whale.streaming.models.TrackDto;
 
 
 @Service
@@ -158,5 +159,10 @@ public class StreamingService {
     		trackId = streamingDao.selectTrackId(trackSpotifyId);
     		return trackId;
     	}
+    }
+    
+    public TrackDto selectTrackDtoService(String trackId) {
+    	TrackDto trackDto = streamingDao.selectTrackDto(trackId);
+    	return trackDto;
     }
 }

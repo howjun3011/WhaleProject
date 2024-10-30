@@ -10,10 +10,19 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
 <style>
+.setting-container {
+	display: flex;
+	flex-direction: column; /* 헤더와 스크롤 콘텐츠를 세로로 배치 */
+	overflow: hidden; /* 부모에서 스크롤 숨김 */
+}
 .setting-item{
 	justify-content: space-between;
 	padding-top: 6px;
 	padding-bottom: 5px;
+}
+.scroll-content {
+	flex: 1; /* 남은 공간을 차지 */
+	overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 .setting-item img{
 	width: 40px;
@@ -71,28 +80,30 @@
 		<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
 		차단 목록
 		</div>
-		<c:choose>
-			<c:when test="${empty blockList }">
-				<div class="no-block-message">차단 목록이 없습니다.</div>
-			</c:when>
-			<c:otherwise>
-				<!-- 차단된 사용자 목록 출력 -->
-			    <c:forEach var="block" items="${blockList}">
-			        <div class="setting-item">
-			        	<div class="profile-info">
-				        	<!-- 프로필 이미지 누르면 그 사람의 프로필 페이지로 이동하도록 설정 -->
-				        	<a href="/whale/profileHome?u=${block.user_id}"><img src="static/images/setting/${block.user_image_url}" alt="프로필 이미지" /> </a>
-				        	<div class="user-details">
-				        		<span id="user-nickname">${block.user_nickname }</span>
-				        		<span id="user-id">${block.user_id}</span>
-				        	</div>
-				        </div>
-				        <!-- 클릭이벤트로 보낼 때, 클릭된 사용자의 user_id(차단된 사용자)를 같이 전달 -->
-				        <button class="unblock-button" onclick="blockcancel('${block.user_id}');">차단 해제</button>
-				    </div>
-			   </c:forEach>
-			</c:otherwise>
-		</c:choose>
+		<div class="scroll-content">
+			<c:choose>
+				<c:when test="${empty blockList }">
+					<div class="no-block-message">차단 목록이 없습니다.</div>
+				</c:when>
+				<c:otherwise>
+					<!-- 차단된 사용자 목록 출력 -->
+					<c:forEach var="block" items="${blockList}">
+						<div class="setting-item">
+							<div class="profile-info">
+								<!-- 프로필 이미지 누르면 그 사람의 프로필 페이지로 이동하도록 설정 -->
+								<a href="/whale/profileHome?u=${block.user_id}"><img src="static/images/setting/${block.user_image_url}" alt="프로필 이미지" /> </a>
+								<div class="user-details">
+									<span id="user-nickname">${block.user_nickname }</span>
+									<span id="user-id">${block.user_id}</span>
+								</div>
+							</div>
+							<!-- 클릭이벤트로 보낼 때, 클릭된 사용자의 user_id(차단된 사용자)를 같이 전달 -->
+							<button class="unblock-button" onclick="blockcancel('${block.user_id}');">차단 해제</button>
+						</div>
+				   </c:forEach>
+				</c:otherwise>
+			</c:choose>
+		</div>
 	</div>
 </div>
 <script>

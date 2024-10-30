@@ -192,14 +192,30 @@
 				ORDER BY POST_COMMENTS_ID ${orderBy }
 			</when>
 			<otherwise>
-				SELECT FI.FEED_ID, FI.FEED_IMG_NAME, FC.FEED_COMMENTS_TEXT
-				FROM FEED_COMMENTS FC 
-				JOIN FEED_IMG FI
-				ON FC.FEED_ID = FI.FEED_ID
+				SELECT
+					FI.FEED_ID,
+					FI.FEED_IMG_NAME,
+					F.FEED_TEXT,
+					UI.USER_IMAGE_URL AS FEED_OWNER_IMAGE,
+					FC.feed_comments_id,
+					FC.parent_comments_id,
+					UIC.USER_IMAGE_URL AS COMMENTER_IMAGE,
+					FC.USER_ID AS COMMENTER_ID,
+					FC.FEED_COMMENTS_TEXT
+				FROM FEED F
+				JOIN FEED_IMG FI ON F.FEED_ID = FI.FEED_ID
+				JOIN USER_INFO UI ON F.USER_ID = UI.USER_ID  -- 피드 작성자 정보
+				JOIN FEED_COMMENTS FC ON F.FEED_ID = FC.FEED_ID
+				JOIN USER_INFO UIC ON FC.USER_ID = UIC.USER_ID  -- 댓글 작성자 정보
 				WHERE FC.USER_ID = #{session_user_id}
 				ORDER BY FC.FEED_COMMENTS_ID ${orderBy }
 			</otherwise>
 		</choose>
 	</select>
-	
+	<select id="getHiddenFeedList" parameterType="map" resultType="com.tech.whale.setting.dto.HiddenFeedDto">
+		SELECT F.FEED_ID, F.FEED_TEXT, FI.FEED_IMG_NAME
+		FROM FEED F JOIN FEED_IMG FI
+		ON F.FEED_ID = FI.FEED_ID
+		WHERE USER_ID = #{session_user_id} AND FEED_OPEN = 1
+	</select>
 </mapper>

@@ -511,9 +511,22 @@
 
 
 	</select>
-
-
 	
 	
-
+	<delete id="postDel">
+		DELETE FROM POST WHERE POST_ID = #{post_id}
+	</delete>
+	<delete id="postCommentsDel">
+		DELETE FROM POST_COMMENTS WHERE POST_ID = #{post_id}
+	</delete>
+	<delete id="postLikeDel">
+		DELETE FROM POST_LIKE WHERE POST_ID = #{post_id}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
 </mapper>

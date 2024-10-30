@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.admin.board.service.AdminBoardContentService;
 import com.tech.whale.admin.board.service.AdminBoardListService;
+import com.tech.whale.admin.board.service.AdminBoardPostDelete;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.util.AdminSearchVO;
@@ -35,6 +36,8 @@ public class AdminBoardController {
 	private AdminBoardContentService adminBoardContentService;
 	@Autowired
 	private ComLikeCommentService comLikeCommentService;
+	@Autowired
+	private AdminBoardPostDelete adminBoardPostDelete;
 	
 	
 	@Autowired
@@ -108,10 +111,10 @@ public class AdminBoardController {
 			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
-		String user_id = (String)session.getAttribute("user_id");
-		model.addAttribute("user_id", user_id);
 		model.addAttribute("request", request);
-	    
+		model.addAttribute("user_id", session.getAttribute("user_id"));
+		
+		adminBoardPostDelete.execute(model);
 		
 		
 		return "redirect:adminBoardListView";

@@ -52,4 +52,9 @@ public interface AdminIDao {
 			int start, int end, String sk, String selNum);
 	public int selectBoardCnt(String sk, String selNum);
 	
+	public void postDel(int post_id);
+	public void postLikeDel(int post_id);
+	public void postCommentsDel(int post_id);
+	public void postDelLog(int post_id, String user_id);
+	
 }

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../static/css/message/messageHome.css">
 <script type="text/javascript"
 	src="../static/js/message/messageCommon.js"></script>
+
 <meta charset="UTF-8" />
 <title>Message Home</title>
 <style>
@@ -37,21 +38,23 @@ body {
 </head>
 <body>
 	<div class="message-container">
-		<form id="search" method="post">
-			<button type="button" id="beforePage" onclick="goBack()">
-				<img src="../static/images/message/arrow.png" alt="이전" />
-			</button>
-			<input id="searchInput" name="searchInput" type="text"
-				placeholder="검색" />
-			<button type="submit" id="searchBtn">
-				<img src="../static/images/message/search.png" alt="검색" />
-			</button>
-		</form>
-		<div id="content">
-			<span id="title">메시지</span>
-			<jsp:include page="messageTable.jsp" />
-			
+			<div id="search">
+				<button type="button" class="beforePage" onclick="goBack()">
+					<img class="barBtns" src="../static/images/message/arrow.png"
+						alt="이전" />
+				</button>
+				<input id="searchInput" name="searchInput" type="text"
+					placeholder="검색" />
+				<button type="submit" id="searchBtn">
+					<img class="barBtns" src="../static/images/message/search.png"
+						alt="검색" />
+				</button>
+			</div>
+			<div id="content">
+				<span id="title">메시지</span>
+				<jsp:include page="messageTable.jsp" />
+
+			</div>
 		</div>
-	</div>
 </body>
 </html>

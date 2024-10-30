@@ -43,4 +43,8 @@ public interface FeedDao {
 
 	void hideFeed(String feed_id);
 
+	void insertFeedMusic(FeedDto feedDto);
+
+	int getNextFeedMusicId();
+
 }

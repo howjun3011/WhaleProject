@@ -182,8 +182,9 @@ public class StreamingService {
     	}
     }
     
-    public TrackDto selectTrackDtoService(String trackId) {
+    public TrackDto selectTrackDtoService(Integer trackId) {
     	TrackDto trackDto = streamingDao.selectTrackDto(trackId);
     	return trackDto;
     }
+
 }

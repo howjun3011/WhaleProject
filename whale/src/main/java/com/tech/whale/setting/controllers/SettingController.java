@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.tech.whale.setting.dao.ReportDao;
 import com.tech.whale.setting.dao.SettingDao;

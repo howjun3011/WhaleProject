@@ -67,7 +67,7 @@ public class AdminController {
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminAccountOfficialListView", "오피셜관리");
-	    subMenu.put("adminAccountClientListView", "광고주관리");
+	    subMenu.put("adminAccountClientListView", "광고주관리 오류남");
 	    subMenu.put("adminAccountUserListView", "유저관리");
 	    
 	    model.addAttribute("subMenu", subMenu);
@@ -97,7 +97,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/adminAccountOfficialListView")
-	public String adminAccountOfficialView(
+	public String adminAccountOfficialListView(
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
@@ -109,24 +109,30 @@ public class AdminController {
 	    		"/whale/static/css/admin/account/adminAccountOfficialListContent.css");
 	    accountSubBar(model);
 	    
-		return "/admin/view/adminOutlineForm";
-	}
-	
-	@RequestMapping("/adminAccountClientListView")
-	public String adminAccountClientView(
-			HttpServletRequest request,
-			AdminSearchVO searchVO,
-			Model model) {
-		model.addAttribute("request", request);
-		model.addAttribute("pname", "광고주관리");
-		model.addAttribute("contentBlockJsp",
-				"../account/adminAccountClientContent.jsp");
-	    model.addAttribute("contentBlockCss",
-	    		"/whale/static/css/admin/account/adminAccountClientListContent.css");
-	    accountSubBar(model);
+	    adminAccountUserListService.officialList(model);
 	    
 		return "/admin/view/adminOutlineForm";
 	}
+	
+	
+//	@RequestMapping("/adminAccountClientListView")
+//	public String adminAccountClientListView(
+//			HttpServletRequest request,
+//			AdminSearchVO searchVO,
+//			Model model) {
+//		
+//		model.addAttribute("request", request);
+//		model.addAttribute("searchVO", searchVO);
+//		model.addAttribute("pname", "광고주관리");
+//		model.addAttribute("contentBlockJsp",
+//				"../account/adminAccountClientContent.jsp");
+//		model.addAttribute("contentBlockCss",
+//				"/whale/static/css/admin/account/adminAccountUserListContent.css");
+//		accountSubBar(model);
+//		
+//		adminAccountUserListService.clientList(model);
+//		return "/admin/view/adminOutlineForm";
+//	}
 	
 	@RequestMapping("/adminAccountUserListView")
 	public String adminAccountUserListView(
@@ -206,6 +212,31 @@ public class AdminController {
 		return "/admin/view/adminOutlineForm";
 	}
 	
+	@RequestMapping("/adminAccountOfficialInfo")
+	public String adminAccountOfficialInfo(
+			HttpServletRequest request,
+			SearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "유저정보");
+		model.addAttribute("contentBlockJsp",
+				"../account/adminAccountUserInfoContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
+		accountSubBar(model);
+		
+		adminAccountUserInfoService.execute(model);
+		adminUserInfoPostService.execute(model);
+		adminUserInfoFeedService.execute(model);
+		adminUserInfoCommentService.execute(model);
+		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	
+	
 	@RequestMapping("/adminAccountUserModify")
 	public String adminAccountUserModify(
 			HttpServletRequest request,
@@ -227,12 +258,13 @@ public class AdminController {
 	
 	@RequestMapping("/adminUserAccessModify")
 	public String adminUserAccessModify(
+			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
 		String userId = request.getParameter("userId");
 		
-		adminAccountUserModifyService.modifyAccess(model);
+		adminAccountUserModifyService.modifyAccess(model,session);
 		
 		
 		return "redirect:adminAccountUserModify?userId="+userId;
@@ -240,12 +272,13 @@ public class AdminController {
 	
 	@RequestMapping("/adminUserStatusModify")
 	public String adminUserStatusModify(
+			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
 		String userId = request.getParameter("userId");
 		
-		adminAccountUserModifyService.modifyStatus(model);
+		adminAccountUserModifyService.modifyStatus(model,session);
 		
 		
 		return "redirect:adminAccountUserModify?userId="+userId;
@@ -276,6 +309,8 @@ public class AdminController {
 		
 		return "redirect:adminAccountUserModify?userId="+userId;
 	}
+	
+	///////////////////////////////////////// 보드
 	
 	
 	

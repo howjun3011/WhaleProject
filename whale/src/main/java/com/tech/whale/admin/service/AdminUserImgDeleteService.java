@@ -38,10 +38,10 @@ public class AdminUserImgDeleteService implements AdminServiceInter{
         String userImgPath = root + "/" + userImgUrl;
         File file = new File(userImgPath);
         
-        if(userImgUrl.equals("pro.png")) {
+        if(userImgUrl.equals("pro.png") || userImgUrl.equals("PRO.PNG") ) {
         	
         }else if(userImgUrl.trim().isEmpty() || userImgUrl == null) {
-        	
+        	System.out.println("null값 이미지 유알앨: "+userImgUrl);
         }else {
         	
         	if (file.exists()) {

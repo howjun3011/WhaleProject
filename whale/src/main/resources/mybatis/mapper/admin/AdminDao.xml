@@ -17,6 +17,7 @@
 	        </otherwise>
 	    </choose>
 	</sql>
+	
 	<sql id="includeUserList">
 	    <choose>
 	        <when test="param4 == 1">
@@ -32,8 +33,6 @@
 	</sql>
 	
 	
-
-
 	<select id="selectUserCnt" parameterType="map" resultType="int">
         SELECT COUNT(*) FROM USER_INFO
         <include refid="includeUserCnt" />
@@ -71,8 +70,6 @@
 		) 
 		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY RNUM
-
-
 	</select>
     
     <select id="userAccountInfoSelect" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
@@ -163,9 +160,15 @@
     	UPDATE USER_INFO SET USER_NICKNAME = #{userNickname}
     	WHERE USER_ID = #{userId}
     </update>
+    
     <update id="userImgDelete" >
-    	UPDATE USER_INFO SET USER_IMAGE_URL = 'PRO.PNG'
-    	WHERE USER_ID = #{userId} AND USER_IMAGE_URL = #{userImgUrl}
+	    UPDATE USER_INFO SET USER_IMAGE_URL = 'PRO.PNG'
+	    WHERE USER_ID = #{userId}
+	    <if test="userImgUrl != null">
+	        AND USER_IMAGE_URL = #{userImgUrl}
+	    </if>
+	    <if test="userImgUrl == null">
+	    </if>
     </update>
     
     
@@ -190,7 +193,7 @@
     	<include refid="accessIdAdd" />
     </insert>
     <insert id="userAccessLog">
-    	INSERT INTO ACCESS_LOG VALUES(ACCESS_LOG_SEQ.NEXTVAL, #{userId}, #{accessReason}, #{userAccess}, SYSDATE )
+    	INSERT INTO ACCESS_LOG VALUES(ACCESS_LOG_SEQ.NEXTVAL, #{userId}, #{accessReason}, #{userAccess}, SYSDATE, #{adminId} )
     </insert>
     
     <update id="userInfoAccessModify" >
@@ -222,8 +225,295 @@
     </update>
     
     <insert id="userStatusLog">
-    	INSERT INTO USER_STATUS_LOG VALUES(USER_STATUS_LOG_SEQ.NEXTVAL, #{userId}, #{userStatus}, #{statusReason}, SYSDATE )
+    	INSERT INTO USER_STATUS_LOG VALUES(USER_STATUS_LOG_SEQ.NEXTVAL, #{userId}, #{userStatus}, #{statusReason}, SYSDATE, #{adminId} )
     </insert>
 
+
+
+
+
+
+
+
+	<sql id="includeOfficialCnt">
+	    <choose>
+	        <when test="param2 == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
+	        </when>
+	        <when test="param2 == 2">
+	            WHERE (OFFICIAL_NAME LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<sql id="includeOfficialList">
+	    <choose>
+	        <when test="param4 == 1">
+	            AND (UI.USER_ID LIKE '%' || #{sk} || '%')
+	            
+	        </when>
+	        <when test="param4 == 2">
+	            AND (O.OFFICIAL_NAME LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<select id="selectOfficialCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM OFFICIAL_INFO
+        <include refid="includeOfficialCnt" />
+    </select>
+    
+    <select id="adminOfficialList" resultType="com.tech.whale.admin.dto.AdminOfficialInfoDto">
+	    SELECT *
+		FROM (
+		    SELECT 
+		        UI.USER_ID,
+		        UI.USER_IMAGE_URL,
+		        UI.USER_NICKNAME,
+		        UI.USER_EMAIL,
+		        UI.USER_ACCESS_ID,
+		        UI.USER_STATUS,
+		        UI.USER_DATE,
+		        O.OFFICIAL_NAME AS OFFICIAL_NAME,
+		        (SELECT COUNT(DISTINCT fw.FOLLOW_ID) FROM FOLLOW fw WHERE fw.USER_ID = UI.USER_ID) AS FOLLOW,
+		        (SELECT COUNT(DISTINCT fw.FOLLOW_ID) FROM FOLLOW fw WHERE fw.FOLLOW_USER_ID = UI.USER_ID) AS FOLLOWER,
+		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
+		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
+		        (
+		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
+		            FROM POST_COMMENTS pc 
+		            WHERE pc.USER_ID = UI.USER_ID
+		        ) +
+		        (
+		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
+		            FROM FEED_COMMENTS fc 
+		            WHERE fc.USER_ID = UI.USER_ID
+		        ) AS COMMENTS_COUNT,
+		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
+		    FROM 
+		        USER_INFO UI
+		    LEFT JOIN
+		    	OFFICIAL_INFO O ON UI.USER_ID = O.USER_ID
+		    WHERE UI.USER_ACCESS_ID = 3
+		    <include refid="includeOfficialList" />
+		    GROUP BY 
+		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL,
+		         UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE, O.OFFICIAL_NAME
+		) 
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<sql id="includeAdvertiserCnt">
+	    <choose>
+	        <when test="param2 == 1">
+	            WHERE (ADVERTISER_ID LIKE '%' || #{sk} || '%')
+	        </when>
+	        <when test="param2 == 2">
+	            WHERE (ADVERTISER_NAME LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<sql id="includeAdvertiserList">
+	    <choose>
+	        <when test="param4 == 1">
+	            WHERE (UI.USER_ID LIKE '%' || #{sk} || '%')
+	            
+	        </when>
+	        <when test="param4 == 2">
+	            WHERE (UI.USER_EMAIL LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<select id="selectAdvertiserCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM ADVERTISER_INFO
+        <include refid="includeAdvertiserCnt" />
+    </select>
+    
+    <select id="adminAdvertiserList" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
+	    SELECT *
+		FROM (
+		    SELECT 
+		        UI.USER_ID,
+		        UI.USER_IMAGE_URL,
+		        UI.USER_NICKNAME,
+		        UI.USER_EMAIL,
+		        UI.USER_ACCESS_ID,
+		        UI.USER_STATUS,
+		        UI.USER_DATE,
+		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
+		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
+		        (
+		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
+		            FROM POST_COMMENTS pc 
+		            WHERE pc.USER_ID = UI.USER_ID
+		        ) +
+		        (
+		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
+		            FROM FEED_COMMENTS fc 
+		            WHERE fc.USER_ID = UI.USER_ID
+		        ) AS COMMENTS_COUNT,
+		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
+		    FROM 
+		        USER_INFO UI
+		    <include refid="includeAdvertiserList" />
+		    GROUP BY 
+		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE
+		) 
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<sql id="includeBoardCnt">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%' )
+	        </when>
+	        <when test="selNum == 2">
+	            WHERE (POST_TITLE LIKE '%' || #{sk} || '%' AND POST_TITLE IS NOT NULL)
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<sql id="includeBoardList">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%' )
+	        </when>
+	        <when test="selNum == 2">
+	            WHERE (POST_TITLE LIKE '%' || #{sk} || '%' AND POST_TITLE IS NOT NULL)
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	
+	<select id="selectBoardCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+		FROM (
+		    SELECT 
+		        F.FEED_ID,
+		        F.USER_ID AS USER_ID,
+		        SUBSTR(F.FEED_TEXT, 1, 20) AS TEXT,
+		        F.FEED_DATE AS DATE_FIELD,
+		        NULL AS POST_ID,
+		        NULL AS POST_TITLE,
+		        NULL AS COMMUNITY_NAME,
+		        NULL AS POST_TAG_TEXT,
+		        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE F.FEED_ID = R.FEED_ID) AS REPORT_FEED_COUNT,
+		        NULL AS REPORT_POST_COUNT
+		    FROM 
+		        FEED F
+		    UNION ALL
+		    SELECT 
+		        NULL AS FEED_ID,
+		        P.USER_ID AS USER_ID,
+		        DBMS_LOB.SUBSTR(P.POST_TEXT, 20, 1) AS TEXT,
+		        P.POST_DATE AS DATE_FIELD,
+		        P.POST_ID,
+		        P.POST_TITLE,
+		        C.COMMUNITY_NAME,
+		        PT.POST_TAG_TEXT,
+		        NULL AS REPORT_FEED_COUNT,
+		        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE P.POST_ID = R.POST_ID) AS REPORT_POST_COUNT
+		    FROM 
+		        POST P
+		        LEFT JOIN COMMUNITY C ON P.COMMUNITY_ID = C.COMMUNITY_ID
+		        LEFT JOIN POST_TAG PT ON P.POST_TAG_ID = PT.POST_TAG_ID
+		) COMBINEDDATA
+		<include refid="includeBoardCnt" />
+		ORDER BY 
+		    DATE_FIELD
+
+
+
+
+    </select>
+    
+    <select id="adminBoardList" resultType="com.tech.whale.admin.dto.AdminPFCDto">
+	    SELECT *
+		FROM (
+		    SELECT 
+		        ROW_NUMBER() OVER (ORDER BY DATE_FIELD DESC) AS RNUM, -- DATE_FIELD을 기준으로 ROW_NUMBER 할당
+		        FEED_ID,
+		        USER_ID,
+		        TEXT,
+		        DATE_FIELD,
+		        POST_ID,
+		        POST_TITLE,
+		        COMMUNITY_NAME,
+		        POST_TAG_TEXT,
+		        REPORT_FEED_COUNT,
+		        REPORT_POST_COUNT
+		    FROM (
+		        SELECT
+		            F.FEED_ID,
+		            F.USER_ID AS USER_ID,
+		            SUBSTR(F.FEED_TEXT, 1, 20) AS TEXT,
+		            F.FEED_DATE AS DATE_FIELD,
+		            NULL AS POST_ID,
+		            NULL AS POST_TITLE,
+		            NULL AS COMMUNITY_NAME,
+		            NULL AS POST_TAG_TEXT,
+		            (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE F.FEED_ID = R.FEED_ID) AS REPORT_FEED_COUNT,
+		            NULL AS REPORT_POST_COUNT
+		        FROM 
+		            FEED F
+		        UNION ALL
+		        SELECT
+		            NULL AS FEED_ID,
+		            P.USER_ID AS USER_ID,
+		            DBMS_LOB.SUBSTR(P.POST_TEXT, 20, 1) AS TEXT,
+		            P.POST_DATE AS DATE_FIELD,
+		            P.POST_ID,
+		            P.POST_TITLE,
+		            C.COMMUNITY_NAME,
+		            PT.POST_TAG_TEXT,
+		            NULL AS REPORT_FEED_COUNT,
+		            (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE P.POST_ID = R.POST_ID) AS REPORT_POST_COUNT
+		        FROM 
+		            POST P
+		            LEFT JOIN COMMUNITY C ON P.COMMUNITY_ID = C.COMMUNITY_ID
+		            LEFT JOIN POST_TAG PT ON P.POST_TAG_ID = PT.POST_TAG_ID
+		    ) UNIONDATA
+		    <include refid="includeBoardList" />
+		) NUMBERDATA
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY DATE_FIELD DESC
+
+
+	</select>
+
+
+	
+	
 
 </mapper>

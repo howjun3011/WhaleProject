@@ -104,6 +104,9 @@
     function closeStatus() {
         document.getElementById('userStatus').style.display = 'none';
     }
+    function closeAccess() {
+        document.getElementById('accessAddForm').style.display = 'none';
+    }
 
     function openAccess() {
         document.getElementById('accessAddForm').style.display = 'block';

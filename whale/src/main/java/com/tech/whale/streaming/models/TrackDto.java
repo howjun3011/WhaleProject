@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TrackDto {
+	private int track_id;
 	private String track_artist;
 	private String track_name;
 	private String track_album;

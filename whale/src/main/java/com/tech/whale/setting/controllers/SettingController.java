@@ -3,7 +3,6 @@ package com.tech.whale.setting.controllers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +38,7 @@ import com.tech.whale.setting.dto.StartpageDto;
 import com.tech.whale.setting.dto.UserInfoDto;
 import com.tech.whale.setting.dto.UserNotificationDto;
 import com.tech.whale.setting.dto.UserSettingDto;
+import com.tech.whale.streaming.service.StreamingService;
 
 @Controller
 public class SettingController {
@@ -53,6 +53,10 @@ public class SettingController {
 	PageAccessDto pageAccessDto;
 	LikeListDto likeListDto;
 	CommentListDto commentListDto;
+	
+	// [ 스트리밍 검색 기능 ]
+    @Autowired
+    private StreamingService streamingService;
 
     @RequestMapping("/settingHome")
     public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
@@ -213,11 +217,14 @@ public class SettingController {
     public String updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	System.out.println("updateRepresentive() ctr");
     	
+    	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
     	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
     	String trackName = map.get("name").toString();
     	String albumName = ((Map<String, String>) map.get("album")).get("name");
     	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
     	String trackSpotifyId = map.get("id").toString();
+    	
+    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
 
     	System.out.println("DB 업데이트 완료");
     	

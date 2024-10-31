@@ -74,7 +74,7 @@ public class SettingController {
         userinfoDto = settingDao.getProfile(session_user_id);
 
         model.addAttribute("profile", userinfoDto);
-//        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
+        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
         System.out.println("대표곡: " + userinfoDto.getTrack_id()); // debug
 
         return "setting/profileEdit";
@@ -82,7 +82,6 @@ public class SettingController {
 
     @PostMapping("/updateProfile")
     public String updateProfile(@RequestParam("user_nickname") String nickname,
-                                @RequestParam("user_password") String password,
                                 @RequestParam("user_email") String email,
                                 HttpSession session) {
         System.out.println("updateProfile() ctr");
@@ -98,17 +97,8 @@ public class SettingController {
         String newProfileImage = (String) session.getAttribute("user_profile_image");
         System.out.println("session_storaged_img_url: " + session.getAttribute("user_profile_image")); // debug
 
-        // password 필드가 비어있으면 DB에 비밀번호 업데이트 X, 비밀번호를 변경해서 필드에 값이 있으면 필드에 입력한 값을 암호화 처리해서 DB 업데이트
-        if (password.isEmpty()) {
-            // DB에 변경한 프로필 정보 업데이트(PW 제외)
-            settingDao.updateProfileNP(nickname, email, newProfileImage, session_user_id);
-        } else {
-            // 비밀번호 암호화
-            String encodedPassword = passwordEncoder.encode(password);
-            System.out.println("encodedpassword: " + encodedPassword); // debug
-            // DB에 변경한 프로필 정보 업데이트
-            settingDao.updateProfile(nickname, encodedPassword, email, newProfileImage, session_user_id);
-        }
+        // DB에 변경한 프로필 정보 업데이트
+        settingDao.updateProfile(nickname, email, newProfileImage, session_user_id);
 
         System.out.println("DB 업데이트 완료");
 

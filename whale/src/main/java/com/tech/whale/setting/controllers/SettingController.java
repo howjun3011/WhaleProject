@@ -146,11 +146,12 @@ public class SettingController {
         System.out.println("updateNewPassword() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        settingDao.updatePassword(session_user_id, encodedPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword); // 암호화된 새로운 pw
 
         // JSON 응답으로 success 메시지 반환
         Map<String, String> response = new HashMap<>();
+
+        settingDao.updatePassword(session_user_id, encodedPassword);
         response.put("status", "success");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -206,7 +207,7 @@ public class SettingController {
     }
     
     @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    public ResponseEntity<?> updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	System.out.println("updateRepresentive() ctr");
     	
     	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
@@ -219,8 +220,9 @@ public class SettingController {
     	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
 
     	System.out.println("DB 업데이트 완료");
-    	
-        return "redirect:/representiveSong";
+
+        // 성공 응답 반환
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping("/account")

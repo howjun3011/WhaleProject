@@ -151,7 +151,7 @@
     function validateForm(event) {
         var feedImage = document.getElementsByName("feedImage")[0].value.trim();
         if (feedImage === "") {
-            alert("글 내용을 작성해 주세요.");
+            alert("사진을 올려주세요.");
             event.preventDefault();  // 폼 제출을 중단
             return false;
         }

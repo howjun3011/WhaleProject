@@ -83,7 +83,7 @@
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>
                                             <div class="recommendationInfo">
-                                                <p class="trackName">${track.name}</p>
+                                                <p class="trackName" onclick="navigateToDetail('${track.id}')">${track.name}</p>
                                                 <p class="artistName"
                                                    onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
                                             </div>
@@ -176,8 +176,8 @@
                                             <p id="artistName" class="trackName">${artistDetail.name}</p>
                                                 <%--<p>팔로워 수: ${artistDetail.followers.total}</p>--%>
                                             <p>장르:
-                                                <c:forEach var="genre" items="${artistDetail.genres}">
-                                                    ${genre}<c:if test="${!fn:endsWith(genre, ' ')}">, </c:if>
+                                                <c:forEach var="genre" items="${artistDetail.genres}" varStatus="status">
+                                                    ${genre}<c:if test="${!status.last}">, </c:if>
                                                 </c:forEach>
                                             </p>
                                                 <%--<p>인기도: ${artistDetail.popularity}</p>--%>
@@ -185,11 +185,20 @@
                                     </div>
 
 
-                                    <!-- 상위 곡 목록 -->
+                                    <!-- 인기 곡 목록 -->
                                     <div class="topTracks">
-                                        <h3>상위 곡</h3>
-                                        <c:forEach var="track" items="${topTracks}">
+                                        <h3>인기</h3>
+                                        <c:forEach var="track" items="${topTracks}" varStatus="status">
                                             <div class="topTrackItem">
+                                                <!-- 순위 표시 -->
+                                                <span class="rank">&nbsp;${status.index + 1}</span>
+                                                <!-- 재생/일시정지 버튼 -->
+                                                <button class="playPauseButton" onclick="togglePlayPause('${track.id}', this)">
+                                                    <svg class="icon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                        <!-- 초기 재생 아이콘 -->
+                                                        <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+                                                    </svg>
+                                                </button>
                                                 <!-- 곡 이미지와 이름 -->
                                                 <c:if test="${not empty track.album.images}">
                                                     <!-- 곡 이미지 클릭 시 재생 후 디테일 페이지로 이동 -->
@@ -198,6 +207,13 @@
                                                          onclick="playAndNavigate('${track.id}')">
                                                 </c:if>
                                                 <p>${track.name}</p>
+                                                <!-- 트랙의 길이 표시 (분/초 변환) -->
+                                                <c:set var="minutes" value="${track.durationMs / 60000}" />
+                                                <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}" />
+
+                                                <!-- 소수점 제거 후 출력 -->
+                                                <p>${minutes.intValue()}분 ${seconds.intValue()}초</p>
+
                                             </div>
                                         </c:forEach>
                                     </div>
@@ -210,7 +226,8 @@
                                                     <img src="${album.images[0].url}" alt="${album.name}" width="50"
                                                          height="50" style="border-radius: 4px;">
                                                 </c:if>
-                                                <p>${album.name}</p>
+                                                <p>${album.name}</p
+                                                <p>${album.releaseDate}</p>
                                             </div>
                                         </c:forEach>
                                     </div>

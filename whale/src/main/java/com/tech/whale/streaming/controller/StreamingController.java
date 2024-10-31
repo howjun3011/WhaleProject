@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
 
@@ -19,17 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.tech.whale.streaming.service.LyricsService;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 
 @Controller
 public class StreamingController {
@@ -83,6 +77,16 @@ public class StreamingController {
 			return ResponseEntity.status(500).body("Failed to play track");
 		}
 	}
+
+	// pauseTrack POST 요청 처리 메서드 추가
+	@PostMapping("/streaming/pauseTrack")
+	public ResponseEntity<Map<String, Boolean>> pauseTrack(HttpSession session) {
+		boolean isPaused = streamingService.pauseTrack(session);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("success", isPaused);
+		return isPaused ? ResponseEntity.ok(response) : ResponseEntity.status(500).body(response);
+	}
+
 
 	// 음악 상세 페이지로 이동
 	@RequestMapping("/streaming/detail")
@@ -162,6 +166,6 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
-	
-	// -------------------------------------------------------------------------------------------------------------
+
+
 }

@@ -93,6 +93,29 @@ function playTrack(trackId) {
         });
 }
 
+function pauseTrack(trackId) {
+    return fetch('/whale/streaming/pauseTrack', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ trackId: trackId })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Track is now paused");
+                return Promise.resolve(); // 성공 시 Promise 반환
+            } else {
+                console.error("Failed to pause track");
+                return Promise.reject(new Error("Failed to pause track")); // 실패 시 에러 반환
+            }
+        })
+        .catch(error => {
+            console.error("Error pausing track:", error);
+            return Promise.reject(error);
+        });
+}
+
 function playAndNavigate(trackId) {
     // 트랙을 재생하고 성공 시 navigateToDetail 호출
     playTrack(trackId).then(() => {
@@ -243,4 +266,29 @@ document.addEventListener("DOMContentLoaded", () => {
 // 아티스트 디테일
 function navigateToArtistDetail(artistId) {
     window.location.href = `/whale/streaming/artistDetail?artistId=${artistId}`;
+}
+
+// 재생/일시정지 상태를 토글하는 함수
+function togglePlayPause(trackId, button) {
+    const isPlaying = button.classList.contains("playing");
+
+    if (isPlaying) {
+        // 일시정지 호출
+        pauseTrack(trackId)
+            .then(() => {
+                button.classList.remove("playing");
+                button.querySelector(".icon").innerHTML = `
+                        <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>`; // 재생 아이콘으로 변경
+            })
+            .catch(error => console.error("Error pausing track:", error));
+    } else {
+        // 재생 호출
+        playTrack(trackId)
+            .then(() => {
+                button.classList.add("playing");
+                button.querySelector(".icon").innerHTML = `
+                        <path d="M6 19h4V5H6zm8-14v14h4V5z"></path>`; // 일시정지 아이콘으로 변경
+            })
+            .catch(error => console.error("Error playing track:", error));
+    }
 }

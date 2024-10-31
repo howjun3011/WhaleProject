@@ -126,7 +126,7 @@
                     </c:when>
                     <c:when test="${page == 'search'}">
                         <div class="resultContainer">
-                            <h3>곡</h3>
+                            <h3 class="resultContainerTitle">곡</h3>
                             <div class="searchResults">
                                 <!-- 왼쪽 버튼 -->
                                 <button class="searchSlideButton left" id="searchScrollLeftBtn" onclick="scrollLeftSearchContent()">

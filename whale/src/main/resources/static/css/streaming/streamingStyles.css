@@ -74,14 +74,22 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .lyrics h3{font-size: 1.5rem;}
 .lyrics pre{max-height: 160px; margin-top: 15px; font-family: 'Noto Sans', sans-serif; line-height: 1.5;}
 
-.searchResults{display: flex; overflow-x: auto; scroll-behavior: smooth;}
+.searchResults{display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 15px;}
 .searchResults .searchResult{width: fit-content; flex: 1 1 20%; padding: 10px;}
+.searchResult {position: relative; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; padding: 0 10px; /* 카드 간 간격 */ transition: transform 0.3s ease;}
+.searchResult:hover {background-color: rgba(60,60,60,0.8);}
 
 .resultContainer{position: relative;}
+.resultContainerTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding: 0 0 8px 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+
 .searchSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%); top: 50%;}
 .searchSlideButton.left {left: 0;}
 .searchSlideButton.right {right: 0;}
 .searchSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
 
+.searchInfo{padding: 12px;}
 .searchInfo .trackName,
-.searchInfo .artistName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;}
+.searchInfo .artistName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95px;}
+
+.searchCover:hover {opacity: 0.6; cursor: grab;}
+.searchCover:active {opacity: 0.4; cursor: grab;}

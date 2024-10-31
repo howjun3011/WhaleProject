@@ -46,22 +46,22 @@ public class StreamingController {
 	public String streaming(@RequestParam Map<String, String> queryParam, HttpSession session, Model model) {
 
 		// 노드 스트리밍 서버를 위한 리다이렉트
-		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
+//		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
 
 		// 스프링 스트리밍 서버를 위한 리다이렉트
 //		 CompletableFuture로 반환되는 비동기 결과를 가져오기 위해 join() 사용
-//		CompletableFuture<Paging<Track>> topTracksFuture = streamingService.getUsersTopTracksAsync(session);
-//		Paging<Track> trackPaging = topTracksFuture.join(); // 결과를 동기적으로 기다림
-//
-//		if (trackPaging != null && trackPaging.getItems().length > 0) {
-//			model.addAttribute("trackPaging", trackPaging);
-//		} else {
-//			model.addAttribute("error", "Unable to retrieve top tracks");
-//		}
-//		// 홈 페이지로 설정
-//		model.addAttribute("page", "home");
-//		System.out.println("page :" + model.getAttribute("page"));
-//		return "streaming/streamingHome";
+		CompletableFuture<Paging<Track>> topTracksFuture = streamingService.getUsersTopTracksAsync(session);
+		Paging<Track> trackPaging = topTracksFuture.join(); // 결과를 동기적으로 기다림
+
+		if (trackPaging != null && trackPaging.getItems().length > 0) {
+			model.addAttribute("trackPaging", trackPaging);
+		} else {
+			model.addAttribute("error", "Unable to retrieve top tracks");
+		}
+		// 홈 페이지로 설정
+		model.addAttribute("page", "home");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
 	}
 
 	// getDeviceId POST 요청 처리 메서드

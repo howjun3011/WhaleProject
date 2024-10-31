@@ -127,7 +127,7 @@ public class FeedController {
 	
 	@RequestMapping("/feedWriteDo")
 	public String feedWriteDo(HttpServletRequest request, HttpSession session, Model model,
-			@RequestParam("selectedTrackId") Integer track_id, 
+			@RequestParam(value = "selectedTrackId", required = false) Integer track_id, 
 			@RequestParam("feedText") String feed_text,
 			@RequestParam("feedImage") MultipartFile file) {
 		
@@ -138,7 +138,9 @@ public class FeedController {
 		FeedDto feedDto = new FeedDto();
 		feedDto.setFeed_text(feed_text);
 		feedDto.setUser_id(now_id);
-		feedDto.setTrack_id(track_id);
+		if (track_id != null) {
+			feedDto.setTrack_id(track_id);			
+		}
 		try {
 			feedWriteService.registerFeed(feedDto, file);
 		} catch (Exception e) {

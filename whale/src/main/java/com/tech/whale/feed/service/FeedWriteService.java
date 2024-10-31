@@ -21,11 +21,13 @@ public class FeedWriteService {
 	public void registerFeed(FeedDto feedDto, MultipartFile file) throws IOException {
 		// TODO Auto-generated method stub
 		int feedId = feedDao.getNextFeedId();
-		int feedMusicId = feedDao.getNextFeedMusicId();
+		if (feedDto.getTrack_id() != null) {
+			int feedMusicId = feedDao.getNextFeedMusicId();
+			feedDto.setFeed_music_id(feedMusicId);
+			feedDao.insertFeedMusic(feedDto);			
+		}
 		feedDto.setFeed_id(feedId);
-		feedDto.setFeed_music_id(feedMusicId);
 		feedDao.insertFeed(feedDto);
-		feedDao.insertFeedMusic(feedDto);
 		
     	String workPath = System.getProperty("user.dir");
 

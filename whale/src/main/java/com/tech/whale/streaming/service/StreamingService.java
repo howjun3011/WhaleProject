@@ -237,7 +237,7 @@ public class StreamingService {
         }
     }
 
-//    -----------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------
     
     // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
     public Integer selectTrackIdService(String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {
@@ -255,5 +255,37 @@ public class StreamingService {
     	TrackDto trackDto = streamingDao.selectTrackDto(trackId);
     	return trackDto;
     }
-
+  
+    // 데이터 베이스에 트랙 좋아요 정보 입력 유무 확인
+    public boolean selectTrackLikeService(HttpSession session, String trackSpotifyId) {
+    	Integer trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	
+    	if(trackId != null) {
+    		Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
+    		
+    		if(trackLikeId != null) {return true;}
+        	else {return false;}
+    	} else {
+    		return false;
+    	}
+    }
+    
+    // 트랙 좋아요 인서트
+    public void insertTrackLikeService(HttpSession session, String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {
+    	Integer trackId = selectTrackIdService(track_artist, track_name, track_album, track_cover, trackSpotifyId);
+    	streamingDao.insertTrackLike(trackId, (String) session.getAttribute("user_id"));
+    }
+    
+    // 트랙 좋아요 삭제
+    public void deleteTrackLikeService(HttpSession session, String trackSpotifyId) {
+    	Integer trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
+    	streamingDao.deleteTrackLike(trackLikeId);
+    }
+    
+    // 트랙 좋아요 인서트
+    public void insertTrackCntService(HttpSession session, String track_artist, String track_name, String track_album, String track_cover, String trackSpotifyId) {
+    	Integer trackId = selectTrackIdService(track_artist, track_name, track_album, track_cover, trackSpotifyId);
+    	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
+    }
 }

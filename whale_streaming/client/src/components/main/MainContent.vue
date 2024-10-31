@@ -2,7 +2,7 @@
     <div class="mainContentFrame">
         <div class="mainContent">
             <div class="mainContentMargin">
-                <router-view></router-view>
+                <router-view :key="$route.fullPath"></router-view>
             </div>
         </div>
     </div>

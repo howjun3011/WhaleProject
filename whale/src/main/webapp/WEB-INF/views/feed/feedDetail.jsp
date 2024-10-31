@@ -620,12 +620,13 @@
 	            event.stopPropagation();
 	            const itemElement = this.closest('.comment, .reply');
 	            const itemId = itemElement.getAttribute('data-comment-id');
+	            const openId = 0;
 	            const itemFeedId = itemElement.getAttribute('data-feed-id');
 	            const itemOwnerId = itemElement.getAttribute('data-user-id');
 	            const currentUserId = '${now_id}';
 	            const itemType = itemElement.classList.contains('reply') ? 'reply' : 'comment';
 	
-	            openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType);
+	            openOtherModal(itemId, openId, itemFeedId, itemOwnerId, currentUserId, itemType);
 	        });
 	    });
 	</script>

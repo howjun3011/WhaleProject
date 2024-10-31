@@ -260,6 +260,19 @@ public class StreamingService {
         }
     }
 
+    // 특정 플레이리스트 ID로 플레이리스트 가져오기
+    public Playlist getPlaylistDetail(HttpSession session, String playlistId) {
+        initializeSpotifyApi(session);
+
+        try {
+            return spotifyApi.getPlaylist(playlistId).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch playlist details: " + e.getMessage());
+            return null;
+        }
+    }
+
+
     //-----------------------------------------------------------------------------------------------------
     
     // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴

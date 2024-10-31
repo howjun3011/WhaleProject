@@ -336,7 +336,7 @@
 </head>
 <body>
 
-    <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}">
+    <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}" data-open-id="${feedDetail.feed_open}">
         <div class="user-info">
             <a href="profileHome?u=${feedDetail.user_id}">
                 <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
@@ -514,12 +514,14 @@
 	<script>
 	    let selectedItemId = null;
 	    let selectedItemFeedId = null;
+	    let selectedOpenId = null;
 	    let selectedItemType = null; // 'post', 'comment', 'reply'
 	    let isOwner = false;
 	
-	    function openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType) {
+	    function openOtherModal(itemId, openId, itemFeedId, itemOwnerId, currentUserId, itemType) {
 	        selectedItemId = itemId;
 	        selectedItemFeedId = itemFeedId;
+	        selectedOpenId = openId;
 	        selectedItemType = itemType;
 	        isOwner = (itemOwnerId === currentUserId);
 	
@@ -592,10 +594,11 @@
 	            const postElement = this.closest('.post');
 	            const itemId = postElement.getAttribute('data-post-id');
 	            const itemFeedId = postElement.getAttribute('data-feed-id');
+	            const openId = postElement.getAttribute('data-open-id');
 	            const itemOwnerId = postElement.getAttribute('data-user-id');
 	            const currentUserId = '${now_id}';
 	
-	            openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, 'post');
+	            openOtherModal(itemId, openId, itemFeedId, itemOwnerId, currentUserId, 'post');
 	        });
 	    });
 	

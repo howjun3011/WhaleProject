@@ -8,14 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/streaming/searchView.css" />
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
     <title>Feed Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Sans', Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
         }
+
+	    body, .music-info, .username, .post-text {
+	        font-family: 'Noto Sans KR', Arial, sans-serif !important;
+	    }
 
         /* 상단 바 스타일 */
         .top-bar {
@@ -241,6 +247,19 @@
         .modal-item:hover {
             background-color: #f9f9f9;
         }
+        
+        .music-info .music-title {
+		    font-weight: bold;
+		    font-size: 1em;
+		    color: #333; /* 기본 검정색 */
+		}
+		
+		.music-info .artist-name {
+		    font-weight: normal;
+		    font-size: 0.9em;
+		    color: #777; /* 회색 */
+		}
+        
     </style>
 </head>
 <body>
@@ -278,7 +297,8 @@
                     <div id="music-info" class="music-info">
 		                <img id="album-icon" src="${feed.track_cover}" alt="Album Icon" style="width: 50px; height: 50px;">
 		                <div>
-		                    <span id="music-title">${feed.track_name}</span> - <span id="artist-name">${feed.track_artist}</span>
+		                    <span class="music-title" id="music-title">${feed.track_name}</span> - 
+		                    <span class="artist-name" id="artist-name">${feed.track_artist}</span>
 		                </div>
  				        <label class="play-button" onclick="playMusic(this, '${feed.track_spotify_id}')" style="display: inline-block;">
 				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;" />

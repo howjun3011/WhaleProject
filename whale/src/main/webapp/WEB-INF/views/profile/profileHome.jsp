@@ -67,6 +67,7 @@
     .profile-info {
         display: flex;
         align-items: center;
+        width: 100%;
     }
 
     .profile-image {
@@ -86,6 +87,8 @@
     .username-container {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .lockbtn {
@@ -102,13 +105,13 @@
         color: #333;
     }
 
-    .stats {
+/*     .stats {
         display: flex;
         gap: 20px;
         font-size: 16px;
         color: #777;
         margin-top: 5px;
-    }
+    } */
 
     .stats div span {
         font-weight: bold;
@@ -126,9 +129,8 @@
     /* 프로필 버튼 */
     .profile-actions {
         display: flex;
-        align-items: center;
         gap: 10px;
-        flex-direction: column;
+        margin-left: 20px; /* 닉네임과 버튼 사이 여백 */
     }
 
     .profile-actions button {
@@ -141,19 +143,16 @@
         font-size: 14px;
         font-weight: 600;
         transition: background-color 0.3s ease;
-        margin-bottom: 8px;
-        width: 100px;
     }
 
-    .profile-actions button:hover {
-        background-color: #007ac1;
-    }
-
-    /* Message button */
     .profile-actions button.message {
         background-color: #fff;
         color: #0095f6;
         border: 1px solid #dbdbdb;
+    }
+
+    .profile-actions button:hover {
+        background-color: #007ac1;
     }
 
     .profile-actions button.message:hover {
@@ -258,6 +257,103 @@
 	.music-artist {
 	    font-size: 14px;
 	}
+	
+    .stats-and-featured-music {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border-top: 1px solid #dbdbdb;
+        padding-top: 10px;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .stats {
+        display: flex;
+        gap: 20px;
+        font-size: 16px;
+        color: #777;
+    }
+
+    .stats div span {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .featured-music {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .featured-music-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 3px;
+        margin-right: 8px;
+    }
+
+    /* 마퀴 효과를 위한 스타일 */
+    .featured-marquee-container {
+        overflow: hidden;
+        width: calc(70% - 38px); /* 아이콘 공간을 제외한 너비 */
+        position: relative;
+    }
+
+    .featured-marquee {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    
+    .animated {
+        animation: marquee 10s linear infinite; /* 애니메이션 시간을 줄일 수 있음 */    
+        animation-delay: 1s;
+        animation-play-state: paused;
+    }
+    
+    @keyframes marquee {
+	    0% {
+	        transform: translateX(1%);
+	    }
+	    100% {
+	        transform: translateX(-50%);
+	    }
+	}
+
+    .featured-music-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .featured-music-artist {
+        font-size: 12px;
+        color: #777;
+        margin-left: 10px;
+    }
+    
+    .featured-play-button, .featured-pause-button {
+    	width: 20px;
+	    height: 20px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .featured-play-button img, .featured-pause-button img {
+    	width: 20px;
+	    height: 20px;
+    } 
+    
+    .now-playing-icon {
+	    height: 20px;
+	    margin-left: 2.5px;
+	    visibility: hidden; /* 초기에는 보이지 않도록 설정 */
+	    opacity: 0; /* 투명하게 */
+	    transition: opacity 0.3s ease; /* 나타나는 효과 */
+	}
 </style>
 </head>
 <body>
@@ -279,69 +375,83 @@
                 <div class="user-id">@${userId}</div>
             </div>
             <div class="details">
-                <div class="username-container">
+                <div class="username-container" style="justify-content: <c:choose><c:when test="${now_id == userId}">left</c:when><c:otherwise>space-between</c:otherwise></c:choose>;">
                     <c:if test="${profile.account_privacy == 1}">
                         <img class="lockbtn" src="static/images/btn/lock_btn.png" alt="secret" />
                     </c:if>
                     <div class="username">${profile.user_nickname}</div>
+	                        <c:if test="${now_id != userId}">
+					        <div class="profile-actions">
+					            <c:choose>
+					                <c:when test="${isFollower}">
+					                    <a href="DoUnfollowing?u=${userId}"><button>팔로우 취소</button></a>
+					                </c:when>
+					                <c:otherwise>
+					                    <c:choose>
+					                        <c:when test="${profile.account_privacy == 1}">
+					                            <c:choose>
+					                                <c:when test="${profile2.target_user_id == now_id}">
+					                                    <a href="CancelFollowingPlease?u=${userId}"><button>요청됨</button></a>
+					                                </c:when>
+					                                <c:otherwise>
+					                                    <a href="DosecretFollowing?u=${userId}"><button>팔로우 요청</button></a>
+					                                </c:otherwise>
+					                            </c:choose>
+					                        </c:when>
+					                        <c:otherwise>
+					                            <a href="DoFollowing?u=${userId}"><button>팔로우</button></a>
+					                        </c:otherwise>
+					                    </c:choose>
+					                </c:otherwise>
+					            </c:choose>
+					            <button class="message">메시지</button>
+					        </div>
+					    </c:if>
                 </div>
-                <div class="stats">
-                    <div>게시물 <span>${fdCount}</span></div>
-
-                    <%-- 본인 또는 팔로우 상태/공개 계정일 때만 팔로워 및 팔로잉 목록 링크 표시 --%>
-                    <div>
-                        <c:choose>
-                            <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
-                                <a href="followers?u=${userId}">팔로워 <span>${frCount}</span></a>
-                            </c:when>
-                            <c:otherwise>
-                                <span>팔로워 <span>${frCount}</span></span>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div>
-                        <c:choose>
-                            <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
-                                <a href="following?u=${userId}">팔로우 <span>${fnCount}</span></a>
-                            </c:when>
-                            <c:otherwise>
-                                <span>팔로우 <span>${fnCount}</span></span>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
+				<div class="stats-and-featured-music">
+				    <div class="stats">
+				        <div>게시물 <span>${fdCount}</span></div>
+				        <div>
+				            <c:choose>
+				                <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
+				                    <a href="followers?u=${userId}">팔로워 <span>${frCount}</span></a>
+				                </c:when>
+				                <c:otherwise>
+				                    <span>팔로워 <span>${frCount}</span></span>
+				                </c:otherwise>
+				            </c:choose>
+				        </div>
+				        <div>
+				            <c:choose>
+				                <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
+				                    <a href="following?u=${userId}">팔로우 <span>${fnCount}</span></a>
+				                </c:when>
+				                <c:otherwise>
+				                    <span>팔로우 <span>${fnCount}</span></span>
+				                </c:otherwise>
+				            </c:choose>
+				        </div>
+				    </div>
+				
+					<div class="featured-music">
+					    <img src="${profile.track_cover}" alt="대표곡" class="featured-music-icon">
+					    <div class="featured-marquee-container">
+					        <div class="featured-marquee" id="featuredMarquee">
+ 					            <span class="featured-music-title">${profile.track_name}</span>
+					            <span class="featured-music-artist">${profile.track_artist}</span>
+					        </div>
+					    </div>
+					    <button class="featured-play-button" onclick="playProMusic(this, '${profile.track_spotify_id}')">
+					        <img src="static/images/btn/play_btn.png" alt="Play Button" />
+					    </button>
+					    <button class="featured-pause-button" onclick="pauseMusic(this, '${profile.track_spotify_id}')" style="display: none;">
+					        <img src="static/images/btn/pause_btn.png" alt="Pause Button" />
+					    </button>
+					</div>
+					    <img src="static/images/btn/moving_music2.gif" alt="now-playing" class="now-playing-icon" />
+				</div>
             </div>
         </div>
-
-        <%-- 팔로우/팔로우 요청 버튼 --%>
-        <c:if test="${now_id != userId}">
-            <div class="profile-actions">
-                <c:choose>
-                    <c:when test="${isFollower}">
-                        <a href="DoUnfollowing?u=${userId}"><button>팔로우 취소</button></a>
-                    </c:when>
-                    <c:otherwise>
-                        <%-- 비공개 계정의 경우 팔로우 요청 링크를 사용 --%>
-                        <c:choose>
-                            <c:when test="${profile.account_privacy == 1}">
-                            	<c:choose>
-                            		<c:when test="${profile2.target_user_id == now_id}">
-                            			<a href="CancelFollowingPlease?u=${userId}"><button>요청됨</button></a>
-                            		</c:when>
-                            		<c:otherwise>
-		                                <a href="DosecretFollowing?u=${userId}"><button>팔로우 요청</button></a>
-                            		</c:otherwise>
-                            	</c:choose>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="DoFollowing?u=${userId}"><button>팔로우</button></a>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:otherwise>
-                </c:choose>
-                <button class="message">메시지</button>
-            </div>
-        </c:if>
     </div>
 
     <%-- 피드 표시 영역 --%>
@@ -404,7 +514,23 @@
     </div>
 </div>
 
+
 <script>
+
+	window.addEventListener('DOMContentLoaded', () => {
+	    const marqueeElement = document.getElementById('featuredMarquee');
+	    const containerWidth = marqueeElement.parentElement.offsetWidth;
+	    const textWidth = marqueeElement.scrollWidth;
+	
+	    // 텍스트가 컨테이너보다 넓을 경우에만 애니메이션 클래스 추가
+	    if (textWidth > containerWidth) {
+	        marqueeElement.classList.add('animated');
+	        
+	        setTimeout(() => {
+	            marqueeElement.style.animationPlayState = 'running'; // 애니메이션 시작
+	        }, 1000); // 2초 후 애니메이션 시작
+	    }
+	});
 
 	function playMusic(element, spotifyId) {
 	    fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
@@ -427,6 +553,55 @@
         document.querySelector('.tab-container .tab[onclick="showTabContent(\'' + tabId + '\')"]').classList.add('active');
         document.getElementById(tabId).classList.add('active');
     }
+    
+    function playProMusic(element, spotifyId) {
+        fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
+            .then(response => {
+                if (response.ok) {
+                    element.style.display = 'none';
+                    const pauseBtn = element.nextElementSibling;
+                    const nowPlayingIcon = document.querySelector('.now-playing-icon');
+                    if (pauseBtn) {
+                        pauseBtn.style.display = 'inline-block';
+                    }
+                    if (nowPlayingIcon) {
+                        nowPlayingIcon.style.visibility = 'visible';
+                        nowPlayingIcon.style.opacity = '1'; // 재생 중 아이콘을 보이게
+                    }
+                } else {
+                    alert('음악 재생에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+                alert('음악 재생 중 오류가 발생했습니다.');
+            });
+    }
+
+    function pauseMusic(element, spotifyId) {
+        fetch(`/whale/feedPauseMusic?id=\${spotifyId}`)
+            .then(response => {
+                if (response.ok) {
+                    element.style.display = 'none';
+                    const playBtn = element.previousElementSibling;
+                    const nowPlayingIcon = document.querySelector('.now-playing-icon');
+                    if (playBtn) {
+                        playBtn.style.display = 'inline-block';
+                    }
+                    if (nowPlayingIcon) {
+                        nowPlayingIcon.style.visibility = 'hidden';
+                        nowPlayingIcon.style.opacity = '0'; // 재생 중 아이콘을 숨기기
+                    }
+                } else {
+                    alert('음악 일시정지에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+                alert('음악 일시정지 중 오류가 발생했습니다.');
+            });
+    }
+    
 </script>
 
 </body>

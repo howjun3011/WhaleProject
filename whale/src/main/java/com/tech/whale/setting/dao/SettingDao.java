@@ -10,8 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SettingDao {
 
 	public UserInfoDto getProfile(String session_user_id);
-	public void updateProfile(String nickname, String  encodedPassword, String email, String newProfileImage, String session_user_id);
-	public void updateProfileNP(String nickname, String email, String newProfileImage, String session_user_id);
+	public void updateProfile(String nickname, String email, String newProfileImage, String session_user_id);
 	public String getCurrentPassword(String session_user_id);
 	public void updatePassword(String session_user_id, String encodedPassword);
 	public void updateAccountPrivacy(String session_user_id, int accountPrivacy);

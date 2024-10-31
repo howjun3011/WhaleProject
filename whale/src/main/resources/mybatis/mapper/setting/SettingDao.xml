@@ -11,16 +11,13 @@
 	    <result column="MESSAGE_NOTIFICATION_ONOFF" property="message_notification_onoff"/>
 	</resultMap>
 	<select id="getProfile" resultType="com.tech.whale.setting.dto.UserInfoDto">
-		SELECT UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_IMAGE_URL, UI.USER_PASSWORD, UI.TRACK_ID, T.TRACK_ARTIST, T.TRACK_NAME
+		SELECT UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_IMAGE_URL, UI.TRACK_ID, T.TRACK_ARTIST, T.TRACK_NAME
 		FROM USER_INFO UI
 	 	LEFT JOIN TRACK T
 	  	ON UI.TRACK_ID = T.TRACK_ID
 		WHERE USER_ID = #{session_user_id}
 	</select>
 	<update id="updateProfile">
-		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_PASSWORD = #{encodedPassword}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
-	</update>
-	<update id="updateProfileNP">
 		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
 	</update>
 	<select id="getCurrentPassword" resultType="String">

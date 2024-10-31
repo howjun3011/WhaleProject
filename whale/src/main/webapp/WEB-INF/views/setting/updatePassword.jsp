@@ -46,36 +46,25 @@
 		button:hover{
 			color: #9f9f9f;
 		}
-		/* 변경할 비밀번호 필드 기본적으로 숨기기 */
-		#new-password-fields {
-			display: none;
-		}
-		#current-password-fields{
+		#password-fields{
+			display: block;
 			margin-top: 20px;
-			margin-left: 20px;
+			justify-content: center;
 		}
 		/* 필드와 이미지를 같은 줄에 정렬 */
 		.input-container{
 			display: flex;
 			align-items: center;
 			margin-top: 20px;
-			margin-left: 20px;
 		}
 		.hint-icon img {
 			width: 17px;
 			height: 17px;
 		}
-		#current-password-fields input{
-			margin-left: 10px;
-		}
-		.input-container input{
-			margin-left: 10px;
-		}
 		#password_hint, #password_match_hint {
 			margin-left: 5px;
 			font-size: 13px;
 		}
-
 		input[type="password"] {
 			padding: 5px;
 			background-color: #FCFCFC;
@@ -90,7 +79,7 @@
 	<script>
 		$(document).ready(function() {
 			// 비밀번호 입력 이벤트를 제대로 바인딩
-			$("#update_password, #check_password").on("input", validatePassword);
+			$("#current_password, #update_password, #check_password").on("input", validatePassword);
 		});
 
 		function checkCurrentPassword(current_password) {
@@ -106,12 +95,10 @@
 					// 응답의 status가 'valid'인 경우
 					if (response.status === "valid") {
 						alert("비밀번호가 확인되었습니다.");
-						// 현재 비밀번호 필드와 버튼 숨기기
-						$("#current-password-fields").hide();
-						// 새로운 비밀번호 필드 보이기
-						$("#new-password-fields").show();
+						$("#pass-check").text("현재 비밀번호 일치").css("color", "green");
 					} else {
 						alert("현재 비밀번호가 일치하지 않습니다.");
+						$("#pass-check").text("현재 비밀번호 불일치").css("color", "red");
 					}
 				},
 				error: function(xhr, status, error) {
@@ -197,17 +184,17 @@
 			비밀번호 변경
 			<button type="button" id="completeBtn" class="complete-btn" onclick="updatePassword();">완료</button>
 		</div>
-		<div id="current-password-fields">현재 비밀번호
-			<input type="password" id="current_password" name="current_password" />
+		<div id="password-fields">
+			<input type="password" id="current_password" name="current_password" placeholder="현재 비밀번호" />
 			<button type="button" onclick="checkCurrentPassword($('#current_password').val());">확인</button>
-		</div>
-		<div id="new-password-fields">
-			<div class="input-container">변경할 비밀번호
-				<input type="password" id="update_password" name="update_password" />
+			<span id="pass-check" class="pass-check"></span>
+
+			<div class="input-container">
+				<input type="password" id="update_password" name="update_password" placeholder="변경할 비밀번호" />
 				<span id="password_hint" class="hint-icon"></span>
 			</div>
-			<div class="input-container">변경할 비밀번호 확인
-				<input type="password" id="check_password" name="check_password" />
+			<div class="input-container">
+				<input type="password" id="check_password" name="check_password" placeholder="변경할 비밀번호 확인" />
 				<span id="password_match_hint" class="hint-icon"></span>
 			</div>
 		</div>

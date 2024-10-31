@@ -297,6 +297,24 @@
                             </div>
                         </div>
                     </c:when>
+                    <c:when test="${page == 'playlistDetail'}">
+                        <div class="playlistDetail">
+                            <h1>${playlistDetail.name}</h1>
+                            <c:if test="${not empty playlistDetail.images}">
+                                <img src="${playlistDetail.images[0].url}" alt="${playlistDetail.name}" width="200" height="200">
+                            </c:if>
+                            <p>설명: ${playlistDetail.description}</p>
+
+                            <h3>트랙 목록:</h3>
+                            <div class="playlistTracks">
+                                <c:forEach var="trackItem" items="${playlistDetail.tracks.items}">
+                                    <div class="trackItem">
+                                        <p>${trackItem.track.name} - ${trackItem.track.artists[0].name}</p>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </c:when>
                 </c:choose>
             </div>
         </div>

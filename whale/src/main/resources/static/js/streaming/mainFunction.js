@@ -374,3 +374,19 @@ function togglePlayPause(trackId, button) {
             .catch(error => console.error("Error playing track:", error));
     }
 }
+
+// 플레이리스트를 불러오고 페이지에 표시하는 함수
+// function playPlaylist(playlistId) {
+//     $.get(`/whale/streaming/playlistDetail`, { playlistId: playlistId })
+//         .done(function(data) {
+//             // 페이지 내용 업데이트
+//             $('#mainContent').html(data);
+//         })
+//         .fail(function() {
+//             alert("플레이리스트 정보를 불러오지 못했습니다.");
+//         });
+// }
+
+function playPlaylist(playlistId) {
+    window.location.href = `/whale/streaming/playlistDetail?playlistId=${playlistId}`;
+}

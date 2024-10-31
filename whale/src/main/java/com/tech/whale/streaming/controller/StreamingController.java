@@ -62,6 +62,7 @@ public class StreamingController {
 		return ResponseEntity.ok("Device ID가 성공적으로 생성되었습니다.");
 	}
 
+	// 음악 재생 메서드
 	@PostMapping("/streaming/playTrack")
 	public ResponseEntity<String> playTrack(HttpSession session, @RequestBody Map<String, String> body) {
 		String trackId = body.get("trackId");
@@ -118,6 +119,7 @@ public class StreamingController {
 		return "streaming/streamingHome";
 	}
 
+	// 아티스트 디테일 페이지 메서드
 	@RequestMapping("/streaming/artistDetail")
 	public String artistDetail(@RequestParam("artistId") String artistId, HttpSession session, Model model) {
 		// 아티스트 상세 정보 가져오기
@@ -168,6 +170,7 @@ public class StreamingController {
 		return "streaming/streamingHome";
 	}
 
+	// 플레이리스트 디테일 메서드
 	@RequestMapping("/streaming/playlistDetail")
 	public String playlistDetail(@RequestParam("playlistId") String playlistId, HttpSession session, Model model) {
 		Playlist playlistDetail = streamingService.getPlaylistDetail(session, playlistId);
@@ -183,4 +186,25 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
+
+	// 앨범 디테일 메서드
+	@RequestMapping("/streaming/albumDetail")
+	public String albumDetail(@RequestParam("albumId") String albumId, HttpSession session, Model model) {
+		System.out.println("앨범 ID: " + albumId);
+
+		Album albumDetail = streamingService.getAlbumDetail(session, albumId);
+		List<Track> albumTracks = streamingService.getAlbumTracks(session, albumId);
+
+		if (albumDetail != null && albumTracks != null) {
+			model.addAttribute("albumDetail", albumDetail);
+			model.addAttribute("tracks", albumTracks);
+		} else {
+			model.addAttribute("error", "앨범 정보를 불러오지 못했습니다.");
+		}
+
+		model.addAttribute("page", "albumDetail");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
+	}
+
 }

@@ -11,6 +11,7 @@ import org.apache.hc.core5.http.ParseException;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.JsonArray;
@@ -272,6 +273,28 @@ public class StreamingService {
         }
     }
 
+    public List<Track> getAlbumTracks(HttpSession session, String albumId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // TrackSimplified 타입의 앨범 트랙 목록을 가져옴
+            Paging<TrackSimplified> trackSimplifiedPaging = spotifyApi.getAlbumsTracks(albumId).build().execute();
+            TrackSimplified[] trackSimplifieds = trackSimplifiedPaging.getItems();
+
+            List<Track> fullTrackDetails = new ArrayList<>();
+
+            // TrackSimplified 객체의 ID로 Track 객체를 각각 가져와 리스트에 추가
+            for (TrackSimplified trackSimplified : trackSimplifieds) {
+                Track trackDetail = spotifyApi.getTrack(trackSimplified.getId()).build().execute();
+                fullTrackDetails.add(trackDetail);
+            }
+
+            return fullTrackDetails; // Track 객체 리스트 반환
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("앨범 트랙 가져오기 실패: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 
     //-----------------------------------------------------------------------------------------------------
     

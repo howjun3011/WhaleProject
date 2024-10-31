@@ -137,3 +137,9 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .playlistTracks .trackItem{display: flex; align-items: center; margin: 15px 0; gap: 10px;}
 
 .playListInfo{margin: 0 0 15px 10px; display: flex; align-items: end; gap: 20px;}
+
+.albumInfo{margin: 0 0 15px 10px; display: flex; align-items: end; gap: 20px;}
+/* 기본 상태에서 순위는 보이고 재생 버튼은 숨김 */
+.albumTracks .rank {display: inline-block; font-size: 18px; flex: 0 0 5%;}
+.albumTracks .playPauseButton {display: none; /* 기본적으로 숨김 */ flex: 0 0 5%;}
+.albumTracks .trackItem{display: flex; align-items: center; margin: 15px 0; gap: 10px;}

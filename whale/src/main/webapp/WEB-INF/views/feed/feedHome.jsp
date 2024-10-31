@@ -431,6 +431,55 @@
 		    });
 		});
 
+		document.querySelector('.feed').addEventListener('click', function(event) {
+		    // 좋아요 버튼 처리
+		    if (event.target.closest('.like-btn')) {
+		        const button = event.target.closest('.like-btn');
+		        const feedId = button.getAttribute('data-feed-id');
+		        /* const nowId = button.getAttribute('data-now-id'); */
+				var nowId = "${sessionScope.user_id}";
+		        
+				fetch('/whale/feedLike', {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/x-www-form-urlencoded'
+		            },
+		            body: new URLSearchParams({
+		                'feedId': feedId,
+		                'now_id': nowId
+		            })
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            if (data.success) {
+		                button.querySelector('.like-count').textContent = data.newLikeCount;
+		            } else {
+		                alert("좋아요 처리에 실패했습니다.");
+		            }
+		        })
+		        .catch(error => console.error('Error:', error));
+		        event.stopPropagation(); // 클릭 이벤트 전파 방지
+		    }
+
+		    // 모달 열기 처리
+		    if (event.target.closest('.other-btn')) {
+		        const button = event.target.closest('.other-btn');
+		        const postElement = button.closest('.post');
+		        const postId = postElement.getAttribute('data-post-id');
+		        const postOwnerId = postElement.getAttribute('data-user-id');
+		        const currentUserId = '${now_id}'; // 현재 사용자 ID
+
+		        openOtherModal(postId, postOwnerId, currentUserId);
+		        event.stopPropagation(); // 클릭 이벤트 전파 방지
+		    }
+
+		    // 피드 상세 페이지 이동 처리
+		    if (event.target.closest('.post') && !event.target.closest('.like-btn') && !event.target.closest('.other-btn')) {
+		        const postId = event.target.closest('.post').getAttribute('data-post-id');
+		        window.location.href = `feedDetail?f=\${postId}`;
+		    }
+		});
+        
         var offset = 10;  // 첫 로딩에서 시작하는 offset 값
         const size = 10;  // 한 번에 가져올 피드 수
         var isLastPage = false;  // 마지막 페이지 여부를 추적
@@ -481,6 +530,7 @@
         
         
         function playMusic(element, spotifyId) {
+        	resetAllButtons();
         	fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
 	            .then(response => {
 	                if (response.ok) {
@@ -520,6 +570,17 @@
 	            });
 	    }
         
+	    function resetAllButtons() {
+	        // 모든 play 버튼을 표시하고 pause 버튼을 숨깁니다.
+	        document.querySelectorAll('.play-button').forEach(playBtn => {
+	            playBtn.style.display = 'inline-block';
+	        });
+
+	        document.querySelectorAll('.pause-button').forEach(pauseBtn => {
+	            pauseBtn.style.display = 'none';
+	        });
+	    }
+	    
     </script>
 
 </body>

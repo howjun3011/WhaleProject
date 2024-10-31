@@ -612,4 +612,57 @@ public class SettingController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @RequestMapping("/report")
+    public String report(HttpServletRequest request, HttpSession session, Model model,
+    		@RequestParam(value = "p", required = false) String post_id,
+    		@RequestParam(value = "f", required = false) String feed_id,
+    		@RequestParam(value = "fc", required = false) String feed_comments_id) {
+    	String now_id = (String) session.getAttribute("user_id");
+    	String report_tag = "";
+    	
+    	if (post_id != null) {
+    		report_tag = "게시글 신고";
+			model.addAttribute("report_type_id", post_id);
+		} else if (feed_id != null) {
+			report_tag = "피드 신고";
+			model.addAttribute("report_type_id", feed_id);
+		} else if (feed_comments_id != null) {
+			report_tag = "피드 댓글 신고";
+			model.addAttribute("report_type_id", feed_comments_id);
+		}
+    	
+    	model.addAttribute("report_tag", report_tag);
+    	model.addAttribute("now_id", now_id);
+    	return "report/report";
+    }
+    
+    @RequestMapping("/reportDo")
+    public String reportDo(HttpServletRequest request, Model model,
+    		HttpSession session, 
+    		@RequestParam("now_id") String now_id,
+    		@RequestParam("report_tag") String report_tag,
+    		@RequestParam("report_type_id") String report_type_id,
+    		@RequestParam("report_why") String report_why) {
+    	
+    	
+    	if (report_tag.equals("게시글 신고")) {
+    		ReportDto reportDto = reportDao.getReportPost(report_type_id);
+    		String reportText = reportDto.getReport_text();
+    		String reportImg = reportDto.getReport_img_url();
+			reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
+    	} else if (report_tag.equals("피드 신고")) {
+			ReportDto reportDto = reportDao.getReportFeed(report_type_id);
+    		String reportText = reportDto.getReport_text();
+    		String reportImg = reportDto.getReport_img_url();
+			reportDao.reportFeed(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
+    	} else if (report_tag.equals("피드 댓글 신고")) {
+			ReportDto reportDto = reportDao.getReportFeedComments(report_type_id);
+    		String reportText = reportDto.getReport_text();
+    		reportDao.reportFeedComments(report_type_id, now_id, report_why, report_tag, reportText);
+    	}
+    	
+    	return "redirect:/profileHome?u="+(String) session.getAttribute("user_id");
+    }
+    
 }

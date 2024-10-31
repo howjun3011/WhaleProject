@@ -248,10 +248,10 @@ public class FeedController {
         streamingService.playTrack(session, spotifyId);
         return ResponseEntity.ok().build();
     }
-    
-    @GetMapping("/feedPauseMusic")
-    public ResponseEntity<Void> feedPauseMusic(@RequestParam("id") String spotifyId, HttpSession session) {
-        streamingService.playTrack(session, spotifyId);
-        return ResponseEntity.ok().build();
-    }
+
+	@GetMapping("/feedPauseMusic")
+	public ResponseEntity<Void> feedPauseMusic(@RequestParam("id") String spotifyId, HttpSession session) {
+		streamingService.pauseTrack(session);
+		return ResponseEntity.ok().build();
+	}
 }

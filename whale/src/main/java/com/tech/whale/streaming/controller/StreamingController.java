@@ -10,9 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
-import se.michaelthelin.spotify.model_objects.specification.Track;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,8 +23,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import se.michaelthelin.spotify.model_objects.specification.Album;
-import se.michaelthelin.spotify.model_objects.specification.Artist;
 
 import com.tech.whale.streaming.service.LyricsService;
 
@@ -124,6 +121,18 @@ public class StreamingController {
 
 		if (artistDetail != null) {
 			model.addAttribute("artistDetail", artistDetail);
+
+			// 아티스트의 상위 곡
+			Track[] topTracks = streamingService.getArtistTopTracks(session, artistId);
+			model.addAttribute("topTracks", topTracks);
+
+			// 아티스트의 앨범 목록
+			Paging<AlbumSimplified> albums = streamingService.getArtistAlbums(session, artistId);
+			model.addAttribute("albums", albums.getItems());
+
+			// 연관된 아티스트
+			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);
+			model.addAttribute("relatedArtists", relatedArtists);
 		} else {
 			model.addAttribute("error", "Unable to retrieve artist details");
 		}

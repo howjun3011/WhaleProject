@@ -96,3 +96,5 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 
 .trackName:hover, .artistName:hover {opacity: 0.6; cursor: grab;}
 .trackName:active, .artistName:active {opacity: 0.4; cursor: grab;}
+
+.artistDetailWrap{display: flex;}

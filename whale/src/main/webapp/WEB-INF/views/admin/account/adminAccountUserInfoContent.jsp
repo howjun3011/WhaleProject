@@ -79,50 +79,6 @@
 			</tr>
 		</c:forEach>
 		</c:if>
-		<%-- <tr>
-		    <td colspan="5">
-		        <c:choose>
-		        
-		            <c:when test="${not empty plsearchVO}">
-		                <a href="adminAccountUserInfo?plpage=1"
-		                   class="${plsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.page - 1}"
-		                   class="${plsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
-		
-		                <c:forEach begin="${plsearchVO.pageStart}" end="${plsearchVO.pageEnd}" var="i">
-		                    <c:choose>
-		                        <c:when test="${i eq plsearchVO.page}">
-		                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
-		                        </c:when>
-		                        <c:otherwise>
-		                            <a href="adminAccountUserInfo?plpage=${i}">${i}</a> &nbsp; &nbsp;
-		                        </c:otherwise>
-		                    </c:choose>
-		                </c:forEach>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.page + 1}"
-		                   class="${plsearchVO.page == plsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.totPage}"
-		                   class="${plsearchVO.page == plsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
-		            </c:when>
-		            
-		            <c:otherwise>
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[이전]</a>
-		
-		                <span class="pagination-active">1 &nbsp; &nbsp;</span>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[마지막]</a>
-		            </c:otherwise>
-		            
-		        </c:choose>
-		    </td>
-		</tr> --%>
 	</table>
 	<hr />
 	<h2>피드</h2>
@@ -146,50 +102,6 @@
 			</tr>
 		</c:forEach>
 		</c:if>
-		<%-- <tr>
-		    <td colspan="3">
-		        <c:choose>
-		        
-		            <c:when test="${not empty flsearchVO}">
-		                <a href="adminAccountUserInfo?flpage=1"
-		                   class="${flsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?flpage=${flsearchVO.page - 1}"
-		                   class="${flsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
-		
-		                <c:forEach begin="${flsearchVO.pageStart}" end="${flsearchVO.pageEnd}" var="i">
-		                    <c:choose>
-		                        <c:when test="${i eq flsearchVO.page}">
-		                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
-		                        </c:when>
-		                        <c:otherwise>
-		                            <a href="adminAccountUserInfo?flpage=${i}">${i}</a> &nbsp; &nbsp;
-		                        </c:otherwise>
-		                    </c:choose>
-		                </c:forEach>
-		
-		                <a href="adminAccountUserInfo?flpage=${flsearchVO.page + 1}"
-		                   class="${flsearchVO.page == flsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?flpage=${plsearchVO.totPage}"
-		                   class="${flsearchVO.page == flsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
-		            </c:when>
-		            
-		            <c:otherwise>
-		                <a href="adminAccountUserInfo?flpage=1" class="pagination-disabled">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?flpage=1" class="pagination-disabled">[이전]</a>
-		
-		                <span class="pagination-active">1 &nbsp; &nbsp;</span>
-		
-		                <a href="adminAccountUserInfo?flpage=1" class="pagination-disabled">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?flpage=1" class="pagination-disabled">[마지막]</a>
-		            </c:otherwise>
-		            
-		        </c:choose>
-		    </td>
-		</tr> --%>
 	</table>
 	<hr />
 	<h2>댓글</h2>
@@ -207,67 +119,24 @@
 		</c:if>
 		<c:if test="${not empty AccountUserCommentsList}">
 	        <c:forEach items="${AccountUserCommentsList }" var="dto" >
-	        	<c:if test="${dto.feed_comments_id !=0}">
+	        	<c:if test="${dto.feed_comments_id !=0 && not empty dto.feed_comments_id}">
 		        	<tr>
 						<td>${dto.feed_comments_id }</td>
 						<td>${dto.feed_comments_id }</td>
 						<td>${dto.feed_comments_text }</td>
-						<td><fmt:formatDate value="${dto.post_comments_date }" pattern="yyyy.MM.dd" /></td>
+						<td><fmt:formatDate value="${dto.comments_date }" pattern="yyyy.MM.dd" /></td>
 					</tr>
 	        	</c:if>
-	        	<c:if test="${dto.post_comments_id != 0}"></c:if>
+	        	<c:if test="${dto.post_comments_id != 0 && not empty dto.post_comments_id}">
 				<tr>
 					<td>${dto.post_comments_id }</td>
 					<td>${dto.post_comments_id }</td>
 					<td>${dto.post_comments_text }</td>
-					<td><fmt:formatDate value="${dto.post_comments_date }" pattern="yyyy.MM.dd" /></td>
+					<td><fmt:formatDate value="${dto.comments_date }" pattern="yyyy.MM.dd" /></td>
 				</tr>
+				</c:if>
 			</c:forEach>
 		</c:if>
-		<%-- <tr>
-		    <td colspan="4">
-		        <c:choose>
-		        
-		            <c:when test="${not empty plsearchVO}">
-		                <a href="adminAccountUserInfo?plpage=1"
-		                   class="${plsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.page - 1}"
-		                   class="${plsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
-		
-		                <c:forEach begin="${plsearchVO.pageStart}" end="${plsearchVO.pageEnd}" var="i">
-		                    <c:choose>
-		                        <c:when test="${i eq plsearchVO.page}">
-		                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
-		                        </c:when>
-		                        <c:otherwise>
-		                            <a href="adminAccountUserInfo?plpage=${i}">${i}</a> &nbsp; &nbsp;
-		                        </c:otherwise>
-		                    </c:choose>
-		                </c:forEach>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.page + 1}"
-		                   class="${plsearchVO.page == plsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=${plsearchVO.totPage}"
-		                   class="${plsearchVO.page == searchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
-		            </c:when>
-		            
-		            <c:otherwise>
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[처음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[이전]</a>
-		
-		                <span class="pagination-active">1 &nbsp; &nbsp;</span>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[다음]</a>
-		
-		                <a href="adminAccountUserInfo?plpage=1" class="pagination-disabled">[마지막]</a>
-		            </c:otherwise>
-		            
-		        </c:choose>
-		    </td>
-		</tr> --%>
 	</table>
 	<br /><br /><br /><br />	
 </div>

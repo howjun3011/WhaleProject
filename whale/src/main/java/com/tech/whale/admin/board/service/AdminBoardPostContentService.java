@@ -13,7 +13,7 @@ import com.tech.whale.community.dao.ComDao;
 import com.tech.whale.community.dto.PostDto;
 
 @Service
-public class AdminBoardContentService implements AdminServiceInter {
+public class AdminBoardPostContentService implements AdminServiceInter {
 	@Autowired
 	private ComDao comDao;
 	

@@ -61,8 +61,8 @@
 					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
 					<td>${dto.report_feed_count }</td>
 					<td>
-						<button onclick = "location.href = 'adminBoardContentView?feedId=${dto.feed_id }
-							&page=1&sk=${searchKeyword}'">조회
+						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
+							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
 						<button onclick = "location.href = '?'" >삭제</button>
 					</td>
@@ -78,7 +78,7 @@
 					<td>${dto.report_post_count }</td>
 					<td>
 						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
-						조회
+							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
 						<button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
 					</td>

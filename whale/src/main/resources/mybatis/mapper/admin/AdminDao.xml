@@ -119,23 +119,44 @@
 	</select>
     <select id="userAccountCommentsSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
 	    SELECT *
-		FROM (
-		    SELECT 
-		        FC.FEED_COMMENTS_ID,
-		        FC.FEED_COMMENTS_TEXT,
-		        PC.POST_COMMENTS_ID,
-		        PC.POST_COMMENTS_TEXT, 
-		        PC.POST_COMMENTS_DATE AS COMMENTS_DATE,
-		        ROW_NUMBER() OVER (ORDER BY PC.POST_COMMENTS_DATE DESC) AS RNUM
-		    FROM 
-		        POST_COMMENTS PC
-		    LEFT JOIN 
-		        FEED_COMMENTS FC ON PC.POST_COMMENTS_DATE = FC.FEED_COMMENTS_DATE
-		    WHERE 
-		        FC.USER_ID = #{userId} OR PC.USER_ID = #{userId}
-		)
-		WHERE RNUM BETWEEN #{start} AND #{end}
-		ORDER BY RNUM
+	    	FROM(
+		    SELECT
+		    	ROW_NUMBER() OVER (ORDER BY COMMENTS_DATE DESC) AS RNUM,
+		    	FEED_COMMENTS_ID,
+		    	USER_ID,
+		    	FEED_COMMENTS_TEXT,
+		    	POST_COMMENTS_TEXT,
+		    	POST_COMMENTS_ID,
+		    	COMMENTS_DATE
+		    	FROM(
+				    SELECT 
+					    FC.FEED_COMMENTS_ID,
+					    FC.USER_ID USER_ID,
+					    FC.FEED_COMMENTS_TEXT,
+					    NULL AS POST_COMMENTS_TEXT,
+					    NULL AS POST_COMMENTS_ID,  
+					    FC.FEED_COMMENTS_DATE AS COMMENTS_DATE
+					FROM 
+					    FEED_COMMENTS FC
+					UNION ALL
+					
+					SELECT 
+					    NULL AS FEED_COMMENTS_ID, 
+					    PC.USER_ID USER_ID,
+					    NULL AS FEED_COMMENTS_TEXT,
+					    PC.POST_COMMENTS_TEXT,
+					    PC.POST_COMMENTS_ID,
+					    PC.POST_COMMENTS_DATE AS COMMENTS_DATE
+					FROM 
+					    POST_COMMENTS PC
+				) UNIONDATA
+				WHERE
+					USER_ID = #{userId}
+		) NUMBERDATA
+		WHERE RNUM BETWEEN 1 AND 5
+		ORDER BY 
+		    COMMENTS_DATE DESC
+
 
 	</select>
 	

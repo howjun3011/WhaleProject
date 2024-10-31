@@ -518,10 +518,55 @@
 	</delete>
 	<delete id="postCommentsDel">
 		DELETE FROM POST_COMMENTS WHERE POST_ID = #{post_id}
+		AND EXISTS (
+        	SELECT 1 FROM POST_COMMENTS WHERE POST_ID = #{post_id}
+    	)
 	</delete>
 	<delete id="postLikeDel">
 		DELETE FROM POST_LIKE WHERE POST_ID = #{post_id}
+		AND EXISTS (
+	        SELECT 1 FROM POST_LIKE WHERE POST_ID = #{post_id}
+	    )
 	</delete>
+	<delete id="CommentsLikeDel">
+		DELETE FROM POST_COMMENTS_LIKE 
+	    WHERE POST_COMMENTS_ID  IN (
+	        SELECT POST_COMMENTS_ID 
+	        FROM POST_COMMENTS 
+	        WHERE POST_ID = #{post_id}
+	    )
+	    AND EXISTS (
+	        SELECT 1 
+	        FROM POST_COMMENTS_LIKE 
+	        WHERE POST_COMMENTS_ID IN (
+	            SELECT POST_COMMENTS_ID 
+	            FROM POST_COMMENTS 
+	            WHERE POST_ID = #{post_id}
+	        )
+	    )
+	</delete>
+	
+	<insert id="postCommentsDelLog">
+	    INSERT INTO POST_DEL_LOG 
+	    (POST_DEL_LOG_ID, POST_DEL_REASON, POST_DEL_DATE, ADMIN_ID, POST_ID, POST_COMMENTS_ID)
+	    SELECT POST_DEL_LOG_SEQ.NEXTVAL, #{comments_del_reason}, SYSDATE, 
+	    (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}),
+	    #{post_id}, POST_COMMENTS_ID
+	    FROM POST_COMMENTS
+	    WHERE POST_ID = #{post_id}
+	    AND EXISTS (
+	        SELECT 1 FROM POST_COMMENTS WHERE POST_ID = #{post_id}
+	    )
+	</insert>
+	
+	<insert id="postDelLog">
+	    INSERT INTO POST_DEL_LOG VALUES( 
+	    POST_DEL_LOG_SEQ.NEXTVAL, #{del_reason}, SYSDATE, 
+		(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), #{post_id}, null)
+
+	</insert>
+
+		
 	
 	
 	

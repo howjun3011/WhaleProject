@@ -29,12 +29,20 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = 
 				(HttpServletRequest) map.get("request");
+		
 		int post_id = Integer.parseInt(request.getParameter("postId"));
-		String user_id = request.getParameter("user_id");
+		String user_id = (String)model.getAttribute("user_id");
+		String post_del_reason = "게시판 규칙 위반";
+		String comments_del_reason = "부모게시글 삭제";
+		
+		adminIDao.postDelLog(post_id,user_id,post_del_reason);
+		adminIDao.postCommentsDelLog(post_id,user_id,comments_del_reason);
 		adminIDao.postLikeDel(post_id);
+		adminIDao.CommentsLikeDel(post_id);
 		adminIDao.postCommentsDel(post_id);
 		adminIDao.postDel(post_id);
-		adminIDao.postDelLog(post_id,user_id);
+		
+		System.out.println("유저 아이디 : "+user_id);
 		
 		
 	}

@@ -76,6 +76,9 @@ public class AdminBoardController {
 	
 	@RequestMapping("/adminBoardPostContentView")
 	public String adminBoardContentView(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
 			@RequestParam("communityName") String communityName,
 			@RequestParam("postId") String postId,
 			HttpSession session,
@@ -85,9 +88,59 @@ public class AdminBoardController {
 		model.addAttribute("request", request);
 		model.addAttribute("pname", "게시글");
 		model.addAttribute("contentBlockJsp",
-				"../board/adminBoardContent.jsp");
+				"../board/adminBoardPostContent.jsp");
 		model.addAttribute("contentBlockCss",
-				"/whale/static/css/admin/board/adminBoardContent.css");
+				"/whale/static/css/admin/board/adminBoardPostContent.css");
+		boardSubBar(model);
+		
+		PostDto postDetail = comDao.getPost(postId);
+		List<CommentDto> commentsList = comLikeCommentService.getCommentsForPost(postId);
+		postDetail.setComments(commentsList);
+
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("sk", sk);
+		model.addAttribute("communityName", communityName);
+		model.addAttribute("postId", postId);
+		model.addAttribute("postDetail", postDetail);
+		model.addAttribute("request", request);
+		adminBoardContentService.execute(model);
+
+//		adminBoardListService.execute(model);
+		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminBoardPostContentDelete")
+	public String adminBoardPostContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardPostDelete.execute(model);
+		
+		return "redirect:adminBoardListView?page="+page+"&sk="+sk+"&searchType="+searchType;
+	}
+	
+	@RequestMapping("/adminBoardFeedContentView")
+	public String adminBoardFeedContentView(
+			@RequestParam("communityName") String communityName,
+			@RequestParam("postId") String postId,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "게시글");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminBoardFeedContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/board/adminBoardFeedContent.css");
 		boardSubBar(model);
 		
 		
@@ -104,20 +157,6 @@ public class AdminBoardController {
 		adminBoardListService.execute(model);
 		
 		return "/admin/view/adminOutlineForm";
-	}
-	
-	@RequestMapping("/adminBoardPostContentDelete")
-	public String adminBoardPostContentDelete(
-			HttpSession session,
-			HttpServletRequest request,
-			Model model) {
-		model.addAttribute("request", request);
-		model.addAttribute("user_id", session.getAttribute("user_id"));
-		
-		adminBoardPostDelete.execute(model);
-		
-		
-		return "redirect:adminBoardListView";
 	}
 	
 }

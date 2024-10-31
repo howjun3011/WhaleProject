@@ -3,7 +3,18 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
-
+<script>
+    function postDelete(postId,page,searchType,sk) {
+        const deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
+        if (deleteConfirm) {
+        	window.location.href = 
+        		"adminBoardPostContentDelete?postId="+postId
+        				+"&sk="+sk
+        				+"&page="+page
+        				+"&searchType="+searchType
+        }
+    }
+</script>
 <div class="content">
     <h2>" ${communityName} "</h2>
     
@@ -48,8 +59,8 @@
 	<br />
 	<div class="btnBlock">
 	좋아요 : <span id="likeCount">${postDetail.likeCount}</span> &nbsp;&nbsp; <!-- 좋아요 수 표시 -->
-    <div class="samllDiv"><a href="#" class="samllBtn">삭제</a></div>
-    <div class="samllDiv"><a href="#" class="samllBtn">목록</a></div>
+    <div class="samllDiv"><a href="#" onclick="postDelete('${postId }','${page}','${searchType }','${sk }')" class="samllBtn">삭제</a></div>
+    <div class="samllDiv"><a href="adminBoardListView?page=${page }&searchType=${searchType }&sk=${sk}" class="samllBtn">목록</a></div>
 	</div>
 <table class="contentTable">
     <colgroup>

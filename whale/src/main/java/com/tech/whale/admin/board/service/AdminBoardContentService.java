@@ -23,9 +23,7 @@ public class AdminBoardContentService implements AdminServiceInter {
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
 		String postId = request.getParameter("postId");
-		
-		comDao.upCnt(postId);
-		
+
         PostDto postDetail = (PostDto) model.getAttribute("postDetail");
 
         if (postDetail == null) {

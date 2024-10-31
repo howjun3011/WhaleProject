@@ -10,11 +10,7 @@
     </select>
     
     <select id="selectTrackLikeId" resultType="Integer">
-        SELECT TRACK_LIKE_ID FROM TRACK_LIKE WHERE USER_ID = #{userId}
-    </select>
-    
-    <select id="selectTrackCntId" resultType="Integer">
-        SELECT TRACK_CNT_ID FROM TRACK_CNT WHERE USER_ID = #{userId}
+        SELECT TRACK_LIKE_ID FROM TRACK_LIKE WHERE USER_ID = #{userId} AND TRACK_ID = #{trackId}
     </select>
     
     <select id="selectTrackDto" resultType="com.tech.whale.streaming.models.TrackDto">
@@ -51,11 +47,7 @@
 	</insert>
 	
 	<delete id="deleteTrackLike">
-		DELETE FROM TRACK_LIKE TRACK_LIKE_ID USER_ID = #{trackLikeId}
-	</delete>
-	
-	<delete id="deleteTrackCnt">
-		DELETE FROM TRACK_CNT TRACK_CNT_ID USER_ID = #{trackCntId}
+		DELETE FROM TRACK_LIKE WHERE TRACK_LIKE_ID = #{trackLikeId}
 	</delete>
 	
 </mapper>

@@ -22,9 +22,13 @@ export default {
         };
     },
     methods: {
-        goMain() {this.$router.replace('/whale/streaming/recommend');},
-        goSearchHome() {this.$router.replace(`/whale/streaming/searchHome`);},
-        goSearch() {this.$router.replace(`/whale/streaming/search/${ this.query }`);},
+        goMain() {this.$router.replace('/whale/streaming/recommend'); this.changeBackground();},
+        goSearchHome() {this.$router.replace(`/whale/streaming/searchHome`); this.changeBackground();},
+        goSearch() {this.$router.replace(`/whale/streaming/search/${ this.query }`); this.changeBackground();},
+        changeBackground() {
+            document.querySelector('.mainContent').style.backgroundImage = '';
+            document.querySelector('.mainContent').style.backgroundColor = '#2e2e2e';
+        },
     },
 };
 </script>

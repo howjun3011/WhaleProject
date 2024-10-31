@@ -70,7 +70,7 @@ export default {
         },
         redirectPlaylist(i) {
             this.$router.replace(`/whale/streaming/playlist/${ i }`);
-        }
+        },
     },
 };
 </script>

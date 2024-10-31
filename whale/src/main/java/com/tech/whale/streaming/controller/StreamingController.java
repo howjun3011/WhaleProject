@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import com.tech.whale.streaming.service.StreamingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;  // ResponseEntity 추가 필요
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,8 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -133,4 +136,6 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
+	
+	// -------------------------------------------------------------------------------------------------------------
 }

@@ -6,7 +6,7 @@ const MainFooterComponent = {
 	        	<div class="playerComponent" id="playerLeft">
 	        		<div class="playerInfo flexCenter" @click="sendStreaming('albumDetail','?type=album')"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
 	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','?type=album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','?type=artist')">{{ trackInfo[2] }}</p></div>
-	        		<div class="playerRightStyle" @click="insertTrack()"><img class="playerImg" src="static/images/streaming/player/like.png" alt="Music Whale Like Button" width="23px" height="23px" :style="{backgroundColor: trackInfo[3] ? '#efefef' : '#FCFCFC'}"></div>
+	        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
 	        	</div>
 	            <div class="playerComponent flexCenter">
 	            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
@@ -39,6 +39,7 @@ const MainFooterComponent = {
 			repeatBtnSrcIndex: 0,
 			isRepeated: false,
 			isShuffled: false,
+			isLiked: ['static/images/streaming/player/like.png','static/images/streaming/player/likeFill.png']
 		};
 	},
 	mounted() {
@@ -100,7 +101,8 @@ const MainFooterComponent = {
 			        this.trackInfo[0] = current_track.album.images[0].url;
 			        this.trackInfo[1] = current_track.name;
 			        this.trackInfo[2] = current_track.artists[0].name;
-			        this.trackInfo[3] = false;
+			        this.trackInfo[3] = current_track.album.name;
+			        this.trackInfo[4] = current_track.id;
 			        
 			        this.player.getCurrentState().then(
 						(state) => {
@@ -113,23 +115,47 @@ const MainFooterComponent = {
 							// [ 셔플 중이라면 버튼 배경 이미지 변환 ]
 							if (state.shuffle_mode === 1) {this.isShuffled = true;}
 							else {this.isShuffled = false;}
+							
+							fetch(`/whale/streaming/currentTrackInfo`, {
+								headers: {
+									'Accept': 'application/json',
+						            'Content-Type': 'application/json'
+						        },
+						        method: 'POST',
+						        body: JSON.stringify({
+									artistName: state.track_window.current_track.artists[0].name,
+									trackName: state.track_window.current_track.name,
+									albumName: state.track_window.current_track.album.name,
+									trackCover: state.track_window.current_track.album.images[0].url,
+									trackSpotifyId: state.track_window.current_track.id
+								})
+							})
+							.then(response => response.json())
+								.then(data => {
+									if (data.result === 'yes') {this.trackInfo[5] = true;}
+									else {this.trackInfo[5] = false;}
+							});
 						}
 					);
 			    });
 			}
 		},
 		
-		async insertTrack() {
-			this.trackInfo[3] = true;
+		async insertTrackLike() {
+			let x;
+			
+			if (this.trackInfo[5] === false) {x = 'insertTrackLike';}
+			else {x = 'deleteTrackLike';}
+			
             try {
                 const body = {
-                    trackArtist: this.playbackState.items[0].track.artists[0].name,
-                    trackName: this.playbackState.items[0].track.name,
-                    trackAlbum: this.playbackState.items[0].track.album.name,
-                    trackCover: this.playbackState.items[0].track.album.images[0].url,
-                    trackSpotifyId: this.playbackState.items[0].track.id,
+                    artistName: this.trackInfo[2],
+					trackName: this.trackInfo[1],
+					albumName: this.trackInfo[3],
+					trackCover: this.trackInfo[0],
+					trackSpotifyId: this.trackInfo[4]
                 };
-                const response = await fetch('streaming/insertTrack', {
+                const response = await fetch(`streaming/${ x }`, {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
@@ -139,12 +165,42 @@ const MainFooterComponent = {
                 });
                 
                 if (response.ok) {
-					console.log("Success inserting Data to the Spring Wep App");
+					console.log("Success updating Track Like Data to the Spring Wep App");
 		        } else {
-		            console.error('Failed to insert the track info: ', response.statusText);
+		            console.error('Failed to update the  Track Like Data: ', response.statusText);
 		        }
             } catch (error) {
-                console.error('Error while fetching the track info:', error);
+                console.error('Error while fetching the  Track Like Data:', error);
+            }
+            
+            this.trackInfo[5] = !this.trackInfo[5];
+        },
+        
+        async insertTrackCnt() {
+            try {
+                const body = {
+                    artistName: this.trackInfo[2],
+					trackName: this.trackInfo[1],
+					albumName: this.trackInfo[3],
+					trackCover: this.trackInfo[0],
+					trackSpotifyId: this.trackInfo[4]
+                };
+                const response = await fetch(`streaming/insertTrackCnt`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+                
+                if (response.ok) {
+					console.log("Success updating Track Cnt Data to the Spring Wep App");
+		        } else {
+		            console.error('Failed to update the  Track Cnt Data: ', response.statusText);
+		        }
+            } catch (error) {
+                console.error('Error while fetching the  Track Cnt Data:', error);
             }
         },
         async fetchData(address) {
@@ -172,7 +228,15 @@ const MainFooterComponent = {
 			if (this.isShuffled) {try {await this.fetchWebApi(`v1/me/player/shuffle?state=${false}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}}
 			else {try {await this.fetchWebApi(`v1/me/player/shuffle?state=${true}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}}
 		},
-		togglePlay() {if (this.playBtnSrcIndex === 1) {this.playBtnSrcIndex = 0;} else {this.playBtnSrcIndex = 1;} this.player.togglePlay();},
+		togglePlay() {
+			if (this.playBtnSrcIndex === 1) {
+				this.playBtnSrcIndex = 0;
+			} else {
+				this.playBtnSrcIndex = 1;
+				this.insertTrackCnt();
+			}
+			this.player.togglePlay();
+		},
 		nextPlay() {
 			this.player.getCurrentState().then(
 				async (state) => {

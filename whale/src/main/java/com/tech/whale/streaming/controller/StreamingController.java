@@ -10,9 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
-import se.michaelthelin.spotify.model_objects.specification.Track;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,8 +23,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import se.michaelthelin.spotify.model_objects.specification.Album;
-import se.michaelthelin.spotify.model_objects.specification.Artist;
 
 import com.tech.whale.streaming.service.LyricsService;
 
@@ -46,22 +43,22 @@ public class StreamingController {
 	public String streaming(@RequestParam Map<String, String> queryParam, HttpSession session, Model model) {
 
 		// 노드 스트리밍 서버를 위한 리다이렉트
-		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
+//		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
 
 		// 스프링 스트리밍 서버를 위한 리다이렉트
 //		 CompletableFuture로 반환되는 비동기 결과를 가져오기 위해 join() 사용
-//		CompletableFuture<Paging<Track>> topTracksFuture = streamingService.getUsersTopTracksAsync(session);
-//		Paging<Track> trackPaging = topTracksFuture.join(); // 결과를 동기적으로 기다림
-//
-//		if (trackPaging != null && trackPaging.getItems().length > 0) {
-//			model.addAttribute("trackPaging", trackPaging);
-//		} else {
-//			model.addAttribute("error", "Unable to retrieve top tracks");
-//		}
-//		// 홈 페이지로 설정
-//		model.addAttribute("page", "home");
-//		System.out.println("page :" + model.getAttribute("page"));
-//		return "streaming/streamingHome";
+		CompletableFuture<Paging<Track>> topTracksFuture = streamingService.getUsersTopTracksAsync(session);
+		Paging<Track> trackPaging = topTracksFuture.join(); // 결과를 동기적으로 기다림
+
+		if (trackPaging != null && trackPaging.getItems().length > 0) {
+			model.addAttribute("trackPaging", trackPaging);
+		} else {
+			model.addAttribute("error", "Unable to retrieve top tracks");
+		}
+		// 홈 페이지로 설정
+		model.addAttribute("page", "home");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
 	}
 
 	// getDeviceId POST 요청 처리 메서드
@@ -114,7 +111,36 @@ public class StreamingController {
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "detail");
 		System.out.println("page :" + model.getAttribute("page"));
-		return "streaming/streamingHome"; // 같은 JSP 파일을 사용하지만 page 값이 "detail"로 설정됨
+		return "streaming/streamingHome";
+	}
+
+	@RequestMapping("/streaming/artistDetail")
+	public String artistDetail(@RequestParam("artistId") String artistId, HttpSession session, Model model) {
+		// 아티스트 상세 정보 가져오기
+		Artist artistDetail = streamingService.getArtistDetail(session, artistId);
+
+		if (artistDetail != null) {
+			model.addAttribute("artistDetail", artistDetail);
+
+			// 아티스트의 상위 곡
+			Track[] topTracks = streamingService.getArtistTopTracks(session, artistId);
+			model.addAttribute("topTracks", topTracks);
+
+			// 아티스트의 앨범 목록
+			Paging<AlbumSimplified> albums = streamingService.getArtistAlbums(session, artistId);
+			model.addAttribute("albums", albums.getItems());
+
+			// 연관된 아티스트
+			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);
+			model.addAttribute("relatedArtists", relatedArtists);
+		} else {
+			model.addAttribute("error", "Unable to retrieve artist details");
+		}
+
+		// 디테일 페이지로 설정
+		model.addAttribute("page", "artistDetail");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
 	}
 
 	// 검색 결과를 받아오는 메서드 추가

@@ -680,8 +680,8 @@
                 replyForm.style.display = 'none';
             }
         }
-        
-        
+
+
         function playMusic(element, spotifyId) {
         	fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
 	            .then(response => {
@@ -701,7 +701,7 @@
 	                alert('음악 재생 중 오류가 발생했습니다.');
 	            });
 	    }
-	
+
 	    function pauseMusic(element, spotifyId) {
 	        fetch('/whale/feedPauseMusic?id=${spotifyId}')
 	            .then(response => {

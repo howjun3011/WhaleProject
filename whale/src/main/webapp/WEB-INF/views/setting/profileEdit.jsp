@@ -12,10 +12,10 @@
 <style>
 a{
 	text-decoration: none;
-	color: black;
+	color: blue;
 }
 a:visited, a:focus, a:active {
-	color: black;
+	color: blue;
 	text-decoration: none;
 }
 a:hover{
@@ -175,7 +175,17 @@ window.onload = function() {
 					</tr>
 					<tr>
 						<td>대표곡 설정</td>
-						<td><a href="representiveSong">대표곡 설정</a></td>
+						<c:choose>
+							<c:when test="${profile.track_id == 0}">
+								<td><a href="representiveSong">대표곡 설정</a></td>
+							</c:when>
+							<c:otherwise>
+								<td>
+									${profile.track_artist} - ${profile.track_name} &nbsp;
+									<a href="representiveSong">변경</a>
+								</td>
+							</c:otherwise>
+						</c:choose>
 					</tr>
 					<tr>
 						<td>이메일</td>

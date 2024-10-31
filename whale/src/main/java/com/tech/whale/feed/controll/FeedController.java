@@ -1,5 +1,6 @@
 package com.tech.whale.feed.controll;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +27,8 @@ import com.tech.whale.feed.dto.FeedDto;
 import com.tech.whale.feed.service.FeedCommentService;
 import com.tech.whale.feed.service.FeedLikeService;
 import com.tech.whale.feed.service.FeedWriteService;
+import com.tech.whale.streaming.models.TrackDto;
+import com.tech.whale.streaming.service.StreamingService;
 
 @Controller
 public class FeedController {
@@ -38,6 +44,9 @@ public class FeedController {
 	
 	@Autowired
 	private FeedCommentService feedCommentsService;
+	
+	@Autowired
+	private StreamingService streamingService;
 	
 	@RequestMapping("/loadMoreFeeds")
 	public String loadMoreFeeds(HttpServletRequest request, HttpSession session, Model model,
@@ -118,6 +127,7 @@ public class FeedController {
 	
 	@RequestMapping("/feedWriteDo")
 	public String feedWriteDo(HttpServletRequest request, HttpSession session, Model model,
+			@RequestParam(value = "selectedTrackId", required = false) Integer track_id, 
 			@RequestParam("feedText") String feed_text,
 			@RequestParam("feedImage") MultipartFile file) {
 		
@@ -128,6 +138,9 @@ public class FeedController {
 		FeedDto feedDto = new FeedDto();
 		feedDto.setFeed_text(feed_text);
 		feedDto.setUser_id(now_id);
+		if (track_id != null) {
+			feedDto.setTrack_id(track_id);			
+		}
 		try {
 			feedWriteService.registerFeed(feedDto, file);
 		} catch (Exception e) {
@@ -212,4 +225,35 @@ public class FeedController {
         return "redirect:/feedDetail?f=" + feedId;
     }
 
+    @ResponseBody
+    @PostMapping(value = "/updateMusic", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TrackDto updateMusic(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	System.out.println("updateRepresentive() ctr");
+    	
+    	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
+    	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
+    	String trackName = map.get("name").toString();
+    	String albumName = ((Map<String, String>) map.get("album")).get("name");
+    	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
+    	String trackSpotifyId = map.get("id").toString();
+    	
+    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	TrackDto trackDto = streamingService.selectTrackDtoService(trackId);
+    	System.out.println("DB 업데이트 완료");
+    	
+    	
+        return trackDto;
+    }
+    
+    @GetMapping("/feedPlayMusic")
+    public ResponseEntity<Void> feedPlayMusic(@RequestParam("id") String spotifyId, HttpSession session) {
+        streamingService.playTrack(session, spotifyId);
+        return ResponseEntity.ok().build();
+    }
+
+	@GetMapping("/feedPauseMusic")
+	public ResponseEntity<Void> feedPauseMusic(@RequestParam("id") String spotifyId, HttpSession session) {
+		streamingService.pauseTrack(session);
+		return ResponseEntity.ok().build();
+	}
 }

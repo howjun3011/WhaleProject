@@ -14,7 +14,7 @@
 	display: block;
 	justify-content: space-between;
 }
-.section #section-top{
+.section-top{
 	font-weight: bold;
 }
 .radio-group{
@@ -67,7 +67,7 @@ input[type='radio']:checked {
 		<form>
 			<div class="setting-item">
 				<div class="section">
-					<label id="section-top">마이페이지</label>
+					<label class="section-top">마이페이지</label>
 					<div class="radio-group">
 						<div class="radio-option">
 							<label for="mypage-left">왼쪽</label>
@@ -82,7 +82,7 @@ input[type='radio']:checked {
 			</div>
 			<div class="setting-item">
 				<div class="section">
-					<label id="section-top">알림</label>
+					<label class="section-top">알림</label>
 					<div class="radio-group">
 						<div class="radio-option">
 							<label for="notification-left">왼쪽</label>
@@ -97,7 +97,7 @@ input[type='radio']:checked {
 			</div>
 			<div class="setting-item">
 				<div class="section">
-					<label id="section-top">설정</label>
+					<label class="section-top">설정</label>
 					<div class="radio-group">
 						<div class="radio-option">
 							<label for="setting-left">왼쪽</label>
@@ -112,7 +112,7 @@ input[type='radio']:checked {
 			</div>
 			<div class="setting-item">
 				<div class="section">
-					<label id="section-top">음악</label>
+					<label class="section-top">음악</label>
 					<div class="radio-group">
 						<div class="radio-option">
 							<label for="music-left">왼쪽</label>

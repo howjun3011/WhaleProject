@@ -81,14 +81,26 @@
             color: #333;    /* 필요 시 색상 지정 */
         }
 
-        .post-text {
-            margin-top: 10px;
-        }
-
-        .post-time {
-            font-size: 0.8em;
-            color: gray;
-        }
+		.post-text {
+			margin-left: 10px;
+		    margin-top: 10px;
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.post-content {
+		    flex: 1;
+		}
+		
+		.post-text p {
+		    margin: 0;
+		}
+		
+		.post-time {
+			float: right;
+		    font-size: 0.8em;
+		    color: gray;
+		}
 
         .other-btn {
             position: absolute;
@@ -302,11 +314,29 @@
 		    margin-right: 5px;
         }
         
+		.music-info {
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between; /* 양 끝에 요소 배치 */
+		    padding: 10px;
+		    background-color: #f9f9f9;
+		    border-radius: 5px;
+		    margin-bottom: 10px;
+		}
+		
+		.music-info > div {
+		    flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */
+		}
+		
+		.music-info label {
+		    margin-left: 10px; /* 버튼 간 간격 조정 */
+		}
+		
     </style>
 </head>
 <body>
 
-    <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}">
+    <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}" data-open-id="${feedDetail.feed_open}">
         <div class="user-info">
             <a href="profileHome?u=${feedDetail.user_id}">
                 <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
@@ -322,11 +352,33 @@
         <c:if test="${not empty feedDetail.feed_img_name}">
             <img src="static/images/feed/${feedDetail.feed_img_name}" alt="Post Image" class="post-image">
         </c:if>
+		<br />
+		<br />
+		<div class="post-text">
+		    <div class="post-content">
+		        <p>${feedDetail.feed_text}</p>
+		    </div>
+		</div>
+		    <br />
+                <c:if test="${not empty feedDetail.track_id}">
+                    <div id="music-info" class="music-info">
+		                <img id="album-icon" src="${feedDetail.track_cover}" alt="Album Icon" style="width: 50px; height: 50px;">
+		                <div>
+		                    <span id="music-title">${feedDetail.track_name}</span> - <span id="artist-name">${feedDetail.track_artist}</span>
+		                </div>
+ 				        <label class="play-button" onclick="playMusic(this, '${feedDetail.track_spotify_id}')" style="display: inline-block;">
+				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;" />
+				        </label>
+				        <!-- Pause 버튼 -->
+				        <label class="pause-button" onclick="pauseMusic(this, '${feedDetail.track_spotify_id}')" style="display: none;">
+				            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;" />
+				        </label>
+		            </div>
+                </c:if>
+		    <span class="post-time">${feedDetail.feed_date}</span>
 
-        <div class="post-text">
-            <p>${feedDetail.feed_text}</p>
-            <span class="post-time">${feedDetail.feed_date}</span>
-        </div>
+		<br />
+
 
         <div class="post-actions">
             <button type="button" class="like-btn" data-feed-id="${feedDetail.feed_id}" data-now-id="${now_id}">
@@ -462,12 +514,14 @@
 	<script>
 	    let selectedItemId = null;
 	    let selectedItemFeedId = null;
+	    let selectedOpenId = null;
 	    let selectedItemType = null; // 'post', 'comment', 'reply'
 	    let isOwner = false;
 	
-	    function openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType) {
+	    function openOtherModal(itemId, openId, itemFeedId, itemOwnerId, currentUserId, itemType) {
 	        selectedItemId = itemId;
 	        selectedItemFeedId = itemFeedId;
+	        selectedOpenId = openId;
 	        selectedItemType = itemType;
 	        isOwner = (itemOwnerId === currentUserId);
 	
@@ -539,11 +593,12 @@
 	            event.stopPropagation();
 	            const postElement = this.closest('.post');
 	            const itemId = postElement.getAttribute('data-post-id');
-	            const itemFeedId = itemElement.getAttribute('data-feed-id');
+	            const itemFeedId = postElement.getAttribute('data-feed-id');
+	            const openId = postElement.getAttribute('data-open-id');
 	            const itemOwnerId = postElement.getAttribute('data-user-id');
 	            const currentUserId = '${now_id}';
 	
-	            openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, 'post');
+	            openOtherModal(itemId, openId, itemFeedId, itemOwnerId, currentUserId, 'post');
 	        });
 	    });
 	
@@ -625,6 +680,47 @@
                 replyForm.style.display = 'none';
             }
         }
+
+
+        function playMusic(element, spotifyId) {
+        	fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
+	            .then(response => {
+	                if (response.ok) {
+	                    // Play 버튼 숨기고 Pause 버튼 보이기
+	                    element.style.display = 'none';
+	                    const pauseBtn = element.parentElement.querySelector('label[onclick^="pauseMusic"]');
+	                    if (pauseBtn) {
+	                        pauseBtn.style.display = 'inline-block';
+	                    }
+	                } else {
+	                    alert('음악 재생에 실패했습니다.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('에러 발생:', error);
+	                alert('음악 재생 중 오류가 발생했습니다.');
+	            });
+	    }
+
+	    function pauseMusic(element, spotifyId) {
+	        fetch('/whale/feedPauseMusic?id=${spotifyId}')
+	            .then(response => {
+	                if (response.ok) {
+	                    // Pause 버튼 숨기고 Play 버튼 보이기
+	                    element.style.display = 'none';
+	                    const playBtn = element.parentElement.querySelector('label[onclick^="playMusic"]');
+	                    if (playBtn) {
+	                        playBtn.style.display = 'inline-block';
+	                    }
+	                } else {
+	                    alert('음악 일시정지에 실패했습니다.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('에러 발생:', error);
+	                alert('음악 일시정지 중 오류가 발생했습니다.');
+	            });
+	    }
     </script>
 
 </body>

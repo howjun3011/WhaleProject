@@ -156,6 +156,7 @@ function navigateToDetail(trackId) {
     window.location.href = `/whale/streaming/detail?trackId=${trackId}`;
 }
 
+// 곡명 길이에 따른 폰트 크기 조절
 document.addEventListener("DOMContentLoaded", function() {
     const trackNameElement = document.getElementById("trackName");
     const textLength = trackNameElement.innerText.length;
@@ -196,3 +197,50 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+
+// 검색 결과 스크롤 이동 함수
+function updateSearchScrollButtons() {
+    const container = document.querySelector('.searchResults');
+    const searchScrollLeftBtn = document.getElementById('searchScrollLeftBtn');
+    const searchScrollRightBtn = document.getElementById('searchScrollRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        searchScrollLeftBtn.classList.remove('hidden');
+    } else {
+        searchScrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft - 1) { // 약간의 여유를 두어 숨김 처리
+        searchScrollRightBtn.classList.remove('hidden');
+    } else {
+        searchScrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollLeftSearchContent() {
+    const container = document.querySelector('.searchResults');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateSearchScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRightSearchContent() {
+    const container = document.querySelector('.searchResults');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateSearchScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    updateSearchScrollButtons(); // 초기 상태
+    const container = document.querySelector('.searchResults');
+    container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
+});
+
+// 아티스트 디테일
+function navigateToArtistDetail(artistId) {
+    window.location.href = `/whale/streaming/artistDetail?artistId=${artistId}`;
+}

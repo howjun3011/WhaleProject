@@ -84,3 +84,5 @@ body {min-height: 100vh;}
 
 .menuTransition-enter-active, .menuTransition-leave-active {transition: opacity 0.5s ease;}
 .menuTransition-enter-from, .menuTransition-leave-to {opacity: 0;}
+
+.playerTrackName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;}

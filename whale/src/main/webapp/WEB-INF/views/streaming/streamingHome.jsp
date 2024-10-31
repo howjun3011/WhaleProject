@@ -84,7 +84,8 @@
                                             </div>
                                             <div class="recommendationInfo">
                                                 <p class="trackName">${track.name}</p>
-                                                <p class="artistName">${track.artists[0].name}</p>
+                                                <p class="artistName"
+                                                   onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -126,8 +127,15 @@
                     </c:when>
                     <c:when test="${page == 'search'}">
                         <div class="resultContainer">
-                            <h3>곡</h3>
+                            <h3 class="resultContainerTitle">곡</h3>
                             <div class="searchResults">
+                                <!-- 왼쪽 버튼 -->
+                                <button class="searchSlideButton left" id="searchScrollLeftBtn"
+                                        onclick="scrollLeftSearchContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                         alt="Like Button" width="30"
+                                         height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
                                 <c:forEach var="track" items="${searchResults}">
                                     <div class="searchResult">
                                         <div class="searchCover" onclick="playAndNavigate('${track.id}');">
@@ -136,10 +144,84 @@
                                         </div>
                                         <div class="searchInfo">
                                             <p class="trackName">${track.name}</p>
-                                            <p class="artistName">${track.artists[0].name}</p>
+                                            <p class="artistName"
+                                               onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
                                         </div>
                                     </div>
                                 </c:forEach>
+                                <!-- 오른쪽 버튼 -->
+                                <button class="searchSlideButton right" id="searchScrollRightBtn"
+                                        onclick="scrollRightSearchContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                         alt="Like Button" width="30"
+                                         height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:when test="${page == 'artistDetail'}">
+                        <div class="artistDetail">
+                            <div class="artistDetailContainer">
+                                <div class="artistDetailInfo">
+                                    <div class="artistDetailWrap">
+                                        <div class="artistDetailImage">
+                                            <c:if test="${not empty artistDetail.images}">
+                                                <!-- 첫 번째 이미지를 불러옵니다 -->
+                                                <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}" width="150"
+                                                     height="150" style="border-radius: 8px;">
+                                            </c:if>
+                                        </div>
+                                        <div class="artistDetailGenre">
+                                            <p>아티스트</p>
+                                            <p id="artistName" class="trackName">${artistDetail.name}</p>
+                                                <%--<p>팔로워 수: ${artistDetail.followers.total}</p>--%>
+                                            <p>장르:
+                                                <c:forEach var="genre" items="${artistDetail.genres}">
+                                                    ${genre}<c:if test="${!fn:endsWith(genre, ' ')}">, </c:if>
+                                                </c:forEach>
+                                            </p>
+                                                <%--<p>인기도: ${artistDetail.popularity}</p>--%>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- 상위 곡 목록 -->
+                                    <div class="topTracks">
+                                        <h3>상위 곡</h3>
+                                        <c:forEach var="track" items="${topTracks}">
+                                            <div class="topTrackItem">
+                                                <!-- 곡 이미지와 이름 -->
+                                                <c:if test="${not empty track.album.images}">
+                                                    <!-- 곡 이미지 클릭 시 재생 후 디테일 페이지로 이동 -->
+                                                    <img src="${track.album.images[0].url}" alt="${track.name}" width="40" height="40"
+                                                         style="border-radius: 4px; cursor: pointer;"
+                                                         onclick="playAndNavigate('${track.id}')">
+                                                </c:if>
+                                                <p>${track.name}</p>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                    <!-- 앨범 목록 -->
+                                    <div class="albums">
+                                        <h3>앨범</h3>
+                                        <c:forEach var="album" items="${albums}">
+                                            <div class="albumItem">
+                                                <c:if test="${not empty album.images}">
+                                                    <img src="${album.images[0].url}" alt="${album.name}" width="50"
+                                                         height="50" style="border-radius: 4px;">
+                                                </c:if>
+                                                <p>${album.name}</p>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                    <!-- 연관된 아티스트 목록 -->
+                                    <div class="relatedArtists">
+                                        <h3>연관된 아티스트</h3>
+                                        <c:forEach var="relatedArtist" items="${relatedArtists}">
+                                            <p>${relatedArtist.name}</p>
+                                        </c:forEach>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </c:when>

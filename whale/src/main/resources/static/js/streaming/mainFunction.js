@@ -263,6 +263,47 @@ document.addEventListener("DOMContentLoaded", () => {
     container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
 });
 
+// 아티스트 디테일 스크롤 이동 함수
+function updateArtistDetailScrollButtons() {
+    const container = document.querySelector('.albumsWrap');
+    const scrollLeftBtn = document.getElementById('artistDetailScrollLeftBtn');
+    const scrollRightBtn = document.getElementById('artistDetailScrollRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollLeftArtistDetailContent() {
+    const container = document.querySelector('.albumsWrap');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateArtistDetailScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRightArtistDetailContent() {
+    const container = document.querySelector('.albumsWrap');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateArtistDetailScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 아티스트 디테일 스크롤 초기화
+document.addEventListener("DOMContentLoaded", () => {
+    updateArtistDetailScrollButtons();
+    const container = document.querySelector('.albumsWrap');
+    container.addEventListener('scroll', updateArtistDetailScrollButtons); // 스크롤 이벤트 감지
+});
+
 // 아티스트 디테일
 function navigateToArtistDetail(artistId) {
     window.location.href = `/whale/streaming/artistDetail?artistId=${artistId}`;

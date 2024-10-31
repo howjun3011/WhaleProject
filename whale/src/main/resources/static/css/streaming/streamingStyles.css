@@ -107,3 +107,13 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 /* 마우스 오버 시 재생 버튼 표시, 순위 숨기기 */
 .topTrackItem:hover .rank {display: none;}
 .topTrackItem:hover .playPauseButton {display: inline-block;}
+
+.albumsContainer{position: relative;}
+.albumsContainerTitle{margin: 40px 0 15px 0;}
+.albumsWrap{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin-left: 10px;}
+.albumItem{width: fit-content;}
+.artistDetailSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.artistDetailSlideButton.left {left: 0; top: 50%;}
+.artistDetailSlideButton.right {right: 0; top: 50%;}
+.artistDetailSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+.albumItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}

@@ -5,8 +5,11 @@
 
 <mapper namespace="com.tech.whale.profile.dao.ProDao">
 	<select id="getUserProfile" resultType="com.tech.whale.profile.dto.ProfileDto">
-	SELECT U.USER_ID, U.USER_NICKNAME, U.USER_IMAGE_URL, S.ACCOUNT_PRIVACY FROM USER_INFO U
+	SELECT U.USER_ID, U.USER_NICKNAME, U.USER_IMAGE_URL, S.ACCOUNT_PRIVACY,
+	T.TRACK_ID, T.TRACK_ARTIST, T.TRACK_NAME, T.TRACK_COVER, T.TRACK_SPOTIFY_ID
+	FROM USER_INFO U
 	JOIN USER_SETTING S ON U.USER_ID = S.USER_ID
+	LEFT JOIN TRACK T ON U.TRACK_ID = T.TRACK_ID
 	WHERE U.USER_ID = #{param1} 
 	</select>
     

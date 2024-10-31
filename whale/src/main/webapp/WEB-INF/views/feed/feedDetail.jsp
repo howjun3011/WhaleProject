@@ -6,15 +6,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
     <title>Feed Detail</title>
     <style>
         /* 기존 feedHome 페이지와 동일한 스타일 사용 */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Nano Sans KR', Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
         }
+        
+      	body, .music-info, .username, .post-text {
+	        font-family: 'Noto Sans KR', Arial, sans-serif !important;
+	    }
 
         .post {
             position: relative;
@@ -332,6 +337,19 @@
 		    margin-left: 10px; /* 버튼 간 간격 조정 */
 		}
 		
+		.music-info .music-title {
+			margin-left: 10px;
+		    font-weight: bold;
+		    font-size: 1em;
+		    color: #333; /* 기본 검정색 */
+		}
+		
+		.music-info .artist-name {
+		    font-weight: normal;
+		    font-size: 0.9em;
+		    color: #777; /* 회색 */
+		}
+		
     </style>
 </head>
 <body>
@@ -364,7 +382,8 @@
                     <div id="music-info" class="music-info">
 		                <img id="album-icon" src="${feedDetail.track_cover}" alt="Album Icon" style="width: 50px; height: 50px;">
 		                <div>
-		                    <span id="music-title">${feedDetail.track_name}</span> - <span id="artist-name">${feedDetail.track_artist}</span>
+		                    <span class="music-title" id="music-title">${feedDetail.track_name}</span> - 
+		                    <span class="artist-name" id="artist-name">${feedDetail.track_artist}</span>
 		                </div>
  				        <label class="play-button" onclick="playMusic(this, '${feedDetail.track_spotify_id}')" style="display: inline-block;">
 				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;" />

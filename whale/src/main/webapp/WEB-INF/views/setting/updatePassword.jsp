@@ -94,14 +94,14 @@
 		});
 
 		function checkCurrentPassword(current_password) {
-			console.log("Current Password: ", current_password); // 입력된 비밀번호 로그 확인
+			console.log("Current Password: ", current_password); // debug
 
 			$.ajax({
 				url: "/whale/checkCurrentPassword", // 서버의 API URL
 				type: "POST",
 				data: { current_password: current_password }, // 사용자가 입력한 비밀번호를 전송
 				success: function(response) {
-					console.log("응답: ", response); // 서버에서 받은 응답 로그
+					console.log("응답: ", response); // 서버에서 받은 응답
 
 					// 응답의 status가 'valid'인 경우
 					if (response.status === "valid") {
@@ -123,6 +123,7 @@
 
 		// 비밀번호 유효성 검사 함수
 		function validatePassword() {
+			let currentPassword = $("#current_password").val();
 			let newPassword = $("#update_password").val();
 			let checkPassword = $("#check_password").val();
 			let passwordRegex = /^.{4,}$/;
@@ -130,6 +131,8 @@
 			// 비밀번호가 4자리 이상인지 검사
 			if(newPassword.length === 0) {
 				$("#password_hint").html("");
+			} else if(currentPassword === newPassword) {
+				$("#password_hint").text("현재 비밀번호와 같은 비밀번호").css("color", "red");
 			} else if (!passwordRegex.test(newPassword)) {
 				$("#password_hint").text("4자리 이상 입력").css("color", "red");
 			} else {
@@ -139,21 +142,26 @@
 			// 두 비밀번호가 일치하는지 검사
 			if(newPassword.length === 0 || checkPassword.length === 0) { // 필드가 비어있으면
 				$("#password_match_hint").html("");
-			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치할 때
+			} else if((currentPassword === newPassword) && (newPassword === checkPassword)) {
+				$("#password_match_hint").text("현재 비밀번호 사용 불가능").css("color", "red");
+			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치
 				// 이미지 동적 추가
 				$("#password_match_hint").html('<img src="static/images/setting/passcheck.png" alt="일치">');
-
 			} else {
 				$("#password_match_hint").text("불일치").css("color", "red");
 			}
 		}
 
 		function updatePassword() {
+			let currentPassword = $("#current_password").val();
 			let newPassword = $("#update_password").val();
 			let checkPassword = $("#check_password").val();
 
 			if (newPassword !== checkPassword) {
 				alert("비밀번호가 일치하지 않습니다.");
+				return;
+			} else if ((currentPassword === newPassword) && (newPassword === checkPassword)) {
+				alert("현재 비밀번호와 같은 비밀번호를 사용할 수 없습니다.");
 				return;
 			}
 

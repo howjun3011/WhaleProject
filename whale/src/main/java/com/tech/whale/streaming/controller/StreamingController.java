@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
 
@@ -19,17 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.tech.whale.streaming.service.LyricsService;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 
 @Controller
 public class StreamingController {
@@ -84,6 +78,16 @@ public class StreamingController {
 		}
 	}
 
+	// pauseTrack POST 요청 처리 메서드 추가
+	@PostMapping("/streaming/pauseTrack")
+	public ResponseEntity<Map<String, Boolean>> pauseTrack(HttpSession session) {
+		boolean isPaused = streamingService.pauseTrack(session);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("success", isPaused);
+		return isPaused ? ResponseEntity.ok(response) : ResponseEntity.status(500).body(response);
+	}
+
+
 	// 음악 상세 페이지로 이동
 	@RequestMapping("/streaming/detail")
 	public String musicDetail(@RequestParam("trackId") String trackId, HttpSession session, Model model) {
@@ -133,9 +137,13 @@ public class StreamingController {
 			Paging<AlbumSimplified> albums = streamingService.getArtistAlbums(session, artistId);
 			model.addAttribute("albums", albums.getItems());
 
-			// 연관된 아티스트
-			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);
-			model.addAttribute("relatedArtists", relatedArtists);
+			// 연관된 아티스트 가져오기
+//			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);  // 메서드가 구현되어 있어야 함
+//			model.addAttribute("relatedArtists", relatedArtists);
+
+			// 관련 플레이리스트 가져오기
+			List<PlaylistSimplified> relatedPlaylists = streamingService.getRelatedPlaylists(artistDetail.getName(), session);
+			model.addAttribute("relatedPlaylists", relatedPlaylists);
 		} else {
 			model.addAttribute("error", "Unable to retrieve artist details");
 		}
@@ -162,6 +170,5 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
-	
-	// -------------------------------------------------------------------------------------------------------------
+
 }

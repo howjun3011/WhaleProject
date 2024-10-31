@@ -74,7 +74,8 @@ public class SettingController {
         userinfoDto = settingDao.getProfile(session_user_id);
 
         model.addAttribute("profile", userinfoDto);
-        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
+//        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
+        System.out.println("대표곡: " + userinfoDto.getTrack_id()); // debug
 
         return "setting/profileEdit";
     }
@@ -209,7 +210,10 @@ public class SettingController {
     @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	System.out.println("updateRepresentive() ctr");
-    	
+
+        String session_user_id = (String) session.getAttribute("user_id");
+        System.out.println(session_user_id);
+
     	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
     	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
     	String trackName = map.get("name").toString();
@@ -218,8 +222,11 @@ public class SettingController {
     	String trackSpotifyId = map.get("id").toString();
     	
     	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+        System.out.println(trackId);
 
-    	System.out.println("DB 업데이트 완료");
+        // user_info 테이블의 representivesong 필드에 trackId 업데이트
+        settingDao.updateRepresentiveSong(session_user_id, trackId);
+        System.out.println("대표곡 업데이트 완료");
 
         // 성공 응답 반환
         return ResponseEntity.ok().build();

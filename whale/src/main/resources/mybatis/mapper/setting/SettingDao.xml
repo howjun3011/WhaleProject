@@ -10,8 +10,12 @@
 	    <result column="COMMENT_NOTIFICATION_ONOFF" property="comment_notification_onoff"/>
 	    <result column="MESSAGE_NOTIFICATION_ONOFF" property="message_notification_onoff"/>
 	</resultMap>
-	<select id="getProfile" resultType="com.tech.whale.setting.dto.UserInfoDto"> 
-		SELECT USER_NICKNAME, USER_EMAIL, USER_IMAGE_URL, USER_PASSWORD FROM USER_INFO WHERE USER_ID = #{session_user_id}
+	<select id="getProfile" resultType="com.tech.whale.setting.dto.UserInfoDto">
+		SELECT UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_IMAGE_URL, UI.USER_PASSWORD, UI.TRACK_ID, T.TRACK_ARTIST, T.TRACK_NAME
+		FROM USER_INFO UI
+	 	LEFT JOIN TRACK T
+	  	ON UI.TRACK_ID = T.TRACK_ID
+		WHERE USER_ID = #{session_user_id}
 	</select>
 	<update id="updateProfile">
 		UPDATE USER_INFO SET USER_NICKNAME = #{nickname}, USER_PASSWORD = #{encodedPassword}, USER_IMAGE_URL = #{newProfileImage}, USER_EMAIL = #{email} WHERE USER_ID = #{session_user_id}
@@ -218,4 +222,7 @@
 		ON F.FEED_ID = FI.FEED_ID
 		WHERE USER_ID = #{session_user_id} AND FEED_OPEN = 1
 	</select>
+	<update id="updateRepresentiveSong">
+		UPDATE USER_INFO SET TRACK_ID = #{trackId} WHERE USER_ID = #{session_user_id}
+	</update>
 </mapper>

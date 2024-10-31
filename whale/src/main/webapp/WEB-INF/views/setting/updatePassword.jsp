@@ -51,19 +51,22 @@
 			margin-top: 20px;
 			justify-content: center;
 		}
-		/* 필드와 이미지를 같은 줄에 정렬 */
 		.input-container{
 			display: flex;
+			flex-direction: column;
+			min-height: 40px;
+			margin: 20px auto 0 auto;
+			width: fit-content;
+		}
+		.input-row{
+			display: flex;
 			align-items: center;
-			margin-top: 20px;
 		}
-		.hint-icon img {
-			width: 17px;
-			height: 17px;
-		}
-		#password_hint, #password_match_hint {
-			margin-left: 5px;
-			font-size: 13px;
+		#password_hint, #password_match_hint{
+			display: flex;
+			margin-top: 3px;
+			font-size: 10px;
+			margin-left: 3px;
 		}
 		input[type="password"] {
 			padding: 5px;
@@ -74,6 +77,15 @@
 		}
 		input[type="password"]:focus {
 			border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
+		}
+		.checkmark-icon {
+			width: 17px; /* 아이콘 크기 조정 */
+			height: 17px;
+			margin-left: 5px;
+		}
+		.checkmark-icon img {
+			width: 100%;
+			height: 100%;
 		}
 	</style>
 	<script>
@@ -95,7 +107,13 @@
 					// 응답의 status가 'valid'인 경우
 					if (response.status === "valid") {
 						alert("비밀번호가 확인되었습니다.");
-						$("#pass-check").text("현재 비밀번호 일치").css("color", "green");
+						// 현재 비밀번호 컨테이너 숨기기
+						$("#current-password-container").hide();
+						// 새로운 비밀번호 입력 필드 보여주기
+						$("#new-password-container").show();
+						$("#confirm-password-container").show();
+						// 비밀번호 입력 이벤트 바인딩
+						$("#update_password, #check_password").on("input", validatePassword);
 					} else {
 						alert("현재 비밀번호가 일치하지 않습니다.");
 						$("#pass-check").text("현재 비밀번호 불일치").css("color", "red");
@@ -115,27 +133,41 @@
 			let checkPassword = $("#check_password").val();
 			let passwordRegex = /^.{4,}$/;
 
-			// 비밀번호가 4자리 이상인지 검사
-			if(newPassword.length === 0) {
-				$("#password_hint").html("");
+			let password_checkmark_1 = $("#password_checkmark_1");
+			let password_checkmark_2 = $("#password_checkmark_2");
+			let passwordHint = $("#password_hint");
+			let password_match_hint = $("#password_match_hint");
+
+			// 새로운 비밀번호 유효성 검사
+			if (newPassword.length === 0) {
+				passwordHint.html("");
+				password_checkmark_1.html("");
 			} else if(currentPassword === newPassword) {
-				$("#password_hint").text("현재 비밀번호와 같은 비밀번호").css("color", "red");
+				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "red");
+				password_checkmark_1.html("");
 			} else if (!passwordRegex.test(newPassword)) {
-				$("#password_hint").text("4자리 이상 입력").css("color", "red");
+				passwordHint.text("4자리 이상 입력").css("color", "red");
+				password_checkmark_1.html("");
 			} else {
-				$("#password_hint").html('<img src="static/images/setting/passcheck.png" alt="일치">');
+				// 비밀번호가 유효한 경우
+				passwordHint.html("");
+				password_checkmark_1.html('<img src="static/images/setting/passcheck.png" alt="일치">');
 			}
 
 			// 두 비밀번호가 일치하는지 검사
 			if(newPassword.length === 0 || checkPassword.length === 0) { // 필드가 비어있으면
-				$("#password_match_hint").html("");
+				password_match_hint.html("");
+				password_checkmark_2.html("");
 			} else if((currentPassword === newPassword) && (newPassword === checkPassword)) {
-				$("#password_match_hint").text("현재 비밀번호 사용 불가능").css("color", "red");
+				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "red");
+				password_checkmark_2.html("");
 			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치
+				password_match_hint.html("");
 				// 이미지 동적 추가
-				$("#password_match_hint").html('<img src="static/images/setting/passcheck.png" alt="일치">');
+				password_checkmark_2.html('<img src="static/images/setting/passcheck.png" alt="일치">');
 			} else {
-				$("#password_match_hint").text("불일치").css("color", "red");
+				password_checkmark_2.html("");
+				password_match_hint.text("불일치").css("color", "red");
 			}
 		}
 
@@ -185,17 +217,29 @@
 			<button type="button" id="completeBtn" class="complete-btn" onclick="updatePassword();">완료</button>
 		</div>
 		<div id="password-fields">
-			<input type="password" id="current_password" name="current_password" placeholder="현재 비밀번호" />
-			<button type="button" onclick="checkCurrentPassword($('#current_password').val());">확인</button>
-			<span id="pass-check" class="pass-check"></span>
-
-			<div class="input-container">
-				<input type="password" id="update_password" name="update_password" placeholder="변경할 비밀번호" />
-				<span id="password_hint" class="hint-icon"></span>
+			<!-- 현재 비밀번호 컨테이너 -->
+			<div id="current-password-container" class="input-container">
+				<div class="input-row">
+					<input type="password" id="current_password" name="current_password" placeholder="현재 비밀번호" />
+					<button type="button" name="current_pass_checkbtn" onclick="checkCurrentPassword($('#current_password').val());">확인</button>
+				</div>
+				<span id="pass-check" class="hint-icon"> </span>
 			</div>
-			<div class="input-container">
-				<input type="password" id="check_password" name="check_password" placeholder="변경할 비밀번호 확인" />
-				<span id="password_match_hint" class="hint-icon"></span>
+			<!-- 새로운 비밀번호 컨테이너 (초기에 숨김 처리) -->
+			<div id="new-password-container" class="input-container" style="display: none;">
+				<div class="input-row">
+					<input type="password" id="update_password" name="update_password" placeholder="변경할 비밀번호" />
+					<span id="password_checkmark_1" class="checkmark-icon"></span>
+				</div>
+				<span id="password_hint" class="hint-icon"> </span>
+			</div>
+			<!-- 비밀번호 확인 컨테이너 (초기에 숨김 처리) -->
+			<div id="confirm-password-container" class="input-container" style="display: none;">
+				<div class="input-row">
+					<input type="password" id="check_password" name="check_password" placeholder="변경할 비밀번호 확인" />
+					<span id="password_checkmark_2" class="checkmark-icon"></span>
+				</div>
+				<span id="password_match_hint" class="hint-icon"> </span>
 			</div>
 		</div>
 	</div>

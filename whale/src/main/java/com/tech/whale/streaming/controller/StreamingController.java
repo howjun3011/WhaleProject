@@ -173,11 +173,8 @@ public class StreamingController {
 		Playlist playlistDetail = streamingService.getPlaylistDetail(session, playlistId);
 
 		if (playlistDetail != null) {
-			System.out.println("1");
 			model.addAttribute("playlistDetail", playlistDetail);
-			System.out.println("2");
 			model.addAttribute("tracks", Arrays.asList(playlistDetail.getTracks().getItems()));
-			System.out.println("3");
 		} else {
 			model.addAttribute("error", "Unable to retrieve playlist details");
 		}

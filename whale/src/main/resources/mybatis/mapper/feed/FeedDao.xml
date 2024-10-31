@@ -69,6 +69,7 @@
 	        F.FEED_ID,
 	        F.USER_ID,
 	        F.FEED_TEXT,
+	        F.FEED_OPEN,
 	        TO_CHAR(F.FEED_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS FEED_DATE,
 	        I.FEED_IMG_ID, -- 이미지 ID 추가
 	        I.FEED_IMG_URL, -- 이미지 경로
@@ -169,6 +170,7 @@
 		<id property="feed_id" column="FEED_ID" />
 		<result property="user_id" column="USER_ID" />
 		<result property="feed_text" column="FEED_TEXT" />
+		<result property="feed_open" column="FEED_OPEN" />
 		<result property="feed_date" column="FEED_DATE" />
 		<result property="feed_url" column="FEED_URL" />
 		<result property="feed_open" column="FEED_OPEN" />

@@ -432,7 +432,8 @@
 				            </c:choose>
 				        </div>
 				    </div>
-				
+					<c:if test="${profile.track_cover != null}">
+					
 					<div class="featured-music">
 					    <img src="${profile.track_cover}" alt="대표곡" class="featured-music-icon">
 					    <div class="featured-marquee-container">
@@ -449,6 +450,7 @@
 					    </button>
 					</div>
 					    <img src="static/images/btn/moving_music2.gif" alt="now-playing" class="now-playing-icon" />
+					</c:if>
 				</div>
             </div>
         </div>

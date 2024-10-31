@@ -642,20 +642,22 @@ public class SettingController {
     		@RequestParam("report_type_id") String report_type_id,
     		@RequestParam("report_why") String report_why) {
     	
+    	String reportText = "";
+    	String reportImg = "";
     	
     	if (report_tag.equals("게시글 신고")) {
     		ReportDto reportDto = reportDao.getReportPost(report_type_id);
-    		String reportText = reportDto.getReport_text();
-    		String reportImg = reportDto.getReport_img_url();
+    		reportText = reportDto.getReport_text();
+    		reportImg = reportDto.getReport_img_url();
 			reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
     	} else if (report_tag.equals("피드 신고")) {
 			ReportDto reportDto = reportDao.getReportFeed(report_type_id);
-    		String reportText = reportDto.getReport_text();
-    		String reportImg = reportDto.getReport_img_url();
+    		reportText = reportDto.getReport_text();
+    		reportImg = reportDto.getReport_img_url();
 			reportDao.reportFeed(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
     	} else if (report_tag.equals("피드 댓글 신고")) {
 			ReportDto reportDto = reportDao.getReportFeedComments(report_type_id);
-    		String reportText = reportDto.getReport_text();
+    		reportText = reportDto.getReport_text();
     		reportDao.reportFeedComments(report_type_id, now_id, report_why, report_tag, reportText);
     	}
     	

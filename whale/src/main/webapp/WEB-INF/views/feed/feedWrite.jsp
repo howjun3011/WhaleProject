@@ -150,8 +150,9 @@
     
     function validateForm(event) {
         var feedImage = document.getElementsByName("feedImage")[0].value.trim();
-        if (feedImage === "") {
-            alert("사진을 올려주세요.");
+        var feedText = document.getElementsByName("feedText")[0].value.trim();
+        if (feedImage === "" || feedText === "") {
+            alert("사진과 글을 모두 작성해주세요.");
             event.preventDefault();  // 폼 제출을 중단
             return false;
         }

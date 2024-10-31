@@ -26,8 +26,9 @@ public class MainController {
 	
     // [ 메인 페이지 이동 ]
     @RequestMapping("/main")
-	public String main() {
-		return "main/main";
+	public String main(HttpSession session) {
+    	if (session.getAttribute("user_id") == null) {return "redirect:/";}
+    	else {return "main/main";}
 	}
     // [ 세션 등록 구간 ]
 	@GetMapping("/check-access-id")

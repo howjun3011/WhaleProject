@@ -117,3 +117,13 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .artistDetailSlideButton.right {right: 0; top: 50%;}
 .artistDetailSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
 .albumItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}
+
+.playListContainer{position: relative;}
+.playListContainerTitle{margin: 40px 0 15px 0;}
+.relatedPlaylists{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin-left: 10px;}
+.playlistItem{width: fit-content;}
+.playListSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.playListSlideButton.left {left: 0; top: 50%;}
+.playListSlideButton.right {right: 0; top: 50%;}
+.playListSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+.playlistItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}

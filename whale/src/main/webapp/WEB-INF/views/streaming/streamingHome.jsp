@@ -257,11 +257,41 @@
                                         </button>
                                     </div>
                                     <!-- 연관된 아티스트 목록 -->
-                                    <div class="relatedArtists">
-                                        <h3>연관된 아티스트</h3>
-                                        <c:forEach var="relatedArtist" items="${relatedArtists}">
-                                            <p>${relatedArtist.name}</p>
-                                        </c:forEach>
+                                        <%--                                    <div class="relatedArtists">--%>
+                                        <%--                                        <h3>연관된 아티스트</h3>--%>
+                                        <%--                                        <c:forEach var="relatedArtist" items="${relatedArtists}">--%>
+                                        <%--                                            <p>${relatedArtist.name}</p>--%>
+                                        <%--                                        </c:forEach>--%>
+                                        <%--                                    </div>--%>
+                                    <!-- 관련된 플레이리스트 목록 -->
+                                    <div class="playListContainer">
+                                        <h3 class="playListContainerTitle">관련된 플레이리스트</h3>
+                                        <!-- 왼쪽 버튼 -->
+                                        <button class="playListSlideButton left" id="playListScrollLeftBtn"
+                                                onclick="scrollLeftPlayListContent()">
+                                            <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                                 alt="Like Button" width="30"
+                                                 height="30" style="border-radius: 8px; opacity: 0.75;">
+                                        </button>
+                                        <div class="relatedPlaylists">
+                                            <c:forEach var="playlist" items="${relatedPlaylists}">
+                                                <div class="playlistItem">
+                                                    <c:if test="${not empty playlist.images}">
+                                                        <img src="${playlist.images[0].url}" alt="${playlist.name}"
+                                                             width="150" height="150" style="border-radius: 4px;"
+                                                             onclick="playPlaylist('${playlist.id}')">
+                                                    </c:if>
+                                                    <p>${playlist.name}</p>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                        <!-- 오른쪽 버튼 -->
+                                        <button class="playListSlideButton right" id="playListScrollRightBtn"
+                                                onclick="scrollRightPlayListContent()">
+                                            <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                                 alt="Like Button" width="30"
+                                                 height="30" style="border-radius: 8px; opacity: 0.75;">
+                                        </button>
                                     </div>
                                 </div>
                             </div>

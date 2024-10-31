@@ -137,9 +137,13 @@ public class StreamingController {
 			Paging<AlbumSimplified> albums = streamingService.getArtistAlbums(session, artistId);
 			model.addAttribute("albums", albums.getItems());
 
-			// 연관된 아티스트
-			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);
-			model.addAttribute("relatedArtists", relatedArtists);
+			// 연관된 아티스트 가져오기
+//			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);  // 메서드가 구현되어 있어야 함
+//			model.addAttribute("relatedArtists", relatedArtists);
+
+			// 관련 플레이리스트 가져오기
+			List<PlaylistSimplified> relatedPlaylists = streamingService.getRelatedPlaylists(artistDetail.getName(), session);
+			model.addAttribute("relatedPlaylists", relatedPlaylists);
 		} else {
 			model.addAttribute("error", "Unable to retrieve artist details");
 		}
@@ -166,6 +170,5 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
-
 
 }

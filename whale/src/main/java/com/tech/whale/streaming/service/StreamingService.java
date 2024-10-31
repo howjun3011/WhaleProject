@@ -20,6 +20,11 @@ import com.tech.whale.streaming.models.TrackDto;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsAlbumsRequest;
+import se.michaelthelin.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
+
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @Service
@@ -209,13 +214,31 @@ public class StreamingService {
     }
 
     // 연관된 아티스트 가져오기
-    public Artist[] getRelatedArtists(HttpSession session, String artistId) {
-        initializeSpotifyApi(session);
+//    public Artist[] getRelatedArtists(HttpSession session, String artistId) {
+//        initializeSpotifyApi(session);
+//        try {
+//            return spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
+//        } catch (IOException | SpotifyWebApiException | ParseException e) {
+//            System.out.println("Failed to fetch related artists: " + e.getMessage());
+//            return null;
+//        }
+//    }
+
+    // 아티스트 관련 플레이리스트 가져오는 메서드
+    public List<PlaylistSimplified> getRelatedPlaylists(String artistName, HttpSession session) {
+        initializeSpotifyApi(session); // session 파라미터 전달
+
         try {
-            return spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
+            SearchPlaylistsRequest searchRequest = spotifyApi.searchPlaylists(artistName)
+                    .limit(10) // 필요한 플레이리스트 수 설정
+                    .build();
+
+            Paging<PlaylistSimplified> playlistPaging = searchRequest.execute();
+            return Arrays.asList(playlistPaging.getItems()); // 플레이리스트 목록 반환
+
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to fetch related artists: " + e.getMessage());
-            return null;
+            System.out.println("Failed to fetch related playlists: " + e.getMessage());
+            return Collections.emptyList();
         }
     }
 

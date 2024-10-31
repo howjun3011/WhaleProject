@@ -309,6 +309,47 @@ function navigateToArtistDetail(artistId) {
     window.location.href = `/whale/streaming/artistDetail?artistId=${artistId}`;
 }
 
+// 플레이리스트 스크롤 이동 함수
+function updatePlayListScrollButtons() {
+    const container = document.querySelector('.relatedPlaylists');
+    const scrollLeftBtn = document.getElementById('playListScrollLeftBtn');
+    const scrollRightBtn = document.getElementById('playListScrollRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollLeftPlayListContent() {
+    const container = document.querySelector('.relatedPlaylists');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updatePlayListScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRightPlayListContent() {
+    const container = document.querySelector('.relatedPlaylists');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updatePlayListScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 플레이리스트 스크롤 초기화
+document.addEventListener("DOMContentLoaded", () => {
+    updatePlayListScrollButtons();
+    const container = document.querySelector('.relatedPlaylists');
+    container.addEventListener('scroll', updatePlayListScrollButtons); // 스크롤 이벤트 감지
+});
+
 // 재생/일시정지 상태를 토글하는 함수
 function togglePlayPause(trackId, button) {
     const isPlaying = button.classList.contains("playing");

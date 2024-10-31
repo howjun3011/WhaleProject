@@ -1,0 +1,109 @@
+.officialAddForm {
+	display:flex;
+	flex-direction: column;
+	flex-grow: 1;
+    background-color: white;
+    margin-left:390px;
+    padding: 20px;
+    height: 100%;
+    min-width: 800px;
+}
+.content {
+	display:flex;
+	flex-direction: column;
+	flex-grow: 1;
+    background-color: white;
+    margin-left:5%;
+    margin-top: 40px;
+    /* padding: 20px; */
+    height: 100%;
+    min-width: 800px;
+}
+
+h2 {
+    color: #000000;
+}
+
+.community-link {
+    color: #000000; /* 검정색으로 고정 */
+    text-decoration: none; /* 밑줄 없애기 */
+}
+
+.community-link:hover {
+    color: #000000; /* 마우스를 올려도 검정색 고정 */
+    text-decoration: none; /* 호버 시에도 밑줄 없애기 */
+}
+
+table {
+    width: 1000px;
+ border-collapse: collapse;
+ background-color: #F8F8F8; /* 테이블 배경을 밝은 회색으로 */
+ border: 1px solid #D0D0D0;
+ margin: 20px;
+ border-radius: 8px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #D0D0D0;
+    color: #000000;
+}
+
+th {
+    background-color: #E0E0E0;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #F0F0F0;
+}
+
+a {
+    color: #000000; /* 링크도 검정색으로 */
+    text-decoration: none;
+    font-weight: 600;
+    
+}
+
+a:hover {
+    text-decoration: underline;
+}
+.btnBlock{
+	display: flex;
+	width:200px;
+}
+.btn {
+    padding: 10px 20px;
+    background-color: #000000; /* 버튼 배경을 검정색으로 */
+    color: #FFFFFF; /* 글자를 흰색으로 */
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #333333; /* 버튼 호버 시 약간 더 밝게 */
+}
+
+.samllDiv{
+	text-align:center;
+	border: none;
+    border-radius: 8px;
+	background-color: #000000;
+	width: 40px;
+	height: 30px;
+	margin-right: 10px;
+}
+
+.samllBtn{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+
+

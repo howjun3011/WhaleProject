@@ -43,7 +43,7 @@ public class AdminBoardListService implements AdminServiceInter{
 	 	
 		String brdTitle = request.getParameter("searchType");
 		
-		if (brdTitle == null) {
+		if (brdTitle == null || brdTitle.trim().isEmpty()) {
 	        user_id = "user_id";
 	        model.addAttribute("user_id", "true");
 	    } else if(brdTitle != null) {
@@ -62,7 +62,7 @@ public class AdminBoardListService implements AdminServiceInter{
 			}
 		}
 		String searchKeyword = request.getParameter("sk");
-		if(searchKeyword == null || searchKeyword.isEmpty()) {
+		if(searchKeyword == null || searchKeyword.trim().isEmpty()) {
 			searchKeyword = "";
 		}
 
@@ -104,7 +104,7 @@ public class AdminBoardListService implements AdminServiceInter{
 		}
 		
 		model.addAttribute("searchKeyword", searchKeyword);
-		model.addAttribute("researchType", brdTitle);
+		model.addAttribute("searchType", brdTitle);
 		model.addAttribute("list", list);
 		model.addAttribute("ultotRowcnt", total);
 		model.addAttribute("ulsearchVO", searchVO);

@@ -3,6 +3,7 @@ package com.tech.whale.admin.dao;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
@@ -51,5 +52,18 @@ public interface AdminIDao {
 	public ArrayList<AdminPFCDto> adminBoardList(
 			int start, int end, String sk, String selNum);
 	public int selectBoardCnt(String sk, String selNum);
+	
+	public void postDelLog(
+			@Param("post_id") int post_id,
+			@Param("user_id") String user_id,
+			@Param("del_reason") String del_reason);
+	public void postCommentsDelLog(
+			@Param("post_id") int post_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
+	public void postDel(int post_id);
+	public void postLikeDel(int post_id);
+	public void CommentsLikeDel(int post_id);
+	public void postCommentsDel(int post_id);
 	
 }

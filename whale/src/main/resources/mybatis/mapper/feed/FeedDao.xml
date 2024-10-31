@@ -56,9 +56,12 @@
 	<select id="getFeedsProfile" resultMap="feedResultMap">
 		SELECT
 			f.FEED_ID, f.USER_ID, f.FEED_TEXT, f.FEED_DATE, f.FEED_URL, f.FEED_OPEN,
-			fi.FEED_IMG_NAME
+			fi.FEED_IMG_NAME, t.TRACK_ID,
+	        t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER, t.TRACK_SPOTIFY_ID
 		FROM feed f
-				 LEFT JOIN feed_img fi ON f.FEED_ID = fi.FEED_ID
+		LEFT JOIN feed_img fi ON f.FEED_ID = fi.FEED_ID
+		LEFT JOIN feed_music fm ON f.FEED_ID = fm.FEED_ID
+		LEFT JOIN track t ON fm.TRACK_ID = t.TRACK_ID
 		WHERE f.USER_ID = #{userId}
 		AND f.FEED_OPEN = 0
 		ORDER BY f.FEED_DATE DESC
@@ -120,6 +123,12 @@
 	<update id="hideFeed">
 		UPDATE FEED
 		SET FEED_OPEN = 1
+		WHERE FEED_ID = #{param1}
+	</update>
+	
+	<update id="openFeed">
+		UPDATE FEED
+		SET FEED_OPEN = 0
 		WHERE FEED_ID = #{param1}
 	</update>
 

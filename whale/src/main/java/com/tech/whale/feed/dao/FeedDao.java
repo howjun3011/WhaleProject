@@ -47,4 +47,6 @@ public interface FeedDao {
 
 	int getNextFeedMusicId();
 
+	void openFeed(String feed_id);
+
 }

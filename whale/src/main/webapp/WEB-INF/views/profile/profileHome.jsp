@@ -17,6 +17,35 @@
         color: #333;
     }
 
+	.tab-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+        border-bottom: 1px solid #dbdbdb;
+    }
+
+    .tab {
+        padding: 10px 0;
+        cursor: pointer;
+        font-weight: bold;
+        color: #777;
+    }
+
+    .tab.active {
+        color: #333;
+        border-bottom: 2px solid #333;
+    }
+
+    /* 탭 콘텐츠 영역 */
+    .tab-content {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
     .container {
         width: 100%;
         max-width: 650px;
@@ -131,18 +160,6 @@
         background-color: #f1f1f1;
     }
 
-    /* Bio */
-    .bio {
-        padding: 10px 0;
-        font-size: 14px;
-        line-height: 1.4;
-    }
-
-    .bio .website {
-        color: #3897f0;
-        text-decoration: none;
-    }
-
     /* Stats links */
     .stats a {
         color: inherit;
@@ -180,6 +197,67 @@
         color: #aaa;
         margin-top: 20px;
     }
+    
+    
+	.music-item {
+	    position: relative;
+	    display: inline-block;
+	    overflow: hidden;
+	    width: 100%;
+	}
+	
+	.music-item img {
+	    width: 100%;
+	    height: auto;
+	    transition: filter 0.3s ease;
+	}
+	
+	.music-item:hover img {
+	    filter: brightness(0.7); /* 이미지 어둡게 */
+	}
+	
+	.overlay {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    background-color: rgba(0, 0, 0, 0.6); /* 반투명 검정 배경 */
+	    opacity: 0;
+	    transition: opacity 0.3s ease;
+	    color: white;
+	    flex-direction: column;
+	    gap: 8px;
+	    pointer-events: none; /* 기본적으로 클릭 방지 */
+	}
+	
+	.music-item:hover .overlay {
+	    opacity: 1;
+	    pointer-events: auto; /* 호버 시 클릭 허용 */
+	}
+	
+	.music-item .overlay .play-button {
+	    width: 20px;
+	    height: 20px;
+	    margin-bottom: 10px;
+	    cursor: pointer;
+	}
+	
+	.music-info {
+	    text-align: center;
+	}
+	
+	.music-title {
+	    font-size: 16px;
+	    font-weight: bold;
+	}
+	
+	.music-artist {
+	    font-size: 14px;
+	}
 </style>
 </head>
 <body>
@@ -266,34 +344,90 @@
         </c:if>
     </div>
 
-    <%-- Bio 정보 --%>
-    <div class="bio">
-        <p>${bio}</p>
-        <a href="${website_url}" class="website">${website_url}</a>
+    <%-- 피드 표시 영역 --%>
+    <div class="tab-container">
+        <div class="tab active" onclick="showTabContent('feed')"><img src="static/images/btn/write_btn.png" alt="피드" style="width: 40px; height: 40px;" /></div>
+        <div class="tab" onclick="showTabContent('music')"><img src="static/images/btn/promusic_btn.png" alt="음악" style=" margin-top:9px; width: 24px; height: 24px;" /></div>
     </div>
 
-    <%-- 피드 표시 영역 --%>
-    <c:choose>
-        <%-- 비공개 계정이며 본인이 아닌 경우 접근 제한 --%>
-        <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
-            <div>비공개 계정입니다.</div>
-        </c:when>
-        <%-- 피드가 없는 경우 --%>
-        <c:when test="${empty feedList}">
-            <div class="no-feed-message">작성한 피드가 없습니다</div>
-        </c:when>
-        <%-- 피드 목록 표시 --%>
-        <c:otherwise>
-            <div class="feed-grid">
-                <c:forEach items="${feedList}" var="feed">
-                    <a href="feedDetail?f=${feed.feed_id}">
-                        <img src="static/images/feed/${feed.feed_img_name}" onerror="this.style.display='none'">
-                    </a>
-                </c:forEach>
-            </div>
-        </c:otherwise>
-    </c:choose>
+    <!-- 피드 탭 콘텐츠 -->
+    <div id="feed" class="tab-content active">
+        <%-- 기존 피드 표시 코드 --%>
+        <c:choose>
+            <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
+                <div>비공개 계정입니다.</div>
+            </c:when>
+            <c:when test="${empty feedList}">
+                <div class="no-feed-message">작성한 피드가 없습니다</div>
+            </c:when>
+            <c:otherwise>
+                <div class="feed-grid">
+                    <c:forEach items="${feedList}" var="feed">
+                        <a href="feedDetail?f=${feed.feed_id}">
+                            <img src="static/images/feed/${feed.feed_img_name}" onerror="this.style.display='none'">
+                        </a>
+                    </c:forEach>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
+    <!-- 음악 탭 콘텐츠 -->
+    <div id="music" class="tab-content">
+        <!-- 추후 추가할 음악 이미지나 콘텐츠를 여기에 표시 -->
+         <c:choose>
+            <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
+                <div>비공개 계정입니다.</div>
+            </c:when>
+            <c:when test="${empty feedList}">
+                <div class="no-feed-message">작성한 피드가 없습니다</div>
+            </c:when>
+            <c:otherwise>
+                <div class="feed-grid">
+                    <c:forEach items="${feedList}" var="feed">
+                    	<c:if test="${feed.track_id != null}">
+							<div class="music-item">
+							    <img src="${feed.track_cover}" onerror="this.style.display='none'">
+							    <div class="overlay">
+							        <img src="static/images/btn/play_btn.png" alt="Play Button" class="play-button" onclick="playMusic(this, '${feed.track_spotify_id}')" />
+							        <div class="music-info">
+							            <div class="music-title">${feed.track_name}</div>
+							            <div class="music-artist">${feed.track_artist}</div>
+							        </div>
+							    </div>
+							</div>
+	                    </c:if>
+                    </c:forEach>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
 </div>
+
+<script>
+
+	function playMusic(element, spotifyId) {
+	    fetch(`/whale/feedPlayMusic?id=\${spotifyId}`)
+	        .then(response => {
+	        })
+	        .catch(error => {
+	            console.error('에러 발생:', error);
+	            alert('음악 재생 중 오류가 발생했습니다.');
+	        });
+	}
+	
+
+    // 탭 콘텐츠 전환 함수
+    function showTabContent(tabId) {
+        // 모든 탭 및 콘텐츠에서 active 클래스 제거
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        // 클릭한 탭 및 해당 콘텐츠에 active 클래스 추가
+        document.querySelector('.tab-container .tab[onclick="showTabContent(\'' + tabId + '\')"]').classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
 
 </body>
 </html>

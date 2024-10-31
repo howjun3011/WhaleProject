@@ -125,6 +125,14 @@ public class FeedController {
 		return "redirect:/feedHome";
 	}
 	
+	@RequestMapping("/feedOpen")
+	public String feedOpen(@RequestParam("f") String feed_id, HttpServletRequest request, HttpSession session, Model model) {
+		
+		feedDao.openFeed(feed_id);
+		
+		return "redirect:/feedHome";
+	}
+	
 	@RequestMapping("/feedWriteDo")
 	public String feedWriteDo(HttpServletRequest request, HttpSession session, Model model,
 			@RequestParam(value = "selectedTrackId", required = false) Integer track_id, 

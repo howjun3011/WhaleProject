@@ -84,7 +84,7 @@
                                             </div>
                                             <div class="recommendationInfo">
                                                 <p class="trackName">${track.name}</p>
-                                                <p class="artistName">${track.artists[0].name}</p>
+                                                <p class="artistName" onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="searchInfo">
                                             <p class="trackName">${track.name}</p>
-                                            <p class="artistName">${track.artists[0].name}</p>
+                                            <p class="artistName" onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -152,6 +152,28 @@
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
                                 </button>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:when test="${page == 'artistDetail'}">
+                        <div class="artistDetail">
+                            <div class="artistDetailContainer">
+                                <c:if test="${not empty artistDetail.images}">
+                                    <!-- 첫 번째 이미지를 불러옵니다 -->
+                                    <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}" width="150"
+                                         height="150" style="border-radius: 8px;">
+                                </c:if>
+                                <div class="artistDetailInfo">
+                                    <p>아티스트</p>
+                                    <p id="artistName" class="trackName">${artistDetail.name}</p>
+                                    <p>팔로워 수: ${artistDetail.followers.total}</p>
+                                    <p>장르:
+                                        <c:forEach var="genre" items="${artistDetail.genres}">
+                                            ${genre}<c:if test="${!fn:endsWith(genre, ' ')}">, </c:if>
+                                        </c:forEach>
+                                    </p>
+                                    <p>인기도: ${artistDetail.popularity}</p>
+                                </div>
                             </div>
                         </div>
                     </c:when>

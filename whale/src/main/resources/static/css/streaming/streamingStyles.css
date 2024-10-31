@@ -93,3 +93,6 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 
 .searchCover:hover {opacity: 0.6; cursor: grab;}
 .searchCover:active {opacity: 0.4; cursor: grab;}
+
+.trackName:hover, .artistName:hover {opacity: 0.6; cursor: grab;}
+.trackName:active, .artistName:active {opacity: 0.4; cursor: grab;}

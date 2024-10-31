@@ -114,7 +114,24 @@ public class StreamingController {
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "detail");
 		System.out.println("page :" + model.getAttribute("page"));
-		return "streaming/streamingHome"; // 같은 JSP 파일을 사용하지만 page 값이 "detail"로 설정됨
+		return "streaming/streamingHome";
+	}
+
+	@RequestMapping("/streaming/artistDetail")
+	public String artistDetail(@RequestParam("artistId") String artistId, HttpSession session, Model model) {
+		// 아티스트 상세 정보 가져오기
+		Artist artistDetail = streamingService.getArtistDetail(session, artistId);
+
+		if (artistDetail != null) {
+			model.addAttribute("artistDetail", artistDetail);
+		} else {
+			model.addAttribute("error", "Unable to retrieve artist details");
+		}
+
+		// 디테일 페이지로 설정
+		model.addAttribute("page", "artistDetail");
+		System.out.println("page :" + model.getAttribute("page"));
+		return "streaming/streamingHome";
 	}
 
 	// 검색 결과를 받아오는 메서드 추가

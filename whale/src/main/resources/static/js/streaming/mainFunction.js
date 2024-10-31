@@ -156,6 +156,7 @@ function navigateToDetail(trackId) {
     window.location.href = `/whale/streaming/detail?trackId=${trackId}`;
 }
 
+// 곡명 길이에 따른 폰트 크기 조절
 document.addEventListener("DOMContentLoaded", function() {
     const trackNameElement = document.getElementById("trackName");
     const textLength = trackNameElement.innerText.length;
@@ -239,3 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
 });
 
+// 아티스트 디테일
+function navigateToArtistDetail(artistId) {
+    window.location.href = `/whale/streaming/artistDetail?artistId=${artistId}`;
+}

@@ -241,15 +241,16 @@ const MainFooterComponent = {
 			this.player.getCurrentState().then(
 				async (state) => {
 					if (state.track_window.next_tracks[0] === undefined) {
-						try {const data = await this.fetchWebApi(`v1/recommendations?limit=1&seed_tracks=${state.track_window.current_track.id}`,'GET'); await this.fetchWebApi(`v1/me/player/play?device_id=${sessionStorage.device_id}`,'PUT',{ "uris": [`${data.tracks[0].uri}`] });} catch(error) {}
+						try {const data = await this.fetchWebApi(`v1/recommendations?limit=1&seed_tracks=${state.track_window.current_track.id}`,'GET'); await this.fetchWebApi(`v1/me/player/play?device_id=${sessionStorage.device_id}`,'PUT',{ "uris": [`${data.tracks[0].uri}`] }); this.insertTrackCnt();} catch(error) {}
 					} else {
 						this.player.nextTrack();
+						this.insertTrackCnt();
 						console.log("next");
 					}
 				}
 			);
 		},
-		prevPlay() {this.player.previousTrack();},
+		prevPlay() {this.player.previousTrack(); this.insertTrackCnt();},
 		async repeatPlayFunction(state) {try {await this.fetchWebApi(`v1/me/player/repeat?state=${state}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}},
 		async repeatPlay() {
 			if (this.repeatBtnSrcIndex === 1 && this.isRepeated) {await this.repeatPlayFunction('off');}

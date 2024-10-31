@@ -7,6 +7,7 @@ const path = require('path');
 const contentsController = require('../../controllers/spotify/contentsController');
 const libraryController = require('../../controllers/spotify/libraryController');
 const playlistController = require('../../controllers/spotify/playlistController');
+const playerController = require('../../controllers/spotify/playerController');
 
 
 // [ 2. 라우터 사용 ]
@@ -42,6 +43,10 @@ router.get('/getLibraries', async (req, res) => {
 router.get('/getPlaylist', async (req, res) => {
     const results = await playlistController.playlistController(req, res);
     res.json(results);
+});
+
+router.get('/play', async (req, res) => {
+    await playerController.playerController(req, res);
 });
 
 

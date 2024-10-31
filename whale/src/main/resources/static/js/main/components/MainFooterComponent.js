@@ -8,6 +8,11 @@ const MainFooterComponent = {
 	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','?type=album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','?type=artist')">{{ trackInfo[2] }}</p></div>
 	        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
 	        	</div>
+	        	<div class="playerComponent flexCenter">
+	        		<div class="player-bar">
+			            <input type="range" id="seek-bar" min="0" max="100" value="0">
+			        </div>
+	        	</div>
 	            <div class="playerComponent flexCenter">
 	            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
 	                <button class="playerBtn flexCenter" @click="prevPlay()"><img src="static/images/streaming/player/prev.png" alt="Music Whale Previous Button" height="42px"></button>
@@ -15,9 +20,13 @@ const MainFooterComponent = {
 	                <button class="playerBtn flexCenter" @click="nextPlay()"><img src="static/images/streaming/player/next.png" alt="Music Whale Next Button" height="42px"></button>
 	                <button class="playerBtn flexCenter" @click="repeatPlay()" style="position: relative;"><img class="playerImg" :src="repeatBtnSrc[repeatBtnSrcIndex]" alt="Music Whale Repeat Button" height="32px" :style="{backgroundColor: isRepeated ? '#F5F5F5' : '#FCFCFC'}"></button>
 	            </div>
+	            <div class="playerComponent"></div>
 	            <div class="playerComponent" id="playerRight">
 	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
 	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
+	            	<div class="volume-bar">
+			            <input type="range" id="volume-slider" min="0" max="100" value="50">
+			        </div>
 	            </div>
 	        </div>
 	    </div>

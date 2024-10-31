@@ -484,7 +484,8 @@
 	<div id="otherModal" class="modal">
 	    <div class="modal-content">
 	        <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
-	        <div id="hidePostItem" class="modal-item" style="display: none;">게시글 숨기기</div>
+	        <div id="hidePostItem" class="modal-item" style="display: none;">게시글 비공개</div>
+	        <div id="openPostItem" class="modal-item" style="display: none;">게시글 공개</div>
 	        <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
 	        <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
 	    </div>
@@ -528,12 +529,17 @@
 	        // 모든 모달 아이템을 초기화
 	        document.getElementById("deleteItem").style.display = "none";
 	        document.getElementById("hidePostItem").style.display = "none";
+	        document.getElementById("openPostItem").style.display = "none";
 	        document.getElementById("reportItem").style.display = "none";
 	
 	        if (itemType === 'post') {
 	            if (isOwner) {
 	                document.getElementById("deleteItem").style.display = "block";
-	                document.getElementById("hidePostItem").style.display = "block";
+	                if (selectedOpenId == 1) {
+	                	document.getElementById("openPostItem").style.display = "block";
+	                } else {	                	
+	                	document.getElementById("hidePostItem").style.display = "block";
+	                }
 	            } else {
 	                document.getElementById("reportItem").style.display = "block";
 	            }
@@ -568,6 +574,12 @@
 	    document.getElementById("hidePostItem").addEventListener("click", function() {
 	        alert("게시글을 숨깁니다.");
 	        window.location.href = `feedHide?f=\${selectedItemId}`;
+	        closeOtherModal();
+	    });
+	    
+	    document.getElementById("openPostItem").addEventListener("click", function() {
+	        alert("게시글을 공개합니다.");
+	        window.location.href = `feedOpen?f=\${selectedItemId}`;
 	        closeOtherModal();
 	    });
 	

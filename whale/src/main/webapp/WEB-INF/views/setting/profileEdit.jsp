@@ -176,7 +176,7 @@ window.onload = function() {
 					<tr>
 						<td>대표곡 설정</td>
 						<c:choose>
-							<c:when test="${profile.track_id.equals('DEFAULT')}">
+							<c:when test="${profile.user_track_id == 'DEFAULT'}">
 								<td><a href="representiveSong">대표곡 설정</a></td>
 							</c:when>
 							<c:otherwise>

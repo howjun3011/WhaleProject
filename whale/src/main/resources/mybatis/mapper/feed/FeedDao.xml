@@ -34,7 +34,7 @@
 	    FROM (
 	        SELECT f.FEED_ID, f.USER_ID, f.FEED_TEXT, f.FEED_DATE, f.FEED_URL, f.FEED_OPEN,
 	               u.USER_NICKNAME, u.USER_IMAGE_URL, fi.FEED_IMG_NAME, t.TRACK_ID,
-	               t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER, t.TRACK_SPOTIFY_ID,
+	               t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER,
 	               (SELECT COUNT(*) FROM feed_like fl WHERE fl.FEED_ID = f.FEED_ID) AS likeCount,
 	               (SELECT COUNT(*) FROM feed_comments fc WHERE fc.FEED_ID = f.FEED_ID) AS commentsCount,
 	               ROW_NUMBER() OVER (ORDER BY f.FEED_DATE DESC) AS rn
@@ -57,7 +57,7 @@
 		SELECT
 			f.FEED_ID, f.USER_ID, f.FEED_TEXT, f.FEED_DATE, f.FEED_URL, f.FEED_OPEN,
 			fi.FEED_IMG_NAME, t.TRACK_ID,
-	        t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER, t.TRACK_SPOTIFY_ID
+	        t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER
 		FROM feed f
 		LEFT JOIN feed_img fi ON f.FEED_ID = fi.FEED_ID
 		LEFT JOIN feed_music fm ON f.FEED_ID = fm.FEED_ID
@@ -85,7 +85,6 @@
 	        T.TRACK_NAME,
 	        T.TRACK_ALBUM,
 	        T.TRACK_COVER,
-	        T.TRACK_SPOTIFY_ID,
 	        -- 좋아요 수 추가
 	        (SELECT COUNT(*) FROM feed_like fl WHERE fl.FEED_ID = F.FEED_ID) AS likeCount,
 	        -- 댓글 수 추가
@@ -188,7 +187,6 @@
 	    <result property="track_name" column="TRACK_NAME" />
 	    <result property="track_album" column="TRACK_ALBUM" />
 	    <result property="track_cover" column="TRACK_COVER" />
-	    <result property="track_spotify_id" column="TRACK_SPOTIFY_ID" />
 		<!-- 유저 정보 -->
 		<result property="user_nickname" column="USER_NICKNAME" />
 		<result property="user_image_url" column="USER_IMAGE_URL" />

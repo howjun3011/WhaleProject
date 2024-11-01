@@ -77,7 +77,7 @@ public class SettingController {
 
         model.addAttribute("profile", userinfoDto);
         System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
-        System.out.println("대표곡: " + userinfoDto.getTrack_id()); // debug
+        System.out.println("대표곡: " + userinfoDto.getUser_track_id()); // debug
 
         return "setting/profileEdit";
     }

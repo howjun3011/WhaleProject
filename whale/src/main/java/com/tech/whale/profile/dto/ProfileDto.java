@@ -17,7 +17,7 @@ public class ProfileDto {
 	private int account_privacy;
 	private int profile_id;
 	private int follow_id;
-	private int track_id;
+	private String track_id;
 	private String track_artist;
 	private String track_name;
 	private String track_cover;

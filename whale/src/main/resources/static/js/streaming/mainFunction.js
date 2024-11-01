@@ -41,8 +41,12 @@ function resize() {
 window.addEventListener("message", receiveMessage, false);
 
 async function receiveMessage(event) {
-    if (event.data === 'Full') {
-        console.log(event.data);
+    if (event.data.type === 'albumDetail') {
+        window.location.href = '/whale/streaming/albumDetail?albumId='+event.data.albumId;
+    } else if (event.data.type === 'trackDetail') {
+        window.location.href = '/whale/streaming/detail?trackId='+event.data.trackId;
+    } else if (event.data.type === 'artistDetail') {
+        window.location.href = '/whale/streaming/artistDetail?artistId='+event.data.artistId;
     } else {
         await sendDeviceId(event);
     }

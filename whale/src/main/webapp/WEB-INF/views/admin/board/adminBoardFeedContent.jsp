@@ -11,7 +11,7 @@
         <span class="username">${feedDetail.user_id}</span>
     </div>
 
-    <button class="other-btn">
+    <button class="other-btn" onclick="feedDelete('${feedDetail.feed_id}','${page}','${searchType }','${sk }')">
         삭제
     </button>
 
@@ -33,11 +33,12 @@
         <div class="comments">
             <img class="commentbtn" src="/whale/static/images/btn/comment_btn.png" alt="comments" />
             <span class="comment-count">${feedDetail.commentsCount}</span>
-           </div>
-       </div>
-   </div>
+        </div>
+    </div>
+</div>
 
 <div class="comments-section">
+	<c:if test="${not empty feedDetail.feedComments}">
     <c:forEach var="comment" items="${feedDetail.feedComments}">
      <div class="comment" data-feed-id="${comment.feed_id}" data-comment-id="${comment.feed_comments_id}" data-user-id="${comment.user_id}">
          <!-- 댓글 헤더 -->
@@ -52,7 +53,7 @@
                  <span class="comment-date">${comment.feed_comments_date}</span>
              </div>
              <!-- other_btn -->
-             <button class="comment-other-btn">
+             <button class="comment-other-btn" onclick="feedCommentsDelete('${comment.feed_comments_id}','${feedDetail.feed_id}','${page}','${searchType }','${sk }')">
                  삭제
              </button>
          </div>
@@ -86,7 +87,7 @@
                                  <span class="comment-date">${reply.feed_comments_date}</span>
                              </div>
                              <!-- other_btn -->
-                             <button class="comment-other-btn">
+                             <button class="comment-other-btn" onclick="feedCommentsDelete('${reply.feed_comments_id}','${feedDetail.feed_id}','${page}','${searchType }','${sk }')">
                                  삭제
                              </button>
                          </div>
@@ -106,16 +107,12 @@
          
      </div>
  </c:forEach>
+ </c:if>
+ <c:if test="${empty feedDetail.feedComments}">
+ 	댓글이 없습니다.
+ </c:if>
 </div>
 
-<div id="otherModal" class="modal">
-    <div class="modal-content">
-        <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
-     <div id="hidePostItem" class="modal-item" style="display: none;">게시글 숨기기</div>
-     <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
-     <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
-    </div>
-</div>
 <br />
 <br />
 <br />
@@ -123,47 +120,26 @@
 
 <script type="text/javascript">
 
- let selectedItemId = null;
- let selectedItemFeedId = null;
- let selectedItemType = null; // 'post', 'comment', 'reply'
- let isOwner = false;
+function feedDelete(feedId,page,searchType,sk) {
+    const deleteConfirm = confirm("피드를 삭제하시겠습니까?");
+    if (deleteConfirm) {
+    	window.location.href = 
+    		"adminBoardFeedContentDelete?feedId="+feedId
+    				+"&sk="+sk
+    				+"&page="+page
+    				+"&searchType="+searchType
+    }
+}
+function feedCommentsDelete(commentId,feedId,page,searchType,sk) {
+    const deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
+    if (deleteConfirm) {
+    	window.location.href = 
+    		"adminBoardFeedCommentsContentDelete?commentId="+commentId
+    				+"&feedId="+feedId
+    				+"&sk="+sk
+    				+"&page="+page
+    				+"&searchType="+searchType
+    }
+}
 
- /* function openOtherModal(itemId, itemFeedId, itemOwnerId, currentUserId, itemType) {
-     selectedItemId = itemId;
-     selectedItemFeedId = itemFeedId;
-     selectedItemType = itemType;
-     isOwner = (itemOwnerId === currentUserId);
-
-     // 모든 모달 아이템을 초기화
-     document.getElementById("deleteItem").style.display = "none";
-     document.getElementById("hidePostItem").style.display = "none";
-     document.getElementById("reportItem").style.display = "none";
-
-     if (itemType === 'post') {
-         if (isOwner) {
-             document.getElementById("deleteItem").style.display = "block";
-             document.getElementById("hidePostItem").style.display = "block";
-         } else {
-             document.getElementById("reportItem").style.display = "block";
-         }
-     } else if (itemType === 'comment' || itemType === 'reply') {
-         if (isOwner) {
-             document.getElementById("deleteItem").style.display = "block";
-         } else {
-             document.getElementById("reportItem").style.display = "block";
-         }
-     }
-
-     document.getElementById("otherModal").style.display = "flex";
- } */
-
-    
-    /* function toggleReplyForm(commentId) {
-        const replyForm = document.getElementById(`reply-form-\${commentId}`);
-        if (replyForm.style.display === 'none' || replyForm.style.display === '') {
-            replyForm.style.display = 'block';
-        } else {
-            replyForm.style.display = 'none';
-        }
-    } */
 </script>

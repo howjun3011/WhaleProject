@@ -4,11 +4,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
     function postDelete(postId,page,searchType) {
-        const deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
+        const deleteConfirm = confirm(postId+"번 게시글을 삭제하시겠습니까?");
         const sk = document.getElementsByName("sk")[0].value;
         if (deleteConfirm) {
         	window.location.href = 
         		"adminBoardPostContentDelete?postId="+postId
+        				+"&sk="+sk
+        				+"&page="+page
+        				+"&searchType="+searchType;
+        }
+    }
+    
+    function feedDelete(feedId,page,searchType) {
+        const deleteConfirm = confirm(feedId+"번 피드를 삭제하시겠습니까?");
+        const sk = document.getElementsByName("sk")[0].value;
+        if (deleteConfirm) {
+        	window.location.href = 
+        		"adminBoardFeedContentDelete?feedId="+feedId
         				+"&sk="+sk
         				+"&page="+page
         				+"&searchType="+searchType;
@@ -64,7 +76,7 @@
 						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "location.href = '?'" >삭제</button>
+						<button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
 					</td>
 					</c:if>
 					

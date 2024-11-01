@@ -63,7 +63,35 @@ public interface AdminIDao {
 			@Param("comments_del_reason") String comments_del_reason);
 	public void postDel(int post_id);
 	public void postLikeDel(int post_id);
-	public void CommentsLikeDel(int post_id);
+	public void postCommentsLikeDel(int post_id);
 	public void postCommentsDel(int post_id);
+	
+	public void feedDelLog(
+			@Param("feed_id") int feed_id,
+			@Param("user_id") String user_id,
+			@Param("del_reason") String del_reason);
+	public void feedCommentsDelLog(
+			@Param("feed_id") int feed_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
+	public void feedDel(int feed_id);
+	public void feedLikeDel(int feed_id);
+	public void feedCommentsLikeDel(int feed_id);
+	public void feedCommentsDel(int feed_id);
+	public void feedCommentsOneDelLog(
+			@Param("feed_comments_id") int feed_comments_id,
+			@Param("feed_id") int feed_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
+	public void feedCommentsLikeOneDel(int feed_comments_id);
+	public void feedCommentsOneDel(int feed_comments_id);
+	public void postCommentsOneDelLog(
+			@Param("post_comments_id") int post_comments_id,
+			@Param("post_id") int post_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
+	public void postCommentsLikeOneDel(int post_comments_id);
+	public void postCommentsOneDel(int post_comments_id);
+	
 	
 }

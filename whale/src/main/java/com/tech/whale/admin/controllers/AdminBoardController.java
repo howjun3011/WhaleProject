@@ -10,10 +10,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.admin.board.service.AdminBoardPostContentService;
+import com.tech.whale.admin.board.service.AdminBoardFeedDelete;
 import com.tech.whale.admin.board.service.AdminBoardListService;
 import com.tech.whale.admin.board.service.AdminBoardPostDelete;
 import com.tech.whale.admin.dao.AdminIDao;
@@ -43,6 +45,8 @@ public class AdminBoardController {
 	@Autowired
 	private AdminBoardPostDelete adminBoardPostDelete;
 	@Autowired
+	private AdminBoardFeedDelete adminBoardFeedDelete;
+	@Autowired
 	private FeedCommentService feedCommentsService;
 	
 	@Autowired
@@ -51,6 +55,12 @@ public class AdminBoardController {
 	private ComDao comDao;
 	@Autowired
 	private FeedDao feedDao;
+	
+	@ModelAttribute("myId")
+    public String addUserIdToModel(HttpSession session) {
+        // 세션에서 user_id 가져오기 (세션에 저장된 user_id가 있다고 가정)
+        return (String) session.getAttribute("user_id");
+    }
 	
 	public void boardSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
@@ -172,6 +182,61 @@ public class AdminBoardController {
 		model.addAttribute("sk", sk);
 		
 		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminBoardFeedContentDelete")
+	public String adminBoardFeedContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardFeedDelete.execute(model);
+		
+		return "redirect:adminBoardListView?page="+page+"&sk="+sk+"&searchType="+searchType;
+	}
+	
+	@RequestMapping("/adminBoardFeedCommentsContentDelete")
+	public String adminBoardFeedCommentsContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("f") String f,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardFeedDelete.commentsDelete(model);
+		
+		///////  자식 댓글있으면 전부 삭제?
+		
+		return "redirect:adminBoardFeedContentView?page="+page+"&sk="+sk+"&searchType="+searchType+"&f="+f;
+	}
+	
+	@RequestMapping("/adminBoardPostCommentsContentDelete")
+	public String adminBoardPostCommentsContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("postId") String postId,
+			@RequestParam("communityName") String communityName,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardPostDelete.commentsDelete(model);
+		
+		///////  자식 댓글있으면 전부 삭제?
+		
+		return "redirect:adminBoardPostContentView?page="+page+"&sk="+sk+"&searchType="+searchType+"&postId="+postId+"&communityName="+communityName;
 	}
 	
 }

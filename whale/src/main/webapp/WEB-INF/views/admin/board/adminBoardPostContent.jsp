@@ -14,6 +14,18 @@
         				+"&searchType="+searchType
         }
     }
+    function postCommentsDelete(communityName,commentId,postId,page,searchType,sk) {
+        const deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
+        if (deleteConfirm) {
+        	window.location.href = encodeURI(
+        		"adminBoardPostCommentsContentDelete?commentId="+commentId
+        				+"&communityName="+encodeURIComponent(communityName)
+        				+"&postId="+postId
+        				+"&sk="+sk
+        				+"&page="+page
+        				+"&searchType="+searchType)
+        }
+    }
 </script>
 <div class="content">
     <h2>" ${communityName} "</h2>
@@ -80,6 +92,7 @@
         </tr>
     </thead>
     <tbody>
+    	<c:if test="${not empty postDetail.comments}">
         <c:forEach var="comment" items="${postDetail.comments}">
             <tr>
                 <td>${comment.user_id}</td> <!-- 작성자 열 -->
@@ -90,11 +103,17 @@
                         <input type="hidden" name="postCommentsId" value="{comment.post_comments_id}" />
                         <input type="hidden" name="postId" value="{postDetail.post_id}" />
                         <input type="hidden" name="communityId" value="{param.c}" />
-	                    <button type="submit">삭제</button>
+	                    <button type="button" onclick="postCommentsDelete('${communityName}','${comment.post_comments_id}','${postDetail.post_id}','${page}','${searchType }','${sk }')">삭제</button>
                     </form>
                 </td> <!-- 관리(삭제) 열 -->
             </tr>
         </c:forEach>
+        </c:if>
+        <c:if test="${empty postDetail.comments}">
+        	<tr>
+        		<td colspan="4">댓글이 없습니다.</td>
+        	</tr>
+        </c:if>
     </tbody>
 </table>
 <br />

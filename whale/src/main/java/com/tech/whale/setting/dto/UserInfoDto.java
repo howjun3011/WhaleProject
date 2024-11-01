@@ -23,7 +23,7 @@ public class UserInfoDto {
 	private String user_image_url;
 	private int user_access_id;
 	private String user_spotify_id;
-	private String track_id;
+	private String user_track_id;
 	private String track_artist;
 	private String track_name;
 }

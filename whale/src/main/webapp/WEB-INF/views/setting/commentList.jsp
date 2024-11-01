@@ -1,155 +1,153 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>commentList</title>
-<link rel="stylesheet" href="static/css/setting/settingStyle.css" />
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="static/js/setting/setting.js"></script>
-<style>
-.setting-container {
-    display: flex;
-    flex-direction: column; /* 헤더와 스크롤 콘텐츠를 세로로 배치 */
-    overflow: hidden; /* 부모에서 스크롤 숨김 */
-}
+	<meta charset="UTF-8">
+	<title>commentList</title>
+	<link rel="stylesheet" href="static/css/setting/settingStyle.css" />
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="static/js/setting/setting.js"></script>
+	<style>
+		.setting-container {
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+		}
 
-.scroll-content {
-    flex: 1; /* 남은 공간을 차지 */
-    overflow-y: auto; /* 세로 스크롤 활성화 */
-}
-.setting-item{
-	display : inline-block;
-	border-bottom: none;
-	margin: 0px;
-}
-.dropdown{
-  position : relative;
-  display : inline-block;
-}
-.dropbtn{
-  display : block;
-  border : 2px solid #ccc;
-  border-radius : 4px;
-  background-color: #fcfcfc;
-  font-weight: 400;
-  color : rgb(124, 124, 124);
-  padding : 12px;
-  width :100px;
-  height: 45px;
-  text-align: left;
-  cursor : pointer;
-  font-size : 12px;
-  z-index : 1;
-  position : relative;
-  margin-right: 3px;
-}
-.dropdown-content{
-  position: absolute;
-  display : none;
-  font-weight: 400;
-  background-color: #fcfcfc;
-  min-width : 100px;
-  border-radius: 8px;
-  height : 50px;
-  box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
-}
-.dropdown-content div{
-  display : block;
-  text-decoration : none;
-  color : rgb(37, 37, 37);
-  font-size: 12px;
-  padding : 12px 20px;
-}
-.dropdown-content div:hover{
-  background-color: rgb(226, 226, 226);
-}
-.dropdown-content.show{
-  display : block;
-}
-.post-list{
-	display: block;
-	margin-bottom: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
-	padding: 10px 10px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-}
-.no-comment-message{
-	margin-left: 20px;
-	color: #ccc;
-}
-#feed-img{
-	width: 200px;
-	height: 200px;
-}
-a{
-	text-decoration: none;
-	color: black;
-}
-a:visited, a:hover, a:focus, a:active {
-	color: black;
-	text-decoration: none;
-}
-#back {
-    position: absolute;
-    left: 15px;
-    top: 55%;
-    transform: translateY(-50%);
-}
+		.scroll-content {
+			flex: 1;
+			overflow-y: auto;
+		}
+		.setting-item {
+			display: inline-block;
+			border-bottom: none;
+			margin: 0px;
+		}
+		.dropdown {
+			position: relative;
+			display: inline-block;
+		}
+		.dropbtn {
+			display: block;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			background-color: #fcfcfc;
+			font-weight: 400;
+			color: rgb(124, 124, 124);
+			padding: 12px;
+			width: 100px;
+			height: 45px;
+			text-align: left;
+			cursor: pointer;
+			font-size: 12px;
+			z-index: 1;
+			position: relative;
+			margin-right: 3px;
+		}
+		.dropdown-content {
+			position: absolute;
+			display: none;
+			font-weight: 400;
+			background-color: #fcfcfc;
+			min-width: 100px;
+			border-radius: 8px;
+			height: 50px;
+			box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
+		}
+		.dropdown-content div {
+			display: block;
+			text-decoration: none;
+			color: rgb(37, 37, 37);
+			font-size: 12px;
+			padding: 12px 20px;
+		}
+		.dropdown-content div:hover {
+			background-color: rgb(226, 226, 226);
+		}
+		.dropdown-content.show {
+			display: block;
+		}
+		.post-list {
+			display: block;
+			margin-bottom: 10px;
+			margin-left: 20px;
+			margin-right: 20px;
+			padding: 10px 10px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+		}
+		.no-comment-message {
+			margin-left: 20px;
+			color: #ccc;
+		}
+		#feed-img {
+			width: 200px;
+			height: 200px;
+		}
+		a {
+			text-decoration: none;
+			color: black;
+		}
+		a:visited, a:hover, a:focus, a:active {
+			color: black;
+			text-decoration: none;
+		}
+		#back {
+			position: absolute;
+			left: 15px;
+			top: 55%;
+			transform: translateY(-50%);
+		}
 
-#feed-list {
-	margin: 20px;
-}
+		#feed-list {
+			margin: 20px;
+		}
 
-.feed-item {
-	margin-bottom: 10px;
-	padding: 10px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-}
+		.feed-item {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+			justify-content: space-between;
+			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
 
-#feed-img {
-	width: 100%;
-	max-width: 300px;
-	border-radius: 8px;
-}
+		#feed-img {
+			width: 100%;
+			max-height: 50px;
+			max-width: 50px;
+			border-radius: 6px;
+			margin-left: auto;
+		}
 
-.feed-text {
-	margin-top: 5px;
-	font-weight: 500;
-}
+		.comments-section {
+			margin-top: 10px;
+			padding-left: 10px;
+		}
 
-.comments-section {
-	margin-top: 10px;
-	padding-left: 10px;
-}
+		.comment, .reply {
+			display: flex;
+			align-items: center;
+			margin-bottom: 5px;
+		}
 
-.comment, .reply {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
-}
+		.comment-img, .reply-img {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			margin-right: 10px;
+		}
 
-.comment-img, .reply-img {
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
-	margin-right: 10px;
-}
+		.comment-text, .reply-text {
+			background-color: #f1f1f1;
+			padding: 8px 12px;
+			border-radius: 20px;
+		}
 
-.comment-text, .reply-text {
-	background-color: #f1f1f1;
-	padding: 8px 12px;
-	border-radius: 20px;
-}
-
-
-
-</style>
+	</style>
 </head>
 <body>
 <div class="setting-body">
@@ -160,9 +158,8 @@ a:visited, a:hover, a:focus, a:active {
 		</div>
 		<div class="scroll-content">
 			<form id="filterForm" action="/whale/commentList" method="get">
-				<!-- 숨겨진 필드에 드롭다운 선택 값 저장 -->
-				<input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder }">
-				<input type="hidden" name="postType" id="postType" value="${selectedPostType }">
+				<input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder}">
+				<input type="hidden" name="postType" id="postType" value="${selectedPostType}">
 
 				<div class="setting-item">
 					<div class="dropdown">
@@ -259,59 +256,41 @@ a:visited, a:hover, a:focus, a:active {
 	</div>
 </div>
 <script>
-	//드롭다운 토글 함수
 	function toggleDropdown(button) {
-	    const dropdownContent = button.nextElementSibling;
-	    closeAllDropdowns(); // 다른 드롭다운 닫기
-	    dropdownContent.classList.toggle('show'); // 드롭다운 열기/닫기
-
-	    // 현재 버튼의 텍스트 가져오기
-	    const currentValue = button.querySelector('.dropbtn_content').innerText;
-
-	    // 가능한 옵션 쌍 설정
-	    // optionPairs 객체는 현재 버튼의 텍스트에 대응하는 반대 옵션을 정의
-	    const optionPairs = {
-	        '최신순': '오래된순',
-	        '오래된순': '최신순',
-	        '게시글': '피드',
-	        '피드': '게시글'
-	    };
-
-	    // 현재 값에 대한 반대 옵션 표시
-	    const options = dropdownContent.querySelectorAll('div');
-	    options.forEach(option => {
-	    	// 현재 버튼의 값에 대응하는 반대 옵션이면 해당 옵션을 표시, 아니면 숨김
-	        option.style.display = option.innerText === optionPairs[currentValue] ? 'block' : 'none';
-	    });
+		const dropdownContent = button.nextElementSibling;
+		closeAllDropdowns();
+		dropdownContent.classList.toggle('show');
+		const currentValue = button.querySelector('.dropbtn_content').innerText;
+		const optionPairs = {
+			'최신순': '오래된순',
+			'오래된순': '최신순',
+			'게시글': '피드',
+			'피드': '게시글'
+		};
+		const options = dropdownContent.querySelectorAll('div');
+		options.forEach(option => {
+			option.style.display = option.innerText === optionPairs[currentValue] ? 'block' : 'none';
+		});
 	}
 
-	// 선택한 값을 hidden 필드에 설정하고 드롭다운 닫기
 	function updateSelection(field, value, element) {
-	    document.getElementById(field).value = value; // hidden 필드에 값 설정
-
-	    // 드롭다운 버튼의 텍스트 변경
-	    const dropbtn = element.closest('.dropdown').querySelector('.dropbtn_content');
-	    dropbtn.innerText = value;
-
-	    // 드롭다운 닫기
-	    closeAllDropdowns();
-
-	    // 폼 제출
-	    document.getElementById('filterForm').submit();
+		document.getElementById(field).value = value;
+		const dropbtn = element.closest('.dropdown').querySelector('.dropbtn_content');
+		dropbtn.innerText = value;
+		closeAllDropdowns();
+		document.getElementById('filterForm').submit();
 	}
 
-	// 모든 드롭다운 닫기
 	function closeAllDropdowns() {
-	    document.querySelectorAll('.dropdown-content.show').forEach(function (dropdown) {
-	        dropdown.classList.remove('show');
-	    });
+		document.querySelectorAll('.dropdown-content.show').forEach(function (dropdown) {
+			dropdown.classList.remove('show');
+		});
 	}
 
-	// 외부 클릭 시 드롭다운 닫기
 	window.onclick = function (event) {
-	    if (!event.target.matches('.dropbtn')) {
-	        closeAllDropdowns();
-	    }
+		if (!event.target.matches('.dropbtn')) {
+			closeAllDropdowns();
+		}
 	};
 </script>
 </body>

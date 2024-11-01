@@ -62,8 +62,6 @@
 			display: flex;
 			align-items: center;
 		}
-
-		
 		#password_hint, #password_match_hint{
 			display: flex;
 			margin-top: 3px;

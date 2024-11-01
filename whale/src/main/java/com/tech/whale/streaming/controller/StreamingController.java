@@ -31,14 +31,24 @@ public class StreamingController {
 	@Autowired
 	private LyricsService lyricsService;
 
-	// [ 프레임에 스트리밍 메인 구간 이동 ]
+	// [ 프레임에 스트리밍의 페이지 선택 ]
 	@RequestMapping("/streaming")
-
 	public String streaming(@RequestParam Map<String, String> queryParam, HttpSession session, Model model) {
-
 		// 노드 스트리밍 서버를 위한 리다이렉트
-//		return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
+		// return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type");
 
+		// 스프링 스트리밍 서버를 위한 리다이렉트
+		String type = queryParam.get("type");
+		
+		if ("albumDetail".equals(type)) {return "redirect:streaming/albumDetail?albumId="+queryParam.get("albumId");}
+		else if ("trackDetail".equals(type)) {return "redirect:streaming/detail?trackId="+queryParam.get("trackId");}
+		else if ("artistDetail".equals(type)) {return "redirect:streaming/artistDetail?artistId="+queryParam.get("artistId");}
+		else {return "redirect:streaming/home";}
+	}
+	
+	// [ 프레임에 스트리밍 메인 구간 이동 ]
+	@RequestMapping("/streaming/home")
+	public String streamingHome(@RequestParam Map<String, String> queryParam, HttpSession session, Model model) {
 		// 스프링 스트리밍 서버를 위한 리다이렉트
 		// CompletableFuture로 반환되는 비동기 결과를 가져오기 위해 join() 사용
 		CompletableFuture<Paging<Track>> topTracksFuture = streamingService.getUsersTopTracksAsync(session);

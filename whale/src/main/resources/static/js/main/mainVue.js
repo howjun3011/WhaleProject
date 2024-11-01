@@ -42,7 +42,15 @@ const app = createApp({
 		},
 		
 		// [ iframe ]
-		fetchIframe(whichIframe,data) {try {document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'https://localhost:5500');} catch (error) {}},
+		fetchIframe(whichIframe,data) {
+			try {
+				// Node
+				// document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'https://localhost:5500');
+				// Spring
+				document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'http://localhost:9002');
+			} catch (error) {
+			}
+		},
 
 		// [ Props ]
 		async fetchWebApi(endpoint, method, body) {const res = await fetch(`https://api.spotify.com/${endpoint}`, {headers: {Authorization: `Bearer ${sessionStorage.accessToken}`,},method,body: JSON.stringify(body)}); return res.json();},

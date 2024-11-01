@@ -13,6 +13,10 @@
     <title>Whale Streaming</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/streaming/mainFunction.js"></script>
+    <!-- 조건에 따라 JavaScript 파일을 포함 -->
+    <c:if test="${page == 'detail' || page == 'playlistDetail' || page == 'artistDetail' || page == 'albumDetail'}">
+        <script src="${pageContext.request.contextPath}/static/js/streaming/mainContentBackground.js" defer></script>
+    </c:if>
 </head>
 <body>
 <div class="header">
@@ -48,13 +52,14 @@
                 ></path>
             </svg>
             <div class="userPlaylists">
-<%--                <h3>내 플레이리스트</h3>--%>
+                <%--                <h3>내 플레이리스트</h3>--%>
                 <c:forEach var="playlist" items="${userPlaylists}">
                     <div class="playlistItem" onclick="playPlaylist('${playlist.id}')">
                         <c:if test="${not empty playlist.images}">
-                            <img src="${playlist.images[0].url}" alt="${playlist.name}" width="50" height="50" style="border-radius: 4px;">
+                            <img src="${playlist.images[0].url}" alt="${playlist.name}" width="45" height="45"
+                                 style="border-radius: 4px;">
                         </c:if>
-<%--                        <p>${playlist.name}</p>--%>
+                            <%--                        <p>${playlist.name}</p>--%>
                     </div>
                 </c:forEach>
             </div>
@@ -116,18 +121,24 @@
                             <div class="trackDetailContainer">
                                 <c:if test="${not empty trackDetail.album.images}">
                                     <!-- 첫 번째 이미지를 불러옵니다 -->
-                                    <img src="${trackDetail.album.images[0].url}" alt="${trackDetail.name}" width="170"
-                                         height="170" style="border-radius: 8px;">
+                                    <img src="${trackDetail.album.images[0].url}" alt="${trackDetail.name}" width="230"
+                                         height="230" style="border-radius: 8px;">
                                 </c:if>
                                 <div class="trackDetailInfo">
                                     <p class="detailSort">곡</p>
                                     <p id="trackName" class="trackName">${trackDetail.name}</p>
-                                    <p class="trackDescription"><!-- 아티스트 이미지 표시 -->
-<%--                                        <c:if test="${not empty artistDetail.images}">--%>
-<%--                                            <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"--%>
-<%--                                                 width="24" height="24" style="border-radius: 50%; margin-top: 10px;">--%>
-<%--                                        </c:if>--%>
-                                            ${trackDetail.artists[0].name} • ${trackDetail.album.name} • ${albumDetail.releaseDate}</p>
+                                    <div class="trackDescription">
+                                        <!-- 아티스트 이미지 표시 -->
+                                        <c:if test="${not empty artistDetail.images}">
+                                            <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"
+                                                 width="24" height="24" style="border-radius: 50%;">
+                                        </c:if>
+                                        <p class="artistName" onclick="navigateToArtistDetail('${trackDetail.artists[0].id}')">${trackDetail.artists[0].name}</p>
+                                        <p> • </p>
+                                        <p class="albumName" onclick="navigateToAlbumDetail('${trackDetail.album.id}')">${trackDetail.album.name}</p>
+                                        <p> • </p>
+                                        <p>${albumDetail.releaseDate}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -180,15 +191,15 @@
                                             <c:if test="${not empty artistDetail.images}">
                                                 <!-- 첫 번째 이미지를 불러옵니다 -->
                                                 <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"
-                                                     width="150"
-                                                     height="150" style="border-radius: 4px;">
+                                                     width="230"
+                                                     height="230" style="border-radius: 8px;">
                                             </c:if>
                                         </div>
                                         <div class="artistDetailGenre">
-                                            <p>아티스트</p>
+                                            <p class="detailSort">아티스트</p>
                                             <p id="artistName" class="trackName">${artistDetail.name}</p>
                                                 <%--<p>팔로워 수: ${artistDetail.followers.total}</p>--%>
-                                            <p>장르:
+                                            <p class="artistDesc">장르:
                                                 <c:forEach var="genre" items="${artistDetail.genres}"
                                                            varStatus="status">
                                                     ${genre}<c:if test="${!status.last}">, </c:if>
@@ -201,11 +212,17 @@
 
                                     <!-- 인기 곡 목록 -->
                                     <div class="topTracks">
-                                        <h3>인기</h3>
+                                        <h3 style="margin: 0 0 15px 10px;">인기</h3>
+                                        <div class="topTracks-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
+                                            <div class="topTracks-tracks-top" style="justify-content: center;">#</div>
+                                            <div class="topTracks-tracks-top" style="padding-left: 5px;">제목</div>
+                                            <div class="topTracks-tracks-top" style="padding-left: 5px;">앨범</div>
+                                            <div class="topTracks-tracks-top" style="justify-content: center;">시간</div>
+                                        </div>
                                         <c:forEach var="track" items="${topTracks}" varStatus="status">
                                             <div class="topTrackItem">
                                                 <!-- 순위 표시 -->
-                                                <span class="rank">&nbsp;${status.index + 1}</span>
+                                                <span class="rank">${status.index + 1}</span>
                                                 <!-- 재생/일시정지 버튼 -->
                                                 <button class="playPauseButton"
                                                         onclick="togglePlayPause('${track.id}', this)">
@@ -215,21 +232,26 @@
                                                         <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                                     </svg>
                                                 </button>
-                                                <!-- 곡 이미지와 이름 -->
-                                                <c:if test="${not empty track.album.images}">
-                                                    <!-- 곡 이미지 클릭 시 재생 후 디테일 페이지로 이동 -->
-                                                    <img src="${track.album.images[0].url}" alt="${track.name}"
-                                                         width="40" height="40"
-                                                         style="border-radius: 4px; cursor: pointer;"
-                                                         onclick="playAndNavigate('${track.id}')">
-                                                </c:if>
-                                                <p>${track.name}</p>
+                                                <div class="topTrackInfo" onclick="playAndNavigate('${track.id}');">
+                                                    <!-- 곡 이미지와 이름 -->
+                                                    <c:if test="${not empty track.album.images}">
+                                                        <!-- 곡 이미지 클릭 시 재생 후 디테일 페이지로 이동 -->
+                                                        <img src="${track.album.images[0].url}" alt="${track.name}"
+                                                             width="50" height="50"
+                                                             style="border-radius: 4px; padding-left: 5px; cursor: pointer;"
+                                                             onclick="playAndNavigate('${track.id}')">
+                                                    </c:if>
+                                                    <p>${track.name}</p>
+                                                </div>
+                                                <!-- 앨범 이름 -->
+                                                <p class="albumName" onclick="navigateToAlbumDetail('${track.album.id}')"
+                                                   style="padding-left: 5px;">${track.album.name}</p>
                                                 <!-- 트랙의 길이 표시 (분/초 변환) -->
                                                 <c:set var="minutes" value="${track.durationMs / 60000}"/>
                                                 <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}"/>
 
                                                 <!-- 소수점 제거 후 출력 -->
-                                                <p>${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                                <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
 
                                             </div>
                                         </c:forEach>
@@ -247,7 +269,8 @@
                                         <div class="albums">
                                             <div class="albumsWrap">
                                                 <c:forEach var="album" items="${albums}">
-                                                    <div class="albumItem" onclick="navigateToAlbumDetail('${album.id}')">
+                                                    <div class="albumItem"
+                                                         onclick="navigateToAlbumDetail('${album.id}')">
                                                         <c:if test="${not empty album.images}">
                                                             <img src="${album.images[0].url}" alt="${album.name}"
                                                                  width="150"
@@ -324,7 +347,11 @@
                             </div>
                             <!-- 전체 재생 버튼 추가 -->
                             <button class="playAllButton" onclick="playAllPlaylist('${playlistDetail.id}')">
-                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn"><path data-v-057e38be="" d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path></svg>
+                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
+                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
+                                    <path data-v-057e38be=""
+                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+                                </svg>
                             </button>
                             <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
@@ -335,7 +362,6 @@
                             <div class="playlistTracks">
                                 <c:forEach var="trackItem" items="${playlistDetail.tracks.items}" varStatus="status">
                                     <div class="trackItem"
-                                         onclick="playAndNavigate('${trackItem.track.id}');"
                                          style="${status.last ? 'padding-bottom: 20px;' : ''}">
                                         <!-- 순위 표시 -->
                                         <span class="rank">${status.index + 1}</span>
@@ -347,7 +373,7 @@
                                                 <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                             </svg>
                                         </button>
-                                        <div class="trackImageAndTitle">
+                                        <div class="trackImageAndTitle" onclick="playAndNavigate('${trackItem.track.id}');">
                                             <!-- 트랙 이미지 표시 -->
                                             <c:if test="${not empty trackItem.track.album.images}">
                                                 <img src="${trackItem.track.album.images[0].url}"
@@ -358,7 +384,8 @@
                                             <p>${trackItem.track.name} - ${trackItem.track.artists[0].name}</p>
                                         </div>
                                         <!-- 앨범 이름 -->
-                                        <p class="albumName" style="padding-left: 5px;">${trackItem.track.album.name}</p>
+                                        <p class="albumName"
+                                           style="padding-left: 5px;">${trackItem.track.album.name}</p>
                                         <!-- 트랙 재생 시간 표시 -->
                                         <c:set var="minutes" value="${trackItem.track.durationMs / 60000}"/>
                                         <c:set var="seconds" value="${(trackItem.track.durationMs % 60000) / 1000}"/>
@@ -374,7 +401,8 @@
                             <!-- 앨범 이미지와 제목, 발매일 -->
                             <div class="albumInfo">
                                 <c:if test="${not empty albumDetail.images}">
-                                    <img src="${albumDetail.images[0].url}" alt="${albumDetail.name}" width="150" height="150"
+                                    <img src="${albumDetail.images[0].url}" alt="${albumDetail.name}" width="150"
+                                         height="150"
                                          style="border-radius: 4px;">
                                 </c:if>
                                 <div>
@@ -390,7 +418,7 @@
                                     <div class="trackItem" onclick="playAndNavigate('${trackItem.id}');"
                                          style="${status.last ? 'padding-bottom: 20px;' : ''}">
                                         <!-- 순위 표시 -->
-                                        <span class="rank">&nbsp;${status.index + 1}</span>
+                                        <span class="rank">${status.index + 1}</span>
                                         <!-- 재생/일시정지 버튼 -->
                                         <button class="playPauseButton"
                                                 onclick="togglePlayPause('${trackItem.id}', this)">
@@ -401,7 +429,8 @@
                                         </button>
                                         <!-- 트랙 이미지 표시 -->
                                         <c:if test="${not empty trackItem.album.images}">
-                                            <img src="${trackItem.album.images[0].url}" alt="${trackItem.name}" width="50" height="50"
+                                            <img src="${trackItem.album.images[0].url}" alt="${trackItem.name}"
+                                                 width="50" height="50"
                                                  style="border-radius: 4px; margin-right: 10px;">
                                         </c:if>
                                         <!-- 트랙 제목과 아티스트 이름 표시 -->

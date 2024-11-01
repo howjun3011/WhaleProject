@@ -21,5 +21,5 @@ public class ProfileDto {
 	private String track_artist;
 	private String track_name;
 	private String track_cover;
-	private String track_spotify_id;
+
 }

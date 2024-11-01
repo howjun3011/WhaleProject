@@ -32,10 +32,9 @@ public class FeedDto {
     private int commentsCount;
     
     private int feed_music_id;
-    private Integer track_id;
+    private String track_id;
     private String track_artist;
     private String track_name;
     private String track_album;
     private String track_cover;
-    private String track_spotify_id;
 }

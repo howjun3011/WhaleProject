@@ -19,12 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -46,7 +41,9 @@ public class SettingController {
 	LikeListDto likeListDto;
 	CommentListDto commentListDto;
     HiddenFeedDto hiddenFeedDto;
-    MainService mainService;
+
+    @Autowired
+    private MainService mainService;
 
 	// [ 스트리밍 검색 기능 ]
     @Autowired
@@ -254,6 +251,7 @@ public class SettingController {
         return "setting/accountPrivacy";
     }
 
+    @RequestMapping(value = "/privateFollowNoti", method = RequestMethod.POST)
     @ResponseBody
     public String privateFollowNoti(HttpSession session, Model model) {
         System.out.println("privateFollowNoti() ctr");
@@ -261,11 +259,17 @@ public class SettingController {
         String session_user_id = (String) session.getAttribute("user_id");
 
         // Follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
+        List<String> followList = settingDao.getFollowRequestList(session_user_id);
 
+        // debug
+        for (String follow : followList) {
+            System.out.println(follow);
+        }
 
-
-//        mainService.privateFollowNotiMainService(session_user_id, target_id);
-
+        // 비공개 계정에서 공개로 풀었을 경우 follow 테이블에 추가(상대방 팔로잉에 +1) + follow_noti 테이블에서 알림 삭제 + 상대방한테 follow 알림 보내기
+        for (String follow_id : followList) {
+            mainService.privateFollowNotiMainService(session_user_id, follow_id);
+        }
 
         return "success";
     }

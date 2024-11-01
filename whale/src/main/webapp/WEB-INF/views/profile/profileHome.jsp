@@ -424,10 +424,10 @@
 				        <div>
 				            <c:choose>
 				                <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
-				                    <a href="following?u=${userId}">팔로우 <span>${fnCount}</span></a>
+				                    <a href="following?u=${userId}">팔로잉 <span>${fnCount}</span></a>
 				                </c:when>
 				                <c:otherwise>
-				                    <span>팔로우 <span>${fnCount}</span></span>
+				                    <span>팔로잉 <span>${fnCount}</span></span>
 				                </c:otherwise>
 				            </c:choose>
 				        </div>

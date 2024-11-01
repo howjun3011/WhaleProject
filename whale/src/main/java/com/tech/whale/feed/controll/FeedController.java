@@ -245,7 +245,7 @@ public class FeedController {
     	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
     	String trackSpotifyId = map.get("id").toString();
     	
-    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
     	TrackDto trackDto = streamingService.selectTrackDtoService(trackId);
     	System.out.println("DB 업데이트 완료");
     	

@@ -30,5 +30,5 @@ public interface SettingDao {
 	public List<LikeListDto> getFilteredPostLikeList(String session_user_id, String orderBy, String postType);
 	public List<CommentListDto> getFilteredPostCommentList(String session_user_id, String orderBy, String postType);
 	public List<HiddenFeedDto> getHiddenFeedList(String session_user_id);
-	public void updateRepresentiveSong(String session_user_id, Integer trackId);
+	public void updateRepresentiveSong(String session_user_id, String trackId);
 }

@@ -385,11 +385,11 @@
 		                    <span class="music-title" id="music-title">${feedDetail.track_name}</span> - 
 		                    <span class="artist-name" id="artist-name">${feedDetail.track_artist}</span>
 		                </div>
- 				        <label class="play-button" onclick="playMusic(this, '${feedDetail.track_spotify_id}')" style="display: inline-block;">
+ 				        <label class="play-button" onclick="playMusic(this, '${feedDetail.track_id}')" style="display: inline-block;">
 				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;" />
 				        </label>
 				        <!-- Pause 버튼 -->
-				        <label class="pause-button" onclick="pauseMusic(this, '${feedDetail.track_spotify_id}')" style="display: none;">
+				        <label class="pause-button" onclick="pauseMusic(this, '${feedDetail.track_id}')" style="display: none;">
 				            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;" />
 				        </label>
 		            </div>

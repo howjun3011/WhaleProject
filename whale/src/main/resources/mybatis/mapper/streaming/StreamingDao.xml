@@ -5,12 +5,12 @@
 
 <mapper namespace="com.tech.whale.streaming.models.StreamingDao">
 	
-	<select id="selectTrackId" resultType="Integer">
-        SELECT TRACK_ID FROM TRACK WHERE TRACK_SPOTIFY_ID = #{trackSpotifyId}
+	<select id="selectTrackId" resultType="String">
+        SELECT TRACK_ID FROM TRACK WHERE TRACK_ID = #{trackSpotifyId}
     </select>
     
     <select id="selectTrackLikeId" resultType="Integer">
-        SELECT TRACK_LIKE_ID FROM TRACK_LIKE WHERE USER_ID = #{userId} AND TRACK_ID = #{trackId}
+        SELECT TRACK_LIKE_ID FROM TRACK_LIKE WHERE USER_ID = #{userId} AND TRACK_ID = #{trackSpotifyId}
     </select>
     
     <select id="selectTrackDto" resultType="com.tech.whale.streaming.models.TrackDto">
@@ -19,30 +19,29 @@
 	        TRACK_ARTIST,
 	        TRACK_NAME,
 	        TRACK_ALBUM,
-	        TRACK_COVER,
-	        TRACK_SPOTIFY_ID
+	        TRACK_COVER
 	    FROM
 	        TRACK
 	    WHERE
-	        TRACK_ID = #{trackId}
+	        TRACK_ID = #{trackSpotifyId}
 	</select>
 	
 	<insert id="insertTrack">
-		INSERT INTO TRACK (TRACK_ID, TRACK_ARTIST, TRACK_NAME, TRACK_ALBUM, TRACK_COVER, TRACK_SPOTIFY_ID) VALUES
-						  (TRACK_SEQ.NEXTVAL,#{track_artist},#{track_name},#{track_album},#{track_cover},#{track_spotify_id})
+		INSERT INTO TRACK (TRACK_ID, TRACK_ARTIST, TRACK_NAME, TRACK_ALBUM, TRACK_COVER) VALUES
+						  (#{track_spotify_id},#{track_artist},#{track_name},#{track_album},#{track_cover})
 	</insert>
 	
 	<insert id="insertTrackLike">
 		INSERT INTO TRACK_LIKE (TRACK_LIKE_ID, TRACK_ID, USER_ID) VALUES
 							   (TRACK_LIKE_SEQ.NEXTVAL,
-							   #{trackId},
+							   #{trackSpotifyId},
 							   #{userId})
 	</insert>
 	
 	<insert id="insertTrackCnt">
 		INSERT INTO TRACK_CNT (TRACK_CNT_ID, TRACK_ID, USER_ID) VALUES
 							  (TRACK_CNT_SEQ.NEXTVAL,
-							  #{trackId},
+							  #{trackSpotifyId},
 							  #{userId})
 	</insert>
 	

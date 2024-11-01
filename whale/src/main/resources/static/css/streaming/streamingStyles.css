@@ -156,7 +156,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .playlistDesc{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8;}
 
 .playlist-tracks{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; border-bottom: 1px solid white; opacity: .8; padding-bottom: 5px;}
-.playlistTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; opacity: .8; margin: 10px 0;}
+.playlistTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; opacity: .9; margin: 10px 0;}
 .playlist-tracks .playlist-tracks-top{display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 13px;}
 .trackImageAndTitle{display: flex; gap: 10px;}
 .trackItem > *{display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 14px;}

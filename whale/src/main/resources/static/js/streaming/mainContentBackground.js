@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (mainContent) {
         const randomColor = getRandomColor(); // 여기서 랜덤 색상 생성
         console.log("Random color:", randomColor);
-        mainContent.style.backgroundImage = `linear-gradient(${randomColor}, rgb(17, 18, 17))`;
+        mainContent.style.backgroundImage = `linear-gradient(${randomColor} 0%, rgb(17, 18, 17) 100%)`;
         console.log("Background image:", mainContent.style.backgroundImage);
     } else {
         console.error('mainContent 요소를 찾을 수 없습니다.');

@@ -179,34 +179,27 @@ function navigateToDetail(trackId) {
     window.location.href = `/whale/streaming/detail?trackId=${trackId}`;
 }
 
-// 곡명 길이에 따른 폰트 크기 조절
-document.addEventListener("DOMContentLoaded", function() {
-    const trackNameElement = document.getElementById("trackName");
-    const textLength = trackNameElement.innerText.length;
+// 길이에 따른 폰트 크기 조절 함수
+function adjustFontSizeByTextLength(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const textLength = element.innerText.length;
 
-    if (textLength > 16) {
-        trackNameElement.classList.add("small-font");
-    } else if (textLength > 8) {
-        trackNameElement.classList.add("medium-font");
-    } else {
-        trackNameElement.classList.add("large-font");
-    }
-});
-
-// playlist 이름 길이에 따른 폰트 크기 조절
-document.addEventListener("DOMContentLoaded", function() {
-    const playlistNameElement = document.getElementById("playlistName");
-    if (playlistNameElement) {
-        const textLengthPlaylist = playlistNameElement.innerText.length;
-
-        if (textLengthPlaylist > 16) {
-            playlistNameElement.classList.add("small-font");
-        } else if (textLengthPlaylist > 8) {
-            playlistNameElement.classList.add("medium-font");
+        if (textLength > 16) {
+            element.classList.add("small-font");
+        } else if (textLength > 8) {
+            element.classList.add("medium-font");
         } else {
-            playlistNameElement.classList.add("large-font");
+            element.classList.add("large-font");
         }
     }
+}
+
+// 페이지 로드 시 폰트 크기 조절
+document.addEventListener("DOMContentLoaded", function() {
+    adjustFontSizeByTextLength("trackName");
+    adjustFontSizeByTextLength("playlistName");
+    adjustFontSizeByTextLength("artistName");
 });
 
 document.addEventListener("DOMContentLoaded", function() {

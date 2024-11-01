@@ -16,7 +16,7 @@ import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 
 @Service
-public class AdminBoardPostDelete implements AdminServiceInter{
+public class AdminBoardFeedDelete implements AdminServiceInter{
 
 	@Autowired
 	private AdminIDao adminIDao;
@@ -30,17 +30,18 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		HttpServletRequest request = 
 				(HttpServletRequest) map.get("request");
 		
-		int post_id = Integer.parseInt(request.getParameter("postId"));
+		int feed_id = Integer.parseInt(request.getParameter("feedId"));
 		String user_id = (String)model.getAttribute("user_id");
-		String post_del_reason = "게시판 규칙 위반";
-		String comments_del_reason = "부모게시글 삭제";
+		String feed_del_reason = "글작성 규칙 위반";
+		String comments_del_reason = "부모글 삭제";
 		
-		adminIDao.postDelLog(post_id,user_id,post_del_reason);
-		adminIDao.postCommentsDelLog(post_id,user_id,comments_del_reason);
-		adminIDao.postLikeDel(post_id);
-		adminIDao.postCommentsLikeDel(post_id);
-		adminIDao.postCommentsDel(post_id);
-		adminIDao.postDel(post_id);
+		adminIDao.feedDelLog(feed_id,user_id,feed_del_reason);
+		adminIDao.feedCommentsDelLog(feed_id,user_id,comments_del_reason);
+		adminIDao.feedLikeDel(feed_id);
+		adminIDao.feedCommentsLikeDel(feed_id);
+		adminIDao.feedCommentsDel(feed_id);
+		adminIDao.feedDel(feed_id);
+		
 	}
 	
 	@Transactional
@@ -50,15 +51,15 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		HttpServletRequest request = 
 				(HttpServletRequest) map.get("request");
 		
-		int post_id = Integer.parseInt(request.getParameter("postId"));
-		int post_comments_id = Integer.parseInt(request.getParameter("commentId"));
+		int feed_id = Integer.parseInt(request.getParameter("feedId"));
+		int feed_comments_id = Integer.parseInt(request.getParameter("commentId"));
 		String user_id = (String)model.getAttribute("user_id");
 		String comments_del_reason = "글작성 규칙 위반";
 		
-		adminIDao.postCommentsOneDelLog(post_comments_id,post_id,user_id,comments_del_reason);
-		adminIDao.postCommentsLikeOneDel(post_comments_id);
-		adminIDao.postCommentsOneDel(post_comments_id);
+		adminIDao.feedCommentsOneDelLog(feed_comments_id,feed_id,user_id,comments_del_reason);
+		adminIDao.feedCommentsLikeOneDel(feed_comments_id);
+		adminIDao.feedCommentsOneDel(feed_comments_id);
 		
 	}
-	
+
 }

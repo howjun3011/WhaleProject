@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<script type="text/javascript">
+        function logoutWhale() {
+            // 스프링 클라이언트 정보 초기화
+            localStorage.clear();
+            // 스프링 서버 정보 초기화
+            location.href = '/whale/main/logout';
+        }
+</script>
+
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
  	<div class="profile">
  	<div style="height:60px; width:100px;
@@ -8,8 +18,8 @@
  	</div>
     </div>
  	<div class="logoutstr">
-        <a href="adminMyInfoView">admin0905</a> <br />
-        <a href="">로그아웃</a>
+        <a href="adminMyInfoView">${myId }</a> <br />
+        <a href="#" onclick="logoutWhale()">로그아웃</a>
     </div>
     <ul>
 		<li><a href="adminMainView">관리자메인</a></li>

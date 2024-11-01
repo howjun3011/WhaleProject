@@ -30,7 +30,7 @@ public class StreamingRestController {
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
     	
     	// 트랙 아이디 반환 및 세션 저장
-    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
     	
     	session.setAttribute("trackId", trackId);
     	
@@ -48,7 +48,7 @@ public class StreamingRestController {
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
     	
     	// 트랙 아이디 반환 및 트랙 좋아요 테이블 삽입
-    	streamingService.insertTrackLikeService(session, artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	streamingService.insertTrackLikeService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 	
 	@PostMapping(value = "/streaming/insertTrackCnt", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,7 +60,7 @@ public class StreamingRestController {
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
     	
     	// 트랙 아이디 반환 및 트랙 좋아요 테이블 삽입
-    	streamingService.insertTrackCntService(session, artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	streamingService.insertTrackCntService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 	
 	@PostMapping(value = "/streaming/deleteTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)

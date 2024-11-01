@@ -211,7 +211,7 @@ public class SettingController {
     	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
     	String trackSpotifyId = map.get("id").toString();
     	
-    	Integer trackId = streamingService.selectTrackIdService(artistName, trackName, albumName, albumCover, trackSpotifyId);
+    	String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
         System.out.println(trackId);
 
         // user_info 테이블의 representivesong 필드에 trackId 업데이트

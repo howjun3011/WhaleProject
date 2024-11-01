@@ -61,11 +61,9 @@ export default {
     receiveMessageMain() {window.addEventListener("message", this.receiveMessage, false);},
 
     async receiveMessage(event) {
-        if (event.data === 'Full') {console.log(event.data);}
-        else if (event.data === 'albumDetail') {this.$router.replace('/whale/streaming/detail/album');}
-        else if (event.data === 'artistDetail') {this.$router.replace('/whale/streaming/detail/artist');}
-        else if (event.data === 'current') {this.$router.replace('/whale/streaming/current-playlist');}
-        else {await this.sendDeviceId(event);}
+      if (event.data.type === 'albumDetail') {this.$router.replace('/whale/streaming/detail/album');}
+      else if (event.data.type === 'artistDetail') {this.$router.replace('/whale/streaming/detail/artist');}
+      else {await this.sendDeviceId(event);}
     },
 
     async sendDeviceId(event) {

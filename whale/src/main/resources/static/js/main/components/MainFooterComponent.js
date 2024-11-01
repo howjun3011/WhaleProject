@@ -4,8 +4,8 @@ const MainFooterComponent = {
 		<div class="footer flexCenter">
 	        <div class="player">
 	        	<div class="playerComponent" id="playerLeft">
-	        		<div class="playerInfo flexCenter" @click="sendStreaming('albumDetail','?type=album')"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
-	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming('albumDetail','?type=album')">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming('artistDetail','?type=artist')">{{ trackInfo[2] }}</p></div>
+	        		<div class="playerInfo flexCenter" @click="sendStreaming({ type: 'albumDetail', albumId: trackInfo[6] },'?type=albumDetail&albumId='+trackInfo[6])"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
+	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming({ type: 'trackDetail', trackId: trackInfo[4] },'?type=trackDetail&trackId='+trackInfo[4])">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming({ type: 'artistDetail', artistId: trackInfo[7] },'?type=artistDetail&artistId='+trackInfo[7])">{{ trackInfo[2] }}</p></div>
 	        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
 	        	</div>
 	        	<div class="playerComponent flexCenter">
@@ -123,6 +123,15 @@ const MainFooterComponent = {
 			        this.trackInfo[2] = state.track_window.current_track.artists[0].name;
 			        this.trackInfo[3] = state.track_window.current_track.album.name;
 			        this.trackInfo[4] = state.track_window.current_track.id;
+			        
+			        (async () => {
+						try {
+							const result = await this.fetchWebApi(`v1/tracks/${this.trackInfo[4]}`,'GET');
+							this.trackInfo[6] = await result.album.id;
+							this.trackInfo[7] = await result.artists[0].id;
+						} catch(error) {
+						}
+					})();
 			        
 			        console.log(state);
 					// [ 재생 중이라면 버튼 이미지 정지 버튼 변환 ]

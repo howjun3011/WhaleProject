@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import com.tech.whale.streaming.models.StreamingDao;
 import com.tech.whale.streaming.models.TrackDto;
+import se.michaelthelin.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsAlbumsRequest;
@@ -309,6 +310,37 @@ public class StreamingService {
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("사용자 플레이리스트 가져오기 실패: " + e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    // 전체 플레이리스트 재생 메서드
+    public boolean playAllPlaylist(HttpSession session, String playlistId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 플레이리스트의 모든 트랙 가져오기
+            Playlist playlistDetail = spotifyApi.getPlaylist(playlistId).build().execute();
+            List<PlaylistTrack> playlistTracks = Arrays.asList(playlistDetail.getTracks().getItems());
+
+            // 각 PlaylistTrack의 실제 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray uris = new JsonArray();
+            for (PlaylistTrack playlistTrack : playlistTracks) {
+                if (playlistTrack.getTrack() instanceof Track) {
+                    Track track = (Track) playlistTrack.getTrack();
+                    uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
+                }
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(uris) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play playlist: " + e.getMessage());
+            return false;
         }
     }
 

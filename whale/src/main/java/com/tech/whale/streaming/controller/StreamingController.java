@@ -242,4 +242,17 @@ public class StreamingController {
 		return "streaming/streamingHome";
 	}
 
+	// 전체 플레이리스트 재생 메서드
+	@PostMapping("/streaming/playAllPlaylist")
+	public ResponseEntity<String> playAllPlaylist(HttpSession session, @RequestBody Map<String, String> body) {
+		String playlistId = body.get("playlistId");
+
+		// 전체 재생 메서드 호출
+		boolean isPlayed = streamingService.playAllPlaylist(session, playlistId);
+		if (isPlayed) {
+			return ResponseEntity.ok("Playlist is playing");
+		} else {
+			return ResponseEntity.status(500).body("Failed to play playlist");
+		}
+	}
 }

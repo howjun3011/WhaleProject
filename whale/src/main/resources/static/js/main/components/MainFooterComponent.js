@@ -9,9 +9,11 @@ const MainFooterComponent = {
 	        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
 	        	</div>
 	        	<div class="playerComponent flexCenter">
-	        		<div class="player-bar">
-			            <input type="range" id="seek-bar" min="0" max="100" value="0">
+	        		<div class="playerTime">{{ playTime[0] }}</div>
+	        		<div class="player-bar-container">
+			            <input type="range" class="player-bar" id="seekBar" min="0" max="100" value="0" v-model="sliderValue" @input="updateSliderBackground" :style="sliderStyle">
 			        </div>
+			        <div class="playerTime">{{ playTime[1] }}</div>
 	        	</div>
 	            <div class="playerComponent flexCenter">
 	            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
@@ -25,7 +27,7 @@ const MainFooterComponent = {
 	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
 	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
 	            	<div class="volume-bar">
-			            <input type="range" id="volume-slider" min="0" max="100" value="50">
+			            <input type="range" class="player-bar" id="volumeSlider" min="0" max="100" v-model="sliderValue" @input="updateSliderBackground" :style="sliderStyle">
 			        </div>
 	            </div>
 	        </div>
@@ -48,11 +50,22 @@ const MainFooterComponent = {
 			repeatBtnSrcIndex: 0,
 			isRepeated: false,
 			isShuffled: false,
-			isLiked: ['static/images/streaming/player/like.png','static/images/streaming/player/likeFill.png']
+			isLiked: ['static/images/streaming/player/like.png','static/images/streaming/player/likeFill.png'],
+			sliderValue: 0,
+			timer: null,
+			playTime: [],
 		};
 	},
 	mounted() {
 		this.playerOn();
+	},
+	computed: {
+		sliderStyle() {
+			const value = (this.sliderValue - 0) / (100 - 0) * 100;
+			return {
+				background: `linear-gradient(to right, #828282 ${value}%, #c2c2c2 ${value}%)`,
+			};
+		},
 	},
 	methods: {
 		playerOn() {
@@ -104,46 +117,66 @@ const MainFooterComponent = {
 			    });
 			    
 			    // [ Player State Changed ]
-			    this.player.addListener('player_state_changed', ({
-			        track_window: { current_track }
-			    }) => {
-			        this.trackInfo[0] = current_track.album.images[0].url;
-			        this.trackInfo[1] = current_track.name;
-			        this.trackInfo[2] = current_track.artists[0].name;
-			        this.trackInfo[3] = current_track.album.name;
-			        this.trackInfo[4] = current_track.id;
+			    this.player.addListener('player_state_changed', (state) => {
+			        this.trackInfo[0] = state.track_window.current_track.album.images[0].url;
+			        this.trackInfo[1] = state.track_window.current_track.name;
+			        this.trackInfo[2] = state.track_window.current_track.artists[0].name;
+			        this.trackInfo[3] = state.track_window.current_track.album.name;
+			        this.trackInfo[4] = state.track_window.current_track.id;
+			        
+			        console.log(state);
+					// [ 재생 중이라면 버튼 이미지 정지 버튼 변환 ]
+					if (!state.paused && this.playBtnSrcIndex === 0) {this.playBtnSrcIndex = 1;}
+					// [ 일회 반복 중이라면 버튼 이미지 변환 ]
+					if (state.repeat_mode === 2) {this.repeatBtnSrcIndex = 1; this.isRepeated = true;}
+					else if (state.repeat_mode === 1) {this.repeatBtnSrcIndex = 0; this.isRepeated = true;}
+					else {this.repeatBtnSrcIndex = 0; this.isRepeated = false;}
+					// [ 셔플 중이라면 버튼 배경 이미지 변환 ]
+					if (state.shuffle_mode === 1) {this.isShuffled = true;}
+					else {this.isShuffled = false;}
+					
+					// 현재 재생바 정보 저장
+					this.sliderValue = (state.position / state.duration) * 100;
+					this.playTime[0] = this.returnTime(state.position);
+					this.playTime[1] = this.returnTime(state.duration);
+					this.playTime[2] = state.position;
+					this.playTime[3] = state.duration;
+					
+					if(this.timer) {clearInterval(this.timer);}
+					if(!state.paused) {
+						this.timer = setInterval(
+							() => {
+								this.playTime[2] += 1000;
+								this.sliderValue = (this.playTime[2] / this.playTime[3]) * 100;
+								this.playTime[0] = this.returnTime(this.playTime[2]);
+							}, 1000);
+					} else {
+						clearInterval(this.timer);
+					}
+					
+					// 현재 재생 중인 음악 서버에 전송하여 저장
+					fetch(`/whale/streaming/currentTrackInfo`, {
+						headers: {
+							'Accept': 'application/json',
+				            'Content-Type': 'application/json'
+				        },
+				        method: 'POST',
+				        body: JSON.stringify({
+							artistName: this.trackInfo[2],
+							trackName: this.trackInfo[1],
+							albumName: this.trackInfo[3],
+							trackCover: this.trackInfo[0],
+							trackSpotifyId: this.trackInfo[4]
+						})
+					})
+					.then(response => response.json())
+						.then(data => {
+							if (data.result === 'yes') {this.trackInfo[5] = true;}
+							else {this.trackInfo[5] = false;}
+					});
 			        
 			        this.player.getCurrentState().then(
 						(state) => {
-							// [ 재생 중이라면 버튼 이미지 정지 버튼 변환 ]
-							if (!state.paused && this.playBtnSrcIndex === 0) {this.playBtnSrcIndex = 1;}
-							// [ 일회 반복 중이라면 버튼 이미지 변환 ]
-							if (state.repeat_mode === 2) {this.repeatBtnSrcIndex = 1; this.isRepeated = true;}
-							else if (state.repeat_mode === 1) {this.repeatBtnSrcIndex = 0; this.isRepeated = true;}
-							else {this.repeatBtnSrcIndex = 0; this.isRepeated = false;}
-							// [ 셔플 중이라면 버튼 배경 이미지 변환 ]
-							if (state.shuffle_mode === 1) {this.isShuffled = true;}
-							else {this.isShuffled = false;}
-							
-							fetch(`/whale/streaming/currentTrackInfo`, {
-								headers: {
-									'Accept': 'application/json',
-						            'Content-Type': 'application/json'
-						        },
-						        method: 'POST',
-						        body: JSON.stringify({
-									artistName: state.track_window.current_track.artists[0].name,
-									trackName: state.track_window.current_track.name,
-									albumName: state.track_window.current_track.album.name,
-									trackCover: state.track_window.current_track.album.images[0].url,
-									trackSpotifyId: state.track_window.current_track.id
-								})
-							})
-							.then(response => response.json())
-								.then(data => {
-									if (data.result === 'yes') {this.trackInfo[5] = true;}
-									else {this.trackInfo[5] = false;}
-							});
 						}
 					);
 			    });
@@ -274,6 +307,15 @@ const MainFooterComponent = {
 			if (x === 'http://localhost:9002/whale/streaming') {this.fetchIframe('leftIframe',i);}
 			else if (y === 'http://localhost:9002/whale/streaming') {this.fetchIframe('rightIframe',i);}
 			else {this.$emit('footer-music-toggle', 3, 0, j);}
+		},
+		
+		// 플레이어 재생바 관련 기능
+		updateSliderBackground() {
+			this.player.seek( (this.sliderValue / 100) * this.playTime[3] )
+		},
+		
+		returnTime(ms) {
+			return `${ String(Math.floor( ms / (1000 * 60 ) )).padStart(2, "0") }:${ String(Math.floor( ( ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }`;
 		},
 	},
 };

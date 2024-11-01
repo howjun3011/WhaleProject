@@ -135,7 +135,7 @@ public class FeedController {
 	
 	@RequestMapping("/feedWriteDo")
 	public String feedWriteDo(HttpServletRequest request, HttpSession session, Model model,
-			@RequestParam(value = "selectedTrackId", required = false) Integer track_id, 
+			@RequestParam(value = "selectedTrackId", required = false) String track_id, 
 			@RequestParam("feedText") String feed_text,
 			@RequestParam("feedImage") MultipartFile file) {
 		

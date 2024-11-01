@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,8 @@ public class SettingController {
 	LikeListDto likeListDto;
 	CommentListDto commentListDto;
     HiddenFeedDto hiddenFeedDto;
-	
+    MainService mainService;
+
 	// [ 스트리밍 검색 기능 ]
     @Autowired
     private StreamingService streamingService;
@@ -252,6 +254,22 @@ public class SettingController {
         return "setting/accountPrivacy";
     }
 
+    @ResponseBody
+    public String privateFollowNoti(HttpSession session, Model model) {
+        System.out.println("privateFollowNoti() ctr");
+
+        String session_user_id = (String) session.getAttribute("user_id");
+
+        // Follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
+
+
+
+//        mainService.privateFollowNotiMainService(session_user_id, target_id);
+
+
+        return "success";
+    }
+
     //  슬라이드 버튼에 의해서 on이면 0(비공개 계정 설정), off면 1(공개 계정 설정)
     @PostMapping("/updatePrivacy")
     @ResponseBody
@@ -326,20 +344,31 @@ public class SettingController {
 
         // debug
         for (CommentListDto commentListDto : currentPostCommentList) {
-            System.out.println("post_id: " + commentListDto.getPost_id());
-            System.out.println("community_id: " + commentListDto.getCommunity_id());
-            System.out.println("post_title: " + commentListDto.getPost_title());
-            System.out.println("post_comment: " + commentListDto.getPost_comments_text());
-            System.out.println("post_tag: " + commentListDto.getPost_tag_text());
-            System.out.println("feed_id: " + commentListDto.getFeed_id());
-            System.out.println("feed_img_name: " + commentListDto.getFeed_img_name());
-            System.out.println("feed_text: " + commentListDto.getFeed_text());
-            System.out.println("feed_owner_image: " + commentListDto.getFeed_owner_image());
-            System.out.println("feed_comments_id: " + commentListDto.getFeed_comments_id());
-            System.out.println("parent_comments_id: " + commentListDto.getParent_comments_id());
-            System.out.println("commenter_image: " + commentListDto.getCommenter_image());
-            System.out.println("commenter_id: " + commentListDto.getCommenter_id());
-            System.out.println("feed_comments_text: " + commentListDto.getFeed_comments_text());
+            System.out.println("게시글");
+            System.out.println("Community_id: " + commentListDto.getCommunity_id());
+            System.out.println("Post_id: " + commentListDto.getPost_id());
+            System.out.println("Post_tag_text: " + commentListDto.getPost_tag_text());
+            System.out.println("Post_writer_id: " + commentListDto.getPost_writer_id());
+            System.out.println("Post_writer_img: " + commentListDto.getPost_writer_img());
+            System.out.println("Post_title: " + commentListDto.getPost_title());
+            System.out.println("Post_text: " + commentListDto.getPost_text());
+            System.out.println("Comments_user_img: " + commentListDto.getComments_user_img());
+            System.out.println("Comments_user_id: " + commentListDto.getComments_user_id());
+            System.out.println("Post_comments_text: " + commentListDto.getPost_comments_text());
+            System.out.println("Post_img_name: " + commentListDto.getPost_img_name());
+            System.out.println("----------------------------------------------------");
+        }
+
+        // debug
+        for (CommentListDto commentListDto : currentPostCommentList) {
+            System.out.println("피드");
+            System.out.println("Feed_id: " + commentListDto.getFeed_id());
+            System.out.println("Feed_text: " + commentListDto.getFeed_text());
+            System.out.println("Feed_comments_text: " + commentListDto.getFeed_comments_text());
+            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_name());
+            System.out.println("Feed_comments_id: " + commentListDto.getFeed_comments_id());
+            System.out.println("Parent_comments_id: " + commentListDto.getParent_comments_id());
+            System.out.println("----------------------------------------------------");
         }
 
         model.addAttribute("currentPostCommentList", currentPostCommentList);

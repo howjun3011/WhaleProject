@@ -54,7 +54,7 @@
                 <p>{{ item.track.name }} / {{ item.track.artists[0].name }}</p>
             </div>
             <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px;">{{ item.track.album.name }}</div>
-            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.track.duration_ms / (1000 * 60 )) % 60 )).padStart(2, "0") }}분 {{ String(Math.floor(( item.track.duration_ms % (1000 * 60 )) % 60 )).padStart(2, "0") }}초</div>
+            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.track.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.track.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
         </div>
     </div>
 </template>

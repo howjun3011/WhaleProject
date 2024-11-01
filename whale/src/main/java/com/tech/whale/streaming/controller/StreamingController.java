@@ -49,6 +49,11 @@ public class StreamingController {
 		} else {
 			model.addAttribute("error", "Unable to retrieve top tracks");
 		}
+
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
+
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -113,6 +118,10 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve track details");
 		}
 
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
+
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "detail");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -147,6 +156,10 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve artist details");
 		}
 
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
+
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "artistDetail");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -163,6 +176,10 @@ public class StreamingController {
 		} else {
 			model.addAttribute("error", "No search results found.");
 		}
+
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
 
 		// 검색 결과 페이지로 이동
 		model.addAttribute("page", "search");
@@ -181,6 +198,10 @@ public class StreamingController {
 		} else {
 			model.addAttribute("error", "Unable to retrieve playlist details");
 		}
+
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
 
 		model.addAttribute("page", "playlistDetail");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -201,6 +222,10 @@ public class StreamingController {
 		} else {
 			model.addAttribute("error", "앨범 정보를 불러오지 못했습니다.");
 		}
+
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
 
 		model.addAttribute("page", "albumDetail");
 		System.out.println("page :" + model.getAttribute("page"));

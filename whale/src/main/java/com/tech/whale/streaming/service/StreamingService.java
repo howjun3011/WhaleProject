@@ -296,6 +296,23 @@ public class StreamingService {
         }
     }
 
+    public List<PlaylistSimplified> getUserPlaylists(HttpSession session) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 최대 10개의 플레이리스트 가져오기
+            Paging<PlaylistSimplified> playlistsPaging = spotifyApi.getListOfCurrentUsersPlaylists()
+                    .limit(10)
+                    .build()
+                    .execute();
+            return Arrays.asList(playlistsPaging.getItems());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("사용자 플레이리스트 가져오기 실패: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+
     //-----------------------------------------------------------------------------------------------------
     
     // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴

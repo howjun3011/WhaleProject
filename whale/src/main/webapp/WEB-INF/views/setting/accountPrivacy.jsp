@@ -89,6 +89,24 @@ label::after {
 				console.log('Privacy setting updated successfully');
 			}
 		};
+
+		// 계정이 비공개에서 공개로 변경되는 경우 privateFollowNoti 호출
+		if(accountPrivacy === 0) {
+			const followNotiXhr = new XMLHttpRequest();
+			followNotiXhr.open('POST', '/whale/privateFollowNoti', true);
+			followNotiXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			followNotiXhr.send();
+
+			followNotiXhr.onreadystatechange = function() {
+				if(followNotiXhr.readyState == XMLHttpRequest.DONE) {
+					if (followNotiXhr.status == 200) {
+						alert('Private follow notification sent successfully');
+					} else {
+						alert('Failed to send private follow notification');
+					}
+				}
+			};
+		}
 	});
 </script>
 </body>

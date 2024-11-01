@@ -29,6 +29,9 @@
 	<update id="updateAccountPrivacy">
 		UPDATE USER_SETTING SET ACCOUNT_PRIVACY = #{accountPrivacy} WHERE USER_ID = #{session_user_id}
 	</update>
+	<select id="getFollowRequestList" resultType="String">
+		select follow_noti_user_id from follow_noti where user_id = #{session_user_id}
+	</select>
 	<update id="updateNotificationSettings">
 	    UPDATE USER_NOTIFICATION_ONOFF 
 	    SET 

@@ -193,6 +193,42 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+// playlist 이름 길이에 따른 폰트 크기 조절
+document.addEventListener("DOMContentLoaded", function() {
+    const playlistNameElement = document.getElementById("playlistName");
+    if (playlistNameElement) {
+        const textLengthPlaylist = playlistNameElement.innerText.length;
+
+        if (textLengthPlaylist > 16) {
+            playlistNameElement.classList.add("small-font");
+        } else if (textLengthPlaylist > 8) {
+            playlistNameElement.classList.add("medium-font");
+        } else {
+            playlistNameElement.classList.add("large-font");
+        }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const descriptionElement = document.querySelector(".playlistDesc");
+    if (descriptionElement) {
+        // a 태그를 찾아 제거
+        const parser = new DOMParser();
+        const parsedContent = parser.parseFromString(descriptionElement.innerHTML, 'text/html');
+        const links = parsedContent.querySelectorAll("a");
+
+        // 각 a 태그를 순회하며 텍스트만 남기기
+        links.forEach(link => {
+            const textNode = document.createTextNode(link.textContent);
+            link.replaceWith(textNode);
+        });
+
+        // 수정된 내용을 다시 playlistDesc에 반영
+        descriptionElement.innerHTML = parsedContent.body.innerHTML;
+    }
+});
+
+
 // 스트리밍 홈 화면으로 돌아가는 버튼
 function goMain() {
     window.location.href = "/whale/streaming";
@@ -382,3 +418,26 @@ function playPlaylist(playlistId) {
 function navigateToAlbumDetail(albumId) {
     window.location.href = `/whale/streaming/albumDetail?albumId=${albumId}`;
 }
+
+function playAllPlaylist(playlistId) {
+    return fetch('/whale/streaming/playAllPlaylist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ playlistId: playlistId })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Playlist is now playing");
+            } else {
+                console.error("Failed to play playlist");
+            }
+        })
+        .catch(error => {
+            console.error("Error playing playlist:", error);
+        });
+}
+
+
+

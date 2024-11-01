@@ -66,13 +66,17 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .trackDetail{margin-left: 5px;}
 .trackDetailContainer{display: flex; gap: 20px; color: white; align-items: end;}
 
-#trackName.small-font {font-size: 2rem; /* 글자가 길 때 작은 폰트 */}
-#trackName.medium-font {font-size: 4rem; /* 글자가 중간 정도 길 때 중간 폰트 */}
-#trackName.large-font {font-size: 5.5rem; /* 글자가 짧을 때 큰 폰트 */}
+#trackName.small-font {font-size: 2rem; opacity: .8; /* 글자가 길 때 작은 폰트 */}
+#trackName.medium-font {font-size: 4rem; opacity: .8; /* 글자가 중간 정도 길 때 중간 폰트 */}
+#trackName.large-font {font-size: 5.5rem; opacity: .8; /* 글자가 짧을 때 큰 폰트 */}
+
+#playlistName.small-font { font-size: 2rem; opacity: .8; /* 글자가 길 때 작은 폰트 */ }
+#playlistName.medium-font { font-size: 4rem; opacity: .8; /* 글자가 중간 정도 길 때 중간 폰트 */ }
+#playlistName.large-font { font-size: 5.5rem; opacity: .8; /* 글자가 짧을 때 큰 폰트 */ }
 
 .lyrics{color: white; margin-top: 20px; overflow: scroll;}
 .lyrics h3{font-size: 1.5rem;}
-.lyrics pre{max-height: 160px; margin-top: 15px; font-family: 'Noto Sans', sans-serif; line-height: 1.5;}
+.lyrics pre{max-height: 100%; margin-top: 15px; font-family: 'Noto Sans', sans-serif; line-height: 1.5; padding-bottom: 20px;}
 
 .searchResults{display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 15px;}
 .searchResults .searchResult{width: fit-content; flex: 1 1 20%; padding: 10px;}
@@ -129,17 +133,31 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .playlistItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}
 
 /* 기본 상태에서 순위는 보이고 재생 버튼은 숨김 */
-.playlistTracks .rank {display: inline-block; font-size: 18px; flex: 0 0 5%;}
+.playlistTracks .rank {font-size: 18px; flex: 0 0 5%; display: flex; align-items: center; justify-content: center;}
 .playlistTracks .playPauseButton {display: none; /* 기본적으로 숨김 */ flex: 0 0 5%;}
 /* trackItem에 마우스를 올리면 rank 숨기고 playPauseButton 표시 */
 .trackItem:hover .rank {display: none;}
 .trackItem:hover .playPauseButton {display: inline-block;}
-.playlistTracks .trackItem{display: flex; align-items: center; margin: 15px 0; gap: 10px;}
+/*.playlistTracks .trackItem{display: flex; align-items: center; margin: 15px 0; gap: 10px;}*/
 
-.playListInfo{margin: 0 0 15px 10px; display: flex; align-items: end; gap: 20px;}
+.playListInfo{margin: 0 0 15px 15px; display: flex; align-items: end; gap: 20px;}
 
 .albumInfo{margin: 0 0 15px 10px; display: flex; align-items: end; gap: 20px;}
 /* 기본 상태에서 순위는 보이고 재생 버튼은 숨김 */
 .albumTracks .rank {display: inline-block; font-size: 18px; flex: 0 0 5%;}
 .albumTracks .playPauseButton {display: none; /* 기본적으로 숨김 */ flex: 0 0 5%;}
 .albumTracks .trackItem{display: flex; align-items: center; margin: 15px 0; gap: 10px;}
+
+.userPlaylists{display: flex; flex-direction: column; gap: 15px;}
+
+.detailSort{margin-top: 20px; margin-left: 2px; font-size: 12px; font-weight: 200; letter-spacing: .3px; opacity: .7;}
+.trackDescription{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8;}
+.playlistOpt{margin-top: 5px; font-size: 14px; font-weight: 400; letter-spacing: .2px; opacity: .8;}
+.playlistDesc{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8;}
+
+.playlist-tracks{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; border-bottom: 1px solid white; opacity: .8; padding-bottom: 5px;}
+.playlistTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; opacity: .8; margin: 10px 0;}
+.playlist-tracks .playlist-tracks-top{display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 13px;}
+.trackImageAndTitle{display: flex; gap: 10px;}
+.trackItem > *{display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 14px;}
+.playAllButton{border: 0; background-color: transparent; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #1ed660; border-radius: 50%;}

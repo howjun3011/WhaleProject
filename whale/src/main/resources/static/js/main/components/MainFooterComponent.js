@@ -26,9 +26,13 @@ const MainFooterComponent = {
 	            <div class="playerComponent" id="playerRight">
 	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
 	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
-	            	<div class="volume-bar">
-			            <input type="range" class="player-bar" id="volumeSlider" min="0" max="100" v-model="sliderValue" @input="updateSliderBackground" :style="sliderStyle">
+	            	<div class="volume-bar-container">
+			            <input type="range" class="volume-bar" id="volumeSlider" min="0" max="100" v-model="volumeValue" @input="updateVolumeBackground" :style="volumeStyle">
 			        </div>
+			        <button class="playerBtn flexCenter" style="margin: 0 8px; opacity: 0.6;">
+			        	<img src="static/images/streaming/player/soundOn.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue !== 0" @click="muteVolume()">
+			        	<img src="static/images/streaming/player/soundOff.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue === 0" @click="returnVolume()">
+			        </button>
 	            </div>
 	        </div>
 	    </div>
@@ -52,6 +56,8 @@ const MainFooterComponent = {
 			isShuffled: false,
 			isLiked: ['static/images/streaming/player/like.png','static/images/streaming/player/likeFill.png'],
 			sliderValue: 0,
+			volumeValue: 50,
+			tempVolume: null,
 			timer: null,
 			playTime: [],
 		};
@@ -62,6 +68,12 @@ const MainFooterComponent = {
 	computed: {
 		sliderStyle() {
 			const value = (this.sliderValue - 0) / (100 - 0) * 100;
+			return {
+				background: `linear-gradient(to right, #828282 ${value}%, #c2c2c2 ${value}%)`,
+			};
+		},
+		volumeStyle() {
+			const value = (this.volumeValue - 0) / (100 - 0) * 100;
 			return {
 				background: `linear-gradient(to right, #828282 ${value}%, #c2c2c2 ${value}%)`,
 			};
@@ -183,11 +195,6 @@ const MainFooterComponent = {
 							if (data.result === 'yes') {this.trackInfo[5] = true;}
 							else {this.trackInfo[5] = false;}
 					});
-			        
-			        this.player.getCurrentState().then(
-						(state) => {
-						}
-					);
 			    });
 			}
 		},
@@ -323,8 +330,23 @@ const MainFooterComponent = {
 			this.player.seek( (this.sliderValue / 100) * this.playTime[3] )
 		},
 		
+		updateVolumeBackground() {
+			this.player.setVolume(this.volumeValue / 100);
+		},
+		
 		returnTime(ms) {
 			return `${ String(Math.floor( ms / (1000 * 60 ) )).padStart(2, "0") }:${ String(Math.floor( ( ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }`;
+		},
+		
+		muteVolume() {
+			this.tempVolume = this.volumeValue;
+			this.volumeValue = 0;
+			this.player.setVolume(this.volumeValue / 100);
+		},
+		
+		returnVolume() {
+			this.volumeValue = this.tempVolume;
+			this.player.setVolume(this.volumeValue / 100);
 		},
 	},
 };

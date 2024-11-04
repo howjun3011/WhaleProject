@@ -126,6 +126,11 @@ public class StreamingController {
 			String artistName = trackDetail.getArtists()[0].getName();
 			String songTitle = trackDetail.getName();
 			String lyrics = lyricsService.getLyrics(artistName, songTitle);  // 가사 조회
+
+			// 가사에서 \r 제거
+			if (lyrics != null) {
+				lyrics = lyrics.replace("\\r", "");
+			}
 			model.addAttribute("lyrics", lyrics);
 		} else {
 			model.addAttribute("error", "Unable to retrieve track details");

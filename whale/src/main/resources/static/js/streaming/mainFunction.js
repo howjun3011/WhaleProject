@@ -129,8 +129,17 @@ $(document).ready(function () {
     $('#toggleButton').click(function () {
         isExpanded = !isExpanded; // 상태를 토글
         $('.mainLibraryFrame').toggleClass('expanded', isExpanded); // 메인 라이브러리 프레임 요소에 클래스 추가/제거
+
+        // SVG 아이콘 변경
+        const path = $('#toggleButton path');
+        if (isExpanded) {
+            path.attr('d', 'M3 22a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1zM15.5 2.134A1 1 0 0 0 14 3v18a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V6.464a1 1 0 0 0-.5-.866l-6-3.464zM9 2a1 1 0 0 0-1 1v18a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1z'); // 확장 시 새로운 d 값
+        } else {
+            path.attr('d', 'M14.5 2.134a1 1 0 0 1 1 0l6 3.464a1 1 0 0 1 .5.866V21a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1V3a1 1 0 0 1 .5-.866zM16 4.732V20h4V7.041l-4-2.309zM3 22a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1zm6 0a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1z'); // 축소 시 기본 d 값
+        }
     });
 });
+
 
 // 스크롤 이동 함수
 function updateScrollButtons() {

@@ -48,5 +48,19 @@
 	<delete id="deleteTrackLike">
 		DELETE FROM TRACK_LIKE WHERE TRACK_LIKE_ID = #{trackLikeId}
 	</delete>
-	
+
+	<!-- 좋아요 표시한 곡 목록 조회 -->
+	<select id="selectLikedTracks" parameterType="String" resultType="com.tech.whale.streaming.models.TrackDto">
+		SELECT
+			t.TRACK_ID AS track_id,
+			t.TRACK_ARTIST AS track_artist,
+			t.TRACK_NAME AS track_name,
+			t.TRACK_ALBUM AS track_album,
+			t.TRACK_COVER AS track_cover
+		FROM
+			TRACK_LIKE tl
+				JOIN TRACK t ON tl.TRACK_ID = t.TRACK_ID
+		WHERE
+			tl.USER_ID = #{userId}
+	</select>
 </mapper>

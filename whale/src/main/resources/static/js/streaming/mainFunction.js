@@ -211,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
     adjustFontSizeByTextLength("trackName");
     adjustFontSizeByTextLength("playlistName");
     adjustFontSizeByTextLength("artistName");
+    adjustFontSizeByTextLength("likedTracksName");
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -452,6 +453,7 @@ function playAllPlaylist(playlistId) {
         });
 }
 
+// 메인 스트리밍 화면 좋아요 버튼
 // insertTrackLike 함수를 전역으로 선언
 // trackInfo 배열을 전역 변수로 설정하고 기본 초기화
 let trackInfo = [];
@@ -587,3 +589,25 @@ async function fetchWebApi(url, method) {
 
 // 초기화 코드 실행
 setupPlayer();
+// --- 메인 스트리밍 화면 좋아요 버튼 끝
+
+// 좋아요 표시한 곡
+function navigateToLikedTracks() {
+    window.location.href = "/whale/streaming/likedTracks";
+}
+
+// 좋아요 표시한 곡 페이지에서 좋아요 제거
+async function toggleTrackLike(trackId, button) {
+    try {
+        const response = await fetch('/whale/streaming/toggleTrackLike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ trackSpotifyId: trackId })
+        });
+        button.querySelector("path").setAttribute("d", "");
+    } catch (error) {
+        console.error("Error toggling like status:", error);
+    }
+}

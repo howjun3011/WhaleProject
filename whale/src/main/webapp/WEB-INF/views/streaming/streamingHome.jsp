@@ -53,7 +53,7 @@
             </svg>
             <p class="mainLibraryName">내 라이브러리</p>
             <div class="userPlaylists">
-            	<div class="playlist-content">
+            	<div class="playlist-content" onclick="navigateToLikedTracks()">
             		<div class="playlistCover">
             			<img src="https://misc.scdn.co/liked-songs/liked-songs-64.png" alt="WHALE LIKE TRACK" width="45" height="45"
             			style="border-radius: 2px; opacity: 0.8;">
@@ -491,6 +491,61 @@
                                         <c:set var="seconds" value="${(trackItem.durationMs % 60000) / 1000}"/>
                                         <!-- 소수점 제거 후 출력 -->
                                         <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:when test="${page == 'likedTracks'}">
+                        <div class="likedTracks">
+                            <div class="likedTracksHeader">
+                                <img src="https://misc.scdn.co/liked-songs/liked-songs-300.png" width="170"
+                                     height="170" style="border-radius: 8px;">
+                                <div class="likedTracksInfo">
+                                    <p class="detailSort">플레이리스트</p>
+                                    <h1 id="likedTracksName">좋아요 표시한 곡</h1>
+                                    <p>WHALE • ${fn:length(likedTracks)}곡</p>
+                                </div>
+                            </div>
+                            <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
+                                <div class="playlist-tracks-top" style="justify-content: center;">#</div>
+                                <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
+                                <div class="playlist-tracks-top" style="padding-left: 5px;">앨범</div>
+                                <div class="playlist-tracks-top" style="justify-content: center;">좋아요</div>
+                            </div>
+                            <div class="likedTracksList">
+                                <c:forEach var="track" items="${likedTracks}" varStatus="status">
+                                    <div class="trackItem" style="${status.last ? 'padding-bottom: 20px;' : ''}">
+                                        <!-- 순위 표시 -->
+                                        <span class="rank">${status.index + 1}</span>
+                                        <!-- 재생/일시정지 버튼 -->
+                                        <button class="playPauseButton" onclick="togglePlayPause('${track.track_id}', this)">
+                                            <svg class="icon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+                                            </svg>
+                                        </button>
+                                        <div class="trackImageAndTitle" onclick="playAndNavigate('${track.track_id}');">
+                                            <!-- 트랙 이미지 표시 -->
+                                            <c:if test="${not empty track.track_cover}">
+                                                <img src="${track.track_cover}" alt="${track.track_name}" width="50" height="50"
+                                                     style="border-radius: 4px; padding-left: 5px;">
+                                            </c:if>
+                                            <!-- 트랙 제목과 아티스트 이름 표시 -->
+                                            <div>
+                                                <p style="font-weight: 400;">${track.track_name}</p>
+                                                <p>${track.track_artist}</p>
+                                            </div>
+                                        </div>
+                                        <!-- 앨범 이름 -->
+                                        <p class="albumName"
+                                           style="padding-left: 5px;">${track.track_album}</p>
+                                        <!-- 좋아요 제거 버튼 -->
+                                        <button class="toggleLikeButton" onclick="toggleTrackLike('${track.track_id}', this)">
+                                            <svg class="icon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
+                                                <path d="${track.liked ? 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' : 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'}"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </c:forEach>
                             </div>

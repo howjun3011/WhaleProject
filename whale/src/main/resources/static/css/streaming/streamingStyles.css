@@ -86,6 +86,10 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 #artistName.medium-font { font-size: 4rem; opacity: .8; font-weight: bold; /* 글자가 중간 정도 길 때 중간 폰트 */ }
 #artistName.large-font { font-size: 5.5rem; opacity: .8; font-weight: bold; /* 글자가 짧을 때 큰 폰트 */ }
 
+#likedTracksName.small-font { font-size: 2rem; opacity: .8; font-weight: bold; /* 글자가 길 때 작은 폰트 */ }
+#likedTracksName.medium-font { font-size: 4rem; opacity: .8; font-weight: bold; /* 글자가 중간 정도 길 때 중간 폰트 */ }
+#likedTracksName.large-font { font-size: 5.5rem; opacity: .8; font-weight: bold; /* 글자가 짧을 때 큰 폰트 */ }
+
 .lyrics{color: white; width: 95%; margin-top: 40px; margin-left: 20px; overflow: scroll; padding-top: 20px; padding-left: 10px; border-top: 0.5px solid rgb(197, 197, 197, 0.7);}
 .lyrics h3{font-size: 1.5rem;}
 .lyrics pre{max-height: 100%; margin-top: 15px; font-family: 'Noto Sans', sans-serif; line-height: 1.5; padding-bottom: 20px;}
@@ -185,3 +189,14 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .topTrackItem > *:not(img) {display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; font-size: 14px; opacity: .9;}
 .topTrackInfo{gap: 10px;}
 .topTrackItem .rank{font-size: 18px; flex: 0 0 5%; display: flex; align-items: center; justify-content: center;}
+
+.likedTracksHeader{margin: 0 0 15px 15px; display: flex; align-items: end; gap: 20px;}
+/* 기본 상태에서 순위는 보이고 재생 버튼은 숨김 */
+.likedTracks {width: 95%; margin-left: 20px;}
+.likedTracks .rank {font-size: 18px; flex: 0 0 5%; display: flex; align-items: center; justify-content: center;}
+.likedTracks .playPauseButton {display: none; /* 기본적으로 숨김 */ flex: 0 0 5%;}
+/* trackItem에 마우스를 올리면 rank 숨기고 playPauseButton 표시 */
+.trackItem:hover .rank {display: none;}
+.trackItem:hover .playPauseButton {display: inline-block;}
+.likedTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; opacity: .8; margin: 10px 0;}
+.toggleLikeButton{border: 0; background-color: transparent; justify-content: center;}

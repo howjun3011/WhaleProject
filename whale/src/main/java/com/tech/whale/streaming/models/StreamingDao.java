@@ -1,6 +1,7 @@
 package com.tech.whale.streaming.models;
 
 import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
 
 @Mapper
 public interface StreamingDao {
@@ -11,4 +12,5 @@ public interface StreamingDao {
 	public void insertTrackLike(String trackSpotifyId, String userId);
 	public void insertTrackCnt(String trackSpotifyId, String userId);
 	public void deleteTrackLike(Integer trackLikeId);
+	public List<TrackDto> selectLikedTracks(String userId);
 }

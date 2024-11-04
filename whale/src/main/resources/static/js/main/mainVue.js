@@ -15,6 +15,8 @@ const app = createApp({
 			pageAccess: [],
 			notifications: [[],[],[],[]],
 			notiCounts: [0,0,0,0],
+			trackInfo: [],
+			fullPlayer: [ false, false ],
 		}
 	},
 	mounted() {
@@ -63,7 +65,13 @@ const app = createApp({
 		changeRedirectIndex(i,j,k) {this.replaceIframe(this.pageAccess[i],j,k); this.closeMenu(); setTimeout(() => {this.getNotification();}, 500);},
 		
 		// [ Main Center ]
-		replaceIframe(i,j,k) {$("#"+this.frameNames[i]).get(0).src = this.whaleAddress[j]+k; if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}},
+		replaceIframe(i,j,k) {
+			this.fullPlayer[i] = false;
+			this.$nextTick(() => {
+                $("#"+this.frameNames[i]).get(0).src = this.whaleAddress[j]+k;
+            });
+			if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}
+		},
 		
 		// [ User Info ]
 		checkUserInfo() {
@@ -98,7 +106,6 @@ const app = createApp({
 				.then(data => {
 					this.notifications[1] = data;
 					this.notiCounts[1] = this.notifications[1].filter(notification => notification.like_noti_check === 0).length;
-					console.log(data);
 			});
 			// 댓글
 			fetch('main/commentsNoti')
@@ -106,7 +113,6 @@ const app = createApp({
 				.then(data => {
 					this.notifications[2] = data;
 					this.notiCounts[2] = this.notifications[2].filter(notification => notification.comments_noti_check === 0).length;
-					console.log(data);
 			});
 			// 팔로우
 			fetch('main/followNoti')
@@ -114,8 +120,13 @@ const app = createApp({
 				.then(data => {
 					this.notifications[3] = data;
 					this.notiCounts[3] = this.notifications[3].filter(notification => notification.follow_noti_check === 0).length;
-					console.log(data);
 			});
+		},
+		
+		// 전체 화면 플레이어
+		changeFullPlayer(i) {
+			if (this.pageAccess[i] === 0) {this.fullPlayer[0] = true;}
+			else {this.fullPlayer[1] = true;}
 		},
 	},
 });

@@ -7,8 +7,8 @@
                 <p class="detailSort">{{ album.album_type }}</p>
                 <p class="playlistName">{{ album.name }}</p>
                 <div class="trackDescription">
-                    <img :src="artist.images[0].url" :alt="album.name" width="24" height="24" style="border-radius: 50%; cursor: pointer;">
-                    <p class="trackFont" style="margin-left: 2px;">{{ album.artists[0].name }}</p>
+                    <img :src="artist.images[0].url" :alt="album.name" width="24" height="24" style="border-radius: 50%; cursor: pointer;" @click="redirectRouter('artist',artist.id)">
+                    <p class="trackFont" style="margin-left: 2px;" @click="redirectRouter('artist',artist.id)">{{ album.artists[0].name }}</p>
                     <p> • </p>
                     <p>{{ album.total_tracks }}곡</p>
                     <p> • </p>
@@ -57,8 +57,8 @@
                 </svg>
             </div>
             <div class="playlist-tracks-content" style="display: block; padding-left: 5px;">
-                <p style="font-weight: 400;">{{ item.name }}</p>
-                <p>{{ item.artists[0].name }}</p>
+                <p style="font-weight: 400; cursor: pointer;"  @click="redirectRouter('track',item.id)">{{ item.name }}</p>
+                <p style="cursor: pointer;" @click="redirectRouter('artist',item.artists[0].id)">{{ item.artists[0].name }}</p>
             </div>
             <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
         </div>
@@ -114,6 +114,9 @@ export default {
         addIsShow(i) {
             this.isShow.push(false);
             return this.isShow[i];
+        },
+        redirectRouter(i,y) {
+            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
     },
 };

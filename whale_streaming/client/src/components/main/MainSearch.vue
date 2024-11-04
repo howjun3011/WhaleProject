@@ -1,8 +1,38 @@
 <template>
-    <div class="search-container">
-        <!-- 검색 결과 및 페이지네이션 영역 -->
-        <div id="pagination"></div>
-        <div id="search-results"></div>
+    <div class="recommendationsHeader"></div>
+    <div class="recommendations" v-if="search !== null">
+        <!-- 왼쪽 버튼 -->
+        <button class="artistDetailSlideButton left" id="scrollLeftBtn" @click="scrollLeftContent()">
+            <img src="../../../public/images/main/prev.png"
+                    alt="Left Button" width="30"
+                    height="30" style="border-radius: 8px; opacity: 0.75;">
+        </button>
+        <div class="recommendationTitle"><p class="titleName">곡</p></div>
+        <div class="recommendationContents">
+            <div class="recommendationContent" v-for="(item, i) in search.tracks.items" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false">
+                <div class="recommendationLike" style="left: 15px;" v-if="addIsShow(i)">
+                    <img src="../../../public/images/main/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+                </div>
+                <div class="recommendationCover">
+                    <img :src="item.album.images[0].url" :alt="item.name" width="120" height="120" style="border-radius: 8px; cursor: pointer;" @click="redirectRouter('track',item.id)">
+                </div>
+                <div class="recommendationLike" style="right: 15px;" v-if="addIsShow(i)" @click="playPlayer(item.uri)">
+                    <img src="../../../public/images/main/play.png"
+                            alt="Play Button" width="30"
+                            height="30" style="border-radius: 8px; opacity: 0.75;">
+                </div>
+                <div class="recommendationInfo">
+                    <p class="trackName" style="cursor: pointer;" @click="redirectRouter('track',item.id)">{{ item.name }}</p>
+                    <p class="artistName" style="cursor: pointer;" @click="redirectRouter('artist',item.artists[0].id)">{{ item.artists[0].name }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- 오른쪽 버튼 -->
+        <button class="artistDetailSlideButton right" id="scrollRightBtn" @click="scrollRightContent()">
+            <img src="../../../public/images/main/next.png"
+                    alt="Right Button" width="30"
+                    height="30" style="border-radius: 8px; opacity: 0.75;">
+        </button>
     </div>
 </template>
 
@@ -10,165 +40,95 @@
 export default {
     data() {
         return {
-            currentPage: 1,
-            itemsPerPage: 10,                                        // 한 페이지에 표시할 항목 수
+            search: null,
+            isShow: [],
         }
     },
     mounted() {
-        if (this.$route.params.query) {
-            this.currentPage = 1; // 새로운 검색 시 페이지를 1로 초기화
-            this.searchTracks(this.$route.params.query, this.currentPage);
-        }
+        this.getSearch();
     },
     methods: {
-        searchTracks(query, page = 1) {
-            const offset = (page - 1) * this.itemsPerPage;
-        
-            fetch(
-                `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-                query
-                )}&type=track&limit=${this.itemsPerPage}&offset=${offset}`,
-                {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.accessToken}`,
-                },
+        async getSearch() {
+            const result = await fetch(`/whale/streaming/getArtistPlaylist?q=${this.$route.params.query}&t=track`);
+            if (await result.ok) {
+                const data = await result.json();
+                this.search = await data;
+                this.$nextTick(() => {
+                    this.checkScroll();
+                });
+            } else {
+                console.error('Failed to fetch user search items:', result.statusText);
+            }
+        },
+        addIsShow(i) {
+            this.isShow.push(false);
+            return this.isShow[i];
+        },
+        async playPlayer(i) {
+            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
+        },
+        updateScrollButtons() {
+            const container = document.querySelector('.recommendationContents');
+            const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+            const scrollRightBtn = document.getElementById('scrollRightBtn');
+
+            if (container) {
+                // 왼쪽 버튼 보이기/숨기기
+                if (container.scrollLeft > 0) {
+                    scrollLeftBtn.classList.remove('hidden');
+                } else {
+                    scrollLeftBtn.classList.add('hidden');
                 }
-            )
-            .then((response) => response.json())
-            .then((data) => {
-                this.displaySearchResults(data.tracks.items);
-                this.setupPagination(data.tracks.total, page, query);
-            })
-            .catch((error) => console.error("검색 에러:", error));
-        },
-        setupPagination(totalItems, currentPage, query) {
-            const pagination = document.getElementById("pagination");
-            pagination.innerHTML = "";
-        
-            const totalPages = Math.ceil(totalItems / this.itemsPerPage);
-        
-            // 이전 페이지 버튼
-            if (currentPage > 1) {
-                const prevButton = document.createElement("button");
-                prevButton.innerText = "이전";
-                prevButton.addEventListener("click", () => {this.searchTracks(query, currentPage - 1);});
-                pagination.appendChild(prevButton);
-            }
-        
-            // 페이지 번호 표시
-            const pageIndicator = document.createElement("span");
-            pageIndicator.innerText = `페이지 ${currentPage} / ${totalPages}`;
-            pagination.appendChild(pageIndicator);
-        
-            // 다음 페이지 버튼
-            if (currentPage < totalPages) {
-                const nextButton = document.createElement("button");
-                nextButton.innerText = "다음";
-                nextButton.addEventListener("click", () => {this.searchTracks(query, currentPage + 1);});
-                pagination.appendChild(nextButton);
+
+                // 오른쪽 버튼 보이기/숨기기
+                const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                if (container.scrollLeft < maxScrollLeft) {
+                    scrollRightBtn.classList.remove('hidden');
+                } else {
+                    scrollRightBtn.classList.add('hidden');
+                }
             }
         },
-        displaySearchResults(tracks) {
-            const searchResults = document.getElementById("search-results");
-            searchResults.innerHTML = "";
-        
-            tracks.forEach((track) => {
-                const trackItem = document.createElement("div");
-                trackItem.classList.add("track-item");
-        
-                const albumImage = document.createElement("img");
-                albumImage.src = track.album.images[0] ? track.album.images[0].url : "";
-        
-                const trackDetails = document.createElement("div");
-                trackDetails.classList.add("track-details");
-        
-                const trackName = document.createElement("div");
-                trackName.innerText = track.name;
-        
-                const artistName = document.createElement("div");
-                artistName.innerText = track.artists.map((artist) => artist.name).join(", ");    
-                artistName.classList.add("artist-name");
-        
-                trackDetails.appendChild(trackName);
-                trackDetails.appendChild(artistName);
-        
-                const playButton = document.createElement("button");
-                playButton.addEventListener("click", () => {this.playTrack(sessionStorage.device_id, track.uri);});
-        
-                trackItem.appendChild(albumImage);
-                trackItem.appendChild(trackDetails);
-                trackItem.appendChild(playButton);
-        
-                searchResults.appendChild(trackItem);
-            });
+        scrollLeftContent() {
+            const container = document.querySelector('.recommendationContents');
+            container.scrollBy({ left: -210, behavior: 'smooth' });
+            setTimeout(this.updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
         },
-        playTrack(deviceId, trackUri) {
-            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-                method: "PUT",
-                body: JSON.stringify({ uris: [trackUri] }),
-                headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.accessToken}`,
-                },
-            })
-            .then(() => {
-            console.log("재생 시작:", trackUri);
-            })
-            .catch((error) => console.error("재생 에러:", error));
+        scrollRightContent() {
+            const container = document.querySelector('.recommendationContents');
+            container.scrollBy({ left: 210, behavior: 'smooth' });
+            setTimeout(this.updateScrollButtons, 300); // 스크롤 후 버튼 업데이트
+        },
+        checkScroll() {
+            this.updateScrollButtons();
+            const container = document.querySelector('.recommendationContents');
+            if (container) {
+                container.addEventListener('scroll', this.updateScrollButtons); // 스크롤 이벤트 감지
+            }
+        },
+        redirectRouter(i,y) {
+            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
     },
 };
 </script>
 
-<style>
-    .search-container {display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%;}
-
-    .track-item {
-        display: flex;
-        align-items: center;
-        border-bottom: 1.5px solid #2e2e2e;
-        padding: 5px 0;
-    }
-
-    .track-item img {
-        width: 64px;
-        height: 64px;
-        margin-right: 15px;
-    }
-
-    .track-details {flex-grow: 1; text-align: left; color: #f2f2f2; font-size: 14px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
-    .artist-name {margin-top: 4px; font-size: 12px;}
-
-    .track-item button {
-        width: 20px;
-        height: 20px;
-        background-color: #e2e2e2;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    #search-results {
-        width: 90%;
-        height: 90%;
-        margin-top: 10px;
-        overflow: auto;
-        -ms-overflow-style: none;
-    }
-
-    #pagination {
-        display: flex;
-        justify-content: center;
-        width: 90%;
-        margin-top: 20px;
-        color: #f2f2f2;
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: 0.4px;
-        opacity: 0.8;
-    }
-
-    #pagination span {
-        margin: 0 10px 0 10px;
-    }
+<style scoped>
+    .recommendationsHeader {width: 100%; height: 30px;}
+    .recommendations {position: relative; width: 100%; height: 240px;}
+    .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+    .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
+    .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
+    .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
+    .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; background: transparent;}
+    .recommendationLike:hover{opacity: 0.7;}
+    .recommendationLike:active{opacity: 0.6;}
+    .recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}
+    .recommendationInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
+    .trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+    .artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}
+    .artistDetailSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+    .artistDetailSlideButton.left {left: 0; top: 50%;}
+    .artistDetailSlideButton.right {right: 0; top: 50%;}
+    .artistDetailSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
 </style>

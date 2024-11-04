@@ -23,4 +23,12 @@ const router = createRouter({
     routes,
 });
 
+router.beforeEach(function (to, from, next) {
+    if (from.path.substring(1).split('/')[2] === 'search' && to.path.substring(1).split('/')[2] === 'searchHome') {
+        console.log('Block');
+    } else {
+        next();
+    }
+  });
+
 export default router;

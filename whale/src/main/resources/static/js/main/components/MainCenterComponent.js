@@ -2,7 +2,11 @@ const MainCenterComponent = {
 	template: `
 		<div class="mainItems flexCenter" v-for="(menuBtnTrigger, i) in menuBtnTriggers" :key="i">
 			<div class="frame">
-				<iframe :id="frameNames[i]" style="width: 100%; height: 100%; border-radius:30px; border: none" :src="startPage[i]" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+				<Transition name="menuTransition" mode="out-in"><iframe :id="frameNames[i]" v-if="fullPlayer[i] === false" style="width: 100%; height: 100%; border-radius:30px; border: none;" :src="startPage[i]" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></Transition>
+				<Transition name="menuTransition" mode="out-in">
+					<div v-if="fullPlayer[i] === true" style="width: 100%; height: 100%; border-radius:30px; border: 1px solid #e2e2e2">
+					</div>
+				</Transition>
 				<Transition name="menuTransition" mode="out-in">
 					<div class="menu-style menuBtn flexCenter" v-if="menuBtnTriggers[i]" :key="keyBtns[i]" @click="menuBtnTriggers[i] = !menuBtnTriggers[i]"><div class="menuBtn-square"></div></div>
 	        		<div class="menu-style menuDock flexCenter" v-else :key="keyDocks[i]" @click="menuBtnTriggers[i] = !menuBtnTriggers[i]">
@@ -16,6 +20,8 @@ const MainCenterComponent = {
 		frameNames: Array,
 		replaceIframe: {type: Function, default() {return 'Default function'}},
 		startPage: Array,
+		trackInfo: Array,
+		fullPlayer: Array,
 	},
 	data() {
 		return {

@@ -338,7 +338,7 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        String orderBy = sortOrder.equals("최신순") ? "ASC" : "DESC";
+        String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
 
         List<CommentListDto> feedCommentList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
         List<CommentListDto> replyList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);

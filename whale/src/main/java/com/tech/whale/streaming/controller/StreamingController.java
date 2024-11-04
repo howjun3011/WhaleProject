@@ -332,4 +332,21 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
+
+	// 좋아요 상태 확인 메서드
+	@PostMapping(value = "/streaming/checkTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, Object>> checkTrackLike(@RequestBody Map<String, Object> map, HttpSession session) {
+		String trackSpotifyId = map.get("trackSpotifyId").toString();
+		Map<String, Object> response = new HashMap<>();
+
+		boolean isLiked = streamingService.selectTrackLikeService(session, trackSpotifyId); // 좋아요 상태 확인
+
+		if (isLiked) {
+			response.put("result", "liked");
+		} else {
+			response.put("result", "not_liked");
+		}
+
+		return ResponseEntity.ok(response);
+	}
 }

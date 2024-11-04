@@ -17,6 +17,9 @@
     <c:if test="${page == 'detail' || page == 'playlistDetail' || page == 'artistDetail' || page == 'albumDetail'}">
         <script src="${pageContext.request.contextPath}/static/js/streaming/mainContentBackground.js" defer></script>
     </c:if>
+    <script>
+        window.contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
+    </script>
 </head>
 <body>
 <div class="header">
@@ -98,7 +101,7 @@
                                 <div class="recommendationContents" id="recommendationContents">
                                     <!-- trackPaging 데이터를 반복문으로 출력 -->
                                     <c:forEach var="track" items="${trackPaging.items}">
-                                        <div class="recommendationContent">
+                                        <div class="recommendationContent" data-track-id="${track.id}">
                                             <div class="recommendationLike"
                                                  onclick="insertTrackLike('<c:out value="${track.album.images[0].url}" />', '<c:out value="${fn:escapeXml(track.name)}" />', '<c:out value="${fn:escapeXml(track.artists[0].name)}" />', '<c:out value="${fn:escapeXml(track.album.name)}" />', '${track.id}', false)">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/like.png"

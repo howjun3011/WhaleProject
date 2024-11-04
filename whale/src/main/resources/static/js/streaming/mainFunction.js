@@ -211,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
     adjustFontSizeByTextLength("trackName");
     adjustFontSizeByTextLength("playlistName");
     adjustFontSizeByTextLength("artistName");
+    adjustFontSizeByTextLength("likedTracksName");
 });
 
 document.addEventListener("DOMContentLoaded", function() {

@@ -499,12 +499,18 @@
                     <c:when test="${page == 'likedTracks'}">
                         <div class="likedTracks">
                             <div class="likedTracksHeader">
-                                <h2>좋아요 표시한 곡</h2>
-                                <p>${fn:length(tracks)}곡</p>
+                                <img src="https://misc.scdn.co/liked-songs/liked-songs-300.png" width="170"
+                                     height="170" style="border-radius: 8px;">
+                                <div class="likedTracksInfo">
+                                    <p class="detailSort">플레이리스트</p>
+                                    <h1 id="likedTracksName">좋아요 표시한 곡</h1>
+                                    <p>WHALE • ${fn:length(likedTracks)}곡</p>
+                                </div>
                             </div>
-                            <div class="playlist-tracks" style="height: 25px; grid-template-columns: 6% 83% 11%; margin-top: 5px; pointer-events: none;">
+                            <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
+                                <div class="playlist-tracks-top" style="padding-left: 5px;">앨범</div>
                                 <div class="playlist-tracks-top" style="justify-content: center;">좋아요</div>
                             </div>
                             <div class="likedTracksList">
@@ -530,9 +536,11 @@
                                                 <p>${track.track_artist}</p>
                                             </div>
                                         </div>
+                                        <!-- 앨범 이름 -->
+                                        <p class="albumName"
+                                           style="padding-left: 5px;">${track.track_album}</p>
                                     </div>
                                 </c:forEach>
-
                             </div>
                         </div>
                     </c:when>

@@ -536,18 +536,7 @@ async function insertTrackLike(coverUrl, trackName, artistName, albumName, track
             body: JSON.stringify(body)
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            if (data.result === 'inserted') {
-                console.log("Track liked successfully.");
-                trackInfo[5] = true;  // 좋아요 상태 설정
-            } else if (data.result === 'deleted') {
-                console.log("Track unliked successfully.");
-                trackInfo[5] = false; // 좋아요 상태 해제
-            }
-        } else {
-            console.error('Failed to update the Track Like Data:', response.statusText);
-        }
+        toggleLikeButton(trackId);
     } catch (error) {
         console.error('Error while updating the Track Like Data:', error);
     } finally {
@@ -611,3 +600,113 @@ async function toggleTrackLike(trackId, button) {
         console.error("Error toggling like status:", error);
     }
 }
+
+// 좋아요 상태 확인 및 초기 이미지 설정 함수
+async function checkTrackLikeStatus(trackId) {
+    try {
+        // 서버에 좋아요 상태 요청
+        const response = await fetch(`/whale/streaming/checkTrackLike`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ trackSpotifyId: trackId })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const isLiked = data.result === 'liked'; // 서버에서 'liked' 반환 시 true로 설정
+            updateLikeButton(trackId, isLiked); // 좋아요 상태에 따라 버튼 업데이트
+        } else {
+            console.error('Failed to fetch like status:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching like status:', error);
+    }
+}
+
+// 페이지 로드 시 모든 트랙의 좋아요 상태 확인
+document.addEventListener("DOMContentLoaded", function() {
+    const trackElements = document.querySelectorAll("[data-track-id]"); // data-track-id 속성을 가진 모든 요소 선택
+
+    trackElements.forEach(trackElement => {
+        const trackId = trackElement.getAttribute("data-track-id"); // 트랙 ID 가져오기
+        checkTrackLikeStatus(trackId, trackElement); // 트랙 ID와 요소를 전달하여 좋아요 상태 확인
+    });
+});
+
+// 좋아요 상태 확인 함수
+async function checkTrackLikeStatus(trackId, trackElement) {
+    try {
+        const response = await fetch("/whale/streaming/checkTrackLike", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ trackSpotifyId: trackId })
+        });
+
+        const data = await response.json();
+        // `recommendationLike`와 `recentlyPlayedTrackLike`에서 좋아요 아이콘을 찾아 변경
+        let imgElement = trackElement.querySelector(".recommendationLike img")
+            || trackElement.querySelector(".recentlyPlayedTrackLike img");
+
+        if (data.result === "liked") {
+            // 좋아요 상태일 때 liked.png로 변경
+            imgElement.src = `${window.contextPath}/static/images/streaming/liked.png`;
+        } else {
+            // 좋아요 상태가 아닐 때 기본 이미지로 변경
+            imgElement.src = `${window.contextPath}/static/images/streaming/like.png`;
+        }
+    } catch (error) {
+        console.error("Error checking track like status:", error);
+    }
+}
+
+// 최근 재생한 항목 스크롤 이동 함수
+function updateRecentlyPlayedScrollButtons() {
+    const container = document.querySelector('.recentlyPlayedTracks');
+    const scrollLeftBtn = document.getElementById('scrollRecentlyPlayedLeftBtn');
+    const scrollRightBtn = document.getElementById('scrollRecentlyPlayedRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollRecentlyPlayedLeftContent() {
+    const container = document.querySelector('.recentlyPlayedTracks');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateRecentlyPlayedScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRecentlyPlayedRightContent() {
+    const container = document.querySelector('.recentlyPlayedTracks');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateRecentlyPlayedScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    // 홈화면에서 최근 재생한 항목 스크롤 버튼 업데이트
+    if (window.location.pathname === '/whale/streaming/home') {
+        updateRecentlyPlayedScrollButtons(); // 초기 상태
+        const container = document.querySelector('.recentlyPlayedTracks');
+        container.addEventListener('scroll', updateRecentlyPlayedScrollButtons); // 스크롤 이벤트 감지
+    }
+});
+
+

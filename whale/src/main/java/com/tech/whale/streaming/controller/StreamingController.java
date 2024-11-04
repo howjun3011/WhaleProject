@@ -75,6 +75,10 @@ public class StreamingController {
 		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
 		model.addAttribute("likedTracks", likedTracks);
 
+		// 최근 재생한 항목 가져오기
+		List<PlayHistory> recentlyPlayedTracks = streamingService.getRecentlyPlayedTracks(session);
+		model.addAttribute("recentlyPlayedTracks", recentlyPlayedTracks);
+
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -331,5 +335,22 @@ public class StreamingController {
 		model.addAttribute("page", "likedTracks");
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
+	}
+
+	// 좋아요 상태 확인 메서드
+	@PostMapping(value = "/streaming/checkTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, Object>> checkTrackLike(@RequestBody Map<String, Object> map, HttpSession session) {
+		String trackSpotifyId = map.get("trackSpotifyId").toString();
+		Map<String, Object> response = new HashMap<>();
+
+		boolean isLiked = streamingService.selectTrackLikeService(session, trackSpotifyId); // 좋아요 상태 확인
+
+		if (isLiked) {
+			response.put("result", "liked");
+		} else {
+			response.put("result", "not_liked");
+		}
+
+		return ResponseEntity.ok(response);
 	}
 }

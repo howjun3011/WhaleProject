@@ -23,10 +23,21 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequ
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsAlbumsRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
+import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
+
+import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
+
+import java.util.HashSet;
+import java.util.Set;
+
 
 import java.util.List;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.LinkedHashSet;
 
 
 @Service
@@ -400,5 +411,32 @@ public class StreamingService {
     // 좋아요 표시한 곡
     public List<TrackDto> getLikedTracks(String userId) {
         return streamingDao.selectLikedTracks(userId);
+    }
+
+    // 최근 재생한 항목
+    public List<PlayHistory> getRecentlyPlayedTracks(HttpSession session) {
+        try {
+            SpotifyApi spotifyApi = new SpotifyApi.Builder()
+                    .setAccessToken((String) session.getAttribute("accessToken"))
+                    .build();
+
+            GetCurrentUsersRecentlyPlayedTracksRequest recentlyPlayedRequest = spotifyApi.getCurrentUsersRecentlyPlayedTracks()
+                    .limit(50) // 충분한 양의 데이터를 가져와서 필터링
+                    .build();
+
+            PagingCursorbased<PlayHistory> recentlyPlayedPaging = recentlyPlayedRequest.execute();
+
+            // 중복을 제거하기 위해 LinkedHashSet을 사용하여 순서를 유지하면서 중복 제거
+            Set<String> trackIds = new LinkedHashSet<>();
+            List<PlayHistory> uniqueRecentlyPlayed = Arrays.stream(recentlyPlayedPaging.getItems())
+                    .filter(playHistory -> trackIds.add(playHistory.getTrack().getId())) // track ID 기준 중복 제거
+                    .limit(10) // 상위 10개 항목만 가져옴
+                    .collect(Collectors.toList());
+
+            return uniqueRecentlyPlayed;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 }

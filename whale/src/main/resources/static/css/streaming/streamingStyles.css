@@ -200,3 +200,29 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .trackItem:hover .playPauseButton {display: inline-block;}
 .likedTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; opacity: .8; margin: 10px 0;}
 .toggleLikeButton{border: 0; background-color: transparent; justify-content: center;}
+
+/*최근 재생한 항목*/
+.recentlyPlayedTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; margin-bottom: 5px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+.recentlyPlayedTracks {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
+.recentlyPlayedTrack {flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; position: relative;}
+.recentlyPlayedTrack:hover {background-color: rgba(60,60,60,0.8);}
+.recentlyPlayedTrack .trackCover{display: flex; align-items: center; justify-content: center; height: 155px;}
+.recentlyPlayedTrackLike{position: absolute; width: 30px; height: 30px; top: 110px; left: 10px; background: transparent;}
+.recentlyPlayedTrackLike:hover{opacity: 0.7;}
+.recentlyPlayedTrackLike:active{opacity: 0.6;}
+.recentlyPlayedTrackPlay{position: absolute; width: 30px; height: 30px; top: 110px; right: 10px; background: transparent;}
+.recentlyPlayedTrackPlay:hover{opacity: 0.7;}
+.recentlyPlayedTrackPlay:active{opacity: 0.6;}
+.recentlyPlayedTrackLike,
+.recentlyPlayedTrackPlay {opacity: 0; transition: all 0.3s ease;}
+.recentlyPlayedTrack:hover .recentlyPlayedTrackLike,
+.recentlyPlayedTrack:hover .recentlyPlayedTrackPlay {opacity: 1; cursor: pointer;}
+/* CSS로 recommendationContents를 가로 스크롤 가능하게 설정 */
+.recentlyPlayedWrap {display: flex; justify-content: center; align-items: center; width: 100%; position: relative;}
+.slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.slideButton.left {left: 0;}
+.slideButton.right {right: 0;}
+.slideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+.recentlyPlayedTrack .trackInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
+.trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+.artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}

@@ -61,8 +61,9 @@ export default {
     receiveMessageMain() {window.addEventListener("message", this.receiveMessage, false);},
 
     async receiveMessage(event) {
-      if (event.data.type === 'albumDetail') {this.$router.replace('/whale/streaming/detail/album');}
-      else if (event.data.type === 'artistDetail') {this.$router.replace('/whale/streaming/detail/artist');}
+      if (event.data.type === 'albumDetail') {this.$router.replace(`/whale/streaming/detail/album/${ event.data.albumId }`);}
+      else if (event.data.type === 'trackDetail') {this.$router.replace(`/whale/streaming/detail/track/${ event.data.trackId }`);}
+      else if (event.data.type === 'artistDetail') {this.$router.replace(`/whale/streaming/detail/artist/${ event.data.artistId }`);}
       else {await this.sendDeviceId(event);}
     },
 
@@ -90,6 +91,7 @@ export default {
 
     checktype() {
       let type;
+      let id;
 
       fetch(`/whale/streaming/getType`, {
             headers: {
@@ -101,10 +103,11 @@ export default {
         .then((response) => response.json())
         .then((data) => {
             type = data.type;
+            id = data.id;
 
-            if (type === 'album') {this.$router.replace('/whale/streaming/detail/album');}
-            else if (type === 'artist') {this.$router.replace('/whale/streaming/detail/artist');}
-            else if (type === 'current') {this.$router.replace('/whale/streaming/current-playlist');}
+            if (type === 'albumDetail') {this.$router.replace(`/whale/streaming/detail/album/${ id }`);}
+            else if (type === 'trackDetail') {this.$router.replace(`/whale/streaming/detail/track/${ id }`);}
+            else if (type === 'artistDetail') {this.$router.replace(`/whale/streaming/detail/artist/${ id }`);}
             else {this.$router.replace('/whale/streaming/recommend');}
         })
     },

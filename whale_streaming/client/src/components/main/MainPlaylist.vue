@@ -6,7 +6,7 @@
             <div class="playlistDetailInfo">
                 <p class="detailSort">플레이리스트</p>
                 <p class="playlistName">{{ playlist.name }}</p>
-                <p class="playlistDesc">{{ playlist.description }}</p>
+                <p class="playlistDesc">{{ deleteTag(playlist.description) }}</p>
                 <p class="playlistOpt">WHALE • {{ playlist.tracks.total }}곡</p>
             </div>
         </div>
@@ -78,7 +78,6 @@ export default {
                 const data = await result.json();
                 if (data && data.tracks.items.length > 0) {
                     this.playlist = data;
-                    console.log('Complete: ',this.playlist);
                 } else {
                     console.error('No items found');
                 }
@@ -89,12 +88,35 @@ export default {
         async playPlayer(i) {
             await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
         },
+        getRandomColor() {
+            // 랜덤 RGB 색상 생성 함수
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            console.log("Generated RGB values:", r, g, b);
+            return `rgb(${r}, ${g}, ${b})`;
+        },
         changeBackground() {
-            document.querySelector('.mainContent').style.backgroundImage = 'linear-gradient(to bottom, rgb(206, 116, 144), rgb(17, 18, 17))';
+            document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
         },
         addIsShow(i) {
             this.isShow.push(false);
             return this.isShow[i];
+        },
+        deleteTag(i) {
+            // a 태그를 찾아 제거
+            const parser = new DOMParser();
+            const parsedContent = parser.parseFromString(i, 'text/html');
+            const links = parsedContent.querySelectorAll("a");
+
+            // 각 a 태그를 순회하며 텍스트만 남기기
+            links.forEach(link => {
+                const textNode = document.createTextNode(link.textContent);
+                link.replaceWith(textNode);
+            });
+
+            // 수정된 내용을 다시 playlistDesc에 반영
+            return parsedContent.body.innerHTML;
         },
     },
 };
@@ -103,7 +125,7 @@ export default {
 <style scoped>
     .playlistDetail {display: flex; align-items: center; width: 100%; height: 35%;}
     .playlistDetailContainer {display: flex; gap: 20px; color: white; align-items: end; width: 100%; padding-left: 20px; overflow-x: scroll; -ms-overflow-style: none;}
-    .playlistDetailInfo {width: 65%; height: 170px;}
+    .playlistDetailInfo {width: 75%; height: 170px; overflow: auto; white-space: nowrap; text-overflow: ellipsis;}
     .detailSort {margin-top: 20px; margin-left: 2px; font-size: 12px; font-weight: 200; letter-spacing: 0.3px; opacity: 0.7;}
     .playlistName {font-size: 64px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
     .playlistDesc {font-size: 12px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}

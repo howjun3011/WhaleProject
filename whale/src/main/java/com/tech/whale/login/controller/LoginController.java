@@ -91,26 +91,31 @@ public class LoginController {
 
     @RequestMapping("/spotify/callback")
     public String callback(HttpServletRequest req, HttpSession session) {
+    	
+    	try {
+    		// 기존 로그인 로직
+            mainAuthorizationCodeController.execute(req, session);
 
-        // 기존 로그인 로직
-        mainAuthorizationCodeController.execute(req, session);
+            // 스포티파이 API를 통해 인증된 사용자 정보 가져오기
+            String[] spotifyInfo = getSpotifyInfo(req, session);
 
-        // 스포티파이 API를 통해 인증된 사용자 정보 가져오기
-        String[] spotifyInfo = getSpotifyInfo(req, session);
+            // 유저 정보를 세션에 저장
+            session.setAttribute("spotifyEmail", spotifyInfo[0]);
+            session.setAttribute("spotifyId", spotifyInfo[1]);
 
-        // 유저 정보를 세션에 저장
-        session.setAttribute("spotifyEmail", spotifyInfo[0]);
-        session.setAttribute("spotifyId", spotifyInfo[1]);
-
-        // 세션 값에 따라 리디렉션 처리
-        String isRegistered = (String) session.getAttribute("authFlow");
-        if ("register".equals(isRegistered)) {
-            return "redirect:/register";
-        } else if (session.getAttribute("access_id").toString().equals("1")) {
-        	return "redirect:/admin/adminMainView";
-        } else {
-            return "redirect:/main";
-        }
+            // 세션 값에 따라 리디렉션 처리
+            String isRegistered = (String) session.getAttribute("authFlow");
+            if ("register".equals(isRegistered)) {
+                return "redirect:/register";
+            } else if (session.getAttribute("access_id").toString().equals("1")) {
+            	return "redirect:/admin/adminMainView";
+            } else {
+                return "redirect:/main";
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/";
+		}
     }
 
     // 스포티파이 API를 사용해서 유저 정보 가져오는 메서드

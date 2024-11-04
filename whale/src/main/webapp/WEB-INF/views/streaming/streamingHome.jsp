@@ -60,7 +60,7 @@
                     </div>
                     <div class="libraryInfo">
                     	<p class="libraryInfoFont">좋아요 표시한 곡</p>
-                    	<p class="libraryInfoFont" style="margin-top: 2px; font-size: 10px;">플레이리스트•5곡</p>
+                    	<p class="libraryInfoFont" style="margin-top: 2px; font-size: 10px;">플레이리스트 • ${fn:length(likedTracks)}곡</p>
                     </div>
                 </div>
                 <c:forEach var="playlist" items="${userPlaylists}">

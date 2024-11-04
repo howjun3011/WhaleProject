@@ -64,9 +64,16 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve top tracks");
 		}
 
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+		
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");

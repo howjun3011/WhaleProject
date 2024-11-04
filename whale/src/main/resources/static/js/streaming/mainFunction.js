@@ -37,7 +37,7 @@ function resize() {
 }
 
 
-// [ Get the Data from the Parent Window ]
+// [ 부모창으로부터 데이터 받는 함수 ]
 window.addEventListener("message", receiveMessage, false);
 
 async function receiveMessage(event) {
@@ -58,7 +58,7 @@ async function sendDeviceId(event) {
     const body = {
         device_id: sessionStorage.device_id,
     };
-    fetch(`/whale/streaming/getDeviceId`, {
+    fetch(`/whale/main/device_id`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -66,12 +66,7 @@ async function sendDeviceId(event) {
         method: 'POST',
         body: JSON.stringify(body)
     })
-        .then((response) => response.json())
-        .then((data) => {
-            sessionStorage.accessToken = data.accessToken;
-            console.log("Success fetching device id to the Node js Wep App");
-        })
-        .catch((error) => console.error("Failed to fetch the device_id: ", error));
+    .catch((error) => console.error("Failed to fetch the device_id: ", error));
 }
 
 function playTrack(trackId) {
@@ -133,7 +128,7 @@ $(document).ready(function () {
 
     $('#toggleButton').click(function () {
         isExpanded = !isExpanded; // 상태를 토글
-        $('.mainLibraryFrame, .mainLibrary').toggleClass('expanded', isExpanded); // 두 요소에 클래스 추가/제거
+        $('.mainLibraryFrame').toggleClass('expanded', isExpanded); // 메인 라이브러리 프레임 요소에 클래스 추가/제거
     });
 });
 
@@ -173,9 +168,12 @@ function scrollRightContent() {
 
 // 스크롤 및 초기 버튼 상태 설정
 document.addEventListener("DOMContentLoaded", () => {
-    updateScrollButtons(); // 초기 상태
-    const container = document.getElementById('recommendationContents');
-    container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
+	// 홈화면 기능시 함수 실행
+	if (window.location.pathname === '/whale/streaming/home') {
+		updateScrollButtons(); // 초기 상태
+	    const container = document.getElementById('recommendationContents');
+	    container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
+	}
 });
 
 // 트랙 이미지 누르면 트랙 디테일 페이지로 리다이렉트
@@ -291,9 +289,12 @@ function scrollRightSearchContent() {
 
 // 스크롤 및 초기 버튼 상태 설정
 document.addEventListener("DOMContentLoaded", () => {
-    updateSearchScrollButtons(); // 초기 상태
-    const container = document.querySelector('.searchResults');
-    container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
+	// 검색 기능시 함수 실행
+	if (window.location.pathname === '/whale/streaming/search') {
+		updateSearchScrollButtons(); // 초기 상태
+	    const container = document.querySelector('.searchResults');
+	    container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
+	}
 });
 
 // 아티스트 디테일 스크롤 이동 함수
@@ -332,9 +333,12 @@ function scrollRightArtistDetailContent() {
 
 // 아티스트 디테일 스크롤 초기화
 document.addEventListener("DOMContentLoaded", () => {
-    updateArtistDetailScrollButtons();
-    const container = document.querySelector('.albumsWrap');
-    container.addEventListener('scroll', updateArtistDetailScrollButtons); // 스크롤 이벤트 감지
+	// 아티스트 디테일 기능시 함수 실행
+	if (window.location.pathname === '/whale/streaming/artistDetail') {
+		updateArtistDetailScrollButtons();
+	    const container = document.querySelector('.albumsWrap');
+	    container.addEventListener('scroll', updateArtistDetailScrollButtons); // 스크롤 이벤트 감지
+	}
 });
 
 // 아티스트 디테일
@@ -378,9 +382,12 @@ function scrollRightPlayListContent() {
 
 // 플레이리스트 스크롤 초기화
 document.addEventListener("DOMContentLoaded", () => {
-    updatePlayListScrollButtons();
-    const container = document.querySelector('.relatedPlaylists');
-    container.addEventListener('scroll', updatePlayListScrollButtons); // 스크롤 이벤트 감지
+	// 아티스트 디테일 기능시 함수 실행
+	if (window.location.pathname === '/whale/streaming/artistDetail') {
+		updatePlayListScrollButtons();
+	    const container = document.querySelector('.relatedPlaylists');
+	    container.addEventListener('scroll', updatePlayListScrollButtons); // 스크롤 이벤트 감지
+	}
 });
 
 // 재생/일시정지 상태를 토글하는 함수

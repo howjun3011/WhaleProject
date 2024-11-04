@@ -1,34 +1,50 @@
 package com.tech.whale.main;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.hc.core5.http.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.tech.whale.main.models.MainAuthorizationCode;
-import com.tech.whale.main.service.MainAuthorizationCodeController;
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 
 @Controller
 public class MainController {
-	private final MainAuthorizationCode mainAuthorizationCode;
-	private final MainAuthorizationCodeController mainAuthorizationCodeController;
-
-    public MainController(MainAuthorizationCode mainAuthorizationCode, MainAuthorizationCodeController mainAuthorizationCodeController) {
-    	this.mainAuthorizationCode = mainAuthorizationCode;
-        this.mainAuthorizationCodeController = mainAuthorizationCodeController;
-    }
+	@Autowired
+	private SpotifyApi spotifyApi;
 	
     // [ 메인 페이지 이동 ]
     @RequestMapping("/main")
 	public String main(HttpSession session) {
-    	if (session.getAttribute("user_id") == null) {return "redirect:/";}
-    	else {return "main/main";}
+    	if (session.getAttribute("user_id") == null) {
+    		return "redirect:/";
+    	} else {
+    		// 유저 아이디가 존재한다면 리프레시 토큰을 이용해 새로운 엑세스 토큰을 받아오는 구간
+            spotifyApi.setRefreshToken((String) session.getAttribute("refreshToken"));
+
+            AuthorizationCodeRefreshRequest refreshRequest = spotifyApi.authorizationCodeRefresh()
+                    .build();
+
+            try {
+                AuthorizationCodeCredentials credentials = refreshRequest.execute();
+                session.setAttribute("accessToken", credentials.getAccessToken());
+            } catch (IOException | SpotifyWebApiException | ParseException e) {
+                e.printStackTrace();
+            }
+    		return "main/main";
+    	}
 	}
     // [ 세션 등록 구간 ]
 	@GetMapping("/check-access-id")

@@ -99,7 +99,7 @@
                                     <!-- trackPaging 데이터를 반복문으로 출력 -->
                                     <c:forEach var="track" items="${trackPaging.items}">
                                         <div class="recommendationContent">
-                                            <div class="recommendationLike" onclick="insertTrack('${track.id}')">
+                                            <div class="recommendationLike" onclick="insertTrackLike('${track.album.images[0].url}', '${track.name}', '${track.artists[0].name}', '${track.album.name}', '${track.id}', false)">
                                                 <img src="${pageContext.request.contextPath}/static/images/streaming/like.png"
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">

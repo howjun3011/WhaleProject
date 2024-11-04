@@ -452,5 +452,138 @@ function playAllPlaylist(playlistId) {
         });
 }
 
+// insertTrackLike 함수를 전역으로 선언
+// trackInfo 배열을 전역 변수로 설정하고 기본 초기화
+let trackInfo = [];
 
+// player_state_changed 이벤트 리스너 설정
+function initializePlayer(player) {
+    player.addListener('player_state_changed', (state) => {
+        // 트랙 정보가 있을 때만 trackInfo 배열 초기화
+        if (state && state.track_window && state.track_window.current_track) {
+            trackInfo = [
+                state.track_window.current_track.album.images[0].url, // 트랙 커버 이미지
+                state.track_window.current_track.name,                // 트랙 이름
+                state.track_window.current_track.artists[0].name,     // 아티스트 이름
+                state.track_window.current_track.album.name,          // 앨범 이름
+                state.track_window.current_track.id,                  // 트랙 ID
+                false                                                 // 좋아요 상태 기본값
+            ];
 
+            // 비동기로 앨범 ID와 아티스트 ID를 추가로 가져옴
+            (async () => {
+                try {
+                    const result = await fetchWebApi(`v1/tracks/${trackInfo[4]}`, 'GET');
+                    trackInfo[6] = result.album.id;    // 앨범 ID
+                    trackInfo[7] = result.artists[0].id;  // 아티스트 ID
+                } catch (error) {
+                    console.error('Error fetching track details:', error);
+                }
+            })();
+
+            // 좋아요 상태를 서버에서 가져와 trackInfo[5]에 설정
+            fetch(`/whale/streaming/currentTrackInfo`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    artistName: trackInfo[2],
+                    trackName: trackInfo[1],
+                    albumName: trackInfo[3],
+                    trackCover: trackInfo[0],
+                    trackSpotifyId: trackInfo[4]
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    trackInfo[5] = data.result === 'yes';  // 좋아요 상태를 업데이트
+                })
+                .catch(error => console.error('Error fetching like status:', error));
+        } else {
+            console.error("Player state or track information is missing.");
+        }
+    });
+}
+
+// 좋아요 상태 변경 함수
+let likeActionPending = false; // 중복 요청 방지를 위한 상태 잠금 변수
+
+async function insertTrackLike(coverUrl, trackName, artistName, albumName, trackId, isLiked) {
+    if (likeActionPending) return;
+    likeActionPending = true;
+
+    trackInfo = [coverUrl, trackName, artistName, albumName, trackId, isLiked];
+
+    try {
+        const body = {
+            artistName: trackInfo[2],
+            trackName: trackInfo[1],
+            albumName: trackInfo[3],
+            trackCover: trackInfo[0],
+            trackSpotifyId: trackInfo[4]
+        };
+
+        const response = await fetch(`/whale/streaming/toggleTrackLike`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(body)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.result === 'inserted') {
+                console.log("Track liked successfully.");
+                trackInfo[5] = true;  // 좋아요 상태 설정
+            } else if (data.result === 'deleted') {
+                console.log("Track unliked successfully.");
+                trackInfo[5] = false; // 좋아요 상태 해제
+            }
+        } else {
+            console.error('Failed to update the Track Like Data:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error while updating the Track Like Data:', error);
+    } finally {
+        likeActionPending = false;
+    }
+}
+
+// player 초기화 함수
+function setupPlayer() {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new Spotify.Player({
+            name: 'Whale Player',
+            getOAuthToken: cb => { cb(sessionStorage.accessToken); },
+            volume: 0.5
+        });
+
+        // Player 연결
+        player.connect().then(success => {
+            if (success) {
+                console.log('The Web Playback SDK successfully connected to Spotify!');
+            }
+        });
+
+        // Player 이벤트 리스너 추가
+        initializePlayer(player);
+    };
+}
+
+// Fetch Web API 함수 예시
+async function fetchWebApi(url, method) {
+    const response = await fetch(`https://api.spotify.com/${url}`, {
+        method: method,
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.accessToken}`
+        }
+    });
+    return response.json();
+}
+
+// 초기화 코드 실행
+setupPlayer();

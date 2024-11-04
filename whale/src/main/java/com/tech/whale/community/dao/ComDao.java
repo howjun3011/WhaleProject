@@ -13,7 +13,7 @@ public interface ComDao {
 	public void deleteComments(String postCommentsId);
 	public void insertComments(String postId, String userId, String comments, String parentCommentId);
 	public List<CommentDto> getComments(String postId);
-	public List<CommunityDto> getComAll();
+	public List<CommunityDto> getComAll(String userId);
 	public List<PostDto> getPostAll(int start, int end, String sk, int selNum, int comId, int tagId);
 	public List<PostDto> chooseTag();
 	public void regPost(String commid, String user, String text, String title, int postnum, String tagid);
@@ -51,4 +51,8 @@ public interface ComDao {
 	public int getCommentLikeCount(String commentId);
 	public List<CommentDto> getReplies(String post_comments_id);
 	public int getCommentsCount(String postId);
+	
+    public void addCommunityBookmark(int communityId, String userId);
+    public void removeCommunityBookmark(int communityId, String userId);
+    public int isCommunityBookmarkedByUser(int communityId, String userId);
 }

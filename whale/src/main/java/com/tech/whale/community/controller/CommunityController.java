@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.tech.whale.community.dao.ComDao;
 import com.tech.whale.community.dto.CommentDto;
 import com.tech.whale.community.dto.PostDto;
+import com.tech.whale.community.service.BookmarkService;
 import com.tech.whale.community.service.ComDetailService;
 import com.tech.whale.community.service.ComHomeService;
 import com.tech.whale.community.service.ComLikeCommentService;
@@ -45,14 +46,31 @@ public class CommunityController {
 	private ComRegService comRegService;
 	
 	@Autowired
+	private ComHomeService comHomeService;
+	
+	@Autowired
 	private PostUpdateService postUpdateService;
+	
+	@Autowired
+	private BookmarkService bookmarkService;
+	
+	@PostMapping("/toggleBookmark")
+	@ResponseBody
+	public String toggleBookmark(@RequestParam("communityId") int communityId, HttpSession session) {
+	    String userId = (String) session.getAttribute("user_id"); // 세션에서 사용자 ID를 가져옴
+	    if (userId == null) {
+	        return "error"; // 세션이 없으면 에러
+	    }
+
+	    boolean isBookmarked = bookmarkService.toggleBookmark(communityId, userId);
+	    return isBookmarked ? "followed" : "unfollowed"; // 즐겨찾기 상태에 따라 응답
+	}
 	
 	@RequestMapping("/communityHome")
 	public String communityHome(HttpServletRequest request, Model model) {
 		System.out.println("communityHome");
-		model.addAttribute(request);
-		comServiceInter = new ComHomeService(comDao);
-		comServiceInter.execute(model);
+		model.addAttribute("request", request);
+		comHomeService.execute(model);
 		
 		return "community/communityHome";
 	}

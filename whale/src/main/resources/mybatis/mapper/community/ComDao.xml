@@ -5,8 +5,15 @@
 
 <mapper namespace="com.tech.whale.community.dao.ComDao">
 	
-    <select id="getComAll" resultType="com.tech.whale.community.dto.CommunityDto">
-        SELECT * FROM COMMUNITY
+
+    <select id="getComAll" parameterType="string" resultType="com.tech.whale.community.dto.CommunityDto">
+	    SELECT * FROM COMMUNITY
+	    ORDER BY 
+	        CASE 
+	            WHEN ',' || COMMUNITY_FOLLOW || ',' LIKE '%,' || #{userId} || ',%' THEN 0
+	            ELSE 1
+	        END,
+	        COMMUNITY_ID ASC
     </select>
     
     <select id="getCommunityName" resultType="java.lang.String">
@@ -285,5 +292,32 @@
             post_text = #{post_text}
         WHERE post_id = #{post_id}
     </update>
+    
+    <update id="addCommunityBookmark">
+	    UPDATE COMMUNITY
+	    SET COMMUNITY_FOLLOW = CASE 
+	        WHEN COMMUNITY_FOLLOW IS NULL THEN #{userId}
+	        ELSE COMMUNITY_FOLLOW || ',' || #{userId}
+	    END
+	    WHERE COMMUNITY_ID = #{communityId}
+	      AND (COMMUNITY_FOLLOW IS NULL OR INSTR(COMMUNITY_FOLLOW, #{userId}) = 0)
+	</update>
+    
+    <update id="removeCommunityBookmark">
+	    UPDATE COMMUNITY
+	    SET COMMUNITY_FOLLOW = TRIM(',' FROM REPLACE(',' || COMMUNITY_FOLLOW || ',', ',' || #{userId} || ',', ','))
+	    WHERE COMMUNITY_ID = #{communityId}
+	      AND (COMMUNITY_FOLLOW LIKE '%,' || #{userId} || ',%'
+	           OR COMMUNITY_FOLLOW LIKE #{userId} || ',%'
+	           OR COMMUNITY_FOLLOW LIKE '%,' || #{userId}
+	           OR COMMUNITY_FOLLOW = #{userId})
+	</update>
+    
+    <select id="isCommunityBookmarkedByUser" resultType="int">
+	    SELECT COUNT(*)
+	    FROM COMMUNITY
+	    WHERE COMMUNITY_ID = #{communityId}
+	      AND INSTR(COMMUNITY_FOLLOW, #{userId}) > 0
+	</select>
     
 </mapper>

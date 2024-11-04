@@ -50,8 +50,18 @@ public interface AdminIDao {
 			String userId, int userStatus, String statusReason, String adminId);
 	/////////////////////////////////////////////
 	public ArrayList<AdminPFCDto> adminBoardList(
-			int start, int end, String sk, String selNum);
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
 	public int selectBoardCnt(String sk, String selNum);
+	
+	public ArrayList<AdminPFCDto> adminBoardCommentsList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectBoardCommentsCnt(String sk, String selNum);
 	
 	public void postDelLog(
 			@Param("post_id") int post_id,
@@ -92,6 +102,7 @@ public interface AdminIDao {
 			@Param("comments_del_reason") String comments_del_reason);
 	public void postCommentsLikeOneDel(int post_comments_id);
 	public void postCommentsOneDel(int post_comments_id);
+	public String comName(String postId);
 	
 	
 }

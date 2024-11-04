@@ -3,24 +3,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
-    function postDelete(postId,page,searchType) {
-        const deleteConfirm = confirm(postId+"번 게시글을 삭제하시겠습니까?");
+    function postCommentsDelete(postId,commentId,page,searchType) {
+        const deleteConfirm = confirm(commentId+"번 게시판댓글을 삭제하시겠습니까?");
         const sk = document.getElementsByName("sk")[0].value;
         if (deleteConfirm) {
         	window.location.href = 
-        		"adminBoardPostContentDelete?postId="+postId
+        		"adminBoardCommentsDelete?commentId="+commentId
+        				+"&postId="+postId
         				+"&sk="+sk
         				+"&page="+page
         				+"&searchType="+searchType;
         }
     }
     
-    function feedDelete(feedId,page,searchType) {
-        const deleteConfirm = confirm(feedId+"번 피드를 삭제하시겠습니까?");
+    function feedCommentsDelete(feedId,commentId,page,searchType) {
+        const deleteConfirm = confirm(commentId+"번 피드댓글을 삭제하시겠습니까?");
         const sk = document.getElementsByName("sk")[0].value;
         if (deleteConfirm) {
         	window.location.href = 
-        		"adminBoardFeedContentDelete?feedId="+feedId
+        		"adminBoardCommentsDelete?commentId="+commentId
+        				+"&feedId="+feedId
         				+"&sk="+sk
         				+"&page="+page
         				+"&searchType="+searchType;
@@ -30,7 +32,7 @@
 <div class="content" name="content" id="content">
 
     <div class="accountSearch">
-		<form action="adminBoardListView" method="post" >
+		<form action="adminBoardCommentsListView" method="post" >
 	        <select name="searchType" id="searchType">
 			    <option value="user_id" selected >아이디</option>
 			    <option value="post_title" <c:if test="${searchType == 'post_title'}">selected</c:if>>제목</option>
@@ -46,9 +48,9 @@
         <thead>
             <tr>
                 <th>커뮤/피드</th>
+                <th>부모글번호</th>
                 <th>번호</th>
-                <th>제목/내용</th>
-                <th>태그</th>
+                <th>내용</th>
                 <th>아이디</th>
                 <th>등록일</th>
                 <th>신고</th>
@@ -64,35 +66,35 @@
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
 				<tr>
-					<c:if test="${not empty dto.feed_id && dto.feed_id != 0}">
+					<c:if test="${not empty dto.feed_comments_id && dto.feed_comments_id != 0}">
 					<td>피드</td>
 					<td>${dto.feed_id }</td>
+					<td>${dto.feed_comments_id }</td>
 					<td>${dto.text }</td>
-					<td></td>
 					<td>${dto.user_id }</td>
 					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_feed_count }</td>
+					<td>${dto.report_feed_comments_count }</td>
 					<td>
 						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<button onclick = "feedCommentsDelete('${dto.feed_id }','${dto.feed_comments_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
 					</td>
 					</c:if>
 					
-					<c:if test="${not empty dto.post_id && dto.post_id !=0}">
-					<td>${dto.community_name }</td>
+					<c:if test="${not empty dto.post_comments_id && dto.post_comments_id !=0}">
+					<td>커뮤</td>
 					<td>${dto.post_id }</td>
-					<td>${dto.post_title }</td>
-					<td>${dto.post_tag_text }</td>
+					<td>${dto.post_comments_id }</td>
+					<td>${dto.text }</td>
 					<td>${dto.user_id }</td>
 					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_post_count }</td>
+					<td>${dto.report_post_comments_count }</td>
 					<td>
 						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<button onclick = "postCommentsDelete('${dto.post_id }','${dto.post_comments_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
 					</td>
 					</c:if>
 					
@@ -106,10 +108,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}"
+			                <a href="adminBoardCommentsListView?page=1&sk=${searchKeyword}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminBoardListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}"
+			                <a href="adminBoardCommentsListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -118,28 +120,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminBoardListView?page=${i}&sk=${searchKeyword}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminBoardCommentsListView?page=${i}&sk=${searchKeyword}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminBoardListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}"
+			                <a href="adminBoardCommentsListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminBoardListView?page=${searchVO.totPage}&sk=${searchKeyword}"
+			                <a href="adminBoardCommentsListView?page=${searchVO.totPage}&sk=${searchKeyword}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[처음]</a>
+			                <a href="adminBoardCommentsListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[이전]</a>
+			                <a href="adminBoardCommentsListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[다음]</a>
+			                <a href="adminBoardCommentsListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[마지막]</a>
+			                <a href="adminBoardCommentsListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

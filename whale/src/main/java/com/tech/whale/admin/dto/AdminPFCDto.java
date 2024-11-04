@@ -42,6 +42,8 @@ public class AdminPFCDto {
 	
 	private int report_feed_count;
 	private int report_post_count;
+	private int report_feed_comments_count;
+	private int report_post_comments_count;
 	private String text;
 	private Date date_field;
 	

@@ -66,7 +66,6 @@ public class AdminController {
 	
 	@ModelAttribute("myId")
     public String addUserIdToModel(HttpSession session) {
-        // 세션에서 user_id 가져오기 (세션에 저장된 user_id가 있다고 가정)
         return (String) session.getAttribute("user_id");
     }
 	

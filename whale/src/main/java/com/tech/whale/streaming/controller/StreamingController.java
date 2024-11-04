@@ -304,12 +304,23 @@ public class StreamingController {
 		// 좋아요 표시한 트랙 목록 가져오기
 		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
 
-		if (likedTracks == null || likedTracks.isEmpty()) {
+		if (likedTracks != null && !likedTracks.isEmpty()) {
+			// 각 트랙의 좋아요 여부를 확인하여 TrackDto의 필드에 추가
+			for (TrackDto track : likedTracks) {
+				boolean isLiked = streamingService.selectTrackLikeService(session, track.getTrack_id());
+				track.setLiked(isLiked); // TrackDto에 isLiked 필드를 설정
+			}
+			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
+		} else {
 			model.addAttribute("error", "No liked tracks found.");
 			System.out.println("likedTracks가 비어 있습니다.");
-		} else {
-			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
 		}
+
+		// 사용자 플레이리스트 가져오기
+		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
+		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 곡 페이지로 이동
 		model.addAttribute("page", "likedTracks");
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";

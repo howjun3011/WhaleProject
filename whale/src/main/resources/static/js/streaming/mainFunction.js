@@ -595,3 +595,19 @@ setupPlayer();
 function navigateToLikedTracks() {
     window.location.href = "/whale/streaming/likedTracks";
 }
+
+// 좋아요 표시한 곡 페이지에서 좋아요 제거
+async function toggleTrackLike(trackId, button) {
+    try {
+        const response = await fetch('/whale/streaming/toggleTrackLike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ trackSpotifyId: trackId })
+        });
+        button.querySelector("path").setAttribute("d", "");
+    } catch (error) {
+        console.error("Error toggling like status:", error);
+    }
+}

@@ -199,3 +199,4 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .trackItem:hover .rank {display: none;}
 .trackItem:hover .playPauseButton {display: inline-block;}
 .likedTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; opacity: .8; margin: 10px 0;}
+.toggleLikeButton{border: 0; background-color: transparent; justify-content: center;}

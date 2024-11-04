@@ -58,6 +58,41 @@
 		<include refid="includeReportList" />
 	    
 	</select>
+    <select id="reportContent" resultType="com.tech.whale.admin.dto.AdminReportResultDto">
+	    SELECT 
+	    R.REPORT_ID,
+	    R.USER_ID,
+	    R.FEED_ID,
+	    R.FEED_COMMENT_ID,
+	    R.POST_ID,
+	    R.POST_COMMENT_ID,
+	    R.MESSAGE_ID,
+	    R.REPORT_WHY,
+	    R.REPORT_DATE,
+	    R.REPORT_TAG,
+	    R.REPORT_TEXT,
+	    R.REPORT_IMG_URL,
+	    R.REPORT_ADMIN_CHECK,
+	    RR.REPORT_LOG_ID,
+	    RR.TARGET_TYPE,
+	    RR.TARGET_ID,
+	    RR.ADMIN_ID,
+	    RR.REPORT_RESULT_DATE,
+	    RR.REPORT_RESULT_ACTION,
+	    RR.REPORT_RESULT_REASON
+	FROM 
+	    REPORT R
+	LEFT JOIN 
+	    REPORT_RESULT RR
+	ON 
+	    R.REPORT_ID = RR.REPORT_ID
+	WHERE
+		R.REPORT_ID = #{report_id}
+	ORDER BY 
+	    R.REPORT_ID, RR.REPORT_RESULT_DATE
+
+	    
+	</select>
     
     
 	

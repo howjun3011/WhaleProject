@@ -9,6 +9,7 @@ import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminReportListDto;
+import com.tech.whale.admin.dto.AdminReportResultDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 
 @Mapper
@@ -21,5 +22,5 @@ public interface AdminReportIDao {
 			@Param("selNum") String selNum);
 	public int selectReportCnt(String sk, String selNum);
 	
-	
+	public AdminReportResultDto reportContent(String report_id);
 }

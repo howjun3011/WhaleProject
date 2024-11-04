@@ -74,7 +74,7 @@ public class AdminReportController {
 				"/whale/static/css/admin/account/adminAccountUserListContent.css");
 		boardSubBar(model);
 		
-		adminReportListService.execute(model);
+		adminReportListService.content(model);
 		
 		return "/admin/view/adminOutlineForm";
 	}

@@ -15,6 +15,7 @@ import com.tech.whale.admin.dao.AdminReportIDao;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminReportListDto;
+import com.tech.whale.admin.dto.AdminReportResultDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
@@ -113,5 +114,18 @@ public class AdminReportListService implements AdminServiceInter{
 		
 	}
 	
-	
+	public void content(Model model) {
+		
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request =
+				(HttpServletRequest) map.get("request");
+		
+		String report_id = (String) request.getParameter("report_id");
+		System.out.println("서비스 리포트아이디 : " + report_id);
+		AdminReportResultDto reportContent =
+				adminReportIDao.reportContent(report_id);
+		model.addAttribute("reportContent", reportContent);
+		
+		// 아직 신고처리안한 데이터값에 null이면 미처리 텍스트 넣기
+	}
 }

@@ -3,6 +3,60 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <div class="content" name="content" id="content">
+	
+	<h1>신고상세</h1>
+	<table class="contentTable">
+        <colgroup>
+            <col width="15%" />
+            <col width="35%" />
+            <col width="15%" />
+            <col width="35%" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>신고일</th>
+                <td>${reportContent.report_date }</td>
+                <th>처리일</th>
+                <td>${reportContent.report_result_date }</td>
+            </tr>
+            <tr>
+                <th>중복신고</th>
+                <td>${reportContent.same_content_count } 건</td>
+                <th>처리자</th>
+                <td>${reportContent.admin_id }</td>
+            </tr>
+            <tr>
+                <th>신고내용</th>
+                <td colspan="3">${reportContent.report_why }</td>
+            </tr>
+            <tr>
+                <th>처리내용</th>
+                <td colspan="3">${reportContent.report_result_action }</td>
+            </tr>
+            <tr>
+                <th>처리사유</th>
+                <td colspan="3">${reportContent.report_result_reason }</td>
+            </tr>
+            <tr>
+                <th>신고글</th>
+                <td colspan="3">${reportContent.report_text }</td>
+            </tr>
+			<tr>
+			    <th>이미지</th>
+			    <td colspan="3">
+			        <%-- <c:forEach var="image" items="${reportContent.images}">
+			        	<img src="/whale/static/images/community/${reportContent.report_img_url}" alt="Post Image">
+			        </c:forEach> --%>
+			    </td>
+			</tr>
+        </tbody>
+        <tr>
+        	<td colspan="3">
+        		
+        	</td>
+        </tr>
+    </table>
+	<hr />
 	<h1>유저상세</h1>
 	<table class="userInfo">
 		<tr>
@@ -52,45 +106,36 @@
 			<td>${AccountUserInfo.comments_count }</td>
 		</tr>
 	</table>
-	<hr />
-	<table class="contentTable">
-        <colgroup>
-            <col width="15%" />
-            <col width="35%" />
-            <col width="15%" />
-            <col width="35%" />
-        </colgroup>
-        <tbody>
-            <tr>
-                <th>구분</th>
-                <td>${reportContent.report_tag }</td>
-                <th>신고일</th>
-                <td>${reportContent.report_date }</td>
-            </tr>
-            <tr>
-                <th>중복신고</th>
-                <td>${reportContent.same_content_count }</td>
-                <th>처리일</th>
-                <td>${reportContent.post_date }</td>
-            </tr>
-            <tr>
-                <th>신고내용</th>
-                <td colspan="3">${reportContent.post_title }</td>
-            </tr>
-            <tr>
-                <th>신고글</th>
-                <td colspan="3">${reportContent.post_text }</td>
-            </tr>
-			<tr>
-			    <th>이미지</th>
-			    <td colspan="3">
-			        <c:forEach var="image" items="${reportContent.images}">
-			        	<img src="/whale/static/images/community/${reportContent.post_img_name}" alt="Post Image">
-			        </c:forEach>
-			    </td>
-			</tr>
-        </tbody>
-    </table>
-	
-	<br /><br /><br /><br />	
+	<br /><br />
+	<form id="userStatusForm" action="adminUserStatusModify" method="post">
+       	<table>
+       		<tr>
+       			<td>계정상태변경</td>
+       			<td>
+       				<label>
+       					<input type="radio" name="userStatus" value="0" onclick="toggleStatusButton()"/>
+       					활동
+       				</label>
+       				&nbsp;&nbsp;
+       				<label>
+       					<input type="radio" name="userStatus" value="1" onclick="toggleStatusButton()"/>
+       					정지
+       				</label>
+       			</td>
+       		</tr>
+       		<tr>
+       			<td>변경사유</td>
+       			<td>
+       				<textarea name="statusReason" id="statusReason" cols="60" rows="20"></textarea>
+       			</td>
+       		</tr>
+       		<tr style="border-bottom: none;">
+       			<td colspan="2" style="margin: 0 auto;">
+       				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+       				<button type="button" onclick="statusUpdate()">저장</button>
+           			<button type="button" onclick="closeStatus()">취소</button>
+       			</td>
+       		</tr>
+       	</table>
+       </form>
 </div>

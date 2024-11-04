@@ -134,7 +134,7 @@
 			margin-bottom: 5px;
 		}
 
-		.comment-img, .reply-img {
+		.comment-img, .reply-img, .owner-image {
 			width: 30px;
 			height: 30px;
 			border-radius: 50%;
@@ -186,13 +186,13 @@
 			<!-- 댓글 목록 출력 -->
 			<div id="comment-list">
 				<c:choose>
-					<c:when test="${empty currentPostCommentList }">
+					<c:when test="${empty feedCommentList }">
 						<div class="no-comment-message">댓글 목록이 없습니다.</div>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when test="${selectedPostType == '게시글'}">
-								<c:forEach var="comment" items="${currentPostCommentList }">
+								<c:forEach var="comment" items="${feedCommentList }">
 									<a href="/whale/communityDetail?c=${comment.community_id}&p=${comment.post_id}">
 										<div class="post-list">
 											<div>태그: ${comment.post_tag_text }</div>
@@ -203,49 +203,42 @@
 								</c:forEach>
 							</c:when>
 							<c:when test="${selectedPostType == '피드'}">
-								<c:set var="lastFeedId" value="-1" />
-								<c:forEach var="comment" items="${currentPostCommentList}">
-									<c:if test="${comment.feed_id != lastFeedId}">
-										<!-- 피드 ID 업데이트 -->
-										<c:set var="lastFeedId" value="${comment.feed_id}" />
-										<a href="/whale/feedDetail?f=${comment.feed_id}">
-											<div id="feed-list">
-												<!-- 피드 내용 -->
-												<div class="feed-item">
-													<img src="static/images/feed/${comment.feed_img_name}" alt="feed_img" id="feed-img">
-													<div class="feed-text">${comment.feed_text}</div>
-												</div>
-
-												<!-- 댓글과 답글 -->
-												<div class="comments-section">
-													<!-- 해당 피드의 댓글 출력 -->
-													<c:forEach var="cmt" items="${currentPostCommentList}">
-														<c:if test="${cmt.feed_id == comment.feed_id && cmt.parent_comments_id == null}">
-															<!-- 댓글 -->
-															<div class="comment">
-																<img src="static/images/setting/${cmt.commenter_image}" alt="commenter_img" class="comment-img">
-																<div class="comment-text">
-																	<span>${cmt.commenter_id}</span>: ${cmt.feed_comments_text}
-																</div>
-															</div>
-
-															<!-- 해당 댓글의 답글 -->
-															<c:forEach var="reply" items="${currentPostCommentList}">
-																<c:if test="${reply.parent_comments_id == cmt.feed_comments_id}">
-																	<div class="reply" style="margin-left: 20px;">
-																		<img src="static/images/setting/${reply.commenter_image}" alt="reply_img" class="reply-img">
-																		<div class="reply-text">
-																			<span>${reply.commenter_id}</span>: ${reply.feed_comments_text}
-																		</div>
-																	</div>
-																</c:if>
-															</c:forEach>
-														</c:if>
-													</c:forEach>
-												</div>
+								<c:forEach var="feed" items="${feedCommentList}">
+									<a href="/whale/feedDetail?f=${feed.feed_id}">
+										<div id="feed-list">
+											<div class="feed-item">
+												<img src="static/images/setting/${feed.feed_owner_image}" alt="owner_image" class="owner-image">
+												&nbsp;${feed.feed_owner_id}&nbsp;&nbsp;${feed.feed_text}
+												<img src="static/images/feed/${feed.feed_img_name}" alt="feed_img" id="feed-img">
 											</div>
-										</a>
-									</c:if>
+
+											<div class="comments-section">
+												<!-- 해당 피드의 댓글 출력 -->
+												<c:forEach var="comment" items="${replyList}">
+													<c:if test="${feed.feed_id == comment.re_feed_id && comment.re_parent_comments_id == null}">
+														<div class="comment">
+															<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="comment-img">
+															<div class="comment-text">
+																<span>${comment.re_commenter_id}</span>: ${comment.re_feed_comments_text}
+															</div>
+														</div>
+
+														<!-- 해당 댓글의 답글 출력 -->
+														<c:forEach var="reply" items="${replyList}">
+															<c:if test="${feed.feed_id == reply.re_feed_id && reply.re_parent_comments_id == comment.re_feed_comments_id}">
+																<div class="reply" style="margin-left: 20px;">
+																	<img src="static/images/setting/${reply.re_commenter_image}" alt="reply_img" class="reply-img">
+																	<div class="reply-text">
+																		<span>${reply.re_commenter_id}</span>: ${reply.re_feed_comments_text}
+																	</div>
+																</div>
+															</c:if>
+														</c:forEach>
+													</c:if>
+												</c:forEach>
+											</div>
+										</div>
+									</a>
 								</c:forEach>
 							</c:when>
 						</c:choose>

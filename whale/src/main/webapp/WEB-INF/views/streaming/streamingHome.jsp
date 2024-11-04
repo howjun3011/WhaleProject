@@ -99,8 +99,9 @@
                                     <!-- trackPaging 데이터를 반복문으로 출력 -->
                                     <c:forEach var="track" items="${trackPaging.items}">
                                         <div class="recommendationContent">
-                                            <div class="recommendationLike" onclick="insertTrack('${track.id}')">
-                                                <img src="${pageContext.request.contextPath}/static/images/streaming/like.png"
+                                            <div class="recommendationLike"
+                                                 onclick="insertTrackLike('<c:out value="${track.album.images[0].url}" />', '<c:out value="${fn:escapeXml(track.name)}" />', '<c:out value="${fn:escapeXml(track.artists[0].name)}" />', '<c:out value="${fn:escapeXml(track.album.name)}" />', '${track.id}', false)">
+                                            <img src="${pageContext.request.contextPath}/static/images/streaming/like.png"
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>

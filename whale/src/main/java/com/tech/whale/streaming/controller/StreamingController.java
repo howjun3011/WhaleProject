@@ -126,6 +126,11 @@ public class StreamingController {
 			String artistName = trackDetail.getArtists()[0].getName();
 			String songTitle = trackDetail.getName();
 			String lyrics = lyricsService.getLyrics(artistName, songTitle);  // 가사 조회
+
+			// 가사에서 \r 제거
+			if (lyrics != null) {
+				lyrics = lyrics.replace("\\r", "");
+			}
 			model.addAttribute("lyrics", lyrics);
 		} else {
 			model.addAttribute("error", "Unable to retrieve track details");
@@ -262,4 +267,27 @@ public class StreamingController {
 			return ResponseEntity.status(500).body("Failed to play playlist");
 		}
 	}
+
+	// 스트리밍 메인 좋아요 버튼
+	@PostMapping(value = "/streaming/toggleTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
+	public HashMap<String, Object> toggleTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
+		HashMap<String, Object> response = new HashMap<>();
+		String trackSpotifyId = map.get("trackSpotifyId").toString();
+
+		boolean isLiked = streamingService.selectTrackLikeService(session, trackSpotifyId);
+
+		if (isLiked) {
+			streamingService.deleteTrackLikeService(session, trackSpotifyId);
+			response.put("result", "deleted");
+		} else {
+			streamingService.insertTrackLikeService(session, trackSpotifyId,
+					map.get("artistName").toString(),
+					map.get("trackName").toString(),
+					map.get("albumName").toString(),
+					map.get("trackCover").toString());
+			response.put("result", "inserted");
+		}
+		return response;
+	}
+
 }

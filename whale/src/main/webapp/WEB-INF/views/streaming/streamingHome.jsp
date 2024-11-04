@@ -53,7 +53,7 @@
             </svg>
             <p class="mainLibraryName">내 라이브러리</p>
             <div class="userPlaylists">
-            	<div class="playlist-content">
+            	<div class="playlist-content" onclick="navigateToLikedTracks()">
             		<div class="playlistCover">
             			<img src="https://misc.scdn.co/liked-songs/liked-songs-64.png" alt="WHALE LIKE TRACK" width="45" height="45"
             			style="border-radius: 2px; opacity: 0.8;">
@@ -493,6 +493,46 @@
                                         <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
                                     </div>
                                 </c:forEach>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:when test="${page == 'likedTracks'}">
+                        <div class="likedTracks">
+                            <div class="likedTracksHeader">
+                                <h2>좋아요 표시한 곡</h2>
+                                <p>${fn:length(tracks)}곡</p>
+                            </div>
+                            <div class="playlist-tracks" style="height: 25px; grid-template-columns: 6% 83% 11%; margin-top: 5px; pointer-events: none;">
+                                <div class="playlist-tracks-top" style="justify-content: center;">#</div>
+                                <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
+                                <div class="playlist-tracks-top" style="justify-content: center;">좋아요</div>
+                            </div>
+                            <div class="likedTracksList">
+                                <c:forEach var="track" items="${likedTracks}" varStatus="status">
+                                    <div class="trackItem" style="${status.last ? 'padding-bottom: 20px;' : ''}">
+                                        <!-- 순위 표시 -->
+                                        <span class="rank">${status.index + 1}</span>
+                                        <!-- 재생/일시정지 버튼 -->
+                                        <button class="playPauseButton" onclick="togglePlayPause('${track.track_id}', this)">
+                                            <svg class="icon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+                                            </svg>
+                                        </button>
+                                        <div class="trackImageAndTitle" onclick="playAndNavigate('${track.track_id}');">
+                                            <!-- 트랙 이미지 표시 -->
+                                            <c:if test="${not empty track.track_cover}">
+                                                <img src="${track.track_cover}" alt="${track.track_name}" width="50" height="50"
+                                                     style="border-radius: 4px; padding-left: 5px;">
+                                            </c:if>
+                                            <!-- 트랙 제목과 아티스트 이름 표시 -->
+                                            <div>
+                                                <p style="font-weight: 400;">${track.track_name}</p>
+                                                <p>${track.track_artist}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+
                             </div>
                         </div>
                     </c:when>

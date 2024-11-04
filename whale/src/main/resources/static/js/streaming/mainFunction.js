@@ -452,6 +452,7 @@ function playAllPlaylist(playlistId) {
         });
 }
 
+// 메인 스트리밍 화면 좋아요 버튼
 // insertTrackLike 함수를 전역으로 선언
 // trackInfo 배열을 전역 변수로 설정하고 기본 초기화
 let trackInfo = [];
@@ -587,3 +588,9 @@ async function fetchWebApi(url, method) {
 
 // 초기화 코드 실행
 setupPlayer();
+// --- 메인 스트리밍 화면 좋아요 버튼 끝
+
+// 좋아요 표시한 곡
+function navigateToLikedTracks() {
+    window.location.href = "/whale/streaming/likedTracks";
+}

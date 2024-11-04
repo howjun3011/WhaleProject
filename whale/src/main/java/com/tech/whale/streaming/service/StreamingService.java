@@ -391,9 +391,14 @@ public class StreamingService {
     	streamingDao.deleteTrackLike(trackLikeId);
     }
     
-    // 트랙 좋아요 인서트
+    // 트랙 재생횟수 인서트
     public void insertTrackCntService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
     	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
     	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
+    }
+
+    // 좋아요 표시한 곡
+    public List<TrackDto> getLikedTracks(String userId) {
+        return streamingDao.selectLikedTracks(userId);
     }
 }

@@ -2,6 +2,7 @@ package com.tech.whale.streaming.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.tech.whale.streaming.models.TrackDto;
 import com.tech.whale.streaming.service.StreamingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -290,4 +291,37 @@ public class StreamingController {
 		return response;
 	}
 
+	// 좋아요 표시한 곡 페이지 메서드
+	@RequestMapping("/streaming/likedTracks")
+	public String likedTracks(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("user_id"); // userId를 session에서 가져옴
+
+		if (userId == null) {
+			model.addAttribute("error", "User not logged in");
+			return "errorPage";
+		}
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		System.out.println("likedTracks 결과: " + likedTracks); // 디버그 출력
+
+		if (likedTracks == null || likedTracks.isEmpty()) {
+			model.addAttribute("error", "No liked tracks found.");
+			System.out.println("likedTracks가 비어 있습니다.");
+		} else {
+			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
+			System.out.println("likedTracks가 JSP로 전달되었습니다: " + likedTracks.size());
+		}
+		model.addAttribute("page", "likedTracks");
+		System.out.println("page :" + model.getAttribute("page"));
+		System.out.println("Liked Tracks: " + likedTracks.size());
+		for (TrackDto track : likedTracks) {
+			if (track == null) {
+				System.out.println("Encountered null track in likedTracks list");
+			} else {
+				System.out.println("Track ID: " + track.getTrack_id());
+			}
+		}
+		return "streaming/streamingHome";
+	}
 }

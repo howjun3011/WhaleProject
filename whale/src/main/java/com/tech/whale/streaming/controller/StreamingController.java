@@ -75,6 +75,10 @@ public class StreamingController {
 		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
 		model.addAttribute("likedTracks", likedTracks);
 
+		// 최근 재생한 항목 가져오기
+		List<PlayHistory> recentlyPlayedTracks = streamingService.getRecentlyPlayedTracks(session);
+		model.addAttribute("recentlyPlayedTracks", recentlyPlayedTracks);
+
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");
 		System.out.println("page :" + model.getAttribute("page"));

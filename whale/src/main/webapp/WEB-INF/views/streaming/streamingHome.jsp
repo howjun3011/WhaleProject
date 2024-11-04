@@ -134,6 +134,22 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="recentlyPlayed">
+                            <h3>최근 재생한 항목</h3>
+                            <div class="recentlyPlayedTracks">
+                                <c:forEach var="playHistory" items="${recentlyPlayedTracks}">
+                                    <div class="trackItem">
+                                        <div class="trackCover">
+                                            <img src="${playHistory.track.album.images[0].url}" alt="${playHistory.track.name}" width="60" height="60">
+                                        </div>
+                                        <div class="trackInfo">
+                                            <p class="trackName">${playHistory.track.name}</p>
+                                            <p class="artistName">${playHistory.track.artists[0].name}</p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
                     </c:when>
                     <c:when test="${page == 'detail'}">
                         <div class="trackDetail">

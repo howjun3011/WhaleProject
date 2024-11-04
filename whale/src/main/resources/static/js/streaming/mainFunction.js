@@ -626,21 +626,6 @@ async function checkTrackLikeStatus(trackId) {
     }
 }
 
-// 좋아요 버튼 상태 업데이트 함수
-function updateLikeButton(trackId, isLiked) {
-    const imgElement = document.querySelector(`[onclick*="'${trackId}'"] img`);
-
-    if (imgElement) {
-        if (isLiked) {
-            // 좋아요 상태일 때 빨간색으로 설정
-            imgElement.style.filter = 'invert(39%) sepia(96%) saturate(4151%) hue-rotate(340deg) brightness(101%) contrast(104%)';
-        } else {
-            // 좋아요 상태가 아닐 때 기본 색상으로 설정
-            imgElement.style.filter = '';
-        }
-    }
-}
-
 // 페이지 로드 시 모든 트랙의 좋아요 상태 확인
 document.addEventListener("DOMContentLoaded", function() {
     const trackElements = document.querySelectorAll("[data-track-id]"); // data-track-id 속성을 가진 모든 요소 선택
@@ -664,7 +649,9 @@ async function checkTrackLikeStatus(trackId, trackElement) {
         });
 
         const data = await response.json();
-        const imgElement = trackElement.querySelector(".recommendationLike img");
+        // `recommendationLike`와 `recentlyPlayedTrackLike`에서 좋아요 아이콘을 찾아 변경
+        let imgElement = trackElement.querySelector(".recommendationLike img")
+            || trackElement.querySelector(".recentlyPlayedTrackLike img");
 
         if (data.result === "liked") {
             // 좋아요 상태일 때 liked.png로 변경

@@ -7,10 +7,10 @@
                 <p class="detailSort">곡</p>
                 <p class="playlistName">{{ track.name }}</p>
                 <div class="trackDescription">
-                    <img :src="artist.images[0].url" :alt="track.name" width="24" height="24" style="border-radius: 50%; cursor: pointer;">
-                    <p class="trackFont" style="margin-left: 2px;">{{ track.artists[0].name }}</p>
+                    <img :src="artist.images[0].url" :alt="track.name" width="24" height="24" style="border-radius: 50%; cursor: pointer;" @click="redirectRouter('artist',artist.id)">
+                    <p class="trackFont" style="margin-left: 2px; cursor: pointer;" @click="redirectRouter('artist',artist.id)">{{ track.artists[0].name }}</p>
                     <p> • </p>
-                    <p class="trackFont">{{ track.album.name }}</p>
+                    <p class="trackFont" style="cursor: pointer;" @click="redirectRouter('album',track.album.id)">{{ track.album.name }}</p>
                     <p> • </p>
                     <p>{{ track.album.release_date }}</p>
                 </div>
@@ -69,7 +69,6 @@ export default {
                     .then((response) => response.json())
                     .then((data) => {
                         this.lyric = data.lyrics;
-                        console.log(this.lyric);
                     })
             } else {
                 console.error('Failed to fetch user top items:', result.statusText);
@@ -88,6 +87,9 @@ export default {
         },
         changeBackground() {
             document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
+        },
+        redirectRouter(i,y) {
+            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
     },
 };

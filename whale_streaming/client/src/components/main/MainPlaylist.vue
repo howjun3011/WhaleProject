@@ -51,9 +51,9 @@
             </div>
             <div class="playlist-tracks-content" style="padding-left: 5px;">
                 <img :src="item.track.album.images[0].url" alt="item.track.name" height="40" style="border-radius: 2px; margin-right: 10px;">
-                <p>{{ item.track.name }} / {{ item.track.artists[0].name }}</p>
+                <span style="cursor: pointer;" @click="redirectRouter('track',item.track.id)">{{ item.track.name }}</span>&nbsp;/&nbsp;<span style="cursor: pointer;" @click="redirectRouter('artist',item.track.artists[0].id)">{{ item.track.artists[0].name }}</span>
             </div>
-            <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px;">{{ item.track.album.name }}</div>
+            <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px; cursor: pointer;" @click="redirectRouter('album',item.track.album.id)">{{ item.track.album.name }}</div>
             <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.track.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.track.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
         </div>
     </div>
@@ -117,6 +117,9 @@ export default {
 
             // 수정된 내용을 다시 playlistDesc에 반영
             return parsedContent.body.innerHTML;
+        },
+        redirectRouter(i,y) {
+            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
     },
 };

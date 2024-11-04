@@ -21,6 +21,9 @@ export default {
             query: null,
         };
     },
+    mounted() {
+        this.checkEnter();
+    },
     methods: {
         goMain() {this.$router.replace('/whale/streaming/recommend'); this.changeBackground();},
         goSearchHome() {this.$router.replace(`/whale/streaming/searchHome`); this.changeBackground();},
@@ -28,6 +31,16 @@ export default {
         changeBackground() {
             document.querySelector('.mainContent').style.backgroundImage = '';
             document.querySelector('.mainContent').style.backgroundColor = '#2e2e2e';
+        },
+        // 엔터 키 입력 시 검색 실행
+        checkEnter() {
+            const headerInput = document.querySelector('.headerInput');
+
+            headerInput.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {  // Enter 키 확인
+                    this.goSearch();
+                }
+            });
         },
     },
 };

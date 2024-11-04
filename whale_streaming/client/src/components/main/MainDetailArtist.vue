@@ -39,9 +39,9 @@
                 </div>
                 <div class="playlist-tracks-content" style="padding-left: 5px;">
                     <img :src="item.album.images[0].url" alt="item.name" height="40" style="border-radius: 2px; margin-right: 10px;">
-                    <p>{{ item.name }} - {{ item.artists[0].name }}</p>
+                    <p style="cursor: pointer;" @click="redirectRouter('track',item.id)">{{ item.name }} - {{ item.artists[0].name }}</p>
                 </div>
-                <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px;">{{ item.album.name }}</div>
+                <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px; cursor: pointer;" @click="redirectRouter('album',item.album.id)">{{ item.album.name }}</div>
                 <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
             </div>
         </div>
@@ -61,8 +61,8 @@
                 <div class="albumItem" v-for="(item, i) in album.items" :key="i">
                     <img :src="item.images[0].url" :alt="item.name"
                             width="150"
-                            height="150" style="border-radius: 4px;">
-                    <p class="trackName" style="font-size: 14px;">{{ item.name }}</p>
+                            height="150" style="border-radius: 4px; cursor: pointer;" @click="redirectRouter('album',item.id)">
+                    <p class="trackName" style="font-size: 14px; cursor: pointer;" @click="redirectRouter('album',item.id)">{{ item.name }}</p>
                     <p class="trackName" style="font-size: 13px;">{{ item.release_date }}</p>
                 </div>
             </div>
@@ -87,8 +87,8 @@
         <div class="relatedPlaylists">
             <div class="playlistItem" v-for="(item, i) in playlist.playlists.items" :key="i">
                 <img :src="item.images[0].url" :alt="item.name"
-                        width="150" height="150" style="border-radius: 4px;">
-                <p class="trackName" style="margin-left: 2px; font-size: 14px;">{{ item.name }}</p>
+                        width="150" height="150" style="border-radius: 4px; cursor: pointer;" @click="redirectPlaylistRouter(item.id)">
+                <p class="trackName" style="margin-left: 2px; font-size: 14px; cursor: pointer;" @click="redirectPlaylistRouter(item.id)">{{ item.name }}</p>
             </div>
         </div>
         <!-- 오른쪽 버튼 -->
@@ -115,8 +115,6 @@ export default {
     mounted() {
         this.getArtistInfo();
         this.changeBackground();
-        this.checkArtistDetailScroll();
-        this.checkArtistDetailPlaylistScroll();
     },
     methods: {
         async getArtistInfo() {
@@ -134,12 +132,17 @@ export default {
                     .then((response) => response.json())
                     .then((data) => {
                         this.album = data;
+                        this.$nextTick(() => {
+                            this.checkArtistDetailScroll();
+                        });
                     })
                 fetch(`/whale/streaming/getArtistPlaylist?q=${ this.artist.name }&t=playlist`)
                     .then((response) => response.json())
                     .then((data) => {
                         this.playlist = data;
-                        console.log(this.playlist);
+                        this.$nextTick(() => {
+                            this.checkArtistDetailPlaylistScroll();
+                        });
                     })
             } else {
                 console.error('Failed to fetch user top items:', result.statusText);
@@ -240,6 +243,12 @@ export default {
             if (container) {
                 container.addEventListener('scroll', this.updatePlayListScrollButtons); // 스크롤 이벤트 감지
             }
+        },
+        redirectRouter(i,y) {
+            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
+        },
+        redirectPlaylistRouter(i) {
+            this.$router.replace(`/whale/streaming/playlist/${i}`);
         },
     },
 };

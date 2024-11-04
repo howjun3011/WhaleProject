@@ -1,53 +1,85 @@
 const MainFooterComponent = {
 	template: `
 		<div>
-		<div class="footer flexCenter">
-	        <div class="player">
-	        	<div class="playerComponent" id="playerLeft">
-	        		<div class="playerInfo flexCenter" @click="sendStreaming({ type: 'albumDetail', albumId: trackInfo[6] },'?type=albumDetail&albumId='+trackInfo[6])"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
-	        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming({ type: 'trackDetail', trackId: trackInfo[4] },'?type=trackDetail&trackId='+trackInfo[4])">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" @click="sendStreaming({ type: 'artistDetail', artistId: trackInfo[7] },'?type=artistDetail&artistId='+trackInfo[7])">{{ trackInfo[2] }}</p></div>
-	        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
-	        	</div>
-	        	<div class="playerComponent flexCenter">
-	        		<div class="playerTime">{{ playTime[0] }}</div>
-	        		<div class="player-bar-container">
-			            <input type="range" class="player-bar" id="seekBar" min="0" max="100" value="0" v-model="sliderValue" @input="updateSliderBackground" :style="sliderStyle">
-			        </div>
-			        <div class="playerTime">{{ playTime[1] }}</div>
-	        	</div>
-	            <div class="playerComponent flexCenter">
-	            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
-	                <button class="playerBtn flexCenter" @click="prevPlay()"><img src="static/images/streaming/player/prev.png" alt="Music Whale Previous Button" height="42px"></button>
-	                <button class="playerBtn flexCenter" @click="togglePlay()"><img :src="playBtnSrc[playBtnSrcIndex]" alt="Music Whale Play Button" height="42px"></button>
-	                <button class="playerBtn flexCenter" @click="nextPlay()"><img src="static/images/streaming/player/next.png" alt="Music Whale Next Button" height="42px"></button>
-	                <button class="playerBtn flexCenter" @click="repeatPlay()" style="position: relative;"><img class="playerImg" :src="repeatBtnSrc[repeatBtnSrcIndex]" alt="Music Whale Repeat Button" height="32px" :style="{backgroundColor: isRepeated ? '#F5F5F5' : '#FCFCFC'}"></button>
-	            </div>
-	            <div class="playerComponent"></div>
-	            <div class="playerComponent" id="playerRight">
-	            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px"></div>
-	            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="sendStreaming('current','?type=current')"></div>
-	            	<div class="volume-bar-container">
-			            <input type="range" class="volume-bar" id="volumeSlider" min="0" max="100" v-model="volumeValue" @input="updateVolumeBackground" :style="volumeStyle">
-			        </div>
-			        <button class="playerBtn flexCenter" style="margin: 0 8px; opacity: 0.6;">
-			        	<img src="static/images/streaming/player/soundOn.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue !== 0" @click="muteVolume()">
-			        	<img src="static/images/streaming/player/soundOff.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue === 0" @click="returnVolume()">
-			        </button>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="footerMargin"></div>
+			<Transition name="menuTransition">
+				<div class="playerPlaylistContainer" v-if="isPlayered">
+					<div class="playlistBody">
+						<div class="playlist-header flexCenter">재생 목록</div>
+						<div class="playlist-delete flexCenter" @click="isPlayered = false;">x</div>
+						<div class="playlist-contents" v-for="(item, i) in playlists.queue" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === playlists.currently_playing.id ? '#E2E2E2' : '#ffffff'}">
+							<div class="playlist-font flexCenter" v-if="!isShow[i]">{{ i+1 }}</div>
+							<div class="flexCenter" v-if="addIsShow(i)">
+				                <svg
+				                    data-encore-id="icon"
+				                    role="img"
+				                    aria-hidden="true"
+				                    viewBox="0 0 24 24"
+				                    class="playlistTrackBtn"
+				                    style="height: 16px; cursor: pointer;"
+				                    @click="playPlayer(item.id)"
+				                >
+				                    <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
+				                    ></path>
+				                </svg>
+				            </div>
+							<div style="display: flex;">
+								<div><img :src="item.album.images[0].url" :alt="item.name" height="55px" style="border-radius: 5px; cursor: pointer;" @click="sendStreaming({ type: 'albumDetail', albumId: item.album.id },'?type=albumDetail&albumId='+item.album.id)"></div>
+								<div>
+									<p class="playlist-font" style="margin: 6px 0 0 10px; font-weight: 300; cursor: pointer;" @click="sendStreaming({ type: 'trackDetail', trackId: item.id },'?type=trackDetail&trackId='+item.id)">{{ item.name }}</p>
+									<p class="playlist-font" style="margin: 2px 0 0 10px; font-size: 13px; cursor: pointer;" @click="sendStreaming({ type: 'artistDetail', artistId: item.artists[0].id },'?type=artistDetail&artistId='+item.artists[0].id)">{{ item.artists[0].name }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</Transition>
+			<div class="footer flexCenter">
+		        <div class="player">
+		        	<div class="playerComponent" id="playerLeft">
+		        		<div class="playerInfo flexCenter" @click="sendStreaming({ type: 'albumDetail', albumId: trackInfo[6] },'?type=albumDetail&albumId='+trackInfo[6])"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
+		        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming({ type: 'trackDetail', trackId: trackInfo[4] },'?type=trackDetail&trackId='+trackInfo[4])">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" style="margin-top: 3px;" @click="sendStreaming({ type: 'artistDetail', artistId: trackInfo[7] },'?type=artistDetail&artistId='+trackInfo[7])">{{ trackInfo[2] }}</p></div>
+		        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
+		        	</div>
+		        	<div class="playerComponent flexCenter">
+		        		<div class="playerTime">{{ playTime[0] }}</div>
+		        		<div class="player-bar-container">
+				            <input type="range" class="player-bar" id="seekBar" min="0" max="100" value="0" v-model="sliderValue" @input="updateSliderBackground" @mouseover="isHovered[0] = true" @mouseleave="isHovered[0] = false" :style="sliderStyle">
+				        </div>
+				        <div class="playerTime">{{ playTime[1] }}</div>
+		        	</div>
+		            <div class="playerComponent flexCenter">
+		            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
+		                <button class="playerBtn flexCenter" @click="prevPlay()"><img src="static/images/streaming/player/prev.png" alt="Music Whale Previous Button" height="42px"></button>
+		                <button class="playerBtn flexCenter" @click="togglePlay()"><img :src="playBtnSrc[playBtnSrcIndex]" alt="Music Whale Play Button" height="42px"></button>
+		                <button class="playerBtn flexCenter" @click="nextPlay()"><img src="static/images/streaming/player/next.png" alt="Music Whale Next Button" height="42px"></button>
+		                <button class="playerBtn flexCenter" @click="repeatPlay()" style="position: relative;"><img class="playerImg" :src="repeatBtnSrc[repeatBtnSrcIndex]" alt="Music Whale Repeat Button" height="32px" :style="{backgroundColor: isRepeated ? '#F5F5F5' : '#FCFCFC'}"></button>
+		            </div>
+		            <div class="playerComponent"></div>
+		            <div class="playerComponent" id="playerRight">
+		            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px" @click="callFullPlayer(3)"></div>
+		            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="getPlaylist()"></div>
+		            	<div class="volume-bar-container">
+				            <input type="range" class="volume-bar" id="volumeSlider" min="0" max="100" v-model="volumeValue" @mouseover="isHovered[1] = true" @mouseleave="isHovered[1] = false" @input="updateVolumeBackground" :style="volumeStyle">
+				        </div>
+				        <button class="playerBtn flexCenter" style="margin: 0 8px; opacity: 0.6;">
+				        	<img src="static/images/streaming/player/soundOn.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue !== 0" @click="muteVolume()">
+				        	<img src="static/images/streaming/player/soundOff.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue === 0" @click="returnVolume()">
+				        </button>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="footerMargin"></div>
 	    </div>
 	`,
 	props: {
 		fetchIframe: {type: Function, default() {return 'Default function'}},
 		fetchWebApi: {type: Function, default() {return 'Default function'}},
 		startPage: Array,
+		trackInfo: Array,
 	},
 	data() {
 		return {
 			player: null,
-			trackInfo: [],
 			playBtnSrc: ['static/images/streaming/player/play.png','static/images/streaming/player/pause.png'],
 			playBtnSrcIndex: 0,
 			repeatBtnSrc: ['static/images/streaming/player/repeat.png','static/images/streaming/player/repeatOnce.png'],
@@ -60,6 +92,10 @@ const MainFooterComponent = {
 			tempVolume: null,
 			timer: null,
 			playTime: [],
+			isHovered: [false,false],
+			isPlayered: false,
+			playlists: null,
+			isShow: [],
 		};
 	},
 	mounted() {
@@ -68,14 +104,16 @@ const MainFooterComponent = {
 	computed: {
 		sliderStyle() {
 			const value = (this.sliderValue - 0) / (100 - 0) * 100;
+			const hoverColor = this.isHovered[0] ? 'rgb(24, 174, 79)' : '#828282';
 			return {
-				background: `linear-gradient(to right, #828282 ${value}%, #c2c2c2 ${value}%)`,
+				background: `linear-gradient(to right, ${hoverColor} ${value}%, #c2c2c2 ${value}%)`,
 			};
 		},
 		volumeStyle() {
 			const value = (this.volumeValue - 0) / (100 - 0) * 100;
+			const hoverColor = this.isHovered[1] ? 'rgb(24, 174, 79)' : '#828282';
 			return {
-				background: `linear-gradient(to right, #828282 ${value}%, #c2c2c2 ${value}%)`,
+				background: `linear-gradient(to right, ${hoverColor} ${value}%, #c2c2c2 ${value}%)`,
 			};
 		},
 	},
@@ -145,7 +183,6 @@ const MainFooterComponent = {
 						}
 					})();
 			        
-			        console.log(state);
 					// [ 재생 중이라면 버튼 이미지 정지 버튼 변환 ]
 					if (!state.paused && this.playBtnSrcIndex === 0) {this.playBtnSrcIndex = 1;}
 					// [ 일회 반복 중이라면 버튼 이미지 변환 ]
@@ -347,6 +384,45 @@ const MainFooterComponent = {
 		returnVolume() {
 			this.volumeValue = this.tempVolume;
 			this.player.setVolume(this.volumeValue / 100);
+		},
+		
+		// 플레이어 재생목록
+		async getPlaylist() {
+			if (this.isPlayered === false) {
+				try {
+					const result = await this.fetchWebApi(`v1/me/player/queue`,`GET`);
+					if (await result) {
+		                this.playlists = await result;
+		                console.log(this.playlists);
+		            } else {
+		                console.error('Failed to fetch user playlist queue:', result.statusText);
+		            }
+				} catch(error) {
+				}
+			} else {
+				this.playlists = null;
+			}
+			this.isPlayered = !this.isPlayered
+		},
+        addIsShow(i) {
+            this.isShow.push(false);
+            return this.isShow[i];
+        },
+        async playPlayer(i) {
+            await fetch(`/whale/streaming/playTrack`, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+				body: JSON.stringify({
+					trackId: i,
+				}),
+			});
+        },
+        
+        // 전체 화면 플레이어
+        callFullPlayer(i) {
+			this.$emit('call-full-player',i);
 		},
 	},
 };

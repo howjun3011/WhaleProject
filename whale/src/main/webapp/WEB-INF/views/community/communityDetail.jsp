@@ -603,7 +603,7 @@
 
         // 음악 재생 및 일시정지
         function playMusic(element, trackId) {
-            fetch(`/whale/playMusic?id=${trackId}`)
+            fetch(`/whale/feedPlayMusic?id=\${trackId}`)
                 .then(response => {
                     if (response.ok) {
                         element.style.display = 'none';
@@ -622,7 +622,7 @@
         }
 
         function pauseMusic(element, trackId) {
-            fetch(`/whale/pauseMusic?id=${trackId}`)
+            fetch(`/whale/feedPauseMusic?id=\${trackId}`)
                 .then(response => {
                     if (response.ok) {
                         element.style.display = 'none';

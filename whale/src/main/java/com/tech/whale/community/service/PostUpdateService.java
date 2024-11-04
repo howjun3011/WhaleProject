@@ -43,7 +43,6 @@ public class PostUpdateService {
                 postImgDto.setPost_img_url(saveFile.getAbsolutePath());  // 파일 절대 경로 설정
                 postImgDto.setPost_img_type(file.getContentType());  // 파일 MIME 타입 설정
                 postImgDto.setPost_img_name(file.getOriginalFilename());  // 파일명 설정
-                comDao.insertImage(postImgDto);  // 이미지 정보 DB에 저장
             }
         }
     }

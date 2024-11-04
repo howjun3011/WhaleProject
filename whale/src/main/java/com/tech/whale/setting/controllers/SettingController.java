@@ -1,11 +1,7 @@
 package com.tech.whale.setting.controllers;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -342,12 +338,27 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
+        String orderBy = sortOrder.equals("최신순") ? "ASC" : "DESC";
 
-        List<CommentListDto> currentPostCommentList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> feedCommentList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> replyList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
+
+        Set<Integer> uniqueFeedIds = new HashSet<>();
+        List<CommentListDto> filteredFeedCommentList = new ArrayList<>();
+
+        for (CommentListDto dto : feedCommentList) {
+            if (uniqueFeedIds.add(dto.getFeed_id())) { // 중복되지 않은 feed_id만 추가
+                filteredFeedCommentList.add(dto);
+            }
+        }
+
+        model.addAttribute("feedCommentList", filteredFeedCommentList); // 중복 제거된 리스트
+        model.addAttribute("replyList", replyList);
+        model.addAttribute("selectedSortOrder", sortOrder);
+        model.addAttribute("selectedPostType", postType);
 
         // debug
-        for (CommentListDto commentListDto : currentPostCommentList) {
+        for (CommentListDto commentListDto : feedCommentList) {
             System.out.println("게시글");
             System.out.println("Community_id: " + commentListDto.getCommunity_id());
             System.out.println("Post_id: " + commentListDto.getPost_id());
@@ -364,7 +375,7 @@ public class SettingController {
         }
 
         // debug
-        for (CommentListDto commentListDto : currentPostCommentList) {
+        for (CommentListDto commentListDto : feedCommentList) {
             System.out.println("피드");
             System.out.println("Feed_id: " + commentListDto.getFeed_id());
             System.out.println("Feed_text: " + commentListDto.getFeed_text());
@@ -375,9 +386,17 @@ public class SettingController {
             System.out.println("----------------------------------------------------");
         }
 
-        model.addAttribute("currentPostCommentList", currentPostCommentList);
-        model.addAttribute("selectedSortOrder", sortOrder);
-        model.addAttribute("selectedPostType", postType);
+        // debug
+        for (CommentListDto replyLists : replyList) {
+            System.out.println("피드");
+            System.out.println("Re_feed_id: " + replyLists.getRe_feed_id());
+            System.out.println("Re_commenter_id: " + replyLists.getRe_commenter_id());
+            System.out.println("Re_feed_comments_id: " + replyLists.getRe_feed_comments_id());
+            System.out.println("Re_feed_comments_text: " + replyLists.getRe_feed_comments_text());
+            System.out.println("Re_parent_comments_id: " + replyLists.getRe_parent_comments_id());
+            System.out.println("Re_commenter_image: " + replyLists.getRe_commenter_image());
+            System.out.println("----------------------------------------------------");
+        }
 
         return "setting/commentList";
     }

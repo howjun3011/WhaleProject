@@ -78,9 +78,6 @@ body {min-height: 100vh;}
 .playerBtn:hover {opacity: 0.8;}
 .playerBtn:active {opacity: 0.6;}
 .playerRightMargin {margin: 0 15px;}
-.playerFullScreenImg {opacity: 0.5;}
-.playerFullScreenImg:hover {opacity: 0.4; cursor: grab;}
-.playerFullScreenImg:active {opacity: 0.3; cursor: grab;}
 
 .player-bar-container {display: flex; align-items: center; width: 100%; border-radius: 20px;}
 .playerTime {font-size: 10px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.7;}

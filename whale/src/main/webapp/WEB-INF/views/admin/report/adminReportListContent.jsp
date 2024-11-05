@@ -27,7 +27,6 @@
                 <th>중복신고</th>
                 <th>신고날짜</th>
                 <th>처리자</th>
-                <th>처리날짜</th>
                 <th></th>
             </tr>
         </thead>
@@ -44,11 +43,10 @@
 					<td>${dto.tag_name }</td>
 					<td>${dto.writing_id }</td>
 					<td>${dto.user_id }</td>
-					<td>${dto.same_content_count }</td>
 					<td>${dto.report_tag }</td>
-					<td><fmt:formatDate value="${dto.report_date}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_admin_check }</td>
 					<td>${dto.same_content_count }</td>
+					<td><fmt:formatDate value="${dto.report_date}" pattern="yyyy.MM.dd  hh:mm" /></td>
+					<td>${dto.report_admin_check }</td>
 					<td>
 						<button onclick = "location.href = 'adminReportContentView?report_id=${dto.report_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
 							조회

@@ -94,6 +94,32 @@
 	    
 	</select>
     
+    <sql id="includeSelectUser">
+	    <choose>
+	        <when test="param2 == 1">
+	            SELECT USER_ID FROM FEED WHERE FEED_ID = #{writingId}
+	        </when>
+	        <when test="param2 == 2">
+	            SELECT USER_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{writingId}
+	        </when>
+	        <when test="param2 == 3">
+	            SELECT USER_ID FROM POST WHERE POST_ID = #{writingId}
+	        </when>
+	        <when test="param2 == 4">
+	            SELECT USER_ID FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{writingId}
+	        </when>
+	        <when test="param2 == 5">
+	            SELECT USER_ID FROM MESSAGE_NOTI WHERE MESSAGE_NOTI_ID = #{writingId}
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+    
+    <select id="selectUserId" resultType="String">
+    	<include refid="includeSelectUser" />
+    </select>
     
 	
    

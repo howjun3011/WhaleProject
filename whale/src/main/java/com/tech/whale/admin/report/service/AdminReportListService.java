@@ -121,11 +121,63 @@ public class AdminReportListService implements AdminServiceInter{
 				(HttpServletRequest) map.get("request");
 		
 		String report_id = (String) request.getParameter("report_id");
-		System.out.println("서비스 리포트아이디 : " + report_id);
 		AdminReportResultDto reportContent =
-				adminReportIDao.reportContent(report_id);
-		model.addAttribute("reportContent", reportContent);
+				adminReportIDao.reportContent(report_id);	
 		
-		// 아직 신고처리안한 데이터값에 null이면 미처리 텍스트 넣기
+		int feed_id = reportContent.getFeed_id();
+		int feed_comment_id = reportContent.getFeed_comment_id();
+		int post_id = reportContent.getPost_id();
+		int post_comment_id = reportContent.getPost_comment_id();
+		int message_id = reportContent.getMessage_id();
+		String userId = null;
+		String imgPath = null;
+		if(feed_id != 0) {
+			userId = adminReportIDao.selectUserId(feed_id,1);
+			imgPath = "feed";
+		}else if(feed_comment_id != 0) {
+			userId = adminReportIDao.selectUserId(feed_comment_id,2);
+			imgPath = "feed";
+		}else if(post_id != 0) {
+			userId = adminReportIDao.selectUserId(post_id,3);
+			imgPath = "community";
+		}else if(post_comment_id != 0) {
+			userId = adminReportIDao.selectUserId(post_comment_id,4);
+			imgPath = "community";
+		}else if(message_id != 0) {
+			userId = adminReportIDao.selectUserId(message_id,5);
+			imgPath = "";
+		}
+		
+		model.addAttribute("imgPath", imgPath);
+		model.addAttribute("userId", userId);
+		model.addAttribute("reportContent", reportContent);
 	}
+	
+//	public void reportUserId(Model model) {
+//		
+//		Map<String, Object> map = model.asMap();
+//		AdminReportResultDto reportContent =
+//				(AdminReportResultDto) map.get("reportContent");
+//		int feed_id = reportContent.getFeed_id();
+//		int feed_comment_id = reportContent.getFeed_comment_id();
+//		int post_id = reportContent.getPost_id();
+//		int post_comment_id = reportContent.getPost_comment_id();
+//		int message_id = reportContent.getMessage_id();
+//		String userId = null;
+//		if(feed_id != 0) {
+//			userId = adminReportIDao.selectUserId(feed_id,1);
+//		}else if(feed_comment_id != 0) {
+//			userId = adminReportIDao.selectUserId(feed_comment_id,2);
+//		}else if(post_id != 0) {
+//			userId = adminReportIDao.selectUserId(post_id,3);
+//		}else if(post_comment_id != 0) {
+//			userId = adminReportIDao.selectUserId(post_comment_id,4);
+//		}else if(message_id != 0) {
+//			userId = adminReportIDao.selectUserId(message_id,5);
+//		}
+//		
+//		model.addAttribute("userId", userId);
+//		
+//		
+//	}
 }

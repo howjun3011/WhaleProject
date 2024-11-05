@@ -23,4 +23,5 @@ public interface AdminReportIDao {
 	public int selectReportCnt(String sk, String selNum);
 	
 	public AdminReportResultDto reportContent(String report_id);
+	public String selectUserId(int writingId, int writingNum);
 }

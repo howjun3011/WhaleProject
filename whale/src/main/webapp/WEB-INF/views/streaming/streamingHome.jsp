@@ -199,15 +199,19 @@
                             <h3 class="featuredPlaylistsTitle">추천 플레이리스트</h3>
                             <div class="featuredPlaylistsWrap">
                                 <!-- 왼쪽 버튼 -->
-                                <button class="slideButton left" id="scrollFeaturedLeftBtn" onclick="scrollFeaturedLeftContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png" alt="Previous Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+                                <button class="slideButton left" id="scrollFeaturedLeftBtn"
+                                        onclick="scrollFeaturedLeftContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                         alt="Previous Button" width="30" height="30"
+                                         style="border-radius: 8px; opacity: 0.75;">
                                 </button>
                                 <div class="featuredPlaylistsContent">
                                     <c:forEach var="playlist" items="${featuredPlaylists}">
                                         <div class="featuredPlaylist" data-playlist-id="${playlist.id}">
                                             <div class="featuredPlaylistCover"
                                                  onclick="playPlaylist('${playlist.id}')">
-                                                <img src="${playlist.images[0].url}" alt="${playlist.name}" width="120" height="120" style="border-radius: 8px;">
+                                                <img src="${playlist.images[0].url}" alt="${playlist.name}" width="120"
+                                                     height="120" style="border-radius: 8px;">
                                             </div>
                                             <div class="featuredPlaylistInfo">
                                                 <p class="playlistName"
@@ -217,8 +221,43 @@
                                     </c:forEach>
                                 </div>
                                 <!-- 오른쪽 버튼 -->
-                                <button class="slideButton right" id="scrollFeaturedRightBtn" onclick="scrollFeaturedRightContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png" alt="Next Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+                                <button class="slideButton right" id="scrollFeaturedRightBtn"
+                                        onclick="scrollFeaturedRightContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                         alt="Next Button" width="30" height="30"
+                                         style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="recommendedArtists">
+                            <h3 class="recommendedArtistsTitle">추천 아티스트</h3>
+                            <div class="recommendedArtistsWrap">
+                                <!-- 왼쪽 버튼 -->
+                                <button class="slideButton left" id="scrollRecommendedArtistsLeftBtn"
+                                        onclick="scrollRecommendedArtistsLeftContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                         alt="Previous Button" width="30" height="30"
+                                         style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                                <div class="recommendedArtistsContainer">
+                                    <c:forEach var="artist" items="${recommendedArtists}">
+                                        <div class="artistItem" onclick="navigateToArtistDetail('${artist.id}')">
+                                            <div class="artistItemCover">
+                                                <c:if test="${not empty artist.images}">
+                                                    <img src="${artist.images[0].url}" alt="${artist.name}" width="120"
+                                                         height="120" style="border-radius: 50%;">
+                                                </c:if>
+                                            </div>
+                                            <p class="artistItemName">${artist.name}</p>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <!-- 오른쪽 버튼 -->
+                                <button class="slideButton right" id="scrollRecommendedArtistsRightBtn"
+                                        onclick="scrollRecommendedArtistsRightContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                         alt="Next Button" width="30" height="30"
+                                         style="border-radius: 8px; opacity: 0.75;">
                                 </button>
                             </div>
                         </div>

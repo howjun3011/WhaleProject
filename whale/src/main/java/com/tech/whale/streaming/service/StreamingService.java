@@ -491,6 +491,40 @@ public class StreamingService {
         }
     }
 
+    // 추천 아티스트 가져오기
+    public List<Artist> getRecommendedArtistsFromRecentTracks(HttpSession session) {
+        initializeSpotifyApi(session);
+        Set<String> artistIds = new HashSet<>();
+
+        try {
+            // 최근 재생한 항목을 가져와서 아티스트 ID를 추출
+            PagingCursorbased<PlayHistory> recentlyPlayedTracks = spotifyApi.getCurrentUsersRecentlyPlayedTracks()
+                    .limit(10)
+                    .build()
+                    .execute();
+
+            for (PlayHistory playHistory : recentlyPlayedTracks.getItems()) {
+                artistIds.add(playHistory.getTrack().getArtists()[0].getId());
+            }
+
+            // 중복 아티스트를 제거하고 최대 5개의 아티스트만 선택
+            List<String> selectedArtistIds = artistIds.stream().limit(5).collect(Collectors.toList());
+            List<Artist> recommendedArtists = new ArrayList<>();
+
+            // 선택된 아티스트마다 추천 아티스트를 가져옴
+            for (String artistId : selectedArtistIds) {
+                Artist[] relatedArtists = spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
+                recommendedArtists.addAll(Arrays.asList(relatedArtists));
+            }
+
+            // 추천 아티스트 최대 10명으로 제한
+            return recommendedArtists.stream().limit(10).collect(Collectors.toList());
+
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 
 
 }

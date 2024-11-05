@@ -323,6 +323,7 @@ public class SettingController {
             System.out.println("post_tag_text: " + likeListDto.getPost_tag_text());
         }
 
+        model.addAttribute("session_user_id", session_user_id);
         model.addAttribute("postLikeList", postLikeList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);

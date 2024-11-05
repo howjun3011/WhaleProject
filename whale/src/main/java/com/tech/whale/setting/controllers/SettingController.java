@@ -25,23 +25,23 @@ import com.tech.whale.streaming.service.StreamingService;
 
 @Controller
 public class SettingController {
-	
-	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	
-	UserInfoDto userinfoDto;
-	StartpageDto startpageDto;
-	UserSettingDto userSettingDto;
-	UserNotificationDto userNotificationDto;
-	BlockDto blockDto;
-	PageAccessDto pageAccessDto;
-	LikeListDto likeListDto;
-	CommentListDto commentListDto;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    UserInfoDto userinfoDto;
+    StartpageDto startpageDto;
+    UserSettingDto userSettingDto;
+    UserNotificationDto userNotificationDto;
+    BlockDto blockDto;
+    PageAccessDto pageAccessDto;
+    LikeListDto likeListDto;
+    CommentListDto commentListDto;
     HiddenFeedDto hiddenFeedDto;
 
     @Autowired
     private MainService mainService;
 
-	// [ 스트리밍 검색 기능 ]
+    // [ 스트리밍 검색 기능 ]
     @Autowired
     private StreamingService streamingService;
 
@@ -191,22 +191,22 @@ public class SettingController {
 
         return "setting/representiveSong";
     }
-    
+
     @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
-    	System.out.println("updateRepresentive() ctr");
+        System.out.println("updateRepresentive() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
         System.out.println(session_user_id);
 
-    	// [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
-    	String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
-    	String trackName = map.get("name").toString();
-    	String albumName = ((Map<String, String>) map.get("album")).get("name");
-    	String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
-    	String trackSpotifyId = map.get("id").toString();
-    	
-    	String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
+        // [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
+        String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
+        String trackName = map.get("name").toString();
+        String albumName = ((Map<String, String>) map.get("album")).get("name");
+        String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
+        String trackSpotifyId = map.get("id").toString();
+
+        String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
         System.out.println(trackId);
 
         // user_info 테이블의 representivesong 필드에 trackId 업데이트
@@ -237,7 +237,7 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-//      비공개 계정 설정 값 가져오기  
+//      비공개 계정 설정 값 가져오기
         userSettingDto = settingDao.getAccountPrivacyByUserId(session_user_id);
         System.out.println("accountPrivacy value : " + userSettingDto.getAccount_privacy());
 
@@ -278,7 +278,7 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-//    	DB 업데이트
+//       DB 업데이트
         settingDao.updateAccountPrivacy(session_user_id, accountPrivacy);
 
         return "success";
@@ -312,20 +312,18 @@ public class SettingController {
 
         String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
 
-        List<LikeListDto> currentPostLikeList = settingDao.getFilteredPostLikeList(session_user_id, orderBy, postType);
+        List<LikeListDto> postLikeList = settingDao.getFilteredPostLikeList(session_user_id, orderBy, postType);
 
         // debug
-        for (LikeListDto likeListDto : currentPostLikeList) {
+        for (LikeListDto likeListDto : postLikeList) {
             System.out.println("post_id: " + likeListDto.getPost_id());
             System.out.println("community_id: " + likeListDto.getCommunity_id());
-            System.out.println("post_text: " + likeListDto.getPost_title());
             System.out.println("post_title: " + likeListDto.getPost_text());
-            System.out.println("post_tag_text: " + likeListDto.getPost_text());
-            System.out.println("feed_id: " + likeListDto.getFeed_id());
-            System.out.println("feed_img_name: " + likeListDto.getFeed_img_name());
+            System.out.println("post_text: " + likeListDto.getPost_title());
+            System.out.println("post_tag_text: " + likeListDto.getPost_tag_text());
         }
 
-        model.addAttribute("currentPostLikeList", currentPostLikeList);
+        model.addAttribute("postLikeList", postLikeList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);
 
@@ -661,59 +659,59 @@ public class SettingController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @RequestMapping("/report")
     public String report(HttpServletRequest request, HttpSession session, Model model,
-    		@RequestParam(value = "p", required = false) String post_id,
-    		@RequestParam(value = "f", required = false) String feed_id,
-    		@RequestParam(value = "fc", required = false) String feed_comments_id) {
-    	String now_id = (String) session.getAttribute("user_id");
-    	String report_tag = "";
-    	
-    	if (post_id != null) {
-    		report_tag = "게시글 신고";
-			model.addAttribute("report_type_id", post_id);
-		} else if (feed_id != null) {
-			report_tag = "피드 신고";
-			model.addAttribute("report_type_id", feed_id);
-		} else if (feed_comments_id != null) {
-			report_tag = "피드 댓글 신고";
-			model.addAttribute("report_type_id", feed_comments_id);
-		}
-    	
-    	model.addAttribute("report_tag", report_tag);
-    	model.addAttribute("now_id", now_id);
-    	return "report/report";
+                         @RequestParam(value = "p", required = false) String post_id,
+                         @RequestParam(value = "f", required = false) String feed_id,
+                         @RequestParam(value = "fc", required = false) String feed_comments_id) {
+        String now_id = (String) session.getAttribute("user_id");
+        String report_tag = "";
+
+        if (post_id != null) {
+            report_tag = "게시글 신고";
+            model.addAttribute("report_type_id", post_id);
+        } else if (feed_id != null) {
+            report_tag = "피드 신고";
+            model.addAttribute("report_type_id", feed_id);
+        } else if (feed_comments_id != null) {
+            report_tag = "피드 댓글 신고";
+            model.addAttribute("report_type_id", feed_comments_id);
+        }
+
+        model.addAttribute("report_tag", report_tag);
+        model.addAttribute("now_id", now_id);
+        return "report/report";
     }
-    
+
     @RequestMapping("/reportDo")
     public String reportDo(HttpServletRequest request, Model model,
-    		HttpSession session, 
-    		@RequestParam("now_id") String now_id,
-    		@RequestParam("report_tag") String report_tag,
-    		@RequestParam("report_type_id") String report_type_id,
-    		@RequestParam("report_why") String report_why) {
-    	
-    	String reportText = "";
-    	String reportImg = "";
-    	
-    	if (report_tag.equals("게시글 신고")) {
-    		ReportDto reportDto = reportDao.getReportPost(report_type_id);
-    		reportText = reportDto.getReport_text();
-    		reportImg = reportDto.getReport_img_url();
-			reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
-    	} else if (report_tag.equals("피드 신고")) {
-			ReportDto reportDto = reportDao.getReportFeed(report_type_id);
-    		reportText = reportDto.getReport_text();
-    		reportImg = reportDto.getReport_img_url();
-			reportDao.reportFeed(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
-    	} else if (report_tag.equals("피드 댓글 신고")) {
-			ReportDto reportDto = reportDao.getReportFeedComments(report_type_id);
-    		reportText = reportDto.getReport_text();
-    		reportDao.reportFeedComments(report_type_id, now_id, report_why, report_tag, reportText);
-    	}
-    	
-    	return "redirect:/profileHome?u="+(String) session.getAttribute("user_id");
+                           HttpSession session,
+                           @RequestParam("now_id") String now_id,
+                           @RequestParam("report_tag") String report_tag,
+                           @RequestParam("report_type_id") String report_type_id,
+                           @RequestParam("report_why") String report_why) {
+
+        String reportText = "";
+        String reportImg = "";
+
+        if (report_tag.equals("게시글 신고")) {
+            ReportDto reportDto = reportDao.getReportPost(report_type_id);
+            reportText = reportDto.getReport_text();
+            reportImg = reportDto.getReport_img_url();
+            reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
+        } else if (report_tag.equals("피드 신고")) {
+            ReportDto reportDto = reportDao.getReportFeed(report_type_id);
+            reportText = reportDto.getReport_text();
+            reportImg = reportDto.getReport_img_url();
+            reportDao.reportFeed(report_type_id, now_id, report_why, report_tag, reportText, reportImg);
+        } else if (report_tag.equals("피드 댓글 신고")) {
+            ReportDto reportDto = reportDao.getReportFeedComments(report_type_id);
+            reportText = reportDto.getReport_text();
+            reportDao.reportFeedComments(report_type_id, now_id, report_why, report_tag, reportText);
+        }
+
+        return "redirect:/profileHome?u="+(String) session.getAttribute("user_id");
     }
-    
+
 }

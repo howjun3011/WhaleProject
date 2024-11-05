@@ -1,6 +1,7 @@
 package com.tech.whale.setting.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tech.whale.setting.dto.*;
 import org.apache.ibatis.annotations.Mapper;

@@ -6,7 +6,7 @@ const MainFooterComponent = {
 					<div class="playlistBody">
 						<div class="playlist-header flexCenter">재생 목록</div>
 						<div class="playlist-delete flexCenter" @click="isPlayered = false;">x</div>
-						<div class="playlist-contents" v-for="(item, i) in resPlaylists" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === playlists.currently_playing.id ? '#E2E2E2' : '#ffffff'}">
+						<div class="playlist-contents" v-for="(item, i) in resPlaylists" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === trackInfo[4] ? '#E2E2E2' : '#ffffff'}">
 							<div class="playlist-font flexCenter" v-if="!isShow[i]">{{ i+1 }}</div>
 							<div class="flexCenter" v-if="addIsShow(i)">
 				                <svg
@@ -16,7 +16,7 @@ const MainFooterComponent = {
 				                    viewBox="0 0 24 24"
 				                    class="playlistTrackBtn"
 				                    style="height: 16px; cursor: pointer;"
-				                    @click="playPlayer(item.id)"
+				                    @click="playPlayer(item.uri)"
 				                >
 				                    <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
 				                    ></path>
@@ -396,11 +396,12 @@ const MainFooterComponent = {
 		                this.playlists = await result;
 						const temp = [];
 						this.playlists.queue.forEach(el => {
-							if (!temp.includes(el.id)) {
+							if (!temp.includes(el.id) && el.id !== this.playlists.currently_playing.id) {
 								temp.push(el.id);
 								this.resPlaylists.push(el);
 							}
 						});
+						this.resPlaylists.unshift(this.playlists.currently_playing);
 		            } else {
 		                console.error('Failed to fetch user playlist queue:', result.statusText);
 		            }
@@ -416,15 +417,18 @@ const MainFooterComponent = {
             return this.isShow[i];
         },
         async playPlayer(i) {
-            await fetch(`/whale/streaming/playTrack`, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-				method: "POST",
-				body: JSON.stringify({
-					trackId: i,
-				}),
-			});
+			const body = {
+				"uris" : this.resPlaylists.map(el => { return el.uri }),
+				"offset": {"uri": `${ i }` }
+			};
+			fetch(`https://api.spotify.com/v1/me/player/play?device_id=${ sessionStorage.device_id }`, {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.accessToken}`,
+					},
+					method: 'PUT',
+					body: JSON.stringify(body)
+				}
+			);
         },
 	},
 };

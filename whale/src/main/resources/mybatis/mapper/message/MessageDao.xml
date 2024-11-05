@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.message.dao.MessageDao">
+
+	<select id="getNextRoomId" resultType="String">
+		SELECT MESSAGE_ROOM_SEQ.NEXTVAL FROM DUAL
+	</select>
+
+	<insert id="createMessageRoom">
+	    INSERT INTO message_room (message_room_id) VALUES (#{roomId})
+	</insert>
+
+	<select id="getAllRoom" resultType="com.tech.whale.message.dto.MessageDto">
+		SELECT mr.message_room_id
+		FROM message_room mr
+		JOIN message_room_user mru1 ON mr.message_room_id = mru1.message_room_id
+		JOIN message_room_user mru2 ON mr.message_room_id = mru2.message_room_id
+		WHERE mru1.user_id = #{now_id}
+		  AND mru2.user_id = #{userId}
+	</select>
+	
+	<insert id="addUserMessageRoom">
+	    INSERT INTO message_room_user (message_room_id, user_id)
+	    VALUES (#{roomId}, #{userId})
+	</insert>
+	    
+    <insert id="saveMessage">
+	    INSERT INTO message (message_id, message_create_date, message_text, message_room_id, message_read, user_id)
+	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, 0, #{user_id})
+	</insert>
+	
+	<select id="getMessagesByRoomId" resultType="com.tech.whale.message.dto.MessageDto">
+	    SELECT message_id, message_create_date, message_text, message_room_id, message_read, user_id
+	    FROM message
+	    WHERE message_room_id = #{roomId}
+	    ORDER BY message_create_date ASC
+	</select>
+	    
+</mapper>

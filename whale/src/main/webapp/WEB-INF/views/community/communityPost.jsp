@@ -262,7 +262,7 @@
         </div>
         <div class="modal-links">
             <a href="" id="profile-link" class="modal-link">프로필</a> 
-            <a href="" id="message-link" class="modal-link">쪽지 보내기</a>
+            <a href="" id="message-link" class="modal-link">메시지 보내기</a>
         </div>
     </div>
 </div>
@@ -285,7 +285,7 @@
 
         // 링크 설정
         document.getElementById('profile-link').href = "profileHome?u=" + userId;
-        document.getElementById('message-link').href = "sendMessage?u=" + userId;
+        document.getElementById('message-link').href = "messageGo?u=" + userId;
 
         // 모달 열기
         document.getElementById("userModal").style.display = "block";

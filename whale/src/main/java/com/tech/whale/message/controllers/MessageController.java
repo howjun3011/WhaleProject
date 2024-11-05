@@ -1,64 +1,87 @@
 package com.tech.whale.message.controllers;
 
-import java.lang.reflect.Array;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.tech.whale.message.dao.MessageDao;
+import com.tech.whale.message.dto.MessageDto;
 
 @Controller
-@RequestMapping("message")
 public class MessageController {
-	@RequestMapping("/home")
-	public String settingHome(HttpServletRequest request, HttpSession session, Model model) {
-		System.out.println(">>[JAVA] MessageController : settingHome");
-		String[] test = new String[] { "A", "B", "C", "D", "E", "F", "G" };
-		model.addAttribute("list", test);
+
+	@Autowired
+	private MessageDao messageDao;
+	
+	@RequestMapping("/messageHome")
+	public String messageHome(HttpServletRequest request, HttpSession session, Model model) {
+		String now_id = (String) session.getAttribute("user_id");
+		
 		return "message/messageHome";
 	}
-
-	@RequestMapping("/messageSearch")
-	public String messageSearch(HttpServletRequest request, HttpSession session, Model model) {
-		System.out.println(">>[JAVA] MessageController : messageSearch");
-		String[] test = new String[] { "1", "2" };
-		model.addAttribute("list", test);
-		return "message/messageSearch";
-	}
-
-	@RequestMapping("/search")
-	public String search(HttpServletRequest request, HttpSession session, Model model) {
-		String tabId = request.getParameter("tabId");
-		System.out.println(">>[JAVA] MessageController : search : " + tabId);
-
-		if (tabId.equals("msg")) {
-			String[] test = new String[] { "가", "나" };
-			model.addAttribute("list", test);
-			return "message/messageTable";
+	
+	@RequestMapping("/messageGo")
+	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
+			@RequestParam("u") String userId) {
+		String now_id = (String) session.getAttribute("user_id");
+		MessageDto messageDto = messageDao.getAllRoom(now_id, userId);
+		String roomId = "";
+		if (messageDto == null || messageDto.getMessage_room_id() == null) {
+			roomId = messageDao.getNextRoomId();
+			messageDao.createMessageRoom(roomId);
+			messageDao.addUserMessageRoom(roomId, userId);
+			messageDao.addUserMessageRoom(roomId, now_id);
+			messageDto = messageDao.getAllRoom(now_id, userId);
 		} else {
-			String[] test = new String[] { "user1", "user2", "user3", "user4", "user5", "user6" };
-			model.addAttribute("list", test);
-			return "message/userTable";
+			roomId = messageDto.getMessage_room_id();
 		}
+		
+		model.addAttribute("roomId", roomId);
+		return "redirect:/messageRoom?r=" + roomId + "&u=" + userId;			
 	}
 
 	@RequestMapping("/messageRoom")
-	public String messageRoom(HttpServletRequest request, HttpSession session, Model model) {
-
-		String tabId = request.getParameter("tabId");
-		System.out.println(">>[JAVA] MessageController : messageRoom : ");
-
-		String[] selectedIds = request.getParameterValues("selectedIds");
-
-		String ids = String.join(", ", selectedIds);
-
-		System.out.println(">>>>>온거 확인 : " + ids);
-
-		model.addAttribute("ids", ids);
+	public String messageRoom(HttpServletRequest request, HttpSession session, Model model,
+			@RequestParam("r") String roomId,
+			@RequestParam("u") String userId) {
+		String now_id = (String) session.getAttribute("user_id");
+		
+		List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);
+		
+		model.addAttribute("messages", messages);
+		model.addAttribute("now_id", now_id);
+		model.addAttribute("userId", userId);
+		model.addAttribute("roomId", roomId);
 		return "message/messageRoom";
 	}
+	
+	@PostMapping("/sendMessage")
+	public String sendMessage(HttpSession session,
+	                          @RequestParam("roomId") String roomId,
+	                          @RequestParam("message") String message,
+	                          @RequestParam("userId") String userId) {
+	    String now_id = (String) session.getAttribute("user_id");
+	    
+	    // 메시지 객체 생성
+	    MessageDto messageDto = new MessageDto();
+	    messageDto.setMessage_room_id(roomId);
+	    messageDto.setUser_id(now_id);
+	    messageDto.setMessage_text(message);
+	    messageDto.setMessage_create_date(new Date());
 
+	    // 메시지 저장
+	    messageDao.saveMessage(messageDto);
+
+	    // 채팅방으로 리다이렉트
+	    return "redirect:/messageRoom?r=" + roomId + "&u=" + userId;
+	}
 }

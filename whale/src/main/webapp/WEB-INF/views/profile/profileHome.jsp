@@ -404,7 +404,7 @@
 					                    </c:choose>
 					                </c:otherwise>
 					            </c:choose>
-					            <button class="message">메시지</button>
+					            <a href="messageGo?u=${userId}"><button class="message">메시지</button></a>
 					        </div>
 					    </c:if>
                 </div>

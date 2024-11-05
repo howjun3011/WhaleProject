@@ -1,73 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<link rel="stylesheet" href="../static/css/message/messageRoom.css">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>채팅방</title>
+<style>
+/* 간단한 스타일 추가 */
+.chat-container {
+    width: 500px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+}
+
+.chat-header {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+}
+
+.chat-messages {
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.chat-input {
+    padding: 10px;
+    background-color: #f1f1f1;
+}
+
+.chat-input textarea {
+    width: 100%;
+    height: 50px;
+}
+
+.chat-input button {
+    float: right;
+    margin-top: 5px;
+}
+</style>
 </head>
 <body>
-	<div class="talk-container">
-		<div class="top">
-			<div class="top-left">
-				<button type="button" class="beforePage" onclick="goBack()">
-					<img class="barBtns" src="../static/images/message/arrow.png"
-						alt="이전" />
-				</button>
-				<img class="room-img" src="../static/images/message/test/people.png" />
-				<div class="profile-name">${ids }</div>
-			</div>
-			<div class="top-right">
-				<img class="barBtns" src="../static/images/message/search.png"
-					alt="검색" /> <img class="barBtns"
-					src="../static/images/message/plus.svg" alt="검색" />
-			</div>
-		</div>
-
-		<div class="middle">
-			<div class="other-msg">
-				<div class="user-info">
-					<img class="msg-img" src="../static/images/message/test/people.png" />
-					<!-- 메시지 출력점  -->
-					<div class="msg-name">내 친구</div>
-				</div>
-				<div class="context">
-					<div class="msg-context">식사하셨나요?ddddddddddddddddddddddddddddddddddd</div>
-				</div>
-				<div class="context">
-					<div class="msg-context">대dddddddddddddddddddddd답</div>
-					<div class="msg-time">오후 3:40</div>
-				</div>
-			</div>
-			<div class="my-msg">
-				<div class="context">
-					<div class="msg-time">오후 13:40</div>
-					<div class="msg-context">ㅇㅇ</div>
-				</div>
-				<div class="context">
-					<div class="msg-time">오후 3:41</div>
-					<div class="msg-context">너dddddddddddddddddddddddddddddddddddddddddd는?</div>
-				</div>
-			</div>
-		</div>
-		<div class="bottom">
-			<textarea class="textarea"></textarea>
-			<div type="submit" class="send-button">
-				<img src="../static/images/message/send.svg" alt="전송" />
-			</div>
-			<input type="submit" id="emoji_btn" onchange="previewImage(event)"
-				style='display: none;'> <img class="emoticon"
-				src="../static/images/message/emoji.svg"
-				onclick='document.all.emoji_btn.click();' /> <input type="file"
-				id="file" accept="image/png, image/jpeg" multiple
-				onchange="previewImage(event)" style='display: none;'> <img
-				class="file" src="../static/images/message/picture.svg"
-				onclick='document.all.file.click();' />
-		</div>
-
-	</div>
+<div class="chat-container">
+    <div class="chat-header">
+        <h3>${userId}님과 ${now_id}님의 ${roomId}번 채팅방입니다.</h3>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- 채팅 메시지들을 표시할 영역 -->
+        <c:forEach var="msg" items="${messages}">
+            <div class="chat-message">
+                <strong>${msg.user_id}:</strong> ${msg.message_text}<br>
+                <small>${msg.message_create_date}</small>
+            </div>
+        </c:forEach>
+    </div>
+    <div class="chat-input">
+        <form action="sendMessage" method="post">
+            <input type="hidden" name="roomId" value="${roomId}">
+            <input type="hidden" name="userId" value="${userId}">
+            <textarea name="message" placeholder="메시지를 입력하세요."></textarea>
+            <button type="submit">전송</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

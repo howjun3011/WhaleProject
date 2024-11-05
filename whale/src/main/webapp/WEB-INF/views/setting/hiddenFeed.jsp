@@ -27,6 +27,7 @@
 		}
 		.no-hidden-list{
 			margin-left: 20px;
+			margin-top: 20px;
 			color: #ccc;
 		}
 		a{

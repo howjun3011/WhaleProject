@@ -10,6 +10,7 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script src="static/js/setting/setting.js"></script>
 	<style>
+		/* 기존 스타일 유지 */
 		.setting-container {
 			display: flex;
 			flex-direction: column;
@@ -128,20 +129,41 @@
 			padding-left: 10px;
 		}
 
-		.comment, .reply {
+		.comment {
 			display: flex;
 			align-items: center;
 			margin-bottom: 5px;
 		}
 
-		.comment-img, .reply-img, .owner-image {
+		.comment-img, .owner-image {
 			width: 30px;
 			height: 30px;
 			border-radius: 50%;
 			margin-right: 10px;
 		}
 
-		.comment-text, .reply-text {
+		.comment-text {
+			background-color: #f1f1f1;
+			padding: 8px 12px;
+			border-radius: 20px;
+		}
+
+		/* 답글 스타일 */
+		.reply {
+			display: flex;
+			align-items: center;
+			margin-bottom: 5px;
+			margin-left: 40px; /* 답글은 원 댓글보다 오른쪽으로 밀리도록 설정 */
+		}
+
+		.reply .reply-img {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			margin-right: 10px;
+		}
+
+		.reply-text {
 			background-color: #f1f1f1;
 			padding: 8px 12px;
 			border-radius: 20px;
@@ -186,18 +208,18 @@
 			<!-- 댓글 목록 출력 -->
 			<div id="comment-list">
 				<c:choose>
-					<c:when test="${empty feedCommentList }">
+					<c:when test="${empty feedCommentList}">
 						<div class="no-comment-message">댓글 목록이 없습니다.</div>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when test="${selectedPostType == '게시글'}">
-								<c:forEach var="comment" items="${feedCommentList }">
+								<c:forEach var="comment" items="${feedCommentList}">
 									<a href="/whale/communityDetail?c=${comment.community_id}&p=${comment.post_id}">
 										<div class="post-list">
-											<div>태그: ${comment.post_tag_text }</div>
-											<div>제목: ${comment.post_title }</div>
-											<div>댓글: ${comment.post_comments_text }</div>
+											<div>태그: ${comment.post_tag_text}</div>
+											<div>제목: ${comment.post_title}</div>
+											<div>댓글: ${comment.post_comments_text}</div>
 										</div>
 									</a>
 								</c:forEach>
@@ -213,27 +235,33 @@
 											</div>
 
 											<div class="comments-section">
-												<!-- 해당 피드의 댓글 출력 -->
+												<!-- 해당 피드에 맞는 댓글 및 답글만 출력 -->
 												<c:forEach var="comment" items="${replyList}">
-													<c:if test="${feed.feed_id == comment.re_feed_id && comment.re_parent_comments_id == null}">
-														<div class="comment">
-															<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="comment-img">
-															<div class="comment-text">
-																<span>${comment.re_commenter_id}</span>: ${comment.re_feed_comments_text}
-															</div>
-														</div>
-
-														<!-- 해당 댓글의 답글 출력 -->
-														<c:forEach var="reply" items="${replyList}">
-															<c:if test="${feed.feed_id == reply.re_feed_id && reply.re_parent_comments_id == comment.re_feed_comments_id}">
-																<div class="reply" style="margin-left: 20px;">
-																	<img src="static/images/setting/${reply.re_commenter_image}" alt="reply_img" class="reply-img">
-																	<div class="reply-text">
-																		<span>${reply.re_commenter_id}</span>: ${reply.re_feed_comments_text}
+													<c:if test="${comment.re_feed_id == feed.feed_id}">
+														<c:choose>
+															<c:when test="${comment.re_parent_comments_id == null}">
+																<div class="comment">
+																	<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="comment-img">
+																	<div class="comment-text">
+																		<span>${comment.re_commenter_id}</span>: ${comment.re_feed_comments_text}
 																	</div>
 																</div>
-															</c:if>
-														</c:forEach>
+															</c:when>
+															<c:otherwise>
+																<div class="comment parent-comment">
+																	<img src="static/images/setting/${comment.re_parent_commenter_image}" alt="parent_commenter_img" class="comment-img">
+																	<div class="comment-text">
+																		<span>${comment.re_parent_commenter_id}</span>: ${comment.re_parent_feed_comments_text}
+																	</div>
+																</div>
+																<div class="reply">
+																	<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="reply-img">
+																	<div class="reply-text">
+																		<span>${comment.re_commenter_id}</span>: ${comment.re_feed_comments_text}
+																	</div>
+																</div>
+															</c:otherwise>
+														</c:choose>
 													</c:if>
 												</c:forEach>
 											</div>

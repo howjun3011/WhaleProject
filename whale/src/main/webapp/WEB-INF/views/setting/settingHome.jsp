@@ -47,12 +47,6 @@ a:visited, a:hover, a:focus, a:active {
 					알림
 				</div>
 			</a>
-			<a href="blockList">
-				<div class="setting-item">
-					<img src="static/images/setting/block.png" alt="차단" />
-					차단
-				</div>
-			</a>
 			<a href="accessibility">
 				<div class="setting-item">
 					<img src="static/images/setting/accessibility.png" alt="접근성" />

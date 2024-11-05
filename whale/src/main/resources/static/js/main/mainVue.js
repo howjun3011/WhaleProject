@@ -65,10 +65,7 @@ const app = createApp({
 		
 		// [ Main Center ]
 		replaceIframe(i,j,k) {
-			this.fullPlayer[i] = false;
-			this.$nextTick(() => {
-                $("#"+this.frameNames[i]).get(0).src = this.whaleAddress[j]+k;
-            });
+			$("#"+this.frameNames[i]).get(0).src = this.whaleAddress[j]+k;
 			if (j === 0) {setTimeout(() => {this.fetchIframe(this.frameNames[i],sessionStorage.device_id);}, 1000);}
 		},
 		

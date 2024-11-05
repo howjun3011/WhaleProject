@@ -803,4 +803,47 @@ function playAllAlbum(albumId) {
         .catch(error => console.error("앨범 재생 요청 중 오류 발생:", error));
 }
 
+// 추천 플레이리스트 스크롤 이동 함수
+function updateFeaturedLeftContentScrollButtons() {
+    const container = document.querySelector('.featuredPlaylistsContent');
+    const scrollLeftBtn = document.getElementById('scrollFeaturedLeftBtn');
+    const scrollRightBtn = document.getElementById('scrollFeaturedRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollFeaturedLeftContent() {
+    const container = document.querySelector('.featuredPlaylistsContent');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateFeaturedLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollFeaturedRightContent() {
+    const container = document.querySelector('.featuredPlaylistsContent');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateFeaturedLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    // 홈화면에서 최근 재생한 항목 스크롤 버튼 업데이트
+    if (window.location.pathname === '/whale/streaming/home') {
+        updateFeaturedLeftContentScrollButtons(); // 초기 상태
+        const container = document.querySelector('.featuredPlaylistsContent');
+        container.addEventListener('scroll', updateFeaturedLeftContentScrollButtons); // 스크롤 이벤트 감지
+    }
+});
 

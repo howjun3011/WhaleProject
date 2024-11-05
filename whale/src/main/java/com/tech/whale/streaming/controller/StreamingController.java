@@ -35,16 +35,16 @@ public class StreamingController {
 		String type = queryParam.get("type");
 		
 		// 노드 스트리밍 서버를 위한 리다이렉트
-		if ("albumDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("albumId");}
-		else if ("trackDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("trackId");}
-		else if ("artistDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("artistId");}
-		else {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");}
+//		if ("albumDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("albumId");}
+//		else if ("trackDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("trackId");}
+//		else if ("artistDetail".equals(type)) {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id")+"&type="+queryParam.get("type")+"&id="+queryParam.get("artistId");}
+//		else {return "redirect:https://localhost:5500/whale/streaming\\?accessToken="+(String) session.getAttribute("accessToken")+"&userId="+(String) session.getAttribute("user_id");}
 
 		// 스프링 스트리밍 서버를 위한 리다이렉트
-		// if ("albumDetail".equals(type)) {return "redirect:streaming/albumDetail?albumId="+queryParam.get("albumId");}
-		// else if ("trackDetail".equals(type)) {return "redirect:streaming/detail?trackId="+queryParam.get("trackId");}
-		// else if ("artistDetail".equals(type)) {return "redirect:streaming/artistDetail?artistId="+queryParam.get("artistId");}
-		// else {return "redirect:streaming/home";}
+		 if ("albumDetail".equals(type)) {return "redirect:streaming/albumDetail?albumId="+queryParam.get("albumId");}
+		 else if ("trackDetail".equals(type)) {return "redirect:streaming/detail?trackId="+queryParam.get("trackId");}
+		 else if ("artistDetail".equals(type)) {return "redirect:streaming/artistDetail?artistId="+queryParam.get("artistId");}
+		 else {return "redirect:streaming/home";}
 	}
 	
 	// [ 프레임에 스트리밍 메인 구간 이동 ]
@@ -75,6 +75,10 @@ public class StreamingController {
 		// 최근 재생한 항목 가져오기
 		List<PlayHistory> recentlyPlayedTracks = streamingService.getRecentlyPlayedTracks(session);
 		model.addAttribute("recentlyPlayedTracks", recentlyPlayedTracks);
+
+		// 추천 플레이리스트 가져오기
+		List<PlaylistSimplified> featuredPlaylists = streamingService.getFeaturedPlaylists(session);
+		model.addAttribute("featuredPlaylists", featuredPlaylists);
 
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");

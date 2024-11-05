@@ -178,8 +178,10 @@
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>
                                             <div class="trackInfo">
-                                                <p class="trackName">${playHistory.track.name}</p>
-                                                <p class="artistName">${playHistory.track.artists[0].name}</p>
+                                                <p class="trackName"
+                                                   onclick="navigateToDetail('${playHistory.track.id}')">${playHistory.track.name}</p>
+                                                <p class="artistName"
+                                                   onclick="navigateToArtistDetail('${playHistory.track.artists[0].id}')">${playHistory.track.artists[0].name}</p>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -190,6 +192,33 @@
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="featuredPlaylists">
+                            <h3 class="featuredPlaylistsTitle">추천 플레이리스트</h3>
+                            <div class="featuredPlaylistsWrap">
+                                <!-- 왼쪽 버튼 -->
+                                <button class="slideButton left" id="scrollFeaturedLeftBtn" onclick="scrollFeaturedLeftContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png" alt="Previous Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+                                </button>
+                                <div class="featuredPlaylistsContent">
+                                    <c:forEach var="playlist" items="${featuredPlaylists}">
+                                        <div class="featuredPlaylist" data-playlist-id="${playlist.id}">
+                                            <div class="featuredPlaylistCover"
+                                                 onclick="playPlaylist('${playlist.id}')">
+                                                <img src="${playlist.images[0].url}" alt="${playlist.name}" width="120" height="120" style="border-radius: 8px;">
+                                            </div>
+                                            <div class="featuredPlaylistInfo">
+                                                <p class="playlistName"
+                                                   onclick="playPlaylist('${playlist.id}')">${playlist.name}</p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <!-- 오른쪽 버튼 -->
+                                <button class="slideButton right" id="scrollFeaturedRightBtn" onclick="scrollFeaturedRightContent()">
+                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png" alt="Next Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
                                 </button>
                             </div>
                         </div>
@@ -342,7 +371,7 @@
                                                              style="border-radius: 4px; padding-left: 5px; cursor: pointer;"
                                                              onclick="playAndNavigate('${track.id}')">
                                                     </c:if>
-                                                    <p style="cursor: pointer;">${track.name}</p>
+                                                    <p class="topTrackName" style="cursor: pointer;">${track.name}</p>
                                                 </div>
                                                 <!-- 앨범 이름 -->
                                                 <p class="albumName"
@@ -421,6 +450,7 @@
                                                              onclick="playPlaylist('${playlist.id}')">
                                                     </c:if>
                                                     <p class="trackName"
+                                                       onclick="playPlaylist('${playlist.id}')"
                                                        style="margin-left: 2px; font-size: 14px;">${playlist.name}</p>
                                                 </div>
                                             </c:forEach>
@@ -570,8 +600,11 @@
                                         </button>
                                         <!-- 트랙 제목과 아티스트 이름 표시 -->
                                         <div style="display: block; cursor: pointer;">
-                                            <p style="font-weight: 400;">${trackItem.name}</p>
-                                            <p>${trackItem.artists[0].name}</p>
+                                            <p class="albumTracksName"
+                                               onclick="navigateToDetail('${trackItem.id}')"
+                                               style="font-weight: 400;">${trackItem.name}</p>
+                                            <p class="albumTracksArtist"
+                                               onclick="navigateToArtistDetail('${albumDetail.artists[0].id}')">${trackItem.artists[0].name}</p>
                                         </div>
                                         <!-- 트랙 재생 시간 표시 -->
                                         <c:set var="minutes" value="${trackItem.durationMs / 60000}"/>

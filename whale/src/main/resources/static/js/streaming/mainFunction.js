@@ -709,4 +709,98 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// 스트리밍 메인 좋아요 버튼 클릭 시 이미지 변경 함수
+document.addEventListener("DOMContentLoaded", function() {
+    // recommendationLike 및 recentlyPlayedTrackLike 클래스의 모든 이미지 요소 선택
+    const likeButtons = document.querySelectorAll(".recommendationLike img, .recentlyPlayedTrackLike img");
+
+    likeButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // 현재 이미지 경로 가져오기
+            const currentSrc = button.src;
+
+            // 이미지 경로 비교 후 변경
+            if (currentSrc.includes("like.png")) {
+                button.src = `${window.contextPath}/static/images/streaming/liked.png`; // liked 상태로 변경
+            } else {
+                button.src = `${window.contextPath}/static/images/streaming/like.png`; // like 상태로 변경
+            }
+        });
+    });
+});
+
+// 페이지 로드 시 trackDetailLike의 좋아요 상태 확인
+document.addEventListener("DOMContentLoaded", function() {
+    const trackDetailElement = document.querySelector(".trackDetailLike"); // trackDetailLike 요소 선택
+
+    if (trackDetailElement) {
+        const trackId = trackDetailElement.getAttribute("data-track-id"); // trackDetailLike의 트랙 ID 가져오기
+        checkTrackDetailLikeStatus(trackId, trackDetailElement); // 트랙 ID와 요소를 전달하여 좋아요 상태 확인
+    }
+});
+
+// 좋아요 상태 확인 함수
+async function checkTrackDetailLikeStatus(trackId, trackElement) {
+    try {
+        const response = await fetch("/whale/streaming/checkTrackLike", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ trackSpotifyId: trackId })
+        });
+
+        const data = await response.json();
+        const iconElement = trackElement.querySelector(".icon"); // icon 요소 선택
+
+        if (data.result === "liked") {
+            // 좋아요 상태일 때 invert(1)로 변경
+            iconElement.style.filter = "invert(0)";
+        } else {
+            // 좋아요 상태가 아닐 때 기본 상태로 변경
+            iconElement.style.filter = "invert(1)";
+        }
+    } catch (error) {
+        console.error("Error checking track like status:", error);
+    }
+}
+
+// 트랙 디테일 좋아요 버튼 클릭 시 이미지 변경 함수
+document.addEventListener("DOMContentLoaded", function() {
+    // trackDetailLike 클래스의 모든 .icon 요소 선택
+    const likeButtons = document.querySelectorAll(".trackDetailLike .icon");
+
+    likeButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // 현재 filter 속성 확인 후 invert 적용 여부를 토글
+            if (button.style.filter === "invert(1)") {
+                button.style.filter = "invert(0)"; // 기본 상태로 변경
+            } else {
+                button.style.filter = "invert(1)"; // liked 상태로 변경
+            }
+        });
+    });
+});
+
+// 앨범 전체 재생을 요청하는 함수
+function playAllAlbum(albumId) {
+    fetch('/whale/streaming/playAllAlbum', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({ albumId: albumId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                console.log("앨범 전체 재생 시작");
+            } else {
+                console.error("앨범 재생 실패");
+            }
+        })
+        .catch(error => console.error("앨범 재생 요청 중 오류 발생:", error));
+}
+
 

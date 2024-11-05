@@ -262,7 +262,7 @@ public class StreamingService {
         try {
             // 검색 요청 생성
             SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(query)
-                    .limit(10)  // 최대 50개까지 가져올 수 있음
+                    .limit(50)  // 최대 50개까지 가져올 수 있음
                     .build();
 
             // 결과 반환
@@ -408,6 +408,8 @@ public class StreamingService {
     	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
     }
 
+//    ----------------------------------------------------------------------------------------------------------
+
     // 좋아요 표시한 곡
     public List<TrackDto> getLikedTracks(String userId) {
         return streamingDao.selectLikedTracks(userId);
@@ -439,4 +441,33 @@ public class StreamingService {
             return Collections.emptyList();
         }
     }
+
+    // 전체 앨범 재생 메서드
+    public boolean playAllAlbum(HttpSession session, String albumId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 앨범의 모든 트랙 가져오기
+            Paging<TrackSimplified> albumTracksPaging = spotifyApi.getAlbumsTracks(albumId).build().execute();
+            TrackSimplified[] albumTracks = albumTracksPaging.getItems();
+
+            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray uris = new JsonArray();
+            for (TrackSimplified track : albumTracks) {
+                uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(uris) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play album: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

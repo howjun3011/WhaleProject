@@ -9,10 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;  // ResponseEntity 추가 필요
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;  // PostMapping 추가 필요
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtistTrackModelObject;
 
@@ -148,9 +145,16 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve track details");
 		}
 
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "detail");
@@ -186,9 +190,16 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve artist details");
 		}
 
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		// 디테일 페이지로 설정
 		model.addAttribute("page", "artistDetail");
@@ -207,9 +218,16 @@ public class StreamingController {
 			model.addAttribute("error", "No search results found.");
 		}
 
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		// 검색 결과 페이지로 이동
 		model.addAttribute("page", "search");
@@ -229,9 +247,16 @@ public class StreamingController {
 			model.addAttribute("error", "Unable to retrieve playlist details");
 		}
 
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		model.addAttribute("page", "playlistDetail");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -256,10 +281,17 @@ public class StreamingController {
 		// 첫 번째 아티스트의 정보 추가
 		Artist artistDetail = streamingService.getArtistDetail(session, albumDetail.getArtists()[0].getId());
 		model.addAttribute("artistDetail", artistDetail);
-		
+
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+
+		// 좋아요 표시한 트랙 목록 가져오기
+		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		model.addAttribute("likedTracks", likedTracks);
 
 		model.addAttribute("page", "albumDetail");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -279,6 +311,14 @@ public class StreamingController {
 			return ResponseEntity.status(500).body("Failed to play playlist");
 		}
 	}
+
+	// 앨범 전체 재생 메서드
+	@PostMapping("/streaming/playAllAlbum")
+	@ResponseBody
+	public boolean playAllAlbum(@RequestParam String albumId, HttpSession session) {
+		return streamingService.playAllAlbum(session, albumId);
+	}
+
 
 	// 스트리밍 메인 좋아요 버튼
 	@PostMapping(value = "/streaming/toggleTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)

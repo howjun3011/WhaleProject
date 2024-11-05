@@ -245,9 +245,25 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .slideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
 .featuredPlaylistInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
 .featuredPlaylistInfo .playlistName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+
 .featuredPlaylistInfo .playlistName:hover,
 .trackDescription .albumName:hover,
 .topTrackName:hover,
 .topTrackItem .albumName:hover,
 .albumTracksName:hover,
 .albumTracksArtist:hover{opacity: 0.6; cursor: grab;}
+
+/*추천 아티스트*/
+.recommendedArtistsTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 65px; margin-bottom: 5px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+.recommendedArtistsContainer {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
+.recommendedArtistsContainer .artistItem {flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; position: relative;}
+.recommendedArtistsContainer .artistItem:hover {background-color: rgba(60,60,60,0.8);}
+.artistItemCover{display: flex; align-items: center; justify-content: center; height: 155px;}
+/* CSS로 recommendationContents를 가로 스크롤 가능하게 설정 */
+.recommendedArtistsWrap {display: flex; justify-content: center; align-items: center; width: 100%; position: relative;}
+.slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.slideButton.left {left: 0;}
+.slideButton.right {right: 0;}
+.slideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
+.artistItemName {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF; font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+

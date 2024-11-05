@@ -847,3 +847,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// 추천 아티스트 스크롤 이동 함수
+function updateRecommendedArtistsLeftContentScrollButtons() {
+    const container = document.querySelector('.recommendedArtistsContainer');
+    const scrollLeftBtn = document.getElementById('scrollRecommendedArtistsLeftBtn');
+    const scrollRightBtn = document.getElementById('scrollRecommendedArtistsRightBtn');
+
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+function scrollRecommendedArtistsLeftContent() {
+    const container = document.querySelector('.recommendedArtistsContainer');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateRecommendedArtistsLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+function scrollRecommendedArtistsRightContent() {
+    const container = document.querySelector('.recommendedArtistsContainer');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateRecommendedArtistsLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    // 홈화면에서 최근 재생한 항목 스크롤 버튼 업데이트
+    if (window.location.pathname === '/whale/streaming/home') {
+        updateRecommendedArtistsLeftContentScrollButtons(); // 초기 상태
+        const container = document.querySelector('.recommendedArtistsContainer');
+        container.addEventListener('scroll', updateRecommendedArtistsLeftContentScrollButtons); // 스크롤 이벤트 감지
+    }
+});
+

@@ -80,6 +80,10 @@ public class StreamingController {
 		List<PlaylistSimplified> featuredPlaylists = streamingService.getFeaturedPlaylists(session);
 		model.addAttribute("featuredPlaylists", featuredPlaylists);
 
+		// 최근 재생한 항목 기반 추천 아티스트 가져오기
+		List<Artist> recommendedArtists = streamingService.getRecommendedArtistsFromRecentTracks(session);
+		model.addAttribute("recommendedArtists", recommendedArtists);
+
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");
 		System.out.println("page :" + model.getAttribute("page"));
@@ -397,4 +401,5 @@ public class StreamingController {
 
 		return ResponseEntity.ok(response);
 	}
+
 }

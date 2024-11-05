@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.special.FeaturedPlaylists;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import org.apache.hc.core5.http.ParseException;
@@ -469,5 +470,27 @@ public class StreamingService {
             return false;
         }
     }
+
+    // 추천 플레이리스트 가져오기
+    public List<PlaylistSimplified> getFeaturedPlaylists(HttpSession session) {
+        initializeSpotifyApi(session);
+
+        try {
+            var featuredPlaylistsRequest = spotifyApi.getListOfFeaturedPlaylists()
+                    .limit(10) // 필요한 플레이리스트 수를 설정
+                    .build();
+
+            // FeaturedPlaylists에서 Paging<PlaylistSimplified>를 가져옴
+            FeaturedPlaylists featuredPlaylists = featuredPlaylistsRequest.execute();
+            Paging<PlaylistSimplified> playlistsPaging = featuredPlaylists.getPlaylists();
+
+            return Arrays.asList(playlistsPaging.getItems());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch featured playlists: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+
 
 }

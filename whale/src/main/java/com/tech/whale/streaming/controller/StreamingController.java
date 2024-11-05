@@ -76,6 +76,10 @@ public class StreamingController {
 		List<PlayHistory> recentlyPlayedTracks = streamingService.getRecentlyPlayedTracks(session);
 		model.addAttribute("recentlyPlayedTracks", recentlyPlayedTracks);
 
+		// 추천 플레이리스트 가져오기
+		List<PlaylistSimplified> featuredPlaylists = streamingService.getFeaturedPlaylists(session);
+		model.addAttribute("featuredPlaylists", featuredPlaylists);
+
 		// 홈 페이지로 설정
 		model.addAttribute("page", "home");
 		System.out.println("page :" + model.getAttribute("page"));

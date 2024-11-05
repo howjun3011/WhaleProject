@@ -700,7 +700,8 @@
                                         </div>
                                         <!-- 앨범 이름 -->
                                         <p class="albumName"
-                                           style="padding-left: 5px;">${track.track_album}</p>
+                                           style="padding-left: 5px;"
+                                           onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
                                         <!-- 좋아요 제거 버튼 -->
                                         <button class="toggleLikeButton"
                                                 onclick="toggleTrackLike('${track.track_id}', this)">

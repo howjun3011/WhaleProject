@@ -526,5 +526,17 @@ public class StreamingService {
         }
     }
 
-
+    // Spotify API를 통해 트랙 정보 가져오기
+    public String getAlbumIdByTrackId(HttpSession session, String trackId) {
+        try {
+            // Spotify API를 통해 트랙 정보 가져오기
+            Track track = getTrackDetail(session, trackId);
+            if (track != null && track.getAlbum() != null) {
+                return track.getAlbum().getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

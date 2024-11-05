@@ -15,16 +15,17 @@
         background-color: #f5f5f5;
         color: #333333;
     }
-    .frame {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
+	.frame {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    width: 100%;
+	    background-color: #ffffff;
+	    border-radius: 10px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    padding: 20px;
+	    height: auto; /* 여기에서 height: auto; 추가 */
+	}
     .container {
         max-width: 900px;
         width: 100%;
@@ -78,7 +79,7 @@
 </style>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>
-	$(document).ready(function() {
+/* 	$(document).ready(function() {
 	    resize();
 	});
 
@@ -89,7 +90,7 @@
 	function resize() {
 	    var windowHeight = $(window).height();
 	    $('.frame').css({'height': (windowHeight - 40) + 'px'});
-	}
+	} */
 
 	var contextPath = '${pageContext.request.contextPath}';
 	// 즐겨찾기 버튼 클릭 시 AJAX 요청

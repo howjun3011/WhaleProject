@@ -506,8 +506,8 @@
     <!-- 모달 창 -->
     <div id="otherModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeOtherModal()">&times;</span>
             <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
+            <div id="updateItem" class="modal-item white" style="display:none;">수정</div>
             <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
             <div class="modal-item gray" onclick="closeOtherModal()">취소</div>
         </div>
@@ -652,10 +652,14 @@
 
             // 모달 아이템 초기화
             document.getElementById("deleteItem").style.display = "none";
+            document.getElementById("updateItem").style.display = "none";
             document.getElementById("reportItem").style.display = "none";
 
             if (isOwner) {
                 document.getElementById("deleteItem").style.display = "block";
+                if(selectedItemType === 'post') {
+	                document.getElementById("updateItem").style.display = "block";                	
+                }
             } else {
                 document.getElementById("reportItem").style.display = "block";
             }
@@ -681,6 +685,11 @@
             closeOtherModal();
         });
 
+        document.getElementById("updateItem").addEventListener("click", function() {
+        	const communityId = '${communityId}';
+        	window.location.href = `communityUpdate?c=\${communityId}&p=\${selectedItemId}`;
+        })
+        
         document.getElementById("reportItem").addEventListener("click", function() {
             if (selectedItemType === 'post') {
                 window.location.href = `report?p=\${selectedItemId}`;

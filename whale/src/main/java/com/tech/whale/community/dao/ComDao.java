@@ -55,4 +55,6 @@ public interface ComDao {
     public void addCommunityBookmark(int communityId, String userId);
     public void removeCommunityBookmark(int communityId, String userId);
     public int isCommunityBookmarkedByUser(int communityId, String userId);
+	public void updatePostMusic(int postId, String trackId);
+	public void deletePostMusic(int postId);
 }

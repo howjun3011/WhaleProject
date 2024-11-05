@@ -281,9 +281,17 @@
 	    AND POST_NUM > #{postNum}
 	</update>
     
-    <delete id="deletePostImage" parameterType="int">
-	    DELETE FROM POST_IMG WHERE POST_IMG_ID = #{imageId}
-	</delete>
+    <update id="updatePostMusic">
+        UPDATE POST_MUSIC 
+        SET TRACK_ID = #{trackId} 
+        WHERE POST_ID = #{postId}
+    </update>
+
+    <!-- 음악 정보 삭제 -->
+    <delete id="deletePostMusic">
+        DELETE FROM POST_MUSIC 
+        WHERE POST_ID = #{postId}
+    </delete>
     
     <update id="updatePost" parameterType="com.tech.whale.community.dto.PostDto">
         UPDATE POST
@@ -319,5 +327,6 @@
 	    WHERE COMMUNITY_ID = #{communityId}
 	      AND INSTR(COMMUNITY_FOLLOW, #{userId}) > 0
 	</select>
+    
     
 </mapper>

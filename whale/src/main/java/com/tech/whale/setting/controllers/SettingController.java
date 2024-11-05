@@ -339,39 +339,22 @@ public class SettingController {
 
         String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
 
-        List<CommentListDto> feedCommentList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
-        List<CommentListDto> replyList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> feedList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> feedCommentList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
 
         Set<Integer> uniqueFeedIds = new HashSet<>();
         List<CommentListDto> filteredFeedCommentList = new ArrayList<>();
 
-        for (CommentListDto dto : feedCommentList) {
+        for (CommentListDto dto : feedList) {
             if (uniqueFeedIds.add(dto.getFeed_id())) { // 중복되지 않은 feed_id만 추가
                 filteredFeedCommentList.add(dto);
             }
         }
 
-        model.addAttribute("feedCommentList", filteredFeedCommentList); // 중복 제거된 리스트
-        model.addAttribute("replyList", replyList);
+        model.addAttribute("feedList", filteredFeedCommentList); // 중복 제거된 리스트
+        model.addAttribute("feedCommentList", feedCommentList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);
-
-        // debug
-        for (CommentListDto commentListDto : feedCommentList) {
-            System.out.println("게시글");
-            System.out.println("Community_id: " + commentListDto.getCommunity_id());
-            System.out.println("Post_id: " + commentListDto.getPost_id());
-            System.out.println("Post_tag_text: " + commentListDto.getPost_tag_text());
-            System.out.println("Post_writer_id: " + commentListDto.getPost_writer_id());
-            System.out.println("Post_writer_img: " + commentListDto.getPost_writer_img());
-            System.out.println("Post_title: " + commentListDto.getPost_title());
-            System.out.println("Post_text: " + commentListDto.getPost_text());
-            System.out.println("Comments_user_img: " + commentListDto.getComments_user_img());
-            System.out.println("Comments_user_id: " + commentListDto.getComments_user_id());
-            System.out.println("Post_comments_text: " + commentListDto.getPost_comments_text());
-            System.out.println("Post_img_name: " + commentListDto.getPost_img_name());
-            System.out.println("----------------------------------------------------");
-        }
 
         // debug
         for (CommentListDto commentListDto : feedCommentList) {
@@ -382,18 +365,6 @@ public class SettingController {
             System.out.println("Feed_img_name: " + commentListDto.getFeed_img_name());
             System.out.println("Feed_comments_id: " + commentListDto.getFeed_comments_id());
             System.out.println("Parent_comments_id: " + commentListDto.getParent_comments_id());
-            System.out.println("----------------------------------------------------");
-        }
-
-        // debug
-        for (CommentListDto replyLists : replyList) {
-            System.out.println("피드");
-            System.out.println("Re_feed_id: " + replyLists.getRe_feed_id());
-            System.out.println("Re_commenter_id: " + replyLists.getRe_commenter_id());
-            System.out.println("Re_feed_comments_id: " + replyLists.getRe_feed_comments_id());
-            System.out.println("Re_feed_comments_text: " + replyLists.getRe_feed_comments_text());
-            System.out.println("Re_parent_comments_id: " + replyLists.getRe_parent_comments_id());
-            System.out.println("Re_commenter_image: " + replyLists.getRe_commenter_image());
             System.out.println("----------------------------------------------------");
         }
 

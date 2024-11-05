@@ -1,4 +1,4 @@
-package com.tech.whale.feed.controll;
+package com.tech.whale.feed.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;

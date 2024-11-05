@@ -171,6 +171,11 @@
         color: #1666c1; /* 호버 시 색상 변경 */
     }
     
+    .pagination .current {
+	    font-weight: bold;
+	    color: #1a73e8;
+	}
+    
 </style>
 </head>
 <body>
@@ -224,7 +229,16 @@
                 <span class="disabled">이전</span>
             </c:otherwise>
         </c:choose>
-        <span>${searchVO.page}</span>
+	    <c:forEach var="i" begin="1" end="${searchVO.totPage}">
+	        <c:choose>
+	            <c:when test="${i == searchVO.page}">
+	                <span class="current">${i}</span>
+	            </c:when>
+	            <c:otherwise>
+	                <a href="communityPost?c=${param.c}&page=${i}">${i}</a>
+	            </c:otherwise>
+	        </c:choose>
+	    </c:forEach>
         <c:choose>
             <c:when test="${searchVO.page < searchVO.totPage}">
                 <a href="communityPost?c=${param.c}&page=${searchVO.page + 1}">다음</a>

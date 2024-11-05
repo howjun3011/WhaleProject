@@ -268,7 +268,7 @@ public class CommunityController {
 	                                @RequestParam("post_tag_id") int postTagId,
 	                                @RequestParam("post_title") String postTitle,
 	                                @RequestParam("post_text") String postText,
-	                                @RequestParam(value = "file", required = false) List<MultipartFile> newImages,
+	                                @RequestParam(value = "selectedTrackId", required = false) String selectedTrackId,
 	                                RedirectAttributes redirectAttributes) {
 	    
 	    PostDto postDto = new PostDto();
@@ -278,9 +278,16 @@ public class CommunityController {
 	    postDto.setPost_tag_id(postTagId);
 	    
 	    try {
-	        // 게시물 업데이트 및 새로운 이미지 저장
-	        postUpdateService.updatePostAndInsertImages(postDto, newImages);
-	    } catch (IOException e) {
+	        // 게시물 업데이트
+	        postUpdateService.updatePost(postDto);
+	        
+	        // 음악 정보 업데이트
+	        if (selectedTrackId != null && !selectedTrackId.isEmpty()) {
+	            postUpdateService.updatePostMusic(postId, selectedTrackId);
+	        } else {
+	            postUpdateService.removePostMusic(postId);
+	        }
+	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return "errorPage";
 	    }

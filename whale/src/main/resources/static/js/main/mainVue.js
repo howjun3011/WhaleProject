@@ -16,7 +16,6 @@ const app = createApp({
 			notifications: [[],[],[],[]],
 			notiCounts: [0,0,0,0],
 			trackInfo: [],
-			fullPlayer: [ false, false ],
 		}
 	},
 	mounted() {
@@ -47,9 +46,9 @@ const app = createApp({
 		fetchIframe(whichIframe,data) {
 			try {
 				// Node
-				// document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'https://localhost:5500');
+				document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'https://localhost:5500');
 				// Spring
-				document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'http://localhost:9002');
+				// document.querySelector('#'+whichIframe).contentWindow.postMessage(data,'http://localhost:9002');
 			} catch (error) {
 			}
 		},
@@ -121,12 +120,6 @@ const app = createApp({
 					this.notifications[3] = data;
 					this.notiCounts[3] = this.notifications[3].filter(notification => notification.follow_noti_check === 0).length;
 			});
-		},
-		
-		// 전체 화면 플레이어
-		changeFullPlayer(i) {
-			if (this.pageAccess[i] === 0) {this.fullPlayer[0] = true;}
-			else {this.fullPlayer[1] = true;}
 		},
 	},
 });

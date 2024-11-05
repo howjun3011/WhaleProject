@@ -6,7 +6,7 @@ const MainFooterComponent = {
 					<div class="playlistBody">
 						<div class="playlist-header flexCenter">재생 목록</div>
 						<div class="playlist-delete flexCenter" @click="isPlayered = false;">x</div>
-						<div class="playlist-contents" v-for="(item, i) in playlists.queue" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === playlists.currently_playing.id ? '#E2E2E2' : '#ffffff'}">
+						<div class="playlist-contents" v-for="(item, i) in resPlaylists" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === playlists.currently_playing.id ? '#E2E2E2' : '#ffffff'}">
 							<div class="playlist-font flexCenter" v-if="!isShow[i]">{{ i+1 }}</div>
 							<div class="flexCenter" v-if="addIsShow(i)">
 				                <svg
@@ -56,7 +56,6 @@ const MainFooterComponent = {
 		            </div>
 		            <div class="playerComponent"></div>
 		            <div class="playerComponent" id="playerRight">
-		            	<div class="playerRightMargin"><img class="playerFullScreenImg" src="static/images/streaming/player/fullScreenBtn.png" alt="Music Whale Full Screen Button" width="24px" height="24px" @click="callFullPlayer(3)"></div>
 		            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="getPlaylist()"></div>
 		            	<div class="volume-bar-container">
 				            <input type="range" class="volume-bar" id="volumeSlider" min="0" max="100" v-model="volumeValue" @mouseover="isHovered[1] = true" @mouseleave="isHovered[1] = false" @input="updateVolumeBackground" :style="volumeStyle">
@@ -95,6 +94,7 @@ const MainFooterComponent = {
 			isHovered: [false,false],
 			isPlayered: false,
 			playlists: null,
+			resPlaylists: [],
 			isShow: [],
 		};
 	},
@@ -390,10 +390,17 @@ const MainFooterComponent = {
 		async getPlaylist() {
 			if (this.isPlayered === false) {
 				try {
+					this.resPlaylists = [];
 					const result = await this.fetchWebApi(`v1/me/player/queue`,`GET`);
 					if (await result) {
 		                this.playlists = await result;
-		                console.log(this.playlists);
+						const temp = [];
+						this.playlists.queue.forEach(el => {
+							if (!temp.includes(el.id)) {
+								temp.push(el.id);
+								this.resPlaylists.push(el);
+							}
+						});
 		            } else {
 		                console.error('Failed to fetch user playlist queue:', result.statusText);
 		            }
@@ -419,11 +426,6 @@ const MainFooterComponent = {
 				}),
 			});
         },
-        
-        // 전체 화면 플레이어
-        callFullPlayer(i) {
-			this.$emit('call-full-player',i);
-		},
 	},
 };
 

@@ -31,5 +31,5 @@ public interface AdminReportIDao {
 			@Param("myAdminId") int myAdminId, 
 			@Param("action") String action,
 			@Param("actionReason") String actionReason);
-	
+	public void reportAdminCh(int report_id);
 }

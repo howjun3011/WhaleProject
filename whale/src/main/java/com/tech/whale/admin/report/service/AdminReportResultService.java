@@ -41,7 +41,14 @@ public class AdminReportResultService implements AdminServiceInter{
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
-		
+		System.out.println("신고결과 서비스 1번 : " + report_id);
+		System.out.println("신고결과 서비스 1번 : " + writingType);
+		System.out.println("신고결과 서비스 1번 : " + writingId);
+		System.out.println("신고결과 서비스 1번 : " + userStatus);
+		System.out.println("신고결과 서비스 1번 : " + writingStatus);
+		System.out.println("신고결과 서비스 1번 : " + myId);
+		System.out.println("신고결과 서비스 1번 : " + statusReason);
+		System.out.println("신고결과 서비스 1번 : " + userId);
 		int myAdminId = adminIDao.myAdminId(myId);
 		
 		if(userStatus =="0") {
@@ -70,6 +77,8 @@ public class AdminReportResultService implements AdminServiceInter{
 			adminReportIDao.reportResult(
 					report_id,writingType,writingId,myAdminId,userStatus,statusReason);
 		}
+		System.out.println("reportAdminCh 전까지");
+		adminReportIDao.reportAdminCh(report_id);
 	}
 	
 	@Transactional
@@ -78,9 +87,6 @@ public class AdminReportResultService implements AdminServiceInter{
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
 		
-		int report_id = Integer.parseInt(request.getParameter("report_id"));
-		String writingType = request.getParameter("writingType");
-		String writingId = request.getParameter("writingId");
 		int userStatus = Integer.parseInt(request.getParameter("userStatus"));
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
@@ -100,14 +106,10 @@ public class AdminReportResultService implements AdminServiceInter{
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
 		
-		int report_id = Integer.parseInt(request.getParameter("report_id"));
 		String writingType = request.getParameter("writingType");
 		int writingId = Integer.parseInt(request.getParameter("writingId"));
-		String userStatus = request.getParameter("userStatus");
-		String writingStatus = request.getParameter("writingStatus");
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
-		String userId = request.getParameter("userId");
 		
 		System.out.println("글삭제 서비스 writingId: " + writingId);
 		System.out.println("글삭제 서비스 writingType: " + writingType);
@@ -135,7 +137,10 @@ public class AdminReportResultService implements AdminServiceInter{
 		} else if(writingType.equals("post_comments")) {
 			int post_id = adminIDao.pfIdFind(writingType,writingId);
 			adminIDao.postCommentsOneDelLog(writingId,post_id,myId,statusReason);
+			adminIDao.postCommentsParentDelLog(writingId,post_id,myId,statusReason);
 			adminIDao.postCommentsLikeOneDel(writingId);
+			adminIDao.postCommentsLikeParentDel(writingId);
+			adminIDao.postCommentsParentDel(writingId);
 			adminIDao.postCommentsOneDel(writingId);
 		} else if(writingType.equals("message")) {
 			

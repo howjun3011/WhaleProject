@@ -26,7 +26,7 @@
                 <th>신고분류</th>
                 <th>중복신고</th>
                 <th>신고날짜</th>
-                <th>처리자</th>
+                <th>상태</th>
                 <th></th>
             </tr>
         </thead>
@@ -46,7 +46,7 @@
 					<td>${dto.report_tag }</td>
 					<td>${dto.same_content_count }</td>
 					<td><fmt:formatDate value="${dto.report_date}" pattern="yyyy.MM.dd  hh:mm" /></td>
-					<td>${dto.report_admin_check }</td>
+					<td>${dto.reportStatus }</td>
 					<td>
 						<button onclick = "location.href = 'adminReportContentView?report_id=${dto.report_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }&userId=${report_user_id }'">
 							조회

@@ -66,9 +66,16 @@
                 <td colspan="3"  style="text-align: left;">${reportContent.report_why }</td>
             </tr>
             <tr>
-                <th>처리내용</th>
+                <th>작성글제재</th>
                 <c:if test="${reportContent.report_result_action != null }">
-                <td colspan="3"  style="text-align: left;">${reportContent.report_result_action }</td>
+                <td style="text-align: left;">${reportContent.report_result_action }</td>
+                </c:if>
+                <c:if test="${reportContent.report_result_action == null }">
+                <td>(내용없음)</td>
+                </c:if>
+                <th>유저제재</th>
+                <c:if test="${reportContent.report_result_action != null }">
+                <td style="text-align: left;">${reportContent.report_result_action }</td>
                 </c:if>
                 <c:if test="${reportContent.report_result_action == null }">
                 <td>(내용없음)</td>

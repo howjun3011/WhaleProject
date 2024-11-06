@@ -596,6 +596,41 @@
 	<delete id="postCommentsOneDel">
 		DELETE FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{post_comments_id}
 	</delete>
+	
+	
+	
+	
+	
+	<delete id="postCommentsParentDel">
+		DELETE FROM POST_COMMENTS WHERE PARENT_COMMENTS_ID = #{post_comments_id}
+	</delete>
+	
+	<delete id="postCommentsLikeParentDel">
+		DELETE FROM POST_COMMENTS_LIKE 
+		WHERE POST_COMMENTS_ID IN (
+		    SELECT POST_COMMENTS_ID 
+		    FROM POST_COMMENTS 
+		    WHERE PARENT_COMMENTS_ID = #{post_comments_id}
+		)
+		AND EXISTS (
+		    SELECT 1 
+		    FROM POST_COMMENTS 
+		    WHERE PARENT_COMMENTS_ID = #{post_comments_id}
+		)
+	</delete>
+	
+	<insert id="postCommentsParentDelLog">
+		INSERT INTO POST_DEL_LOG (LOG_ID, COMMENTS_DEL_REASON, DEL_DATE, ADMIN_ID, POST_ID, POST_COMMENTS_ID)
+	    SELECT POST_DEL_LOG_SEQ.NEXTVAL, 
+	           #{comments_del_reason}, 
+	           SYSDATE, 
+	           (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), 
+	           #{post_id}, 
+	           POST_COMMENTS_ID
+	    FROM POST_COMMENTS
+	    WHERE PARENT_COMMENTS_ID = #{post_comments_id}
+
+	</insert>
 		
 	
 	<sql id="includeBoardCommentsCnt">

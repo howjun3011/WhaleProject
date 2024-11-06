@@ -141,6 +141,10 @@
 			#{actionReason}
 			)
 	</insert>
+	
+	<update id="reportAdminCh">
+		UPDATE REPORT SET REPORT_ADMIN_CHECK = 1 WHERE REPORT_ID = #{report_id}
+	</update>
    
 	
 	

@@ -1,0 +1,31 @@
+body{background-color: #1f1f1f;}
+header{display: flex; justify-content: center;}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #000;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    box-shadow: 0 0 0px 1000px #fff inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+    -webkit-text-fill-color: #000;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    box-shadow: 0 0 0px 1000px #fff inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.headerSearch {display: flex; justify-content: center; align-items: center; width: 30%; height: 60%; border: 1.6px solid #3c3c3c; border-radius: 18px; padding: 9px 0;}
+.headerSearchInput {width: 80%; height: 56%; background: transparent; border: none; outline: none; font-size: 13px; color: rgb(164, 164, 164); text-align: center; cursor: grab;}
+.headerSearch .searchBtn{border: 0; background-color: transparent; display: flex; align-items: center; justify-content: center;
+}
+.headerSearch form{display: flex; align-items: center; justify-content: space-around;}
+
+.searchProfile{width: 60px; height: 60px; border: 3.5px solid #E2E2E2; border-radius: 50%;}
+.searchProfile img {width: 100%; height: 100%; object-fit: cover; border-radius: 50%;}

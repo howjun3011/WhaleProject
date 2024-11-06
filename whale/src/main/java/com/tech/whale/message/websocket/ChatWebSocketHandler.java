@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
@@ -46,7 +47,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
-            System.out.println("메시지 수신: " + message.getPayload());
             String payload = message.getPayload();
             String[] parts = payload.split(":", 3);
             if (parts.length < 3) {
@@ -57,34 +57,52 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String userId = parts[1];
             String messageText = parts[2];
 
-            if (messageText == null || messageText.isEmpty()) {
-                System.err.println("Message text is null or empty.");
-                return;
-            }
-
-            // 메시지 저장
+            // 메시지 객체 생성 및 기본 설정
             MessageDto messageDto = new MessageDto();
             messageDto.setMessage_room_id(roomId);
             messageDto.setUser_id(userId);
             messageDto.setMessage_text(messageText);
-            messageDto.setMessage_create_date(new Date());
-            messageDao.saveMessage(messageDto);
+            Date messageDate = new Date();  // 서버에서 날짜 생성
+            messageDto.setMessage_create_date(messageDate);
 
-            // 같은 roomId의 세션에만 메시지 브로드캐스트
-            TextMessage broadcastMessage = new TextMessage(payload);
+            // 날짜 포맷 설정
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(messageDate);
+
+            // 로그로 formattedDate 값 확인
+            System.out.println("Formatted Date: " + formattedDate);
+
+            // 같은 roomId의 세션들 가져오기
             List<WebSocketSession> sessions = roomSessions.get(roomId);
-            if (sessions != null) {
-                for (WebSocketSession sess : sessions) {
-                    if (sess.isOpen()) {
-                        sess.sendMessage(broadcastMessage);
-                        System.out.println("메시지 전송: " + sess.getId());
-                    } else {
-                        System.out.println("세션이 닫혀 있습니다: " + sess.getId());
-                    }
+            
+            boolean isRecipientConnected = false;
+            for (WebSocketSession sess : sessions) {
+                if (sess.isOpen() && !sess.equals(session)) { // 본인의 세션이 아닌 경우 (상대방 세션)
+                    isRecipientConnected = true;
+                    break;
                 }
             }
+
+            // 본인의 메시지이므로 상대방이 접속 중인지 확인하여 읽음 상태 설정
+            messageDto.setMessage_read(isRecipientConnected ? 0 : 1); // 접속 중이면 읽음(0), 아니면 안 읽음(1)
+
+            // 서버에서 포맷된 날짜와 읽음 상태를 포함하여 5개 필드로 메시지 생성
+            String formattedMessage = String.format("%s#%s#%s#%s#%d",
+                    roomId, userId, messageText, formattedDate, messageDto.getMessage_read());
+
+            TextMessage broadcastMessage = new TextMessage(formattedMessage);
+
+            for (WebSocketSession sess : sessions) {
+                if (sess.isOpen()) {
+                    sess.sendMessage(broadcastMessage);
+                    System.out.println("Message sent to session: " + sess.getId());
+                }
+            }
+
+            // 메시지 저장
+            messageDao.saveMessage(messageDto);
+
         } catch (Exception e) {
-            System.err.println("메시지 처리 중 에러 발생: " + e.getMessage());
             e.printStackTrace();
             session.sendMessage(new TextMessage("Error: " + e.getMessage()));
             session.close(CloseStatus.SERVER_ERROR);

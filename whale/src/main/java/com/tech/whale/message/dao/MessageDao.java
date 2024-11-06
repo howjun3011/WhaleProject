@@ -28,4 +28,6 @@ public interface MessageDao {
 	List<FollowListDto> getFollowList(String now_id);
 
 	List<ChatListDto> getChatList(String now_id);
+	
+	void readMessage(String roomId, String userId);
 }

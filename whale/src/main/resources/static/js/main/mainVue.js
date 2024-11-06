@@ -9,7 +9,7 @@ const app = createApp({
 		return {
 			headerMenuCheck: [false, false, false],
 			frameNames: ['leftIframe','rightIframe'],
-			whaleAddress: ['streaming','message/home','communityHome','feedHome','profile','settingHome','communityDetail','feedDetail','profileHome'],
+			whaleAddress: ['streaming','message/home','communityHome','feedHome','searchHome','profile','settingHome','communityDetail','feedDetail','profileHome'],
 			userInfo: [],
 			startPage: [ null, null ],
 			pageAccess: [],

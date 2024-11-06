@@ -23,7 +23,7 @@ const MainCenterComponent = {
 		return {
 			keyBtns: ['leftMenuBtn','rightMenuBtn'],
 			keyDocks: ['leftDock','rightDock'],
-			dockIcons: ['static/images/main/musicIcon.png','static/images/main/messageIcon.png','static/images/main/communityIcon.png','static/images/main/feedIcon.png'],
+			dockIcons: ['static/images/main/musicIcon.png','static/images/main/messageIcon.png','static/images/main/communityIcon.png','static/images/main/feedIcon.png','static/images/streaming/player/magnifying-glass.svg'],
 			menuBtnTriggers: [true, true],
 		};
 	},

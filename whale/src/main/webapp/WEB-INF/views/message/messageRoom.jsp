@@ -142,6 +142,22 @@
         background-color: #0ca678;
     }
 
+    .unread-badge {
+        font-size: 0.8em;
+        color: red;
+        position: absolute;
+    }
+
+    .chat-message.left .unread-badge {
+        bottom: 5px;
+        right: -10px;
+    }
+
+    .chat-message.right .unread-badge {
+        bottom: 5px;
+        left: -10px;
+    }
+
 </style>
 </head>
 <body>
@@ -155,24 +171,28 @@
     <!-- 채팅 메시지 영역 -->
     <div class="chat-messages" id="chatMessages">
         <!-- 채팅 메시지들을 표시할 영역 -->
-        <c:forEach var="msg" items="${messages}">
-            <div class="chat-message <c:choose>
-                <c:when test="${msg.user_id == now_id}">
-                    right
-                </c:when>
-                <c:otherwise>
-                    left
-                </c:otherwise>
-            </c:choose>">
-                <div class="message-bubble">
-                    <div>${msg.message_text}</div>
-                    <div class="message-info">
-                        ${msg.user_id} • 
-                        <fmt:formatDate value="${msg.message_create_date}" pattern="yyyy-MM-dd HH:mm:ss" />
-                    </div>
-                </div>
-            </div>
-        </c:forEach>
+		<c:forEach var="msg" items="${messages}">
+		    <div class="chat-message <c:choose>
+		        <c:when test="${msg.user_id == now_id}">
+		            right
+		        </c:when>
+		        <c:otherwise>
+		            left
+		        </c:otherwise>
+		    </c:choose>">
+		        <div class="message-bubble">
+		            <div>${msg.message_text}</div>
+		            <div class="message-info">
+		                ${msg.user_id} • 
+		                <fmt:formatDate value="${msg.message_create_date}" pattern="yyyy-MM-dd HH:mm:ss" />
+		            </div>
+		            <!-- 안 읽은 메시지일 경우 읽지 않음 표시 -->
+		            <c:if test="${msg.message_read eq 1}">
+		                <span class="unread-badge">1</span>
+		            </c:if>
+		        </div>
+		    </div>
+		</c:forEach>
     </div>
 
     <!-- 채팅 입력 영역 -->
@@ -199,8 +219,9 @@
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 
     // WebSocket URL을 설정합니다. 컨텍스트 패스를 포함합니다.
-    // const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId);
-    const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId);
+
+/*     const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId); */
+	const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId);
 
     socket.onopen = function() {
         console.log("WebSocket 연결 성공");
@@ -208,32 +229,27 @@
     };
 
     socket.onmessage = function(event) {
-        console.log("Received message: " + event.data);
         const chatMessages = document.getElementById('chatMessages');
-        const [msgRoomId, msgUserId, msgText] = event.data.split(':');
+        const [msgRoomId, msgUserId, msgText, msgDate, msgRead] = event.data.split('#'); // '#' 구분자로 분리
 
-        console.log("Parsed message - roomId: " + msgRoomId + ", userId: " + msgUserId + ", messageText: " + msgText);
-        
-        // 현재 채팅방 메시지만 표시
+        console.log("Received Date: " + msgDate); // 수정된 날짜 로그로 확인
+
         if (msgRoomId === roomId) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = "chat-message " + (msgUserId === now_id ? 'right' : 'left');
+            const isOwnMessage = msgUserId === now_id;
+            msgDiv.className = "chat-message " + (isOwnMessage ? 'right' : 'left');
+
             msgDiv.innerHTML =
                 '<div class="message-bubble">' +
+                    (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
                     '<div>' + msgText + '</div>' +
-                    '<div class="message-info">' + msgUserId + '</div>' +
+                    '<div class="message-info">' +
+                        msgUserId + ' • ' + msgDate + // 날짜를 그대로 표시
+                    '</div>' +
                 '</div>';
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight; // 스크롤을 맨 아래로 이동
         }
-    };
-
-    socket.onclose = function(event) {
-        console.log("WebSocket 연결 종료", event);
-    };
-
-    socket.onerror = function(error) {
-        console.error("WebSocket 에러: ", error);
     };
 
     function sendMessage() {

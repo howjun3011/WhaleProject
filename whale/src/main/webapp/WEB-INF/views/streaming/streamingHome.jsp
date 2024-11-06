@@ -316,36 +316,41 @@
                         </div>
                     </c:when>
                     <c:when test="${page == 'search'}">
-                        <div class="resultContainer">
-                            <h3 class="resultContainerTitle">곡</h3>
-                            <div class="searchResults">
-                                <!-- 왼쪽 버튼 -->
-                                <button class="searchSlideButton left" id="searchScrollLeftBtn"
-                                        onclick="scrollLeftSearchContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
-                                         alt="Like Button" width="30"
-                                         height="30" style="border-radius: 8px; opacity: 0.75;">
-                                </button>
-                                <c:forEach var="track" items="${searchResults}">
-                                    <div class="searchResult">
-                                        <div class="searchCover" onclick="playAndNavigate('${track.id}');">
-                                            <img src="${track.album.images[0].url}" alt="${track.name}" width="120"
-                                                 height="120" style="border-radius: 8px;">
-                                        </div>
-                                        <div class="searchInfo">
-                                            <p class="trackName">${track.name}</p>
-                                            <p class="artistName"
-                                               onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
+                        <div class="searchFirstContainer">
+                            <div>
+                                <!-- 연관 아티스트가 있을 때만 표시 -->
+                                <c:if test="${not empty searchedArtist}">
+                                    <h3 class="resultContainerTitle">연관 아티스트</h3>
+                                    <div class="relatedArtists">
+                                        <div class="artistResult" onclick="navigateToArtistDetail('${searchedArtist.id}');">
+                                            <div class="artistResultCover">
+                                                <img src="${searchedArtist.images[0].url}" alt="${searchedArtist.name}" width="100"
+                                                     height="100" style="border-radius: 50%;">
+                                            </div>
+                                            <p class="searchArtistName">${searchedArtist.name}</p>
+                                            <p class="artistName">아티스트</p>
                                         </div>
                                     </div>
-                                </c:forEach>
-                                <!-- 오른쪽 버튼 -->
-                                <button class="searchSlideButton right" id="searchScrollRightBtn"
-                                        onclick="scrollRightSearchContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
-                                         alt="Like Button" width="30"
-                                         height="30" style="border-radius: 8px; opacity: 0.75;">
-                                </button>
+                                </c:if>
+                            </div>
+                            <div class="resultContainer">
+                                <h3 class="resultContainerTitle">곡</h3>
+                                <div class="searchResults">
+                                    <c:forEach var="track" items="${searchResults}">
+                                        <div class="searchResult">
+                                            <div class="searchCover" onclick="playAndNavigate('${track.id}');">
+                                                <img src="${track.album.images[0].url}" alt="${track.name}" width="45"
+                                                     height="45" style="border-radius: 2px;">
+                                            </div>
+                                            <div class="searchInfo">
+                                                <p class="trackName"
+                                                    style="font-size: 1rem">${track.name}</p>
+                                                <p class="artistName"
+                                                   onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div>
                     </c:when>

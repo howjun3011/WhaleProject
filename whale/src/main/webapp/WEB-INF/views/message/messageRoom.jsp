@@ -199,7 +199,8 @@
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 
     // WebSocket URL을 설정합니다. 컨텍스트 패스를 포함합니다.
-    const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId);
+    // const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId);
+    const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId);
 
     socket.onopen = function() {
         console.log("WebSocket 연결 성공");

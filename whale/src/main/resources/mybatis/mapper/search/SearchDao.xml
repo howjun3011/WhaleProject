@@ -37,27 +37,5 @@
         	OR
         	P.POST_TEXT LIKE '%'||#{keyword}||'%'
     </select>
-    
-    <select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
-        SELECT
-        	F.FEED_ID AS FEED_ID,
-        	F.USER_ID AS USER_ID,
-        	F.FEED_TEXT AS FEED_TEXT,
-        	F.FEED_TEXT AS FEED_DATE,
-        	FI.FEED_IMG_URL AS FEED_IMG_URL,
-        	FM.TRACK_ID AS TRACK_ID,
-        	FT.FEED_TAG_TEXT AS FEED_TAG_TEXT
-        FROM
-        	FEED F
-        		LEFT JOIN FEED_IMG FI ON FI.FEED_ID = F.FEED_ID
-        		LEFT JOIN FEED_MUSIC FM ON FM.FEED_ID = F.FEED_ID
-        		LEFT JOIN FEED_TAG FT ON FT.FEED_ID = F.FEED_ID
-        WHERE
-        	F.USER_ID LIKE '%'||#{keyword}||'%'
-        	OR
-        	F.FEED_TEXT LIKE '%'||#{keyword}||'%'
-        	OR
-        	FT.FEED_TAG_TEXT LIKE '%'||#{keyword}||'%'
-    </select>
-    
+  
 </mapper>

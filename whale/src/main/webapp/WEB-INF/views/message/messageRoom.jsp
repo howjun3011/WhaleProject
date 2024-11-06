@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery 추가 -->
 <meta charset="UTF-8">
 <title>채팅방</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
@@ -186,14 +187,34 @@
 </div>
 
 <script>
+	var contextPath = '<%= request.getContextPath() %>';
+    var roomId = '${roomId}';
+    var now_id = '${now_id}';
+</script>
+
+<script>
 function refreshMessages() {
-    $.ajax({
-        url: 'getMessages',
-        data: { roomId: '${roomId}' },
-        success: function(data) {
-            $('#chatMessages').html(data);
-        }
-    });
+	fetch(contextPath + '/getMessages?roomId=' + roomId)
+        .then(response => response.json())
+        .then(messages => {
+            let messageHtml = '';
+            messages.forEach(msg => {
+                const alignClass = msg.user_id === now_id ? 'right' : 'left';
+                messageHtml += `
+                    <div class="chat-message ${alignClass}">
+                        <div class="message-bubble">
+                            <div>\${msg.message_text}</div>
+                            <div class="message-info">
+                                \${msg.user_id} • \${new Date(msg.message_create_date).toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('chatMessages').innerHTML = messageHtml;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => console.error('메시지 가져오기 오류:', error));
 }
 
 // 5초마다 메시지 갱신

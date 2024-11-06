@@ -15,6 +15,7 @@
 
 	    <input type="hidden" name="now_id" value="${now_id}" />
 	    <input type="hidden" name="report_type_id" value="${report_type_id}" />
+	    <input type="hidden" name="userId" value="${userId}" />
 	    
 		신고 사유 : 
 		<textarea name="report_why" id="report_why" class="content">신고 사유를 입력해주십시오.</textarea> <br />

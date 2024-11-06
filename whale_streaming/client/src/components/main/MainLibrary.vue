@@ -29,14 +29,14 @@
             </svg>
             <p class="mainLibraryName" v-if="isExpanded">내 라이브러리</p>
             <div class="playlist-container">
-                <div class="playlist-content">
+                <div class="playlist-content" @click="redirectPlaylist(0)">
                     <div class="playlistCover">
                         <img src="https://misc.scdn.co/liked-songs/liked-songs-64.png" alt="WHALE LIKE TRACK" width="45" height="45"
                         style="border-radius: 2px; opacity: 0.8;">
                     </div>
                     <div class="libraryInfo" v-if="isExpanded">
                         <p class="libraryInfoFont">좋아요 표시한 곡</p>
-                        <p class="libraryInfoFont" style="margin-top: 2px; font-size: 10px;">플레이리스트•5곡</p>
+                        <p class="libraryInfoFont" style="margin-top: 2px; font-size: 10px;">플레이리스트•{{ likeCnt.CNT }}곡</p>
                     </div>
                 </div>
                 <div class="playlist-content" v-for="(library, i) in libraries" :key="i" @click="redirectPlaylist(library.id)">
@@ -60,10 +60,12 @@ export default {
             isExpanded: false,
             libraries: null,
             isShow: [],
+            likeCnt: null,
         };
     },
     mounted() {
         this.getUserLibraries();
+        this.getUserLikeCnt();
     },
     methods: {
         expandLibrary() {
@@ -81,6 +83,13 @@ export default {
             } else {
                 console.error('Failed to fetch user top items:', result.statusText);
             }
+        },
+        getUserLikeCnt() {
+            fetch('/whale/streaming/getUserLikeCntInfo')
+                .then((response) => response.json())
+                .then((data) => {
+                    this.likeCnt = data;
+                })
         },
         redirectPlaylist(i) {
             this.$router.replace(`/whale/streaming/playlist/${ i }`);

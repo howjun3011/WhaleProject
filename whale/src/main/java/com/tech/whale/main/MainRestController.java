@@ -49,7 +49,7 @@ public class MainRestController {
 	// [ 시작페이지 설정 값 ]
 	@GetMapping(value = "/checkStartPage", produces = MediaType.APPLICATION_JSON_VALUE)
 	public HashMap<String, Object> checkStartPage(HttpSession session) {
-		String[] startPages = mainService.checkStartPageMain(session);
+		int[] startPages = mainService.checkStartPageMain(session);
 		HashMap<String, Object> map = new HashMap<>();
 		
 		map.put("leftStartPage",startPages[0]);

@@ -1,5 +1,8 @@
 <template>
     <div class="header">
+        <button class="prvBtn">
+            <img src="../../../public/images/main/backIcon.png" alt="Music Whale Search Button" height="20px" @click="goMain()">
+        </button>
         <div class="headerItems">
             <button class="homeBtn">
                 <img src="../../../public/images/main/homeBtn.png" alt="Music Whale Search Button" height="20px" @click="goMain()">
@@ -42,13 +45,17 @@ export default {
                 }
             });
         },
+        backRouter() {this.$router.go(-1)},
     },
 };
 </script>
 
 <style scoped>
-    .header {display: flex; justify-content: center; align-items: center; width: 100%; height: 58px; background-color: #1f1f1f; border-bottom: 1.5px solid #2e2e2e;}
+    .header {position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 58px; background-color: #1f1f1f; border-bottom: 1.5px solid #2e2e2e;}
     .headerItems {display: flex; justify-content: center; align-items: center; width: 300px; height: 100%;}
+    .prvBtn {position: absolute; top: 22px; left: 25px; border-radius: 50%; background-color: transparent; border: none; opacity: 0.3;}
+    .prvBtn:hover {opacity: 0.2;}
+    .prvBtn:active {opacity: 0.1;}
     .homeBtn {margin-right: 13px; background-color: transparent; border: none; opacity: 0.44;}
     .homeBtn:hover {opacity: 0.3;}
     .homeBtn:active {opacity: 0.1;}

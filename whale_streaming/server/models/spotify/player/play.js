@@ -21,7 +21,14 @@ async function playTrack(req,res){
     );
 }
 
+async function playTracks(req,res){
+    await fetchWebApi(
+        req, `v1/me/player/play?device_id=${ req.body.device_id }`, 'PUT', { "uris": req.body.uri }
+    );
+}
+
 module.exports = {
     play,
-    playTrack
+    playTrack,
+    playTracks
 }

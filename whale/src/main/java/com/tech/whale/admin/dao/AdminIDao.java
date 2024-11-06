@@ -103,6 +103,9 @@ public interface AdminIDao {
 	public void postCommentsLikeOneDel(int post_comments_id);
 	public void postCommentsOneDel(int post_comments_id);
 	public String comName(String postId);
+	public int pfIdFind(
+			@Param("type") String type, 
+			@Param("commentId") int commentId);
 	
 	
 }

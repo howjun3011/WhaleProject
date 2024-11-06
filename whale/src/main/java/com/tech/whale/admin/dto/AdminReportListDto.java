@@ -11,6 +11,7 @@ public class AdminReportListDto {
 	
 	private int report_id;
 	private String user_id;
+	private String report_user_id;
 	private int feed_id;
 	private int feed_comment_id;
 	private int post_id;

@@ -24,4 +24,12 @@ public interface AdminReportIDao {
 	
 	public AdminReportResultDto reportContent(String report_id);
 	public String selectUserId(int writingId, int writingNum);
+	public void reportResult(
+			@Param("report_id") int report_id, 
+			@Param("target_type") String target_type, 
+			@Param("target_id") String target_id, 
+			@Param("myId") String myId, 
+			@Param("action") String action,
+			@Param("actionReason") String actionReason);
+	
 }

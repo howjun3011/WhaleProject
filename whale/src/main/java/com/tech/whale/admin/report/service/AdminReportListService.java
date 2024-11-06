@@ -129,32 +129,27 @@ public class AdminReportListService implements AdminServiceInter{
 		int post_id = reportContent.getPost_id();
 		int post_comment_id = reportContent.getPost_comment_id();
 		int message_id = reportContent.getMessage_id();
-		String userId = null;
+		String userId = (String) request.getParameter("userId");
 		String imgPath = null;
 		String writingType = null;
 		String writingId = null;
 		if(feed_id != 0) {
-			userId = adminReportIDao.selectUserId(feed_id,1);
 			imgPath = "feed";
 			writingType ="feed";
 			writingId = Integer.toString(feed_id);
 		}else if(feed_comment_id != 0) {
-			userId = adminReportIDao.selectUserId(feed_comment_id,2);
 			imgPath = "feed";
 			writingType ="feed_comments";
 			writingId = Integer.toString(feed_comment_id);
 		}else if(post_id != 0) {
-			userId = adminReportIDao.selectUserId(post_id,3);
 			imgPath = "community";
 			writingType ="post";
 			writingId = Integer.toString(post_id);
 		}else if(post_comment_id != 0) {
-			userId = adminReportIDao.selectUserId(post_comment_id,4);
 			imgPath = "community";
 			writingType ="post_comments";
 			writingId = Integer.toString(post_comment_id);
 		}else if(message_id != 0) {
-			userId = adminReportIDao.selectUserId(message_id,5);
 			imgPath = "";
 			writingType ="message";
 			writingId = Integer.toString(message_id);
@@ -162,7 +157,6 @@ public class AdminReportListService implements AdminServiceInter{
 		
 		model.addAttribute("writingType", writingType);
 		model.addAttribute("imgPath", imgPath);
-		model.addAttribute("userId", userId);
 		model.addAttribute("reportContent", reportContent);
 	}
 	

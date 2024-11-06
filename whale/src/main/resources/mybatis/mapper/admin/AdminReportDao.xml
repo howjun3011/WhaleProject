@@ -62,6 +62,7 @@
 	    SELECT 
 	    R.REPORT_ID,
 	    R.USER_ID,
+	    R.REPORT_USER_ID,
 	    R.FEED_ID,
 	    R.FEED_COMMENT_ID,
 	    R.POST_ID,
@@ -121,7 +122,19 @@
     	<include refid="includeSelectUser" />
     </select>
     
-	
+    
+	<insert id="reportResult">
+		insert into report_result values(
+			report_result_seq.nextval,
+			#{report_id},
+			#{target_type},
+			#{target_id},
+			#{myId},
+			sysdate,
+			#{action},
+			#{actionReason}
+			)
+	</insert>
    
 	
 	

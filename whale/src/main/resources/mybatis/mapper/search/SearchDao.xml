@@ -38,24 +38,26 @@
         	P.POST_TEXT LIKE '%'||#{keyword}||'%'
     </select>
     
-    <select id="selectSearchPostInfo" resultType="com.tech.whale.community.dto.PostDto">
+    <select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
         SELECT
-        	P.POST_ID AS POST_ID,
-        	P.COMMUNITY_ID AS COMMUNITY_ID,
-        	P.USER_ID AS USER_ID,
-        	P.POST_TITLE AS POST_TITLE,
-        	P.POST_TEXT AS POST_TEXT,
-        	P.POST_DATE AS POST_DATE,
-        	PT.POST_TAG_TEXT AS POST_TAG_TEXT
+        	F.FEED_ID AS FEED_ID,
+        	F.USER_ID AS USER_ID,
+        	F.FEED_TEXT AS FEED_TEXT,
+        	F.FEED_TEXT AS FEED_DATE,
+        	FI.FEED_IMG_URL AS FEED_IMG_URL,
+        	FM.TRACK_ID AS TRACK_ID,
+        	FT.FEED_TAG_TEXT AS FEED_TAG_TEXT
         FROM
-        	POST P
-        		LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
+        	FEED F
+        		LEFT JOIN FEED_IMG FI ON FI.FEED_ID = F.FEED_ID
+        		LEFT JOIN FEED_MUSIC FM ON FM.FEED_ID = F.FEED_ID
+        		LEFT JOIN FEED_TAG FT ON FT.FEED_ID = F.FEED_ID
         WHERE
-        	P.USER_ID LIKE '%'||#{keyword}||'%'
+        	F.USER_ID LIKE '%'||#{keyword}||'%'
         	OR
-        	P.POST_TEXT LIKE '%'||#{keyword}||'%'
+        	F.FEED_TEXT LIKE '%'||#{keyword}||'%'
         	OR
-        	P.POST_TEXT LIKE '%'||#{keyword}||'%'
+        	FT.FEED_TAG_TEXT LIKE '%'||#{keyword}||'%'
     </select>
-	
+    
 </mapper>

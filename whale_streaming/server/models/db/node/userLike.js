@@ -49,7 +49,9 @@ async function getLikeInfo(req,res) {
          FROM
             TRACK_LIKE TL
                 LEFT JOIN TRACK T ON T.TRACK_ID = TL.TRACK_ID
-         WHERE TL.USER_ID = :userId`,
+         WHERE TL.USER_ID = :userId
+         ORDER BY
+            TL.TRACK_LIKE_DATE DESC`,
         {
           userId: req.session.user_id,
         },

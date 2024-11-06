@@ -296,3 +296,12 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .searchAlbums{margin: 10px 0 0 10px;}
 .hidden {display: none;}
 .searchAlbumsItem p {width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0;}
+
+.searchPlayListContainer{position: relative;}
+.searchPlayListContainerTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding: 0 0 8px 15px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8; box-sizing: border-box; margin-top: 20px;}
+.searchRelatedPlaylists{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin: 10px 0 0 15px;}
+.searchPlayListSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
+.searchPlayListSlideButton.left {left: 0; top: 50%;}
+.searchPlayListSlideButton.right {right: 0; top: 50%;}
+.hidden {display: none;}
+.searchPlaylistItem p {width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0;}

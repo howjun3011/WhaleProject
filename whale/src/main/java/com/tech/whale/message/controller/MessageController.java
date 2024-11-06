@@ -24,16 +24,7 @@ public class MessageController {
 	@Autowired
 	private MessageDao messageDao;
 	
-<<<<<<< Updated upstream:whale/src/main/java/com/tech/whale/message/controller/MessageController.java
-	@RequestMapping("/messageHome")
-	public String messageHome(HttpServletRequest request, HttpSession session, Model model) {
-		String now_id = (String) session.getAttribute("user_id");
-		
-		return "message/messageHome";
-	}
-	
-=======
->>>>>>> Stashed changes:whale/src/main/java/com/tech/whale/message/controllers/MessageController.java
+
 	@RequestMapping("/messageGo")
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
 			@RequestParam("u") String userId) {

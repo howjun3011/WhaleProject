@@ -12,5 +12,9 @@
 </head>
 <body>
 	<div>Search</div>
+	<form action="searchResult" method="get">
+		<input type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
+		<input type="submit" value="검색"/>
+	</form>
 </body>
 </html>

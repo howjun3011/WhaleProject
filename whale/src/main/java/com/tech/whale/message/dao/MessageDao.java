@@ -2,8 +2,9 @@ package com.tech.whale.message.dao;
 
 import java.util.List;
 
-import com.tech.whale.message.dto.ChatListDto;
+import com.tech.whale.message.dto.AllChatListDto;
 import com.tech.whale.message.dto.FollowListDto;
+import com.tech.whale.message.dto.ReadChatDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,9 @@ public interface MessageDao {
 
 	List<FollowListDto> getFollowList(String now_id);
 
-	List<ChatListDto> getChatList(String now_id);
+	List<AllChatListDto> getAllChatList(String now_id);
+
+	List<ReadChatDto> getReadChatList(String now_id);
+
+
 }

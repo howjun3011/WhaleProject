@@ -38,24 +38,4 @@
         	P.POST_TEXT LIKE '%'||#{keyword}||'%'
     </select>
     
-    <select id="selectSearchPostInfo" resultType="com.tech.whale.community.dto.PostDto">
-        SELECT
-        	P.POST_ID AS POST_ID,
-        	P.COMMUNITY_ID AS COMMUNITY_ID,
-        	P.USER_ID AS USER_ID,
-        	P.POST_TITLE AS POST_TITLE,
-        	P.POST_TEXT AS POST_TEXT,
-        	P.POST_DATE AS POST_DATE,
-        	PT.POST_TAG_TEXT AS POST_TAG_TEXT
-        FROM
-        	POST P
-        		LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
-        WHERE
-        	P.USER_ID LIKE '%'||#{keyword}||'%'
-        	OR
-        	P.POST_TEXT LIKE '%'||#{keyword}||'%'
-        	OR
-        	P.POST_TEXT LIKE '%'||#{keyword}||'%'
-    </select>
-	
 </mapper>

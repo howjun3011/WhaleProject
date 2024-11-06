@@ -82,7 +82,7 @@ a:visited, a:hover, a:focus, a:active {
     </div>
 
     <div class="scroll-content">
-        <c:forEach var="list" items="${chatList}">
+        <c:forEach var="list" items="${allChatList}">
             <a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}">
                 <div class="room-list">
                     <img src="${pageContext.request.contextPath}/static/images/setting/${list.user_image_url}" alt="user-img">
@@ -90,9 +90,26 @@ a:visited, a:hover, a:focus, a:active {
                         <div class="user-nickname">
                             <span>${list.user_nickname}</span>
                         </div>
-                        <div class="new-message">
-                            <span>새 메시지 ${list.unread_message_count}개</span>&nbsp;&nbsp;<div class="diff">${list.time_difference}</div>
-                        </div>
+                        <c:forEach var="read" items="${readChatList}">
+                            <c:choose>
+                                <c:when test="${list.user_id == read.user_id && list.message_read == 1}">
+                                    <div class="new-message">
+                                        <span>새 메시지 ${read.unread_message_count}개</span>&nbsp;&nbsp;
+                                        <div class="diff">${read.time_difference}</div>
+                                    </div>
+                                </c:when>
+                                <c:when test="${list.user_id == read.user_id && list.message_read == 0}">
+                                    <div class="new-message">
+                                        <span>${list.last_message_text}</span>&nbsp;&nbsp;
+                                        <div class="diff">${read.time_difference}</div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+
                     </div>
                 </div>
             </a>

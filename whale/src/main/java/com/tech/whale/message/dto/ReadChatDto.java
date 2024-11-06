@@ -9,14 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class ChatListDto {
+public class ReadChatDto {
     private String user_id;
-    private String user_nickname;
-    private String user_image_url;
-    private Integer unread_message_count;
     private Integer minutes_since_last_message;
+    private Integer unread_message_count;
     private String last_message_text;
     private String time_difference;
-
 
 }

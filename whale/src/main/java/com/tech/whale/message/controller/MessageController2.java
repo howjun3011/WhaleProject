@@ -1,19 +1,16 @@
 package com.tech.whale.message.controller;
 
 import com.tech.whale.message.dao.MessageDao;
-import com.tech.whale.message.dto.ChatListDto;
+import com.tech.whale.message.dto.AllChatListDto;
 import com.tech.whale.message.dto.FollowListDto;
-import com.tech.whale.message.dto.MessageDto;
+import com.tech.whale.message.dto.ReadChatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -27,9 +24,10 @@ public class MessageController2 {
 		System.out.println("maeeageHome() ctr");
 		String now_id = (String) session.getAttribute("user_id");
 
-		List<ChatListDto> chatList = messageDao.getChatList(now_id);
+		List<AllChatListDto> allChatList = messageDao.getAllChatList(now_id);
+		List<ReadChatDto> readChatList = messageDao.getReadChatList(now_id);
 
-		for (ChatListDto list : chatList) {
+		for (ReadChatDto list : readChatList) {
 			int minutes = list.getMinutes_since_last_message();
 			String timeDifference = "";
 
@@ -47,16 +45,26 @@ public class MessageController2 {
 		}
 
 		// debug
-		for (ChatListDto chatListDto : chatList) {
+		for (AllChatListDto chatListDto : allChatList) {
+			System.out.println("User_id: " + chatListDto.getUser_id());
 			System.out.println("User_nickname: " + chatListDto.getUser_nickname());
 			System.out.println("User_image_url: " + chatListDto.getUser_image_url());
-			System.out.println("Unread_message_count: " + chatListDto.getUnread_message_count());
-			System.out.println("Minute_since_last_message: " + chatListDto.getMinutes_since_last_message());
+			System.out.println("Message_read: " + chatListDto.getMessage_read());
 			System.out.println("Last_message_text: " + chatListDto.getLast_message_text());
 			System.out.println("--------------------------");
 		}
 
-		model.addAttribute("chatList", chatList);
+		// debug
+		for (ReadChatDto chatListDto : readChatList) {
+			System.out.println("User_id: " + chatListDto.getUser_id());
+			System.out.println("Minutes_since_last_message: " + chatListDto.getMinutes_since_last_message());
+			System.out.println("Last_message_text: " + chatListDto.getLast_message_text());
+			System.out.println("Unread_message_count: " + chatListDto.getUnread_message_count());
+			System.out.println("--------------------------");
+		}
+
+		model.addAttribute("allChatList", allChatList);
+		model.addAttribute("readChatList", readChatList);
 		model.addAttribute("now_id", now_id);
 		
 		return "message/home";

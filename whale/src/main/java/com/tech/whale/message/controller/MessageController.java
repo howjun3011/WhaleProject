@@ -23,7 +23,6 @@ public class MessageController {
 
 	@Autowired
 	private MessageDao messageDao;
-	
 
 	@RequestMapping("/messageGo")
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,

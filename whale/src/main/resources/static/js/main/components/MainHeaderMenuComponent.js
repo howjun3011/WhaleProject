@@ -115,8 +115,8 @@ const MainHeaderMenuComponent = {
 					</div>
 					<div class="headerMenu-container" id="headerMenu-profile" v-if="headerMenuCheck[2]">
 						<div class="header-contents flexCenter" style="height: 60px; background-color: #f9f9f9; pointer-events: none;"><p class="header-nick-content">{{ userNickname }}님</p></div>
-						<div class="header-contents flexCenter" @click="redirectIframe(0,4,'')"><p class="header-profile-content">마이페이지</p></div>
-						<div class="header-contents flexCenter" @click="redirectIframe(2,5,'')"><p class="header-profile-content">설정</p></div>
+						<div class="header-contents flexCenter" @click="redirectIframe(0,5,'')"><p class="header-profile-content">마이페이지</p></div>
+						<div class="header-contents flexCenter" @click="redirectIframe(2,6,'')"><p class="header-profile-content">설정</p></div>
 						<div class="header-contents flexCenter" @click="logoutWhale()" style="border: none; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px;"><p class="header-profile-content">로그아웃</p></div>
 					</div>
 				</div>
@@ -144,9 +144,9 @@ const MainHeaderMenuComponent = {
 		redirectIframeNoti(i,j,k,l) {
 			let x;
 			let y;
-			if (this.notifications[j][k].post_id > 0) {x = 6; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
-			else if (this.notifications[j][k].feed_id > 0) {x = 7; y = `?f=${this.notifications[j][k].feed_id}`;}
-			else if (this.notifications[j][k].follow_noti_id > 0) {x = 8; y = `?u=${this.notifications[j][k].target_user_id}`;}
+			if (this.notifications[j][k].post_id > 0) {x = 7; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
+			else if (this.notifications[j][k].feed_id > 0) {x = 8; y = `?f=${this.notifications[j][k].feed_id}`;}
+			else if (this.notifications[j][k].follow_noti_id > 0) {x = 9; y = `?u=${this.notifications[j][k].target_user_id}`;}
 			this.$emit('menu-redirect-iframe',i,x,y);
 			this.notificationIndex = null;
 			fetch('main/'+l);

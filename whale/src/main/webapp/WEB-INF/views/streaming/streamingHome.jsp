@@ -316,37 +316,111 @@
                         </div>
                     </c:when>
                     <c:when test="${page == 'search'}">
-                        <div class="resultContainer">
-                            <h3 class="resultContainerTitle">곡</h3>
-                            <div class="searchResults">
-                                <!-- 왼쪽 버튼 -->
-                                <button class="searchSlideButton left" id="searchScrollLeftBtn"
-                                        onclick="scrollLeftSearchContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
-                                         alt="Like Button" width="30"
-                                         height="30" style="border-radius: 8px; opacity: 0.75;">
-                                </button>
-                                <c:forEach var="track" items="${searchResults}">
-                                    <div class="searchResult">
-                                        <div class="searchCover" onclick="playAndNavigate('${track.id}');">
-                                            <img src="${track.album.images[0].url}" alt="${track.name}" width="120"
-                                                 height="120" style="border-radius: 8px;">
-                                        </div>
-                                        <div class="searchInfo">
-                                            <p class="trackName">${track.name}</p>
-                                            <p class="artistName"
-                                               onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
+                        <div class="searchFirstContainer">
+                            <div>
+                                <!-- 연관 아티스트가 있을 때만 표시 -->
+                                <c:if test="${not empty searchedArtist}">
+                                    <h3 class="resultContainerTitle">연관 아티스트</h3>
+                                    <div class="relatedArtists">
+                                        <div class="artistResult" onclick="navigateToArtistDetail('${searchedArtist.id}');">
+                                            <div class="artistResultCover">
+                                                <img src="${searchedArtist.images[0].url}" alt="${searchedArtist.name}" width="100"
+                                                     height="100" style="border-radius: 50%;">
+                                            </div>
+                                            <p class="searchArtistName">${searchedArtist.name}</p>
+                                            <p class="artistName">아티스트</p>
                                         </div>
                                     </div>
-                                </c:forEach>
-                                <!-- 오른쪽 버튼 -->
-                                <button class="searchSlideButton right" id="searchScrollRightBtn"
-                                        onclick="scrollRightSearchContent()">
-                                    <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
-                                         alt="Like Button" width="30"
-                                         height="30" style="border-radius: 8px; opacity: 0.75;">
-                                </button>
+                                </c:if>
                             </div>
+                            <div class="resultContainer">
+                                <h3 class="resultContainerTitle">곡</h3>
+                                <div class="searchResults">
+                                    <c:forEach var="track" items="${searchResults}">
+                                        <div class="searchResult">
+                                            <div class="searchCover" onclick="playAndNavigate('${track.id}');">
+                                                <img src="${track.album.images[0].url}" alt="${track.name}" width="45"
+                                                     height="45" style="border-radius: 2px;">
+                                            </div>
+                                            <div class="searchInfo">
+                                                <p class="trackName"
+                                                    style="font-size: 1rem">${track.name}</p>
+                                                <p class="artistName"
+                                                   onclick="navigateToArtistDetail('${track.artists[0].id}')">${track.artists[0].name}</p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="searchAlbumsContainer">
+                            <h3 class="searchAlbumsContainerTitle">앨범</h3>
+                            <!-- 왼쪽 버튼 -->
+                            <button class="searchAlbumsSlideButton left" id="searchAlbumsScrollLeftBtn"
+                                    onclick="scrollLeftSearchAlbumsContent()">
+                                <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                     alt="Like Button" width="30"
+                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                            </button>
+                            <!-- 앨범 목록 -->
+                            <div class="searchAlbums">
+                                <div class="searchAlbumsWrap">
+                                    <c:forEach var="album" items="${albums}">
+                                        <div class="searchAlbumsItem"
+                                             onclick="navigateToAlbumDetail('${album.id}')"
+                                             style="cursor: pointer;">
+                                            <c:if test="${not empty album.images}">
+                                                <img src="${album.images[0].url}" alt="${album.name}"
+                                                     width="150"
+                                                     height="150" style="border-radius: 4px;">
+                                            </c:if>
+                                            <p class="trackName"
+                                               style="margin-left: 2px; font-size: 14px;">${album.name}</p>
+                                            <p class="trackName"
+                                               style="margin-left: 2px; font-size: 13px;">${album.releaseDate}</p>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                            <!-- 오른쪽 버튼 -->
+                            <button class="searchAlbumsSlideButton right" id="searchAlbumsScrollRightBtn"
+                                    onclick="scrollRightSearchAlbumsContent()">
+                                <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                     alt="Like Button" width="30"
+                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                            </button>
+                        </div>
+                        <!-- 관련된 플레이리스트 목록 -->
+                        <div class="searchPlayListContainer">
+                            <h3 class="searchPlayListContainerTitle">관련된 플레이리스트</h3>
+                            <!-- 왼쪽 버튼 -->
+                            <button class="searchPlayListSlideButton left" id="searchPlayListScrollLeftBtn"
+                                    onclick="scrollLeftSearchPlayListContent()">
+                                <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
+                                     alt="Like Button" width="30"
+                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                            </button>
+                            <div class="searchRelatedPlaylists">
+                                <c:forEach var="playlist" items="${relatedPlaylists}">
+                                    <div class="searchPlaylistItem" style="cursor: pointer;">
+                                        <c:if test="${not empty playlist.images}">
+                                            <img src="${playlist.images[0].url}" alt="${playlist.name}"
+                                                 width="150" height="150" style="border-radius: 4px;"
+                                                 onclick="playPlaylist('${playlist.id}')">
+                                        </c:if>
+                                        <p class="trackName"
+                                           onclick="playPlaylist('${playlist.id}')"
+                                           style="margin-left: 2px; font-size: 14px;">${playlist.name}</p>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- 오른쪽 버튼 -->
+                            <button class="searchPlayListSlideButton right" id="searchPlayListScrollRightBtn"
+                                    onclick="scrollRightSearchPlayListContent()">
+                                <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
+                                     alt="Like Button" width="30"
+                                     height="30" style="border-radius: 8px; opacity: 0.75;">
+                            </button>
                         </div>
                     </c:when>
                     <c:when test="${page == 'artistDetail'}">
@@ -694,17 +768,18 @@
                                             </c:if>
                                             <!-- 트랙 제목과 아티스트 이름 표시 -->
                                             <div>
-                                                <p style="font-weight: 400;">${track.track_name}</p>
-                                                <p>${track.track_artist}</p>
+                                                <p class="trackInfoTitle" style="font-weight: 400;">${track.track_name}</p>
+                                                <p class="trackInfoArtist">${track.track_artist}</p>
                                             </div>
                                         </div>
                                         <!-- 앨범 이름 -->
                                         <p class="albumName"
-                                           style="padding-left: 5px;"
+                                           style="padding-left: 5px; cursor: pointer;"
                                            onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
                                         <!-- 좋아요 제거 버튼 -->
                                         <button class="toggleLikeButton"
-                                                onclick="toggleTrackLike('${track.track_id}', this)">
+                                                onclick="toggleTrackLike('${track.track_id}', this)"
+                                                style="cursor: pointer;">
                                             <svg class="icon" style="width: 20px; filter: invert(1);"
                                                  viewBox="0 0 24 24">
                                                 <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->

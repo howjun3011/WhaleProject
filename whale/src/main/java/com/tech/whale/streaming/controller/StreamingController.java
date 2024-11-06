@@ -15,6 +15,7 @@ import se.michaelthelin.spotify.requests.data.personalization.interfaces.IArtist
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import com.tech.whale.streaming.service.LyricsService;
 
@@ -222,7 +223,15 @@ public class StreamingController {
 	// 검색 결과를 받아오는 메서드 추가
 	@RequestMapping("/streaming/search")
 	public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
-		// Spotify API로 검색 요청
+
+		// 세션에서 userId 가져오기
+		String userId = (String) session.getAttribute("user_id");
+
+		// 정확히 일치하는 아티스트 찾기
+		Artist searchedArtist = streamingService.getFirstArtistByQuery(session, query);
+		model.addAttribute("searchedArtist", searchedArtist); // 검색된 아티스트를 모델에 추가
+
+		// Spotify API로 트랙 검색 요청
 		Paging<Track> searchResults = streamingService.searchTracks(session, query);
 		if (searchResults != null && searchResults.getItems().length > 0) {
 			model.addAttribute("searchResults", searchResults.getItems());
@@ -230,8 +239,17 @@ public class StreamingController {
 			model.addAttribute("error", "No search results found.");
 		}
 
-		// 세션에서 userId 가져오기
-		String userId = (String) session.getAttribute("user_id");
+		// **앨범 검색 추가**
+		Paging<AlbumSimplified> albumResults = streamingService.searchAlbums(session, query);
+		if (albumResults != null && albumResults.getItems().length > 0) {
+			model.addAttribute("albums", albumResults.getItems());
+		}
+
+		// **관련된 플레이리스트 검색 추가**
+		List<PlaylistSimplified> relatedPlaylists = streamingService.searchPlaylists(session, query);
+		if (relatedPlaylists != null && !relatedPlaylists.isEmpty()) {
+			model.addAttribute("relatedPlaylists", relatedPlaylists);
+		}
 
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
@@ -414,5 +432,6 @@ public class StreamingController {
 
 		return ResponseEntity.ok(response);
 	}
+
 
 }

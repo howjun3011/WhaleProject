@@ -20,6 +20,7 @@ import com.google.gson.JsonPrimitive;
 import com.tech.whale.streaming.models.StreamingDao;
 import com.tech.whale.streaming.models.TrackDto;
 import se.michaelthelin.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
+import se.michaelthelin.spotify.requests.data.search.simplified.SearchArtistsRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistsAlbumsRequest;
@@ -266,12 +267,34 @@ public class StreamingService {
                     .limit(50)  // 최대 50개까지 가져올 수 있음
                     .build();
 
+            Paging<Track> searchResults = searchTracksRequest.execute();
+
+            // 응답 로그 출력
+            System.out.println("Tracks Search Results for query '" + query + "': " + Arrays.toString(searchResults.getItems()));
+
             // 결과 반환
             return searchTracksRequest.execute();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Failed to search tracks: " + e.getMessage());
             return null;
         }
+    }
+
+    // 특정 아티스트 이름으로 검색하여 첫 번째 결과만 반환하는 메서드
+    public Artist getFirstArtistByQuery(HttpSession session, String query) {
+        initializeSpotifyApi(session);
+
+        try {
+            SearchArtistsRequest searchRequest = spotifyApi.searchArtists(query).limit(1).build(); // 첫 번째 결과만 가져옴
+            Paging<Artist> searchResults = searchRequest.execute();
+
+            if (searchResults != null && searchResults.getItems().length > 0) {
+                return searchResults.getItems()[0]; // 첫 번째 아티스트 반환
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch artist by query: " + e.getMessage());
+        }
+        return null; // 검색 결과가 없을 경우 null 반환
     }
 
     // 특정 플레이리스트 ID로 플레이리스트 가져오기
@@ -539,4 +562,80 @@ public class StreamingService {
         }
         return null;
     }
+
+    // 검색에서 가장 연관된 아티스트 가져오는 메서드
+    public Artist getRelatedArtists(HttpSession session, String query) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 검색어로 아티스트 검색
+            SearchArtistsRequest searchRequest = spotifyApi.searchArtists(query).limit(1).build();
+            Paging<Artist> searchResults = searchRequest.execute();
+
+            if (searchResults != null && searchResults.getItems().length > 0) {
+                // 첫 번째 아티스트의 ID로 연관 아티스트 검색
+                String artistId = searchResults.getItems()[0].getId();
+                Artist[] relatedArtists = spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
+
+                // 연관 아티스트가 있으면 첫 번째 아티스트만 반환
+                return (relatedArtists.length > 0) ? relatedArtists[0] : null;
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to fetch related artist: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null; // 오류 발생 시 null 반환
+    }
+
+    // 검색 결과에서 정확한 아티스트 반환
+    public Artist searchArtistByName(HttpSession session, String query) {
+        initializeSpotifyApi(session);
+
+        try {
+            SearchArtistsRequest searchRequest = spotifyApi.searchArtists(query).limit(50).build();
+            Paging<Artist> artistSearchResults = searchRequest.execute();
+
+            // 응답 로그 출력
+            System.out.println("Artist Search Results for query '" + query + "': " + Arrays.toString(artistSearchResults.getItems()));
+
+            // 정확히 이름이 일치하는 아티스트가 있는지 확인
+            for (Artist artist : artistSearchResults.getItems()) {
+                if (artist.getName().equalsIgnoreCase(query)) {
+                    return artist;
+                }
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to search artist by name: " + e.getMessage());
+        }
+        return null; // 일치하는 아티스트가 없으면 null 반환
+    }
+
+    // 앨범 검색 메서드
+    public Paging<AlbumSimplified> searchAlbums(HttpSession session, String query) {
+        try {
+            return spotifyApi.searchAlbums(query)
+                    .limit(10) // 검색 결과를 10개로 제한 (필요시 변경 가능)
+                    .build()
+                    .execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 플레이리스트 검색 메서드
+    public List<PlaylistSimplified> searchPlaylists(HttpSession session, String query) {
+        try {
+            Paging<PlaylistSimplified> playlistResults = spotifyApi.searchPlaylists(query)
+                    .limit(10) // 검색 결과를 10개로 제한 (필요시 변경 가능)
+                    .build()
+                    .execute();
+
+            return Arrays.asList(playlistResults.getItems());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

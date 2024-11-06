@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.community.dao.ComDao;
 import com.tech.whale.community.dto.PostDto;
@@ -16,6 +17,8 @@ import com.tech.whale.community.dto.PostDto;
 public class AdminBoardPostContentService implements AdminServiceInter {
 	@Autowired
 	private ComDao comDao;
+	@Autowired
+	private AdminIDao adminIDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -29,6 +32,9 @@ public class AdminBoardPostContentService implements AdminServiceInter {
         if (postDetail == null) {
             // postDetail이 없으면 새로 조회
             postDetail = comDao.getPost(postId);
+        }
+        if(request.getAttribute("communityName") == null) {
+        	model.addAttribute("communityName", adminIDao.comName(postId));
         }
 		
 		int likeCount = comDao.getLikeCount(postId);

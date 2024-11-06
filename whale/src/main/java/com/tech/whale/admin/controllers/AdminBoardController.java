@@ -58,14 +58,13 @@ public class AdminBoardController {
 	
 	@ModelAttribute("myId")
     public String addUserIdToModel(HttpSession session) {
-        // 세션에서 user_id 가져오기 (세션에 저장된 user_id가 있다고 가정)
         return (String) session.getAttribute("user_id");
     }
 	
 	public void boardSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminBoardListView", "게시글");
-	    subMenu.put("", "댓글");
+	    subMenu.put("adminBoardCommentsListView", "댓글");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -139,7 +138,8 @@ public class AdminBoardController {
 		model.addAttribute("user_id", user_id);
 		adminBoardPostDelete.execute(model);
 		
-		return "redirect:adminBoardListView?page="+page+"&sk="+sk+"&searchType="+searchType;
+		return "redirect:adminBoardListView?page="+page+
+				"&sk="+sk+"&searchType="+searchType;
 	}
 	
 	@RequestMapping("/adminBoardFeedContentView")
@@ -167,7 +167,8 @@ public class AdminBoardController {
 		List<FeedCommentDto> commentsList = feedCommentsService.getCommentsForFeed(feedId);
 		
 	    for (FeedCommentDto comment : commentsList) {
-	        List<FeedCommentDto> replies = feedCommentsService.getRepliesForComment(comment.getFeed_comments_id());
+	        List<FeedCommentDto> replies = 
+	        		feedCommentsService.getRepliesForComment(comment.getFeed_comments_id());
 	        comment.setReplies(replies);
 	    }
 		
@@ -197,7 +198,8 @@ public class AdminBoardController {
 		model.addAttribute("user_id", user_id);
 		adminBoardFeedDelete.execute(model);
 		
-		return "redirect:adminBoardListView?page="+page+"&sk="+sk+"&searchType="+searchType;
+		return "redirect:adminBoardListView?page="+page+
+				"&sk="+sk+"&searchType="+searchType;
 	}
 	
 	@RequestMapping("/adminBoardFeedCommentsContentDelete")
@@ -216,7 +218,8 @@ public class AdminBoardController {
 		
 		///////  자식 댓글있으면 전부 삭제?
 		
-		return "redirect:adminBoardFeedContentView?page="+page+"&sk="+sk+"&searchType="+searchType+"&f="+f;
+		return "redirect:adminBoardFeedContentView?page="+page+
+				"&sk="+sk+"&searchType="+searchType+"&f="+f;
 	}
 	
 	@RequestMapping("/adminBoardPostCommentsContentDelete")
@@ -236,7 +239,62 @@ public class AdminBoardController {
 		
 		///////  자식 댓글있으면 전부 삭제?
 		
-		return "redirect:adminBoardPostContentView?page="+page+"&sk="+sk+"&searchType="+searchType+"&postId="+postId+"&communityName="+communityName;
+		return "redirect:adminBoardPostContentView?page="+page+
+				"&sk="+sk+"&searchType="+searchType+"&postId="+postId+"&communityName="+communityName;
 	}
+	
+	@RequestMapping("/adminBoardCommentsListView")
+	public String adminBoardCommentsListView(
+			HttpServletRequest request,
+			AdminSearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "댓글");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminBoardCommentsListContent.jsp");
+	    model.addAttribute("contentBlockCss",
+	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
+	    boardSubBar(model);
+	    
+	    adminBoardListService.comments(model);
+	    
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	
+	
+	@RequestMapping("/adminBoardCommentsDelete")
+	public String adminBoardCommentsDelete(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam(value = "feedId", required = false) String feedId,
+	        @RequestParam(value = "postId", required = false) String postId,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		
+		System.out.println("feedId :  "+feedId);
+		System.out.println("postId :  "+postId);
+		
+		if(feedId != null) {
+			adminBoardFeedDelete.commentsDelete(model);
+		} else if(postId != null) {
+			adminBoardPostDelete.commentsDelete(model);
+		}else {
+			System.out.println("글번호 안들어옴 오류");
+		}
+		
+		///////  자식 댓글있으면 전부 삭제?
+		
+		return "redirect:adminBoardCommentsListView?page="+page+
+				"&sk="+sk+"&searchType="+searchType;
+	}
+	
 	
 }

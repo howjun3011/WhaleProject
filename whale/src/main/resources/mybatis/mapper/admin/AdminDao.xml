@@ -331,83 +331,6 @@
 	
 	
 	
-	
-	
-	
-	
-	<sql id="includeAdvertiserCnt">
-	    <choose>
-	        <when test="param2 == 1">
-	            WHERE (ADVERTISER_ID LIKE '%' || #{sk} || '%')
-	        </when>
-	        <when test="param2 == 2">
-	            WHERE (ADVERTISER_NAME LIKE '%' || #{sk} || '%')
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-	
-	<sql id="includeAdvertiserList">
-	    <choose>
-	        <when test="param4 == 1">
-	            WHERE (UI.USER_ID LIKE '%' || #{sk} || '%')
-	            
-	        </when>
-	        <when test="param4 == 2">
-	            WHERE (UI.USER_EMAIL LIKE '%' || #{sk} || '%')
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-	
-	<select id="selectAdvertiserCnt" parameterType="map" resultType="int">
-        SELECT COUNT(*) FROM ADVERTISER_INFO
-        <include refid="includeAdvertiserCnt" />
-    </select>
-    
-    <select id="adminAdvertiserList" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
-	    SELECT *
-		FROM (
-		    SELECT 
-		        UI.USER_ID,
-		        UI.USER_IMAGE_URL,
-		        UI.USER_NICKNAME,
-		        UI.USER_EMAIL,
-		        UI.USER_ACCESS_ID,
-		        UI.USER_STATUS,
-		        UI.USER_DATE,
-		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
-		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
-		        (
-		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
-		            FROM POST_COMMENTS pc 
-		            WHERE pc.USER_ID = UI.USER_ID
-		        ) +
-		        (
-		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
-		            FROM FEED_COMMENTS fc 
-		            WHERE fc.USER_ID = UI.USER_ID
-		        ) AS COMMENTS_COUNT,
-		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
-		    FROM 
-		        USER_INFO UI
-		    <include refid="includeAdvertiserList" />
-		    GROUP BY 
-		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE
-		) 
-		WHERE RNUM BETWEEN #{start} AND #{end}
-		ORDER BY RNUM
-	</select>
-	
-	
-	
-	
-	
-	
-	
-	
 	<sql id="includeBoardCnt">
 	    <choose>
 	        <when test="selNum == 1">
@@ -675,9 +598,132 @@
 	</delete>
 		
 	
+	<sql id="includeBoardCommentsCnt">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%' )
+	        </when>
+	        <when test="selNum == 2">
+	            WHERE (TEXT LIKE '%' || #{sk} || '%' 
+	            AND TEXT IS NOT NULL)
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<sql id="includeBoardCommentsList">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%' )
+	        </when>
+	        <when test="selNum == 2">
+	            WHERE (TEXT LIKE '%' || #{sk} || '%'
+	            AND TEXT IS NOT NULL)
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
 	
 	
+	<select id="selectBoardCommentsCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+		FROM (
+		    SELECT 
+		        FC.FEED_ID,
+		        FC.FEED_COMMENTS_ID,
+		        FC.USER_ID AS USER_ID,
+		        SUBSTR(FC.FEED_COMMENTS_TEXT, 1, 20) AS TEXT,
+		        FC.FEED_COMMENTS_DATE AS DATE_FIELD,
+		        NULL AS POST_ID,
+		        NULL AS POST_COMMENTS_ID,
+		        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE FC.FEED_COMMENTS_ID = R.FEED_COMMENT_ID) AS REPORT_FEED_COMMENTS_COUNT,
+		        NULL AS REPORT_POST_COUNT
+		    FROM 
+		        FEED_COMMENTS FC
+		    UNION ALL
+		    SELECT 
+		        NULL AS FEED_ID,
+		        NULL AS FEED_COMMENTS_ID,
+		        PC.USER_ID AS USER_ID,
+		        SUBSTR(PC.POST_COMMENTS_TEXT, 20, 1) AS TEXT,
+		        PC.POST_COMMENTS_DATE AS DATE_FIELD,
+		        PC.POST_ID,
+		        PC.POST_COMMENTS_ID,
+		        NULL AS REPORT_FEED_COUNT,
+		        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE PC.POST_COMMENTS_ID = R.POST_COMMENT_ID) AS REPORT_POST_COMMENTS_COUNT
+		    FROM 
+		        POST_COMMENTS PC
+		) COMBINEDDATA
+		<include refid="includeBoardCommentsCnt" />
+		ORDER BY 
+		    DATE_FIELD
+
+
+
+
+    </select>
+    
+    <select id="adminBoardCommentsList" resultType="com.tech.whale.admin.dto.AdminPFCDto">
+	    SELECT *
+		FROM (
+		    SELECT 
+		        ROW_NUMBER() OVER (ORDER BY DATE_FIELD DESC) AS RNUM, -- DATE_FIELD을 기준으로 ROW_NUMBER 할당
+		        FEED_ID,
+		        FEED_COMMENTS_ID,
+		        USER_ID,
+		        TEXT,
+		        DATE_FIELD,
+		        POST_ID,
+		        POST_COMMENTS_ID,
+		        REPORT_FEED_COMMENTS_COUNT,
+		        REPORT_POST_COMMENTS_COUNT
+		    FROM (
+		       SELECT 
+			        FC.FEED_ID,
+			        FC.FEED_COMMENTS_ID,
+			        FC.USER_ID AS USER_ID,
+			        SUBSTR(FC.FEED_COMMENTS_TEXT, 1, 20) AS TEXT,
+			        FC.FEED_COMMENTS_DATE AS DATE_FIELD,
+			        NULL AS POST_ID,
+			        NULL AS POST_COMMENTS_ID,
+			        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE FC.FEED_COMMENTS_ID = R.FEED_COMMENT_ID) AS REPORT_FEED_COMMENTS_COUNT,
+			        NULL AS REPORT_POST_COMMENTS_COUNT
+			    FROM 
+			        FEED_COMMENTS FC
+			    UNION ALL
+			    SELECT 
+			        NULL AS FEED_ID,
+			        NULL AS FEED_COMMENTS_ID,
+			        PC.USER_ID AS USER_ID,
+			        SUBSTR(PC.POST_COMMENTS_TEXT, 1, 20) AS TEXT,
+			        PC.POST_COMMENTS_DATE AS DATE_FIELD,
+			        PC.POST_ID,
+			        PC.POST_COMMENTS_ID,
+			        NULL AS REPORT_FEED_COMMENTS_COUNT,
+			        (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE PC.POST_COMMENTS_ID = R.POST_COMMENT_ID) AS REPORT_POST_COMMENTS_COUNT
+			    FROM 
+			        POST_COMMENTS PC
+			    ) UNIONDATA
+		    <include refid="includeBoardCommentsList" />
+		) NUMBERDATA
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY DATE_FIELD DESC
+
+
+	</select>
 	
+	<select id="comName" resultType="String">
+		SELECT
+			C.COMMUNITY_NAME FROM POST P 
+		LEFT JOIN 
+			COMMUNITY C ON P.COMMUNITY_ID = C.COMMUNITY_ID
+		WHERE
+			P.POST_ID = #{POSTID}
+	</select>
 	
 	
 	

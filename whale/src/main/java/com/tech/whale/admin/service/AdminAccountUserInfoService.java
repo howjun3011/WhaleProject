@@ -26,7 +26,9 @@ public class AdminAccountUserInfoService implements AdminServiceInter{
 		HttpServletRequest request = 
 				(HttpServletRequest) map.get("request");
 		String userId = request.getParameter("userId");
-		
+		if(userId == null ) {
+			userId = (String) map.get("userId");
+		}
 		AdminUserInfoDto dto = adminIDao.userAccountInfoSelect(userId);
 		
 		// 추후에 access_id를 언어로 바꾸는 class파일 만들어야함?

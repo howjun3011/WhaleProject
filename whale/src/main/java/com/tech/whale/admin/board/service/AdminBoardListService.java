@@ -111,5 +111,76 @@ public class AdminBoardListService implements AdminServiceInter{
 		
 	}
 	
+	public void comments(Model model) {
+		
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request =
+				(HttpServletRequest) map.get("request");
+		AdminSearchVO searchVO = (AdminSearchVO) map.get("searchVO");
+		
+		if (searchVO == null) {
+			searchVO = new AdminSearchVO();
+			model.addAttribute("searchVO", searchVO);
+		}
+		
+		String user_id = "";
+		String all_text = "";
+		
+		String brdTitle = request.getParameter("searchType");
+		
+		if (brdTitle == null || brdTitle.trim().isEmpty()) {
+			user_id = "user_id";
+			model.addAttribute("user_id", "true");
+		} else if(brdTitle != null) {
+			if(brdTitle.equals("user_id")) {
+				model.addAttribute("user_id", "true");
+				user_id="user_id";
+			}else if(brdTitle.equals("all_text")) {
+				model.addAttribute("all_text", "true");
+				all_text="all_text";
+			}
+		}
+		String searchKeyword = request.getParameter("sk");
+		if(searchKeyword == null || searchKeyword.trim().isEmpty()) {
+			searchKeyword = "";
+		}
+		
+		int total = 0;
+		if(user_id.equals("user_id")) {
+			total = adminIDao.selectBoardCommentsCnt(searchKeyword,"1");
+		}else if(all_text.equals("all_text")) {
+			total = adminIDao.selectBoardCommentsCnt(searchKeyword,"2");
+		}
+		
+		String strPage = request.getParameter("page");
+		
+		if(strPage == null || strPage.isEmpty()) {
+			strPage="1";
+		}
+		
+		int page = Integer.parseInt(strPage);
+		searchVO.setPage(page);
+		
+		searchVO.pageCalculate(total);
+		
+		int rowStart = searchVO.getRowStart();
+		int rowEnd = searchVO.getRowEnd();
+		
+		ArrayList<AdminPFCDto> list = null;
+		if(user_id.equals("user_id")) {
+			list = adminIDao.adminBoardCommentsList(rowStart,rowEnd, searchKeyword,"1");
+		}
+		else if(all_text.equals("all_text")) {
+			list = adminIDao.adminBoardCommentsList(rowStart,rowEnd,searchKeyword,"2");
+		}
+		
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("searchType", brdTitle);
+		model.addAttribute("list", list);
+		model.addAttribute("ultotRowcnt", total);
+		model.addAttribute("ulsearchVO", searchVO);
+		
+	}
+	
 	
 }

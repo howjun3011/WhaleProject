@@ -7,28 +7,28 @@
 	<insert id="reportPost">
 		INSERT INTO REPORT
 		(REPORT_ID, USER_ID, POST_ID, REPORT_WHY,
-		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL)
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL, REPORT_USER_ID)
 		VALUES 
 		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
-		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg})
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg}, #{userId})
 	</insert>
 	
 	<insert id="reportFeed">
 		INSERT INTO REPORT
 		(REPORT_ID, USER_ID, FEED_ID, REPORT_WHY,
-		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL)
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_IMG_URL, REPORT_USER_ID)
 		VALUES 
 		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
-		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg})
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{reportImg}, #{userId})
 	</insert>
 	
 	<insert id="reportFeedComments">
 		INSERT INTO REPORT
 		(REPORT_ID, USER_ID, FEED_COMMENT_ID, REPORT_WHY,
-		REPORT_DATE, REPORT_TAG, REPORT_TEXT)
+		REPORT_DATE, REPORT_TAG, REPORT_TEXT, REPORT_USER_ID)
 		VALUES
 		(REPORT_SEQ.NEXTVAL, #{now_id}, #{report_type_id},
-		#{report_why}, SYSDATE, #{report_tag}, #{reportText})
+		#{report_why}, SYSDATE, #{report_tag}, #{reportText}, #{userId})
 	</insert>
 	
 	<select id="getReportPost" resultType="com.tech.whale.setting.dto.ReportDto">
@@ -52,6 +52,16 @@
 		WHERE FEED_COMMENTS_ID = #{report_type_id}
 	</select>
 
-
+	<select id="getPostUser" resultType="String">
+		SELECT USER_ID FROM POST WHERE POST_ID = #{post_id}
+	</select>
+	
+	<select id="getFeedUser" resultType="String">
+		SELECT USER_ID FROM FEED WHERE FEED_ID = #{feed_id}
+	</select>
+	
+	<select id="getFeedCommentsUser" resultType="String">
+		SELECT USER_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{feed_comments_id}
+	</select>
 
 </mapper>

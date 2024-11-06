@@ -7,9 +7,9 @@ import com.tech.whale.setting.dto.ReportDto;
 @Mapper
 public interface ReportDao {
 
-	public void reportPost(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg);
+	public void reportPost(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg, String userId);
 
-	public void reportFeed(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg);
+	public void reportFeed(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg, String userId);
 
 	public ReportDto getReportPost(String report_type_id);
 
@@ -18,9 +18,12 @@ public interface ReportDao {
 	public ReportDto getReportFeedComments(String report_type_id);
 
 	public void reportFeedComments(String report_type_id, String now_id, String report_why, String report_tag,
-			String reportText, String reportImg);
+			String reportText, String userId);
 
-	public void reportFeedComments(String report_type_id, String now_id, String report_why, String report_tag,
-			String reportText);
+	public String getPostUser(String post_id);
+
+	public String getFeedUser(String feed_id);
+
+	public String getFeedCommentsUser(String feed_comments_id);
 
 }

@@ -21,14 +21,17 @@ public interface MessageDao {
 	void addUserMessageRoom(String roomId, String userId);
 
 	String getNextRoomId();
-	
+
 	void saveMessage(MessageDto messageDto);
-	
-    List<MessageDto> getMessagesByRoomId(String roomId);
+
+	List<MessageDto> getMessagesByRoomId(String roomId);
 
 	List<FollowListDto> getFollowList(String now_id);
 
 	List<AllChatListDto> getAllChatList(String now_id);
 
 	List<ReadChatDto> getReadChatList(String now_id);
+
+	void readMessage(String roomId, String userId);
+}
 

@@ -177,54 +177,74 @@
 
     <!-- 채팅 입력 영역 -->
     <div class="chat-input">
-        <form action="sendMessage" method="post">
+        <form action="sendMessage" method="post" onsubmit="sendMessage(); return false;">
             <input type="hidden" name="roomId" value="${roomId}">
             <input type="hidden" name="userId" value="${userId}">
-            <textarea name="message" placeholder="메시지를 입력하세요." required onkeypress="if(event.keyCode==13 && !event.shiftKey){ this.form.submit(); return false;}"></textarea>
+            <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
+                      onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
             <button type="submit">전송</button>
         </form>
     </div>
 </div>
 
 <script>
-	var contextPath = '<%= request.getContextPath() %>';
-    var roomId = '${roomId}';
-    var now_id = '${now_id}';
-</script>
+    // JSP에서 컨텍스트 패스를 동적으로 가져옵니다.
+    const contextPath = '${pageContext.request.contextPath}';
+    const roomId = '${roomId}';
+    const now_id = '${now_id}';
 
-<script>
-function refreshMessages() {
-	fetch(contextPath + '/getMessages?roomId=' + roomId)
-        .then(response => response.json())
-        .then(messages => {
-            let messageHtml = '';
-            messages.forEach(msg => {
-                const alignClass = msg.user_id === now_id ? 'right' : 'left';
-                messageHtml += `
-                    <div class="chat-message ${alignClass}">
-                        <div class="message-bubble">
-                            <div>\${msg.message_text}</div>
-                            <div class="message-info">
-                                \${msg.user_id} • \${new Date(msg.message_create_date).toLocaleString()}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('chatMessages').innerHTML = messageHtml;
+    // 프로토콜을 동적으로 설정합니다. HTTPS인 경우 wss, 그렇지 않으면 ws를 사용합니다.
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+    // WebSocket URL을 설정합니다. 컨텍스트 패스를 포함합니다.
+    const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat");
+
+    socket.onopen = function() {
+        console.log("WebSocket 연결 성공");
+    };
+
+    socket.onmessage = function(event) {
+        const chatMessages = document.getElementById('chatMessages');
+        const [msgRoomId, msgUserId, msgText] = event.data.split(':');
+
+        // 현재 채팅방 메시지만 표시
+        if (msgRoomId === roomId) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message \${msgUserId == now_id ? 'right' : 'left'}`;
+            msgDiv.innerHTML = `
+                <div class="message-bubble">
+                    <div>\${msgText}</div>
+                    <div class="message-info">\${msgUserId}</div>
+                </div>
+            `;
+            chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        })
-        .catch(error => console.error('메시지 가져오기 오류:', error));
-}
+        }
+    };
 
-// 5초마다 메시지 갱신
-setInterval(refreshMessages, 5000);
-</script>
+    socket.onclose = function(event) {
+        console.log("WebSocket 연결 종료", event);
+    };
 
-<!-- 자동 스크롤 스크립트 -->
-<script>
-    var chatMessages = document.getElementById('chatMessages');
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    socket.onerror = function(error) {
+        console.error("WebSocket 에러: ", error);
+    };
+
+    function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value.trim();
+        if (message) {
+            const payload = `${roomId}:${now_id}:\${message}`;
+            socket.send(payload);
+            messageInput.value = "";
+        }
+    }
+
+    // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.
+    window.onload = function() {
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
 </script>
 
 </body>

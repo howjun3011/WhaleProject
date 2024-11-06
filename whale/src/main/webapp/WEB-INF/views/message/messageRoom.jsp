@@ -199,7 +199,7 @@
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 
     // WebSocket URL을 설정합니다. 컨텍스트 패스를 포함합니다.
-    const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat");
+    const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId);
 
     socket.onopen = function() {
         console.log("WebSocket 연결 성공");
@@ -207,7 +207,7 @@
     };
 
     socket.onmessage = function(event) {
-    	console.log("Received message: " + event.data);
+        console.log("Received message: " + event.data);
         const chatMessages = document.getElementById('chatMessages');
         const [msgRoomId, msgUserId, msgText] = event.data.split(':');
 
@@ -216,15 +216,14 @@
         // 현재 채팅방 메시지만 표시
         if (msgRoomId === roomId) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = `chat-message \${msgUserId === now_id ? 'right' : 'left'}`;
-            msgDiv.innerHTML = `
-                <div class="message-bubble">
-                    <div>\${msgText}</div>
-                    <div class="message-info">\${msgUserId}</div>
-                </div>
-            `;
+            msgDiv.className = "chat-message " + (msgUserId === now_id ? 'right' : 'left');
+            msgDiv.innerHTML =
+                '<div class="message-bubble">' +
+                    '<div>' + msgText + '</div>' +
+                    '<div class="message-info">' + msgUserId + '</div>' +
+                '</div>';
             chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 스크롤을 맨 아래로 이동
         }
     };
 

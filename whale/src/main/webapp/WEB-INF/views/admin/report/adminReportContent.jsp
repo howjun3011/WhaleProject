@@ -148,6 +148,9 @@
        				<input type="hidden" name="report_id" value="${reportContent.report_id }" />
        				<input type="hidden" name="writingId" value="${writingId }" />
        				<input type="hidden" name="writingType" value="${writingType }" />
+       				<input type="hidden" name="page" value="${page }" />
+       				<input type="hidden" name="sk" value="${sk }" />
+       				<input type="hidden" name="searchType" value="${searchType }" />
        				<button type="button" onclick="reportSubmit()">저장</button>
            			<button type="button" onclick="reportClose()">취소</button>
        			</td>

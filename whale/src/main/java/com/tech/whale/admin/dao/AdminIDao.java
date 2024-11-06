@@ -106,6 +106,7 @@ public interface AdminIDao {
 	public int pfIdFind(
 			@Param("type") String type, 
 			@Param("commentId") int commentId);
+	public int myAdminId(String myId);
 	
 	
 }

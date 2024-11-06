@@ -3,7 +3,12 @@
 <div class="mainContent">
     <div class="blockContainer">
 	    <div class="divStep">
-	        <div class="block" id="block1" onclick="window.location.href=''">문의현황</div>
+	        <div class="block" id="block1" onclick="window.location.href=''">
+	        	신고현황
+	        	<div id="reportToday">
+	        		
+	        	</div>
+	        </div>
 	        <div class="block" id="block2" onclick="window.location.href=''">현재로그인</div>
 	        <div class="block" id="block3" onclick="window.location.href=''">오늘재생횟수</div>
 	        <div class="block" id="block4" onclick="window.location.href=''">오늘음악태그</div>

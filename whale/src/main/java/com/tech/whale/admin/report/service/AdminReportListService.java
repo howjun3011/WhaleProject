@@ -120,7 +120,10 @@ public class AdminReportListService implements AdminServiceInter{
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
 		
-		String report_id = (String) request.getParameter("report_id");
+		String report_id = request.getParameter("report_id");
+		if(report_id.trim().isEmpty() || report_id == null) {
+			
+		}
 		AdminReportResultDto reportContent =
 				adminReportIDao.reportContent(report_id);	
 		
@@ -129,7 +132,8 @@ public class AdminReportListService implements AdminServiceInter{
 		int post_id = reportContent.getPost_id();
 		int post_comment_id = reportContent.getPost_comment_id();
 		int message_id = reportContent.getMessage_id();
-		String userId = (String) request.getParameter("userId");
+		String userId = reportContent.getReport_user_id();
+		System.out.println("리포트콘텐트 유저 아이디" + userId);
 		String imgPath = null;
 		String writingType = null;
 		String writingId = null;
@@ -155,7 +159,9 @@ public class AdminReportListService implements AdminServiceInter{
 			writingId = Integer.toString(message_id);
 		}
 		
+		model.addAttribute("userId", userId);
 		model.addAttribute("writingType", writingType);
+		model.addAttribute("writingId", writingId);
 		model.addAttribute("imgPath", imgPath);
 		model.addAttribute("reportContent", reportContent);
 	}

@@ -742,5 +742,9 @@
 		<include refid="includepfIdFind" />
 	</select>
 	
+	<select id="myAdminId" resultType="int">
+		select admin_id from admin_info where user_id = #{myId}
+	</select>
+	
 	
 </mapper>

@@ -42,6 +42,8 @@ public class AdminReportResultService implements AdminServiceInter{
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
 		
+		int myAdminId = adminIDao.myAdminId(myId);
+		
 		if(userStatus =="0") {
 			userStatus="-";
 		}else if(userStatus =="1") {
@@ -58,15 +60,15 @@ public class AdminReportResultService implements AdminServiceInter{
 		
 		if(userStatus !="0") {
 			adminReportIDao.reportResult(
-					report_id,"user",userId,myId,userStatus,statusReason);
+					report_id,"user",userId,myAdminId,userStatus,statusReason);
 		}
 		if(writingStatus !="0") {
 			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myId,writingStatus,statusReason);
+					report_id,writingType,writingId,myAdminId,writingStatus,statusReason);
 		}
 		if(userStatus == "0" && writingStatus =="0"){
 			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myId,userStatus,statusReason);
+					report_id,writingType,writingId,myAdminId,userStatus,statusReason);
 		}
 	}
 	
@@ -107,32 +109,35 @@ public class AdminReportResultService implements AdminServiceInter{
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
 		
+		System.out.println("글삭제 서비스 writingId: " + writingId);
+		System.out.println("글삭제 서비스 writingType: " + writingType);
 		String comments_del_reason = "부모글 삭제";
-		if(writingType =="feed") {
+		
+		if(writingType.equals("feed")) {
 			adminIDao.feedDelLog(writingId,myId,statusReason);
 			adminIDao.feedCommentsDelLog(writingId,myId,comments_del_reason);
 			adminIDao.feedLikeDel(writingId);
 			adminIDao.feedCommentsLikeDel(writingId);
 			adminIDao.feedCommentsDel(writingId);
 			adminIDao.feedDel(writingId);
-		} else if(writingType =="feed_comments") {
+		} else if(writingType.equals("feed_comments")) {
 			int feed_id = adminIDao.pfIdFind(writingType,writingId);
 			adminIDao.feedCommentsOneDelLog(writingId,feed_id,myId,statusReason);
 			adminIDao.feedCommentsLikeOneDel(writingId);
 			adminIDao.feedCommentsOneDel(writingId);
-		} else if(writingType =="post") {
+		} else if(writingType.equals("post")) {
 			adminIDao.postDelLog(writingId,myId,statusReason);
 			adminIDao.postCommentsDelLog(writingId,myId,comments_del_reason);
 			adminIDao.postLikeDel(writingId);
 			adminIDao.postCommentsLikeDel(writingId);
 			adminIDao.postCommentsDel(writingId);
 			adminIDao.postDel(writingId);
-		} else if(writingType =="post_comments") {
+		} else if(writingType.equals("post_comments")) {
 			int post_id = adminIDao.pfIdFind(writingType,writingId);
 			adminIDao.postCommentsOneDelLog(writingId,post_id,myId,statusReason);
 			adminIDao.postCommentsLikeOneDel(writingId);
 			adminIDao.postCommentsOneDel(writingId);
-		} else if(writingType =="message") {
+		} else if(writingType.equals("message")) {
 			
 		}
 		

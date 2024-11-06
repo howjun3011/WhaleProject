@@ -71,6 +71,9 @@ public class AdminReportController {
 	}
 	@RequestMapping("/adminReportContentView")
 	public String adminReportContentView(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
@@ -83,6 +86,9 @@ public class AdminReportController {
 		model.addAttribute("contentBlockCss",
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
 		boardSubBar(model);
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("sk", sk);
 		
 		adminReportListService.content(model);
 		adminAccountUserInfoService.execute(model);
@@ -90,12 +96,13 @@ public class AdminReportController {
 		return "/admin/view/adminOutlineForm";
 	}
 	
-	@RequestMapping("/reportStatusForm")
+	@RequestMapping("/adminReportSubmit")
 	@Transactional
 	public String reportStatusForm(
 			@RequestParam("page") int page,
 			@RequestParam("searchType") String searchType,
 			@RequestParam("sk") String sk,
+			@RequestParam("report_id") int report_id,
 			HttpServletRequest request,
 			Model model) {
 		
@@ -112,7 +119,7 @@ public class AdminReportController {
 		adminReportResultService.writingDel(model);
 		
 		return "redirect:adminReportContentView?"
-				+ "page="+page+"&sk="+sk+"&searchType="+searchType;
+				+ "page="+page+"&sk="+sk+"&searchType="+searchType+"&report_id="+report_id;
 	}
 	
 }

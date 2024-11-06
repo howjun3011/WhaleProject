@@ -28,7 +28,7 @@ public interface AdminReportIDao {
 			@Param("report_id") int report_id, 
 			@Param("target_type") String target_type, 
 			@Param("target_id") String target_id, 
-			@Param("myId") String myId, 
+			@Param("myAdminId") int myAdminId, 
 			@Param("action") String action,
 			@Param("actionReason") String actionReason);
 	

@@ -106,9 +106,11 @@ public class AdminReportController {
 		
 		//제제로그
 		adminReportResultService.rerusltRog(model, session);
+		//유저제재
+		adminReportResultService.reportUser(model, session);
+		//제재 내용
 		adminReportResultService.reportUser(model, session);
 		
-		//제재 로그, 삭제 로그
 		
 		return "/admin/view/adminOutlineForm";
 	}

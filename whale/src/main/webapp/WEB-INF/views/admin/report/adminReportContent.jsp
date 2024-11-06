@@ -140,8 +140,9 @@
        		<tr style="border-bottom: none;">
        			<td colspan="2" style="margin: 0 auto;">
        				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
-       				<input type="hidden" name="report_id" value="${AccountUserInfo.report_id }" />
-       				<input type="hidden" name="feed_id" value="${AccountUserInfo.feed_id }" />
+       				<input type="hidden" name="report_id" value="${reportContent.report_id }" />
+       				<input type="hidden" name="writingId" value="${writingId }" />
+       				<input type="hidden" name="writingType" value="${writingType }" />
        				<button type="button" onclick="reportSubmit()">저장</button>
            			<button type="button" onclick="reportClose()">취소</button>
        			</td>

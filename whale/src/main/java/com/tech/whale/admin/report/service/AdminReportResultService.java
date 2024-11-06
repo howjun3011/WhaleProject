@@ -45,7 +45,10 @@ public class AdminReportResultService implements AdminServiceInter{
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
 		
-		String report_id = (String) request.getParameter("report_id");
+//		String report_id = (String) request.getParameter("report_id");
+//		String writingType = (String) request.getParameter("writingType");
+//		String writingId = (String) request.getParameter("writingId");
+		
 	}
 
 }

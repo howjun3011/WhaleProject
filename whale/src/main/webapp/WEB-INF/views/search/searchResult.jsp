@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Whale</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/search/searchStyles.css"/>
 </head>
 <body>
 <h1>검색 결과: "${keyword}"</h1>
@@ -18,7 +19,9 @@
             <li>
                 아이디: ${user.user_id} <br/>
                 닉네임: ${user.user_nickname} <br/>
-                <img src="${user.user_image_url}" alt="프로필 이미지"/>
+                <div class="searchProfile">
+                    <img src="static/images/setting/${user.user_image_url}" alt="프로필 이미지"/>
+                </div>
             </li>
         </c:forEach>
     </ul>

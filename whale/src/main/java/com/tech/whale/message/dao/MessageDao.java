@@ -32,5 +32,3 @@ public interface MessageDao {
 
 	List<ReadChatDto> getReadChatList(String now_id);
 
-
-}

@@ -46,7 +46,10 @@ public class MessageController {
 			@RequestParam("u") String userId) {
 		String now_id = (String) session.getAttribute("user_id");
 		
+		messageDao.readMessage(roomId, userId);
 		List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);
+		
+		
 		
 		model.addAttribute("messages", messages);
 		model.addAttribute("now_id", now_id);

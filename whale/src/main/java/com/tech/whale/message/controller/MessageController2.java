@@ -1,4 +1,4 @@
-package com.tech.whale.message.controllers;
+package com.tech.whale.message.controller;
 
 import com.tech.whale.message.dao.MessageDao;
 import com.tech.whale.message.dto.FollowListDto;

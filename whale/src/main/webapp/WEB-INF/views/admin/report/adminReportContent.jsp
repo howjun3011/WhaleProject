@@ -63,29 +63,29 @@
             </tr>
             <tr>
                 <th>신고내용</th>
-                <td colspan="3">${reportContent.report_why }</td>
+                <td colspan="3"  style="text-align: left;">${reportContent.report_why }</td>
             </tr>
             <tr>
                 <th>처리내용</th>
                 <c:if test="${reportContent.report_result_action != null }">
-                <td colspan="3">${reportContent.report_result_action }</td>
+                <td colspan="3"  style="text-align: left;">${reportContent.report_result_action }</td>
                 </c:if>
                 <c:if test="${reportContent.report_result_action == null }">
-                <td colspan="3">(내용없음)</td>
+                <td>(내용없음)</td>
                 </c:if>
             </tr>
             <tr>
                 <th>처리사유</th>
                 <c:if test="${reportContent.report_result_reason != null}">
-                <td colspan="3">${reportContent.report_result_reason }</td>
+                <td colspan="3"  style="text-align: left;">${reportContent.report_result_reason }</td>
                 </c:if>
                 <c:if test="${reportContent.report_result_reason == null}">
-                <td colspan="3">(내용없음)</td>
+                <td colspan="3" >(내용없음)</td>
                 </c:if>
             </tr>
             <tr>
                 <th>신고글</th>
-                <td colspan="3">${reportContent.report_text }</td>
+                <td colspan="3"  style="text-align: left;">${reportContent.report_text }</td>
             </tr>
 			<tr>
 			    <th>이미지</th>
@@ -97,6 +97,7 @@
         <tr style="border-bottom: none;">
         	<td colspan="4">
         		<input type="button" value="처리하기" onclick="showReportForm()" />
+        		<input type="button" value="목록" onclick="adminReportListView?page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }" />
         	</td>
         </tr>
     </table>
@@ -113,7 +114,11 @@
        				&nbsp;&nbsp;
        				<label>
        					<input type="radio" name="userStatus" value="1" onclick="toggleStatusButton()"/>
-       					정지
+       					1일정지
+       				</label>
+       				<label>
+       					<input type="radio" name="userStatus" value="2" onclick="toggleStatusButton()"/>
+       					영구정지
        				</label>
        			</td>
        		</tr>
@@ -143,6 +148,9 @@
        				<input type="hidden" name="report_id" value="${reportContent.report_id }" />
        				<input type="hidden" name="writingId" value="${writingId }" />
        				<input type="hidden" name="writingType" value="${writingType }" />
+       				<input type="hidden" name="page" value="${page }" />
+       				<input type="hidden" name="sk" value="${sk }" />
+       				<input type="hidden" name="searchType" value="${searchType }" />
        				<button type="button" onclick="reportSubmit()">저장</button>
            			<button type="button" onclick="reportClose()">취소</button>
        			</td>

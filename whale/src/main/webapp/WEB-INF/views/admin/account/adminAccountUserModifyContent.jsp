@@ -36,7 +36,6 @@
         if (result) {
             document.getElementById('accessAddForm').style.display = 'none';
             document.getElementById("accessForm").submit();
-            alert('변경 사항 저장완료.');
         } else {
             alert("취소되었습니다.");
         }
@@ -46,7 +45,6 @@
         if (result) {
             document.getElementById('userStatus').style.display = 'none';
             document.getElementById("userStatusForm").submit();
-            alert('변경 사항 저장완료.');
         } else {
             alert("취소되었습니다.");
         }

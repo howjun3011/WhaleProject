@@ -33,7 +33,7 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		int post_id = Integer.parseInt(request.getParameter("postId"));
 		String user_id = (String)model.getAttribute("user_id");
 		String post_del_reason = "게시판 규칙 위반";
-		String comments_del_reason = "부모게시글 삭제";
+		String comments_del_reason = "부모글 삭제";
 		
 		adminIDao.postDelLog(post_id,user_id,post_del_reason);
 		adminIDao.postCommentsDelLog(post_id,user_id,comments_del_reason);

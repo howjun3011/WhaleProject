@@ -725,6 +725,26 @@
 			P.POST_ID = #{POSTID}
 	</select>
 	
+	<sql id="includepfIdFind">
+		<choose>
+	        <when test="type == 'feed_comments'">
+	            SELECT FEED_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{commentId}
+	        </when>
+	        <when test="type == 'post_comments'">
+	            SELECT POST_ID FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{commentId}
+	        </when>
+	        
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	<select id="pfIdFind" resultType="int">
+		<include refid="includepfIdFind" />
+	</select>
+	
+	<select id="myAdminId" resultType="int">
+		select admin_id from admin_info where user_id = #{myId}
+	</select>
 	
 	
 </mapper>

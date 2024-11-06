@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.report.service.AdminReportListService;
@@ -70,6 +71,9 @@ public class AdminReportController {
 	}
 	@RequestMapping("/adminReportContentView")
 	public String adminReportContentView(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
@@ -82,6 +86,9 @@ public class AdminReportController {
 		model.addAttribute("contentBlockCss",
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
 		boardSubBar(model);
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("sk", sk);
 		
 		adminReportListService.content(model);
 		adminAccountUserInfoService.execute(model);
@@ -89,11 +96,14 @@ public class AdminReportController {
 		return "/admin/view/adminOutlineForm";
 	}
 	
-	@RequestMapping("/reportStatusForm")
+	@RequestMapping("/adminReportSubmit")
 	@Transactional
 	public String reportStatusForm(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("report_id") int report_id,
 			HttpServletRequest request,
-			HttpSession session,
 			Model model) {
 		
 		model.addAttribute("request", request);
@@ -104,15 +114,12 @@ public class AdminReportController {
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
 		boardSubBar(model);
 		
-		//제제로그
-		adminReportResultService.rerusltRog(model, session);
-		//유저제재
-		adminReportResultService.reportUser(model, session);
-		//제재 내용
-		adminReportResultService.reportUser(model, session);
+		adminReportResultService.execute(model);
+		adminReportResultService.userBan(model);
+		adminReportResultService.writingDel(model);
 		
-		
-		return "/admin/view/adminOutlineForm";
+		return "redirect:adminReportContentView?"
+				+ "page="+page+"&sk="+sk+"&searchType="+searchType+"&report_id="+report_id;
 	}
 	
 }

@@ -48,7 +48,7 @@
 					<td><fmt:formatDate value="${dto.report_date}" pattern="yyyy.MM.dd  hh:mm" /></td>
 					<td>${dto.report_admin_check }</td>
 					<td>
-						<button onclick = "location.href = 'adminReportContentView?report_id=${dto.report_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
+						<button onclick = "location.href = 'adminReportContentView?report_id=${dto.report_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }&userId=${report_user_id }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>

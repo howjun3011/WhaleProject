@@ -69,6 +69,7 @@
 
 	<select id="getChatList" resultType="com.tech.whale.message.dto.ChatListDto">
 		SELECT
+		U.USER_ID,
 		U.USER_NICKNAME,
 		U.USER_IMAGE_URL,
 		COUNT(M.MESSAGE_ID) AS UNREAD_MESSAGE_COUNT,
@@ -87,6 +88,7 @@
 		AND MRU.USER_ID != #{now_id}   -- 현재 사용자를 제외
 		AND MR.MESSAGE_ROOM_ID IN (SELECT MESSAGE_ROOM_ID FROM MESSAGE_ROOM_USER WHERE USER_ID = #{now_id})
 		GROUP BY
+		U.USER_ID,
 		U.USER_NICKNAME,
 		U.USER_IMAGE_URL
 		ORDER BY

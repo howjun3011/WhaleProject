@@ -185,6 +185,7 @@ const MainFooterComponent = {
 			        
 					// [ 재생 중이라면 버튼 이미지 정지 버튼 변환 ]
 					if (!state.paused && this.playBtnSrcIndex === 0) {this.playBtnSrcIndex = 1;}
+					if (state.paused && this.playBtnSrcIndex === 1) {this.playBtnSrcIndex = 0;}
 					// [ 일회 반복 중이라면 버튼 이미지 변환 ]
 					if (state.repeat_mode === 2) {this.repeatBtnSrcIndex = 1; this.isRepeated = true;}
 					else if (state.repeat_mode === 1) {this.repeatBtnSrcIndex = 0; this.isRepeated = true;}

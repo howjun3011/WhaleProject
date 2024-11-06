@@ -1,3 +1,5 @@
+const fetchSpotify = require('../dao/fetchSpotify');
+
 async function fetchWebApi(req, endpoint, method, body) {
     await fetch(`https://api.spotify.com/${endpoint}`, {
         headers: {
@@ -11,13 +13,24 @@ async function fetchWebApi(req, endpoint, method, body) {
 
 async function play(req,res){
     await fetchWebApi(
-        req, `v1/me/player/play?device_id=${ req.query.device_id }`, 'PUT', { "context_uri": `${ req.query.uri }` }
+        req,
+        `v1/me/player/play?device_id=${ req.query.device_id }`,
+        'PUT',
+        {
+            "context_uri": `${ req.query.uri }`
+        }
     );
 }
 
 async function playTrack(req,res){
     await fetchWebApi(
-        req, `v1/me/player/play?device_id=${ req.query.device_id }`, 'PUT', { "uris": [ `${ req.query.uri }` ] }
+        req,
+        `v1/me/player/play?device_id=${ req.query.device_id }`,
+        'PUT',
+        {
+            "uris": [ `${ req.query.uri }` ],
+            "position_ms": req.query.position
+        }
     );
 }
 
@@ -27,8 +40,22 @@ async function playTracks(req,res){
     );
 }
 
+async function pauseTrack(req,res){
+    await fetchWebApi(
+        req, `v1/me/player/pause?device_id=${ req.query.device_id }`, 'PUT'
+    );
+}
+
+async function getPlayback(req,res){
+    return (await fetchSpotify.fetchWebApi(
+        req, `v1/me/player`, 'GET'
+    ));
+}
+
 module.exports = {
     play,
     playTrack,
-    playTracks
+    playTracks,
+    pauseTrack,
+    getPlayback
 }

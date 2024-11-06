@@ -6,6 +6,13 @@ async function playerService(req,res) {
     else {await play.play(req,res);}
 }
 
+async function playerPauseService(req,res) {
+    await play.pauseTrack(req,res);
+    const results = await play.getPlayback(req,res);
+    return results;
+}
+
 module.exports = {
-    playerService
+    playerService,
+    playerPauseService
 }

@@ -50,11 +50,18 @@ router.get('/getPlaylist', async (req, res) => {
 });
 
 router.get('/play', async (req, res) => {
-    await playerService.playerService(req, res);
+    const results = await playerService.playerService(req, res);
+    res.json(results);
 });
 
 router.post('/plays', async (req, res) => {
-    await playerService.playerService(req, res);
+    const results = await playerService.playerService(req, res);
+    res.json(results);
+});
+
+router.get('/pause', async (req, res) => {
+    const results = await playerService.playerPauseService(req, res);
+    res.json(results);
 });
 
 router.get('/getTrackInfo', async (req, res) => {

@@ -231,12 +231,24 @@ public class StreamingController {
 		Artist searchedArtist = streamingService.getFirstArtistByQuery(session, query);
 		model.addAttribute("searchedArtist", searchedArtist); // 검색된 아티스트를 모델에 추가
 
-		// Spotify API로 검색 요청
+		// Spotify API로 트랙 검색 요청
 		Paging<Track> searchResults = streamingService.searchTracks(session, query);
 		if (searchResults != null && searchResults.getItems().length > 0) {
 			model.addAttribute("searchResults", searchResults.getItems());
 		} else {
 			model.addAttribute("error", "No search results found.");
+		}
+
+		// **앨범 검색 추가**
+		Paging<AlbumSimplified> albumResults = streamingService.searchAlbums(session, query);
+		if (albumResults != null && albumResults.getItems().length > 0) {
+			model.addAttribute("albums", albumResults.getItems());
+		}
+
+		// **관련된 플레이리스트 검색 추가**
+		List<PlaylistSimplified> relatedPlaylists = streamingService.searchPlaylists(session, query);
+		if (relatedPlaylists != null && !relatedPlaylists.isEmpty()) {
+			model.addAttribute("relatedPlaylists", relatedPlaylists);
 		}
 
 		// 사용자 플레이리스트 가져오기

@@ -891,4 +891,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// 검색창 앨범 스크롤 이동 함수
+function updateSearchAlbumsLeftContentScrollButtons() {
+    const container = document.querySelector('.searchAlbumsWrap');
+    const scrollLeftBtn = document.getElementById('searchAlbumsScrollLeftBtn');
+    const scrollRightBtn = document.getElementById('searchAlbumsScrollRightBtn');
 
+    // 왼쪽 버튼 보이기/숨기기
+    if (container.scrollLeft > 0) {
+        scrollLeftBtn.classList.remove('hidden');
+    } else {
+        scrollLeftBtn.classList.add('hidden');
+    }
+
+    // 오른쪽 버튼 보이기/숨기기
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft < maxScrollLeft) {
+        scrollRightBtn.classList.remove('hidden');
+    } else {
+        scrollRightBtn.classList.add('hidden');
+    }
+}
+
+// 왼쪽으로 스크롤하는 함수
+function scrollLeftSearchAlbumsContent() {
+    const container = document.querySelector('.searchAlbumsWrap');
+    container.scrollBy({ left: -210, behavior: 'smooth' });
+    setTimeout(updateSearchAlbumsLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 오른쪽으로 스크롤하는 함수
+function scrollRightSearchAlbumsContent() {
+    const container = document.querySelector('.searchAlbumsWrap');
+    container.scrollBy({ left: 210, behavior: 'smooth' });
+    setTimeout(updateSearchAlbumsLeftContentScrollButtons, 300); // 스크롤 후 버튼 업데이트
+}
+
+// 스크롤 및 초기 버튼 상태 설정
+document.addEventListener("DOMContentLoaded", () => {
+    updateSearchAlbumsLeftContentScrollButtons(); // 초기 상태 설정
+    const container = document.querySelector('.searchAlbumsWrap');
+    container.addEventListener('scroll', updateSearchAlbumsLeftContentScrollButtons); // 스크롤 이벤트 감지
+});

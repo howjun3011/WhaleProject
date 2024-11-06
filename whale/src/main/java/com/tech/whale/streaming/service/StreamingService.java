@@ -610,6 +610,32 @@ public class StreamingService {
         return null; // 일치하는 아티스트가 없으면 null 반환
     }
 
+    // 앨범 검색 메서드
+    public Paging<AlbumSimplified> searchAlbums(HttpSession session, String query) {
+        try {
+            return spotifyApi.searchAlbums(query)
+                    .limit(10) // 검색 결과를 10개로 제한 (필요시 변경 가능)
+                    .build()
+                    .execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    // 플레이리스트 검색 메서드
+    public List<PlaylistSimplified> searchPlaylists(HttpSession session, String query) {
+        try {
+            Paging<PlaylistSimplified> playlistResults = spotifyApi.searchPlaylists(query)
+                    .limit(10) // 검색 결과를 10개로 제한 (필요시 변경 가능)
+                    .build()
+                    .execute();
+
+            return Arrays.asList(playlistResults.getItems());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

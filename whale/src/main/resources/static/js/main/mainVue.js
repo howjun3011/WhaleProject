@@ -124,7 +124,7 @@ const app = createApp({
 			this.checkUserInfo();
 			this.checkPageAccess();
 			this.getNotification();
-			fetch('/whale/spotify/refresh_token');
+			setTimeout(() => {fetch('/whale/spotify/refresh_token');},2000);
 		}
 	},
 });

@@ -48,25 +48,7 @@ async function receiveMessage(event) {
     } else if (event.data.type === 'artistDetail') {
         window.location.href = '/whale/streaming/artistDetail?artistId='+event.data.artistId;
     } else {
-        await sendDeviceId(event);
     }
-}
-
-async function sendDeviceId(event) {
-    sessionStorage.device_id = event.data;
-
-    const body = {
-        device_id: sessionStorage.device_id,
-    };
-    fetch(`/whale/main/device_id`, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(body)
-    })
-    .catch((error) => console.error("Failed to fetch the device_id: ", error));
 }
 
 function playTrack(trackId) {

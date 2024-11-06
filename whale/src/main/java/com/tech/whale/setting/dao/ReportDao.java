@@ -7,7 +7,7 @@ import com.tech.whale.setting.dto.ReportDto;
 @Mapper
 public interface ReportDao {
 
-	public void reportPost(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg, String userId);
+	public void reportPost(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String userId);
 
 	public void reportFeed(String report_type_id, String now_id, String report_why, String report_tag, String reportText, String reportImg, String userId);
 

@@ -676,8 +676,7 @@ public class SettingController {
         if (report_tag.equals("게시글 신고")) {
             ReportDto reportDto = reportDao.getReportPost(report_type_id);
             reportText = reportDto.getReport_text();
-            reportImg = reportDto.getReport_img_url();
-            reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, reportImg, userId);
+            reportDao.reportPost(report_type_id, now_id, report_why, report_tag, reportText, userId);
         } else if (report_tag.equals("피드 신고")) {
             ReportDto reportDto = reportDao.getReportFeed(report_type_id);
             reportText = reportDto.getReport_text();

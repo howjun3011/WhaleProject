@@ -141,8 +141,8 @@ const MainFooterComponent = {
 					(async () => {await this.fetchData(`http://localhost:9002/whale/main/device_id`);})();
 					
 					// [ The Node js Web App ]
-					if (this.startPage[0] === 'streaming') {this.fetchIframe('leftIframe',sessionStorage.device_id);}
-					if (this.startPage[1] === 'streaming') {this.fetchIframe('rightIframe',sessionStorage.device_id);}
+					if (this.startPage[0] === 0) {this.fetchIframe('leftIframe',sessionStorage.device_id);}
+					if (this.startPage[1] === 0) {this.fetchIframe('rightIframe',sessionStorage.device_id);}
 					
 					(async () => {try {await this.fetchWebApi(`v1/me/player`,'PUT',{ device_ids: [ sessionStorage.device_id ]});} catch(error) {}})();
 					

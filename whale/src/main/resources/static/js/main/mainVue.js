@@ -118,6 +118,14 @@ const app = createApp({
 					this.notiCounts[3] = this.notifications[3].filter(notification => notification.follow_noti_check === 0).length;
 			});
 		},
+		resetMain() {
+			this.replaceIframe(0,this.startPage[0],'');
+			this.replaceIframe(1,this.startPage[1],'');
+			this.checkUserInfo();
+			this.checkPageAccess();
+			this.getNotification();
+			fetch('/whale/spotify/refresh_token');
+		}
 	},
 });
 

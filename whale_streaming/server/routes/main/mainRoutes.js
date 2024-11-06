@@ -10,6 +10,7 @@ const playlistService = require('../../service/spotify/playlistService');
 const playerService = require('../../service/spotify/playerService');
 const infoService = require('../../service/spotify/infoService');
 const searchService = require('../../service/spotify/searchService');
+const userLikeService = require('../../service/node/userLikeService');
 
 
 // [ 2. 라우터 사용 ]
@@ -26,7 +27,7 @@ router.get('/', (req, res) => {
 router.post('/getDeviceId', (req, res) => {
     const { device_id } = req.body;
     req.session.device_id = device_id;
-    res.json({ accessToken: req.session.accessToken });
+    res.json({ accessToken: req.session.accessToken, userId: req.session.user_id });
 });
 
 router.get('/getContents', async (req, res) => {
@@ -49,6 +50,10 @@ router.get('/getPlaylist', async (req, res) => {
 });
 
 router.get('/play', async (req, res) => {
+    await playerService.playerService(req, res);
+});
+
+router.post('/plays', async (req, res) => {
     await playerService.playerService(req, res);
 });
 
@@ -80,6 +85,29 @@ router.get('/getArtistPlaylist', async (req, res) => {
 router.get('/getAlbumInfo', async (req, res) => {
     const results = await infoService.albumInfoService(req, res);
     res.json(results);
+});
+
+router.get('/getUserLikeCntInfo', async (req, res) => {
+    const results = await userLikeService.userLikeCntService(req, res);
+    res.json(results);
+});
+
+router.get('/getUserLikeInfo', async (req, res) => {
+    const results = await userLikeService.userLikeService(req, res);
+    res.json(results);
+});
+
+router.get('/getUserLikeTrackInfo', async (req, res) => {
+    const results = await userLikeService.userLikeTrackService(req, res);
+    res.json(results);
+});
+
+router.get('/userDeleteLikeInfo', async (req, res) => {
+    await userLikeService.userDeleteLikeService(req, res);
+});
+
+router.get('/userInsertLikeInfo', async (req, res) => {
+    await userLikeService.userInsertLikeService(req, res);
 });
 
 

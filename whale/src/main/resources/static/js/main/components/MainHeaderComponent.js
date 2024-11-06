@@ -35,7 +35,7 @@ const MainHeaderComponent = {
 	mounted() {
 	},
 	methods: {
-		goMain() {location.replace('main');},
+		goMain() {this.$emit('reset-main');},
 		alarmCheck() {this.$emit('header-alarm-toggle', 1);},
 		profileCheck() {this.$emit('header-profile-toggle', 2);},
 		redirectAdmin() {location.href='/whale/admin/adminMainView';},

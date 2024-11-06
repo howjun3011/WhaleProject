@@ -35,16 +35,16 @@ public class MainService {
 	}
 	
 	// [ 시작 페이지 설정 서비스 ]
-	public String[] checkStartPageMain(HttpSession session) {
+	public int[] checkStartPageMain(HttpSession session) {
 		StartpageDto startpageDto = settingDao.getStartpageSetting((String) session.getAttribute("user_id"));
-		return new String[] {searchStartPageMain(startpageDto,1),searchStartPageMain(startpageDto,2)};
+		return new int[] {searchStartPageMain(startpageDto,1),searchStartPageMain(startpageDto,2)};
 	}
-	private String searchStartPageMain(StartpageDto startpageDto, int x) {
-		if (startpageDto.getStartpage_music_setting() == x) {return "streaming";}
-		else if (startpageDto.getStartpage_feed_setting() == x) {return "feedHome";}
-		else if (startpageDto.getStartpage_community_setting() == x) {return "communityHome";}
-		else if (startpageDto.getStartpage_message_setting() == x) {return "message/home";}
-		else {return "Error";}
+	private int searchStartPageMain(StartpageDto startpageDto, int x) {
+		if (startpageDto.getStartpage_music_setting() == x) {return 0;}
+		else if (startpageDto.getStartpage_feed_setting() == x) {return 3;}
+		else if (startpageDto.getStartpage_community_setting() == x) {return 2;}
+		else if (startpageDto.getStartpage_message_setting() == x) {return 1;}
+		else {return 4;}
 	}
 	
 	// [ 페이지 접근 설정 서비스 ]

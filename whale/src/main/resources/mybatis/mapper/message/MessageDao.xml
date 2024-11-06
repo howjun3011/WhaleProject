@@ -108,8 +108,7 @@
 		JOIN
 		USER_INFO U ON MRU.USER_ID = U.USER_ID
 		WHERE
-		M.MESSAGE_READ = 1           -- 읽지 않은 메시지
-		AND MRU.USER_ID != #{now_id}   -- 현재 사용자를 제외
+		MRU.USER_ID != #{now_id}   -- 현재 사용자를 제외
 		AND MR.MESSAGE_ROOM_ID IN (SELECT MESSAGE_ROOM_ID FROM MESSAGE_ROOM_USER WHERE USER_ID = #{now_id})
 		GROUP BY
 		U.USER_ID

@@ -81,7 +81,6 @@
                     <span>${follow.follow_user_id}</span>
                 </div>
             </div>
-
         </div>
     </c:forEach>
 </div>

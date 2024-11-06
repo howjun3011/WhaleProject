@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,10 +9,18 @@
 <title>messageHome</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/message/messageHome.css" />
 <style>
+.container{
+    padding: 20px 20px;
+}
+.scroll-content {
+    flex: 1;
+    overflow-y: auto;
+}
 .header{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 40px;
 }
 .left{
     display: flex;
@@ -25,6 +35,31 @@
     width: 30px;
     height: 30px;
 }
+.room-list{
+    display: flex;
+    align-items: center;
+    padding: 5px 5px;
+    margin: 10px 10px;
+}
+.user-nickname{
+    font-weight: bold;
+}
+.room-list img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.new-message{
+    display: flex;
+    font-weight: bold;
+    line-height: 30px;
+}
+.diff{
+    font-weight: normal;
+    display: flex;
+    color: #999999;
+}
 </style>
 </head>
 <body>
@@ -38,7 +73,21 @@
         <a href="${pageContext.request.contextPath}/message/newChat" id="new-chat"><img src="${pageContext.request.contextPath}/static/images/message/newchatIcon.png" id="newchat" alt="newchatIcon"></a>
     </div>
 
-    <div class="room-list">
+    <div class="scroll-content">
+
+        <c:forEach var="list" items="${chatList}">
+            <div class="room-list">
+                <img src="${pageContext.request.contextPath}/static/images/setting/${list.user_image_url}" alt="user-img">
+                <div class="chat">
+                    <div class="user-nickname">
+                        <span>${list.user_nickname}</span>
+                    </div>
+                    <div class="new-message">
+                        <span>새 메시지 ${list.unread_message_count}개</span>&nbsp;&nbsp;<div class="diff">${list.time_difference}</div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
 
     </div>
 </div>

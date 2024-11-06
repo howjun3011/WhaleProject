@@ -694,17 +694,18 @@
                                             </c:if>
                                             <!-- 트랙 제목과 아티스트 이름 표시 -->
                                             <div>
-                                                <p style="font-weight: 400;">${track.track_name}</p>
-                                                <p>${track.track_artist}</p>
+                                                <p class="trackInfoTitle" style="font-weight: 400;">${track.track_name}</p>
+                                                <p class="trackInfoArtist">${track.track_artist}</p>
                                             </div>
                                         </div>
                                         <!-- 앨범 이름 -->
                                         <p class="albumName"
-                                           style="padding-left: 5px;"
+                                           style="padding-left: 5px; cursor: pointer;"
                                            onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
                                         <!-- 좋아요 제거 버튼 -->
                                         <button class="toggleLikeButton"
-                                                onclick="toggleTrackLike('${track.track_id}', this)">
+                                                onclick="toggleTrackLike('${track.track_id}', this)"
+                                                style="cursor: pointer;">
                                             <svg class="icon" style="width: 20px; filter: invert(1);"
                                                  viewBox="0 0 24 24">
                                                 <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->

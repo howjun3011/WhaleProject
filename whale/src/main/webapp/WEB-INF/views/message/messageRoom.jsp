@@ -177,13 +177,13 @@
 
     <!-- 채팅 입력 영역 -->
     <div class="chat-input">
-        <form action="sendMessage" method="post" onsubmit="sendMessage(); return false;">
-            <input type="hidden" name="roomId" value="${roomId}">
-            <input type="hidden" name="userId" value="${userId}">
-            <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
-                      onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
-            <button type="submit">전송</button>
-        </form>
+		<form onsubmit="sendMessage(); return false;">
+		    <input type="hidden" name="roomId" value="${roomId}">
+		    <input type="hidden" name="userId" value="${userId}">
+		    <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
+		              onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
+		    <button type="submit">전송</button>
+		</form>
     </div>
 </div>
 
@@ -193,6 +193,8 @@
     const roomId = '${roomId}';
     const now_id = '${now_id}';
 
+    console.log(contextPath);
+    
     // 프로토콜을 동적으로 설정합니다. HTTPS인 경우 wss, 그렇지 않으면 ws를 사용합니다.
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 
@@ -201,16 +203,20 @@
 
     socket.onopen = function() {
         console.log("WebSocket 연결 성공");
+        console.log(socket);
     };
 
     socket.onmessage = function(event) {
+    	console.log("Received message: " + event.data);
         const chatMessages = document.getElementById('chatMessages');
         const [msgRoomId, msgUserId, msgText] = event.data.split(':');
 
+        console.log("Parsed message - roomId: " + msgRoomId + ", userId: " + msgUserId + ", messageText: " + msgText);
+        
         // 현재 채팅방 메시지만 표시
         if (msgRoomId === roomId) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = `chat-message \${msgUserId == now_id ? 'right' : 'left'}`;
+            msgDiv.className = `chat-message \${msgUserId === now_id ? 'right' : 'left'}`;
             msgDiv.innerHTML = `
                 <div class="message-bubble">
                     <div>\${msgText}</div>

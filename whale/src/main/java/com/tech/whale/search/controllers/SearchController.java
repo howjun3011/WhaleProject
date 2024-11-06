@@ -2,22 +2,20 @@ package com.tech.whale.search.controllers;
 
 import javax.servlet.http.HttpSession;
 
-import com.tech.whale.setting.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tech.whale.search.models.SearchDao;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.tech.whale.search.service.SearchService;
 
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SearchController {
 
 	@Autowired
-	private SearchDao searchDao;
+	private SearchService searchService;
 
 	// [ 메인 페이지 이동 ]
     @RequestMapping("/searchHome")
@@ -29,8 +27,7 @@ public class SearchController {
 	@RequestMapping("/searchResult")
 	public String searchResult(@RequestParam("keyword") String keyword, Model model) {
 		// 검색 로직 추가 (예: 데이터베이스에서 검색)
-		List<UserInfoDto> userList = searchDao.selectSearchUserInfo(keyword);
-		model.addAttribute("userList", userList);
+		searchService.getSearchUserService(model, keyword);
 		model.addAttribute("keyword", keyword);
 		return "search/searchResult";
 	}

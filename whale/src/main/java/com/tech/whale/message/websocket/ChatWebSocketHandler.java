@@ -31,23 +31,44 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-    	System.out.println("메시지 수신: " + message.getPayload());
-    	String payload = message.getPayload();
-        String[] parts = payload.split(":", 3);
-        String roomId = parts[0];
-        String userId = parts[1];
-        String messageText = parts[2];
+        try {
+            System.out.println("메시지 수신: " + message.getPayload());
+            String payload = message.getPayload();
+            String[] parts = payload.split(":", 3);
+            if (parts.length < 3) {
+                System.err.println("Invalid message format: " + payload);
+                return;
+            }
+            String roomId = parts[0];
+            String userId = parts[1];
+            String messageText = parts[2];
 
-        MessageDto messageDto = new MessageDto();
-        messageDto.setMessage_room_id(roomId);
-        messageDto.setUser_id(userId);
-        messageDto.setMessage_text(messageText);
-        messageDto.setMessage_create_date(new Date());
-        messageDao.saveMessage(messageDto);
+            if (messageText == null || messageText.isEmpty()) {
+                System.err.println("Message text is null or empty.");
+                return;
+            }
 
-        TextMessage broadcastMessage = new TextMessage(payload);
-        for (WebSocketSession sess : sessions) {
-            sess.sendMessage(broadcastMessage);
+            MessageDto messageDto = new MessageDto();
+            messageDto.setMessage_room_id(roomId);
+            messageDto.setUser_id(userId);
+            messageDto.setMessage_text(messageText);
+            messageDto.setMessage_create_date(new Date());
+            messageDao.saveMessage(messageDto);
+
+            TextMessage broadcastMessage = new TextMessage(payload);
+            for (WebSocketSession sess : sessions) {
+                if (sess.isOpen()) {
+                    sess.sendMessage(broadcastMessage);
+                    System.out.println("메시지 전송: " + sess.getId());
+                } else {
+                    System.out.println("세션이 닫혀 있습니다: " + sess.getId());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("메시지 처리 중 에러 발생: " + e.getMessage());
+            e.printStackTrace();
+            session.sendMessage(new TextMessage("Error: " + e.getMessage()));
+            session.close(CloseStatus.SERVER_ERROR);
         }
     }
 

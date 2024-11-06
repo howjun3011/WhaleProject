@@ -60,6 +60,14 @@
     display: flex;
     color: #999999;
 }
+a {
+    text-decoration: none;
+    color: black;
+}
+a:visited, a:hover, a:focus, a:active {
+    color: black;
+    text-decoration: none;
+}
 </style>
 </head>
 <body>
@@ -74,21 +82,21 @@
     </div>
 
     <div class="scroll-content">
-
         <c:forEach var="list" items="${chatList}">
-            <div class="room-list">
-                <img src="${pageContext.request.contextPath}/static/images/setting/${list.user_image_url}" alt="user-img">
-                <div class="chat">
-                    <div class="user-nickname">
-                        <span>${list.user_nickname}</span>
-                    </div>
-                    <div class="new-message">
-                        <span>새 메시지 ${list.unread_message_count}개</span>&nbsp;&nbsp;<div class="diff">${list.time_difference}</div>
+            <a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}">
+                <div class="room-list">
+                    <img src="${pageContext.request.contextPath}/static/images/setting/${list.user_image_url}" alt="user-img">
+                    <div class="chat">
+                        <div class="user-nickname">
+                            <span>${list.user_nickname}</span>
+                        </div>
+                        <div class="new-message">
+                            <span>새 메시지 ${list.unread_message_count}개</span>&nbsp;&nbsp;<div class="diff">${list.time_difference}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </c:forEach>
-
     </div>
 </div>
 </body>

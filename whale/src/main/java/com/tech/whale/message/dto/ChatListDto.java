@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ChatListDto {
+    private String user_id;
     private String user_nickname;
     private String user_image_url;
     private Integer unread_message_count;

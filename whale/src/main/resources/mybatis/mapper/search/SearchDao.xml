@@ -37,5 +37,5 @@
         	OR
         	P.POST_TEXT LIKE '%'||#{keyword}||'%'
     </select>
-	
+  
 </mapper>

@@ -27,9 +27,16 @@
 	    VALUES (#{roomId}, #{userId})
 	</insert>
 	    
+	<update id="readMessage">
+		UPDATE MESSAGE
+		SET MESSAGE_READ = 0
+		WHERE MESSAGE_ROOM_ID = #{roomId} AND USER_ID = #{userId}
+	</update>
+	    
+	    
     <insert id="saveMessage">
 	    INSERT INTO message (message_id, message_create_date, message_text, message_room_id, message_read, user_id)
-	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, 0, #{user_id})
+	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, 1, #{user_id})
 	</insert>
 	
 	<select id="getMessagesByRoomId" resultType="com.tech.whale.message.dto.MessageDto">
@@ -62,6 +69,7 @@
 
 	<select id="getChatList" resultType="com.tech.whale.message.dto.ChatListDto">
 		SELECT
+		U.USER_ID,
 		U.USER_NICKNAME,
 		U.USER_IMAGE_URL,
 		COUNT(M.MESSAGE_ID) AS UNREAD_MESSAGE_COUNT,
@@ -80,6 +88,7 @@
 		AND MRU.USER_ID != #{now_id}   -- 현재 사용자를 제외
 		AND MR.MESSAGE_ROOM_ID IN (SELECT MESSAGE_ROOM_ID FROM MESSAGE_ROOM_USER WHERE USER_ID = #{now_id})
 		GROUP BY
+		U.USER_ID,
 		U.USER_NICKNAME,
 		U.USER_IMAGE_URL
 		ORDER BY

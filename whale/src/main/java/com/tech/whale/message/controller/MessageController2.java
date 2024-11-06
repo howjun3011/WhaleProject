@@ -45,14 +45,14 @@ public class MessageController2 {
 		}
 
 		// debug
-		for (AllChatListDto chatListDto : allChatList) {
+		/*for (AllChatListDto chatListDto : allChatList) {
 			System.out.println("User_id: " + chatListDto.getUser_id());
 			System.out.println("User_nickname: " + chatListDto.getUser_nickname());
 			System.out.println("User_image_url: " + chatListDto.getUser_image_url());
 			System.out.println("Message_read: " + chatListDto.getMessage_read());
 			System.out.println("Last_message_text: " + chatListDto.getLast_message_text());
 			System.out.println("--------------------------");
-		}
+		}*/
 
 		// debug
 		for (ReadChatDto chatListDto : readChatList) {

@@ -13,4 +13,6 @@ public interface StreamingDao {
 	public void insertTrackCnt(String trackSpotifyId, String userId);
 	public void deleteTrackLike(Integer trackLikeId);
 	public List<TrackDto> selectLikedTracks(String userId);
+	public Integer getLikeCountInfo(String userId);
+	public Integer getTrackLikeCountInfo(String userId, String trackSpotifyId);
 }

@@ -431,8 +431,33 @@ public class StreamingService {
     	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
     	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
     }
+    
+    // 좋아요 표시한 곡의 숫자
+    public Integer getLikeCountInfoService(String userId) {
+        return streamingDao.getLikeCountInfo(userId);
+    }
+    
+    // 해당 유저의 트랙 좋아요 확인
+    public Boolean getTrackLikeBoolService(String userId, String trackId) {
+    	Integer result = streamingDao.getTrackLikeCountInfo(userId, trackId);
+    	if (result > 0) {return true;}
+    	else {return false;}
+    }
+    
+    // 트랙 좋아요 인서트 노드용
+    public void insertTrackLikeNodeService(String userId, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
+    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
+    	streamingDao.insertTrackLike(trackId, userId);
+    }
+    
+    // 트랙 좋아요 삭제 노드용
+    public void deleteTrackLikeNodeService(String userId, String trackSpotifyId) {
+    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	Integer trackLikeId = streamingDao.selectTrackLikeId(userId, trackId);
+    	streamingDao.deleteTrackLike(trackLikeId);
+    }
 
-//    ----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
 
     // 좋아요 표시한 곡
     public List<TrackDto> getLikedTracks(String userId) {

@@ -14,9 +14,9 @@
             <img src="https://misc.scdn.co/liked-songs/liked-songs-300.png" :alt="좋아요" width="170"
                         height="170" style="border-radius: 8px;">
             <div class="playlistDetailInfo">
-                <p class="detailSort">플레이리스트</p>
+                <p class="detailSort" style="padding-top: 20px;">플레이리스트</p>
                 <p class="playlistName">좋아요 표시한 곡</p>
-                <p class="playlistOpt" style="margin-left: 10px;" v-if="userLike !== null"> {{ userName }} • {{ userLike.length }}곡</p>
+                <p class="playlistOpt" style="margin-top: 0; margin-left: 5px;" v-if="userLike !== null"> {{ userName }} • {{ userLike.length }}곡</p>
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
                     viewBox="0 0 24 24"
                     class="playlistTrackBtn likeBtn"
                     :style="{ fill: like[i] === true ? 'rgb(203, 130, 163)' : '#000000' }"
-                    @click="changeTrackLikeInfo(item.TRACKID,i)"
+                    @click="changeTrackLikeInfo(item.track.artists[0].name, item.track.name, item.track.album.name, item.track.album.images[0].url, item.track.id, i)"
                 >
                     <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -93,18 +93,18 @@
                     viewBox="0 0 24 24"
                     class="playlistTrackBtn"
                     style="height: 16px;"
-                    @click="playPlayer(`spotify:track:${item.TRACKID}`,i)"
+                    @click="playPlayer(`spotify:track:${item.track_id}`,i)"
                 >
                     <path :d=" isPlayed[i] === false ? 'm7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z' : 'M6 19h4V5H6zm8-14v14h4V5z'"
                     ></path>
                 </svg>
             </div>
             <div class="playlist-tracks-content" style="padding-left: 5px;">
-                <img :src="item.TRACKCOVER" :alt="item.TRACKNAME" height="40" style="border-radius: 2px; margin-right: 10px;">
-                <span style="cursor: pointer;" @click="redirectRouter('track',item.TRACKID)">{{ item.TRACKNAME }}</span>&nbsp;/&nbsp;<span style="cursor: pointer;" @click="redirectRouter('artist',temp[i].artists[0].id)">{{ item.ARTISTNAME }}</span>
+                <img :src="item.track_cover" :alt="item.track_name" height="40" style="border-radius: 2px; margin-right: 10px;">
+                <span style="cursor: pointer;" @click="redirectRouter('track',item.track_id)">{{ item.track_name }}</span>&nbsp;/&nbsp;<span style="cursor: pointer;" @click="redirectRouter('artist',temp[i].artists[0].id)">{{ item.track_artist }}</span>
             </div>
-            <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px; cursor: pointer;" @click="redirectRouter('album',temp[0].album.id)">{{ item.ALBUMNAME }}</div>
-            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;" v-if="!isShow[i]">{{ new Date(item.LIKEDATE).getFullYear() }}.{{ String(new Date(item.LIKEDATE).getDay()).padStart(2, "0") }}.{{ String(new Date(item.LIKEDATE).getDate()).padStart(2, "0") }}</div>
+            <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px; cursor: pointer;" @click="redirectRouter('album',temp[0].album.id)">{{ item.track_album }}</div>
+            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;" v-if="!isShow[i]">{{ new Date(item.track_like_date).getFullYear() }}.{{ String(new Date(item.track_like_date).getDay()).padStart(2, "0") }}.{{ String(new Date(item.track_like_date).getDate()).padStart(2, "0") }}</div>
             <div class="playlist-tracks-content" style="justify-content: center;" v-if="isShow[i]">
                 <svg
                     data-encore-id="icon"
@@ -113,7 +113,7 @@
                     viewBox="0 0 24 24"
                     class="playlistTrackBtn likeBtn"
                     :style="{ fill: like[i] === true ? 'rgb(203, 130, 163)' : '#000000' }"
-                    @click="changeTrackLikeInfo(item.TRACKID,i)"
+                    @click="changeTrackLikeInfo(item.track_artist, item.track_name, item.track_album, item.track_cover, item.track_id, i)"
                 >
                     <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
@@ -148,15 +148,15 @@ export default {
         async getUserPlaylists() {
             if(this.$route.params.id === '0') {
                 this.isLiked = true;
-                fetch('/whale/streaming/getUserLikeInfo')
+                fetch(`http://localhost:9002/whale/streaming/userLikeInfo?userId=${ sessionStorage.userId }`)
                     .then((response) => response.json())
                     .then((data) => {
                         this.userLike = data;
-                        this.userLikeTracks = this.userLike.map((el) => {return `spotify:track:${el.TRACKID}`});
+                        this.userLikeTracks = this.userLike.map((el) => {return `spotify:track:${el.track_id}`});
 
                         this.userLike.forEach((el, index) => {
-                            this.getTrackInfo(el.TRACKID,index);
-                            this.getTrackLikeInfo(el.TRACKID,index);
+                            this.getTrackInfo(el.track_id,index);
+                            this.getTrackLikeInfo(el.track_id,index);
                         });
                     })
             } else {
@@ -253,16 +253,36 @@ export default {
                 })
         },
         getTrackLikeInfo(i,j) {
-            fetch(`/whale/streaming/getUserLikeTrackInfo?id=${i}`)
+            fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.like[j] = data;
                 })
         },
-        changeTrackLikeInfo(i,j){
-            if (this.like[j] === true) {fetch(`/whale/streaming/userDeleteLikeInfo?id=${i}`)}
-            else {fetch(`/whale/streaming/userInsertLikeInfo?id=${i}`)}
-            this.like[j] = !this.like[j];
+        changeTrackLikeInfo(a,b,c,d,e,x){
+            if (this.like[x] === false) {
+                const body = {
+                    userId: sessionStorage.userId,
+                    artistName: a,
+                    trackName: b,
+                    albumName: c,
+                    trackCover: d,
+                    trackSpotifyId: e
+                };
+
+                fetch(`http://localhost:9002/whale/streaming/insertTrackLikeNode`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+            else {
+                fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
+            }
+            this.like[x] = !this.like[x];
         }
     },
 };

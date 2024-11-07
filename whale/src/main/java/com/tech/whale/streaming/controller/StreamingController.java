@@ -396,15 +396,22 @@ public class StreamingController {
 			// 각 트랙의 앨범 ID를 가져오기 위해 Spotify API 호출
 			Map<String, String> albumIds = new HashMap<>();
 			Map<String, String> artistIds = new HashMap<>();
+			Map<String, Integer> durations = new HashMap<>();
+
 			for (TrackDto trackDto : likedTracks) {
 				String[] result = streamingService.getAlbumIdByTrackId(session, trackDto.getTrack_id());
 				albumIds.put(trackDto.getTrack_id(), result[0]);
 				artistIds.put(trackDto.getTrack_id(), result[1]);
+
+				// 트랙의 재생 시간 가져오기
+				int durationMs = streamingService.getTrackDuration(session, trackDto.getTrack_id());
+				trackDto.setDurationMs(durationMs);
 			}
 
 			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
 			model.addAttribute("albumIds", albumIds);        // 각 트랙의 앨범 ID 추가
 			model.addAttribute("artistIds", artistIds);      // 각 트랙의 아티스트 ID 추가
+			model.addAttribute("durations", durations);
 		} else {
 			model.addAttribute("error", "No liked tracks found.");
 			System.out.println("likedTracks가 비어 있습니다.");

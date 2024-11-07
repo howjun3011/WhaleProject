@@ -261,7 +261,8 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .albumTracksArtist:hover,
 .trackInfoTitle:hover,
 .trackInfoArtist:hover,
-.trackItem .albumName:hover{opacity: 0.6; cursor: grab;}
+.trackItem .albumName:hover,
+.trackHover:hover{opacity: 0.6; cursor: grab;}
 
 /*추천 아티스트*/
 .recommendedArtistsTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 65px; margin-bottom: 5px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
@@ -305,3 +306,23 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .searchPlayListSlideButton.right {right: 0; top: 50%;}
 .hidden {display: none;}
 .searchPlaylistItem p {width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0;}
+
+
+.trackDuration {
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.toggleLikeButton {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.trackItem:hover .trackDuration {
+    display: none;
+}
+
+.trackItem:hover .toggleLikeButton .icon {
+    display: block !important;
+}

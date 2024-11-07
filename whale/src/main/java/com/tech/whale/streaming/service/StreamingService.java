@@ -663,4 +663,22 @@ public class StreamingService {
         }
     }
 
+    public int getTrackDuration(HttpSession session, String trackId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // Spotify API를 통해 트랙 상세 정보 가져오기
+            Track track = spotifyApi.getTrack(trackId).build().execute();
+            if (track != null) {
+                return track.getDurationMs();
+            } else {
+                System.out.println("트랙 정보를 가져오지 못했습니다: " + trackId);
+                return -1;
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("트랙 재생 시간 가져오기 실패: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

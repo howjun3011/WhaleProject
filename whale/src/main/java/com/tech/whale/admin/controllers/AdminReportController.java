@@ -28,7 +28,7 @@ import com.tech.whale.admin.util.AdminSearchVO;
 public class AdminReportController {
 	
 	@Autowired
-	private AdminIDao AdminIDao;
+	private AdminIDao adminIDao;
 	@Autowired
 	private AdminReportListService adminReportListService;
 	@Autowired
@@ -41,6 +41,12 @@ public class AdminReportController {
     public String addUserIdToModel(HttpSession session) {
         return (String) session.getAttribute("user_id");
     }
+	@ModelAttribute("myImgUrl")
+	public String myImgUrl(Model model) {
+		String myId = (String)model.getAttribute("myId");
+		String myImgSty = adminIDao.myImg(myId);
+		return myImgSty;
+	}
 	
 	public void boardSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
@@ -74,6 +80,7 @@ public class AdminReportController {
 			@RequestParam("page") int page,
 			@RequestParam("searchType") String searchType,
 			@RequestParam("sk") String sk,
+			@RequestParam("same_content_count") int same_content_count,
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
@@ -89,7 +96,7 @@ public class AdminReportController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("sk", sk);
-		
+		model.addAttribute("same_content_count", same_content_count);
 		adminReportListService.content(model);
 		adminAccountUserInfoService.execute(model);
 		
@@ -100,6 +107,7 @@ public class AdminReportController {
 	@Transactional
 	public String reportStatusForm(
 			@RequestParam("page") int page,
+			@RequestParam("same_content_count") int same_content_count,
 			@RequestParam("searchType") String searchType,
 			@RequestParam("sk") String sk,
 			@RequestParam("report_id") int report_id,
@@ -114,12 +122,16 @@ public class AdminReportController {
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
 		boardSubBar(model);
 		
+		System.out.println("삭제 컨트롤1");
 		adminReportResultService.execute(model);
+		System.out.println("삭제 컨트롤2");
 		adminReportResultService.userBan(model);
+		System.out.println("삭제 컨트롤3");
 		adminReportResultService.writingDel(model);
 		
 		return "redirect:adminReportContentView?"
-				+ "page="+page+"&sk="+sk+"&searchType="+searchType+"&report_id="+report_id;
+				+ "page="+page+"&sk="+sk+"&searchType="+searchType
+				+ "&report_id="+report_id+"&same_content_count="+same_content_count;
 	}
 	
 }

@@ -1,7 +1,6 @@
 package com.tech.whale.admin.report.service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,13 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dao.AdminReportIDao;
-import com.tech.whale.admin.dto.AdminOfficialInfoDto;
-import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminReportListDto;
 import com.tech.whale.admin.dto.AdminReportResultDto;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
 
@@ -85,26 +80,30 @@ public class AdminReportListService implements AdminServiceInter{
 		
 		if(list !=null) {
 			for (AdminReportListDto var : list) {
-				if(var.getFeed_id() != 0) {
+				if(var.getFeed_id() != null  && var.getFeed_id() != 0) {
 					var.setWriting_id(var.getFeed_id());
 					var.setTag_name("피드");
-				}else if(var.getPost_id() != 0) {
+				}else if(var.getPost_id() != null && var.getPost_id() != 0) {
 					var.setWriting_id(var.getPost_id());
 					var.setTag_name("커뮤");
-				}else if(var.getFeed_comment_id() != 0) {
+				}else if(var.getFeed_comment_id() != null && var.getFeed_comment_id() != 0) {
 					var.setWriting_id(var.getFeed_comment_id());
 					var.setTag_name("피드댓글");
-				}else if(var.getPost_comment_id() != 0) {
+				}else if(var.getPost_comment_id() != null && var.getPost_comment_id() != 0) {
 					var.setWriting_id(var.getPost_comment_id());
 					var.setTag_name("커뮤댓글");
-				}else if(var.getMessage_id() != 0) {
+				}else if(var.getMessage_id() != null && var.getMessage_id() != 0) {
 					var.setWriting_id(var.getMessage_id());
 					var.setTag_name("메시지");
 				}
+				
+				if(var.getReport_admin_check() == null || var.getReport_admin_check() == 0) {
+					var.setReportStatus("접수");
+				}else if(var.getReport_admin_check() == 1) {
+					var.setReportStatus("완료");
+				}
 			}
 		}
-		
-		
 		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchType", brdTitle);
@@ -122,38 +121,38 @@ public class AdminReportListService implements AdminServiceInter{
 		
 		String report_id = request.getParameter("report_id");
 		if(report_id.trim().isEmpty() || report_id == null) {
-			
+			report_id = (String) model.getAttribute("report_id");
 		}
 		AdminReportResultDto reportContent =
 				adminReportIDao.reportContent(report_id);	
 		
-		int feed_id = reportContent.getFeed_id();
-		int feed_comment_id = reportContent.getFeed_comment_id();
-		int post_id = reportContent.getPost_id();
-		int post_comment_id = reportContent.getPost_comment_id();
-		int message_id = reportContent.getMessage_id();
+		Integer feed_id = reportContent.getFeed_id();
+		Integer feed_comment_id = reportContent.getFeed_comment_id();
+		Integer post_id = reportContent.getPost_id();
+		Integer post_comment_id = reportContent.getPost_comment_id();
+		Integer message_id = reportContent.getMessage_id();
 		String userId = reportContent.getReport_user_id();
-		System.out.println("리포트콘텐트 유저 아이디" + userId);
+		
 		String imgPath = null;
 		String writingType = null;
 		String writingId = null;
-		if(feed_id != 0) {
+		if(feed_id != null && feed_id != 0) {
 			imgPath = "feed";
 			writingType ="feed";
 			writingId = Integer.toString(feed_id);
-		}else if(feed_comment_id != 0) {
+		}else if(feed_comment_id != null && feed_comment_id != 0) {
 			imgPath = "feed";
 			writingType ="feed_comments";
 			writingId = Integer.toString(feed_comment_id);
-		}else if(post_id != 0) {
+		}else if(post_id != null && post_id != 0) {
 			imgPath = "community";
 			writingType ="post";
 			writingId = Integer.toString(post_id);
-		}else if(post_comment_id != 0) {
+		}else if(post_comment_id != null && post_comment_id != 0) {
 			imgPath = "community";
 			writingType ="post_comments";
 			writingId = Integer.toString(post_comment_id);
-		}else if(message_id != 0) {
+		}else if(message_id != null && message_id != 0) {
 			imgPath = "";
 			writingType ="message";
 			writingId = Integer.toString(message_id);

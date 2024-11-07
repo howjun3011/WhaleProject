@@ -128,19 +128,38 @@
     	<include refid="includeSelectUser" />
     </select>
     
+    <sql id="includeEndDate">
+    	<choose>
+	        <when test="endDate == 0">
+	        	null
+	        </when>
+	        <when test="endDate == 1">
+	        	sysdate+1
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+    </sql>
     
 	<insert id="reportResult">
-		insert into report_result values(
-			report_result_seq.nextval,
+		INSERT INTO REPORT_RESULT VALUES(
+			REPORT_RESULT_SEQ.NEXTVAL,
 			#{report_id},
 			#{target_type},
 			#{target_id},
 			#{myAdminId},
-			sysdate,
+			SYSDATE,
 			#{action},
-			#{actionReason}
+			#{actionReason},
+			#{userId},
+			#{userStatus},
+			<include refid="includeEndDate" />
 			)
 	</insert>
+	
+	<update id="reportAdminCh">
+		UPDATE REPORT SET REPORT_ADMIN_CHECK = 1 WHERE REPORT_ID = #{report_id}
+	</update>
    
 	
 	

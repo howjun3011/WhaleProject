@@ -25,20 +25,6 @@ import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.vo.SearchVO;
 
 
-/*
-
-- 광고 업무
-광고주가 신청서를 작성할 수 있는 양식. (페이지)
-광고를 심사하고 승인할 수 있는 양식(승인 거절 남김)
-승인된 광고 게시
-광고id, 제목, 내용, 이미지url, 광고주정보, 광고상태, 시작 종료날짜
-광고 기간에만 게시되도록 종료날짜에 광고 비활성화
-노출횟수, 클릭수, 광고종료시 연장 및 새로신청
-
-*/
-
-//   http://localhost:9002/whale/admin/adminMainView
-
 
 @Controller
 @RequestMapping("/admin")
@@ -68,12 +54,18 @@ public class AdminController {
     public String addUserIdToModel(HttpSession session) {
         return (String) session.getAttribute("user_id");
     }
+	@ModelAttribute("myImgUrl")
+	public String myImgUrl(Model model) {
+		String myId = (String)model.getAttribute("myId");
+		String myImgSty = adminIDao.myImg(myId);
+		return myImgSty;
+	}
 	
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
+	    subMenu.put("adminAccountUserListView", "유저관리");
 	    subMenu.put("adminAccountOfficialListView", "오피셜관리");
 	    subMenu.put("adminAccountClientListView", "광고주관리 오류남");
-	    subMenu.put("adminAccountUserListView", "유저관리");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}

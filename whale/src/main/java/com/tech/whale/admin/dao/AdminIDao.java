@@ -100,13 +100,30 @@ public interface AdminIDao {
 			@Param("post_id") int post_id,
 			@Param("user_id") String user_id,
 			@Param("comments_del_reason") String comments_del_reason);
+	public void postCommentsParentDelLog(
+			@Param("post_comments_id") int post_comments_id,
+			@Param("post_id") int post_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
+	public void feedCommentsParentDelLog(
+			@Param("feed_comments_id") int feed_comments_id,
+			@Param("feed_id") int feed_id,
+			@Param("user_id") String user_id,
+			@Param("comments_del_reason") String comments_del_reason);
 	public void postCommentsLikeOneDel(int post_comments_id);
 	public void postCommentsOneDel(int post_comments_id);
 	public String comName(String postId);
-	public int pfIdFind(
+	public Integer pfIdFind(
 			@Param("type") String type, 
 			@Param("commentId") int commentId);
 	public int myAdminId(String myId);
+	
+	public void postCommentsParentDel(int post_comments_id);
+	public void postCommentsLikeParentDel(int post_comments_id);
+	public void feedCommentsParentDel(int feed_comments_id);
+	public void feedCommentsLikeParentDel(int feed_comments_id);
+	public void updateUserStatus(String userId);
+	public String myImg(String userId);
 	
 	
 }

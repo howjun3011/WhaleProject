@@ -28,94 +28,111 @@
     }
 </script>
 <div class="content">
-    <h2>" ${communityName} "</h2>
-    
-    <table class="contentTable">
-        <colgroup>
-            <col width="15%" />
-            <col width="35%" />
-            <col width="15%" />
-            <col width="35%" />
-        </colgroup>
-        <tbody>
-            <tr>
-                <th>태그</th>
-                <td>${postDetail.post_tag_text }</td>
-                <th>작성자</th>
-                <td>${postDetail.user_id }</td>
-            </tr>
-            <tr>
-                <th>조회수</th>
-                <td>${postDetail.post_cnt }</td>
-                <th>등록일</th>
-                <td>${postDetail.post_date }</td>
-            </tr>
-            <tr>
-                <th>제목</th>
-                <td colspan="3">${postDetail.post_title }</td>
-            </tr>
-            <tr>
-                <th>내용</th>
-                <td colspan="3">${postDetail.post_text }</td>
-            </tr>
-			<tr>
-			    <th>이미지</th>
-			    <td colspan="3">
-			        <c:forEach var="image" items="${postDetail.images}">
-			        	<img src="/whale/static/images/community/${image.post_img_name}" alt="Post Image">
-			        </c:forEach>
-			    </td>
-			</tr>
-        </tbody>
-    </table>
-	<br />
-	<div class="btnBlock">
-	좋아요 : <span id="likeCount">${postDetail.likeCount}</span> &nbsp;&nbsp; <!-- 좋아요 수 표시 -->
-    <div class="samllDiv"><a href="#" onclick="postDelete('${postId }','${page}','${searchType }','${sk }')" class="samllBtn">삭제</a></div>
-    <div class="samllDiv"><a href="adminBoardListView?page=${page }&searchType=${searchType }&sk=${sk}" class="samllBtn">목록</a></div>
-	</div>
-<table class="contentTable">
-    <colgroup>
-        <col style="width: 15%;"> <!-- 작성자 칸 -->
-        <col style="width: 55%;"> <!-- 코멘트 칸 (넓게) -->
-        <col style="width: 20%;"> <!-- 날짜 칸 (좁게) -->
-        <col style="width: 10%;"> <!-- 관리 칸 -->
-    </colgroup>
-    <thead>
-        <tr>
-            <th>작성자</th>
-            <th>코멘트</th>
-            <th>작성일</th>
-            <c:if test= "${comment.user_id eq now_id}">
-	            <th>관리</th>
-			</c:if>
-        </tr>
-    </thead>
-    <tbody>
-    	<c:if test="${not empty postDetail.comments}">
-        <c:forEach var="comment" items="${postDetail.comments}">
-            <tr>
-                <td>${comment.user_id}</td> <!-- 작성자 열 -->
-                <td>${comment.post_comments_text}</td> <!-- 코멘트 열 -->
-                <td>${comment.post_comments_date}</td> <!-- 작성일 열 -->
-                <td>
-                    <form action="#" method="post">
-                        <input type="hidden" name="postCommentsId" value="{comment.post_comments_id}" />
-                        <input type="hidden" name="postId" value="{postDetail.post_id}" />
-                        <input type="hidden" name="communityId" value="{param.c}" />
-	                    <button type="button" onclick="postCommentsDelete('${communityName}','${comment.post_comments_id}','${postDetail.post_id}','${page}','${searchType }','${sk }')">삭제</button>
-                    </form>
-                </td> <!-- 관리(삭제) 열 -->
-            </tr>
-        </c:forEach>
+    <div class="container">
+        <!-- 페이지 상단 커뮤니티 이름 -->
+        <div class="community-name">${communityName}</div>
+
+        <!-- 게시글 헤더 -->
+        <div class="post-header">
+            <h1 class="post-title">${postDetail.post_title}</h1>
+            <div class="post-meta">
+                <a href="adminAccountUserListView?sk=${postDetail.user_id}">
+                    <img src="/whale/static/images/setting/${postDetail.user_image_url}" alt="User Profile" class="profile-pic">
+                </a>
+                <span class="username">${postDetail.user_id}</span>
+                <span class="post-date">${postDetail.post_date}</span>
+                <!-- 기타 버튼 -->
+                <button class="other-btn" onclick="postDelete('${postId }','${page}','${searchType }','${sk }')">
+                    삭제하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 게시글 내용 -->
+        <div class="post-content">
+            ${postDetail.post_text}
+        </div>
+
+        <!-- 음악 정보 표시 -->
+        <c:if test="${not empty postDetail.track_id}">
+            <div class="music-info">
+                <img src="${postDetail.track_cover}" alt="Album Cover">
+                <div class="music-details">
+                    <div class="music-title">${postDetail.track_name}</div>
+                    <div class="artist-name">${postDetail.track_artist}</div>
+                </div>
+                <label class="play-button" onclick="playMusic(this, '${postDetail.track_id}')">
+                    <img src="/whale/static/images/btn/play_btn.png" alt="Play">
+                </label>
+                <label class="pause-button" onclick="pauseMusic(this, '${postDetail.track_id}')" style="display: none;">
+                    <img src="/whale/static/images/btn/pause_btn.png" alt="Pause">
+                </label>
+            </div>
         </c:if>
-        <c:if test="${empty postDetail.comments}">
-        	<tr>
-        		<td colspan="4">댓글이 없습니다.</td>
-        	</tr>
-        </c:if>
-    </tbody>
-</table>
+
+        <!-- 좋아요 및 댓글 수 -->
+        <div class="post-actions">
+            <button type="button" class="like-btn" data-post-id="${postDetail.post_id}" data-now-id="${now_id}">
+                <img src="/whale/static/images/btn/like_btn.png" alt="Like">
+                <span class="like-count">${postDetail.likeCount}</span>
+            </button>
+            <div class="comment-btn">
+                <img src="/whale/static/images/btn/comment_btn.png" alt="Comments">
+                <span class="comment-count">${postDetail.commentsCount}</span>
+            </div>
+        </div>
+
+        <!-- 댓글 섹션 -->
+        <div class="comments-section">
+            <!-- 댓글 목록 -->
+            <c:forEach var="comment" items="${postDetail.comments}">
+                <div class="comment-item" data-comment-id="${comment.post_comments_id}" data-user-id="${comment.user_id}">
+                    <div class="comment-header">
+                        <a href="adminAccountUserListView?sk=${comment.user_id}">
+                            <img src="/whale/static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+                        </a>
+                        <span class="username">${comment.user_id}</span>
+                        <span class="comment-date">${comment.post_comments_date}</span>
+                        <!-- 댓글의 기타 버튼 -->
+                        <button class="comment-other-btn" onclick="postCommentsDelete('${communityName}','${comment.post_comments_id}','${postDetail.post_id}','${page}','${searchType }','${sk }')">
+                            삭제하기
+                        </button>
+                    </div>
+                    <div class="comment-text">${comment.post_comments_text}</div>
+                    <div class="comment-actions">
+                        <button type="button" class="comment-like-btn" data-comment-id="${comment.post_comments_id}" data-now-id="${now_id}">
+                            <img src="/whale/static/images/btn/like_btn.png" alt="Like">
+                            <span class="comment-like-count">${comment.likeCount}</span>
+                        </button>
+                    </div>
+                    <!-- 답글 목록 -->
+                    <c:if test="${not empty comment.replies}">
+                        <c:forEach var="reply" items="${comment.replies}">
+                            <div class="reply-item" data-comment-id="${reply.post_comments_id}" data-user-id="${reply.user_id}">
+                                <div class="comment-header">
+                                    <a href="adminAccountUserListView?sk=${reply.user_id}">
+                                        <img src="/whale/static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+                                    </a>
+                                    <span class="username">${reply.user_id}</span>
+                                    <span class="comment-date">${reply.post_comments_date}</span>
+                                    <!-- 답글의 기타 버튼 -->
+                                    <button class="comment-other-btn" onclick="postCommentsDelete('${communityName}','${comment.post_comments_id}','${postDetail.post_id}','${page}','${searchType }','${sk }')">
+                                    </button>
+                                </div>
+                                <div class="comment-text">${reply.post_comments_text}</div>
+                                <div class="comment-actions">
+                                    <button type="button" class="comment-like-btn" data-comment-id="${reply.post_comments_id}" data-now-id="${now_id}">
+                                        <img src="/whale/static/images/btn/like_btn.png" alt="Like">
+                                        <span class="comment-like-count">${reply.likeCount}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:if>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
 <br />
 <br />
 <br />

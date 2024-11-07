@@ -21,6 +21,18 @@
     window.onload = function() {
         document.getElementById("reportStatusForm").style.display = "none";
     };
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        // JSP 표현식을 통해 report_result_date의 값이 null인지 확인
+        const reportResultDate = "${reportContent.report_result_date}";
+        
+        // 조건에 따라 버튼 활성화 또는 비활성화
+        if (reportResultDate != "") { // null일 경우 JSP 표현식은 빈 문자열을 반환
+            document.getElementById("submitButton").disabled = true;
+        } else {
+            document.getElementById("submitButton").disabled = false;
+        }
+    });
 </script>
 
 <div class="content" name="content" id="content">
@@ -47,10 +59,10 @@
             </tr>
             <tr>
                 <th>중복신고</th>
-                <c:if test="${reportContent.same_content_count != 0}">
-                <td>${reportContent.same_content_count } 건</td>
+                <c:if test="${same_content_count != 0}">
+                <td>${same_content_count } 건</td>
                 </c:if>
-                <c:if test="${reportContent.same_content_count == 0}">
+                <c:if test="${same_content_count == 0}">
                 <td>(내용없음)</td>
                 </c:if>
                 <th>처리자</th>
@@ -66,9 +78,16 @@
                 <td colspan="3"  style="text-align: left;">${reportContent.report_why }</td>
             </tr>
             <tr>
-                <th>처리내용</th>
+                <th>작성글제재</th>
                 <c:if test="${reportContent.report_result_action != null }">
-                <td colspan="3"  style="text-align: left;">${reportContent.report_result_action }</td>
+                <td style="text-align: left;">${reportContent.report_result_action }</td>
+                </c:if>
+                <c:if test="${reportContent.report_result_action == null }">
+                <td>(내용없음)</td>
+                </c:if>
+                <th>유저제재</th>
+                <c:if test="${reportContent.report_result_action != null }">
+                <td style="text-align: left;">${reportContent.report_result_action }</td>
                 </c:if>
                 <c:if test="${reportContent.report_result_action == null }">
                 <td>(내용없음)</td>
@@ -96,7 +115,7 @@
         </tbody>
         <tr style="border-bottom: none;">
         	<td colspan="4">
-        		<input type="button" value="처리하기" onclick="showReportForm()" />
+        		<input id="submitButton" type="button" value="처리하기" onclick="showReportForm()" />
         		<input type="button" value="목록" onclick="adminReportListView?page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }" />
         	</td>
         </tr>
@@ -150,6 +169,7 @@
        				<input type="hidden" name="writingType" value="${writingType }" />
        				<input type="hidden" name="page" value="${page }" />
        				<input type="hidden" name="sk" value="${sk }" />
+       				<input type="hidden" name="same_content_count" value="${same_content_count }" />
        				<input type="hidden" name="searchType" value="${searchType }" />
        				<button type="button" onclick="reportSubmit()">저장</button>
            			<button type="button" onclick="reportClose()">취소</button>

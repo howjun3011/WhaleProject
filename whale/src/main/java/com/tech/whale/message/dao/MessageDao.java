@@ -35,5 +35,9 @@ public interface MessageDao {
 	void readMessage(String roomId, String userId);
 	
 	String getOtherUserInRoom(String roomId, String userId);
+
+	String getOtherUserInRoom2(String roomId, String userId);
+
+	String getUserImage(String userId);
 }
 

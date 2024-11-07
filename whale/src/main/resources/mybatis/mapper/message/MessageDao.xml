@@ -39,6 +39,11 @@
 	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, #{message_read}, #{user_id}, #{message_type})
 	</insert>
 	
+	<select id="getUserImage" resultType="String">
+		SELECT USER_IMAGE_URL FROM USER_INFO
+		WHERE USER_ID = #{userId}
+	</select>
+	
 	<select id="getMessagesByRoomId" resultType="com.tech.whale.message.dto.MessageDto">
 	    SELECT message_id, message_create_date, message_text, message_room_id, message_read, user_id, message_type
 	    FROM message
@@ -52,6 +57,14 @@
 	    JOIN message_room mr ON mr.message_room_id = mru.message_room_id
 	    WHERE mru.message_room_id = #{roomId}
 	      AND mru.user_id = #{userId}
+	</select>
+	
+		<select id="getOtherUserInRoom2" resultType="String">
+	    SELECT mru.user_id
+	    FROM message_room_user mru
+	    JOIN message_room mr ON mr.message_room_id = mru.message_room_id
+	    WHERE mru.message_room_id = #{roomId}
+	      AND mru.user_id != #{userId}
 	</select>
 
 	<select id="getFollowList" resultType="com.tech.whale.message.dto.FollowListDto">

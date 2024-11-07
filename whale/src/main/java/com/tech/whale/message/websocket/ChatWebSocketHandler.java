@@ -132,13 +132,20 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // DB에 메시지 저장
             messageDao.saveMessage(messageDto);
 
+            String otherUserId = messageDao.getOtherUserInRoom2(roomId, userId);
+            
+            String userImgUrl = messageDao.getUserImage(userId);
+            
             // Home 페이지에 메시지 알림 전송
             HomeMessage homeMessage = new HomeMessage();
-            homeMessage.setReceiverId(messageDto.getReceiver_id()); // receiver_id는 추가로 설정 필요
+            homeMessage.setReceiverId(otherUserId); // receiver_id는 추가로 설정 필요
             homeMessage.setSenderId(userId);
             homeMessage.setMessageType(messageType);
             homeMessage.setMessageText(messageDto.getMessage_text());
             homeMessage.setTimeDifference(calculateTimeDifference());
+            homeMessage.setUserImageUrl(userImgUrl);
+            
+            System.out.println(homeMessage.getReceiverId());
 
             String homeMessageJson = objectMapper.writeValueAsString(homeMessage);
             homeWebSocketHandler.sendMessageToUser(homeMessage.getReceiverId(), homeMessageJson);

@@ -18,12 +18,10 @@
 <header>
 	<div class="header">
 		<div class="headerSearch">
-	        <form action="searchResult" method="get">
-	            <button class="searchBtn">
-	                <input type="image" src="/whale/static/images/streaming/searchBtn.png" alt="검색" style="height: 14px;" class="searchBtn"/>
-	            </button>
-	            <input id="searchInput" class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
-	        </form>
+			<button class="searchBtn">
+				<input type="image" src="/whale/static/images/streaming/searchBtn.png" alt="검색" style="height: 14px;" class="searchBtn"/>
+			</button>
+			<input id="searchInput" class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
 	    </div>
 	</div>
 </header>

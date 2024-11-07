@@ -84,7 +84,7 @@ public class MessageController2 {
 			} else if (lastMessageType.equals("TEXT")) {
 				// text가 너무 길면 앞부분 어느정도만 잘라서 뒤는 ...처리
 				String messageText = list.getLast_message_text();
-				int maxLength = 20;
+				int maxLength = 40;
 
 				if(messageText.length() > maxLength) {
 					String shortenedText = messageText.substring(0, maxLength) + "...";

@@ -6,6 +6,8 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import com.tech.whale.Image.controller.LinkPreviewUtils;
 import com.tech.whale.message.dao.MessageDao;
 import com.tech.whale.message.dto.MessageDto;
 
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +53,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
-            String[] parts = payload.split(":", 4); // 이미지 URL을 포함하기 위해 4개로 분할
+            String[] parts = payload.split(":", 4);
             if (parts.length < 4) {
                 System.err.println("Invalid message format: " + payload);
                 return;
@@ -60,28 +64,39 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String messageType = parts[2];
             String messageContent = parts[3];
 
-            // 메시지 객체 생성
             MessageDto messageDto = new MessageDto();
             messageDto.setMessage_room_id(roomId);
             messageDto.setUser_id(userId);
             messageDto.setMessage_create_date(new Date());
             messageDto.setMessage_type(messageType);
             
-            // 메시지 타입에 따라 처리
-            if ("TEXT".equals(messageType)) {
-                messageDto.setMessage_text(messageContent);
+            if ("TEXT".equals(messageType) && containsUrl(messageContent)) {
+                messageType = "LINK";
+                String url = extractUrl(messageContent);
+                
+                // 유튜브 링크인지 확인 후 iframe 생성
+                if (url.contains("youtube.com") || url.contains("youtu.be")) {
+                    String embedHtml = fetchYouTubeEmbedHtml(url);
+                    messageDto.setMessage_text(embedHtml);
+                    messageDto.setMessage_type(messageType);
+                } else {
+                    // 일반 링크의 경우 미리보기 생성
+                    Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(url);
+                    messageDto.setMessage_text(messageContent + "#preview=" + previewData);
+                    messageDto.setMessage_type(messageType);
+                }
             } else if ("IMAGE".equals(messageType)) {
-                messageDto.setMessage_text(messageContent); // Google Cloud Storage의 이미지 URL을 저장
+                messageDto.setMessage_text(messageContent);
+            } else {
+                messageDto.setMessage_text(messageContent);
             }
 
-            // 포맷팅된 메시지 생성
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = dateFormat.format(new Date());
 
             String formattedMessage = String.format("%s#%s#%s#%s#%d#%s",
                     roomId, userId, messageType, messageDto.getMessage_text(), messageDto.getMessage_read(), formattedDate);
 
-            // 메시지 전송 및 저장
             broadcastToRoom(roomId, new TextMessage(formattedMessage));
             messageDao.saveMessage(messageDto);
 
@@ -90,6 +105,32 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage("Error: " + e.getMessage()));
             session.close(CloseStatus.SERVER_ERROR);
         }
+    }
+
+    private boolean containsUrl(String text) {
+        return text.contains("http://") || text.contains("https://");
+    }
+
+    private String extractUrl(String text) {
+        String urlRegex = "(https?://[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*)";
+        Pattern pattern = Pattern.compile(urlRegex);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    private String fetchYouTubeEmbedHtml(String url) {
+        return "<iframe src=\"https://www.youtube.com/embed/" + extractYouTubeId(url) +
+               "\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+    }
+
+    private String extractYouTubeId(String url) {
+        String pattern = "(?<=watch\\?v=|/videos/|embed/|youtu.be/|/v/|/e/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#&?\\n]*";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(url);
+        return matcher.find() ? matcher.group() : "";
     }
     
     private void broadcastToRoom(String roomId, TextMessage message) throws IOException {

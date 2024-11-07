@@ -158,6 +158,13 @@
         bottom: 5px;
         left: -10px;
     }
+    
+    .chat-message .message-bubble iframe {
+	    width: 100%; /* 말풍선의 너비에 맞춰 YouTube iframe 크기 조절 */
+	    height: 200px; /* 적당한 높이 지정 */
+	    border-radius: 5px;
+	    border: none;
+	}
 
 </style>
 </head>
@@ -183,7 +190,7 @@
 		    </c:choose>">
 		        <div class="message-bubble">
 		        <c:choose>
-		        	<c:when test="${msg.message_type eq 'TEXT'}">
+		        	<c:when test="${msg.message_type eq 'TEXT' || msg.message_type eq 'LINK'}">
 			            <div>${msg.message_text}</div>		        	
 		        	</c:when>
 		        	<c:otherwise>
@@ -267,35 +274,55 @@
 	}
 	
 	// WebSocket 수신 시 메시지 처리
-	socket.onmessage = function(event) {
-	    const chatMessages = document.getElementById('chatMessages');
-	    const [msgRoomId, msgUserId, msgType, msgContent, msgRead, msgDate] = event.data.split('#');
-	
-	    if (msgRoomId === roomId) {
-	        const msgDiv = document.createElement('div');
-	        const isOwnMessage = msgUserId === now_id;
-	        msgDiv.className = "chat-message " + (isOwnMessage ? 'right' : 'left');
-	
-	        let contentHTML = '';
-	        if (msgType === 'TEXT') {
-	            contentHTML = '<div>' + msgContent + '</div>';
-	        } else if (msgType === 'IMAGE') {
-	            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
-	        }
-	
-	        msgDiv.innerHTML =
-	            '<div class="message-bubble">' +
-	                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
-	                contentHTML +
-	                '<div class="message-info">' +
-	                    msgUserId + ' • ' + msgDate +
-	                '</div>' +
-	            '</div>';
-	
-	        chatMessages.appendChild(msgDiv);
-	        chatMessages.scrollTop = chatMessages.scrollHeight;
-	    }
-	};
+socket.onmessage = function(event) {
+    const chatMessages = document.getElementById('chatMessages');
+    const data = event.data.split('#');
+    const msgRoomId = data[0];
+    const msgUserId = data[1];
+    const msgType = data[2];
+    const msgContent = data[3];
+    const msgRead = data[4];
+    const msgDate = data[5];
+
+    if (msgRoomId === roomId) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
+
+        let contentHTML = '';
+        if (msgType === 'TEXT') {
+            contentHTML = '<div>' + msgContent + '</div>';
+        } else if (msgType === 'IMAGE') {
+            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
+        } else if (msgType === 'LINK') {
+            if (msgContent.includes('<iframe')) {
+                contentHTML = msgContent; // YouTube HTML
+            } else {
+                const previewParts = msgContent.split('#preview=');
+                const textContent = previewParts[0];
+                const previewData = JSON.parse(previewParts[1]);
+                contentHTML = 
+                    '<div>' + textContent + '</div>' +
+                    '<div class="preview">' +
+                        '<a href="' + previewData.url + '" target="_blank">' +
+                            '<img src="' + previewData.image + '" alt="' + previewData.title + '" style="width: 60px; height: 60px; border-radius: 5px;">' +
+                            '<div><strong>' + previewData.title + '</strong></div>' +
+                            '<div>' + previewData.description + '</div>' +
+                        '</a>' +
+                    '</div>';
+            }
+        }
+
+        msgDiv.innerHTML =
+            '<div class="message-bubble">' +
+                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
+                contentHTML +
+                '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>' +
+            '</div>';
+        
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+};
 
 
     // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.

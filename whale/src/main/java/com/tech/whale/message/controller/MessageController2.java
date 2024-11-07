@@ -1,9 +1,7 @@
 package com.tech.whale.message.controller;
 
 import com.tech.whale.message.dao.MessageDao;
-import com.tech.whale.message.dto.AllChatListDto;
-import com.tech.whale.message.dto.FollowListDto;
-import com.tech.whale.message.dto.ReadChatDto;
+import com.tech.whale.message.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

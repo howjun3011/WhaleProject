@@ -15,5 +15,6 @@ public class HomeMessage {
     private String messageType;
     private String messageText;
     private String timeDifference;
+    private String userImageUrl;
 
 }

@@ -86,10 +86,10 @@
         </a>
     </div>
 
-    <div class="scroll-content">
+    <div class="scroll-content" id="chatList">
         <c:forEach var="list" items="${allChatList}">
             <a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}">
-                <div class="room-list">
+                <div class="room-list" id="chat-${list.user_id}" data-read-id="${list.unread_message_count}">
                     <img src="${pageContext.request.contextPath}/static/images/setting/${list.user_image_url}"
                          alt="user-img">
                     <div class="chat">
@@ -130,9 +130,10 @@
 
     // WebSocket 연결 설정
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const socketUrl = protocol + window.location.host + "${pageContext.request.contextPath}/home?userId=" + encodeURIComponent(now_id);
+    const socketUrl = protocol + "25.5.112.217:9002/whale/home?userId=" + now_id;
     const socket = new WebSocket(socketUrl);
 
+    console.log(socketUrl);
     socket.onopen = function() {
         console.log("Home WebSocket 연결 성공");
     };
@@ -156,15 +157,18 @@
         const messageType = homeMessage.messageType;
         let messageText = homeMessage.messageText;
         const timeDifference = homeMessage.timeDifference;
+        const userImageUrl = homeMessage.userImageUrl;
 
         // 기존 채팅 목록에서 senderId에 해당하는 요소 찾기
         const chatElement = document.getElementById('chat-' + senderId);
+        console.log(messageType);
+        console.log(chatElement);
         if (chatElement) {
             // 읽지 않은 메시지 수 업데이트
+            const unreadBefore = parseInt(chatElement.getAttribute('data-read-id')) || 0;
             let unreadCount = parseInt(chatElement.getAttribute('data-unread-count')) || 0;
             unreadCount += 1;
             chatElement.setAttribute('data-unread-count', unreadCount);
-
             // 메시지 유형에 따른 텍스트 설정
             if (messageType === 'IMAGE') {
                 messageText = "이미지를 보냈습니다.";
@@ -179,21 +183,21 @@
             } else {
                 messageText = "알 수 없는 메시지 유형입니다.";
             }
-
             // 새로운 메시지 HTML 생성
             let newMessageHTML = '';
-            if (unreadCount > 0) {
+            const totalUnreadCount = unreadCount + unreadBefore;
+            if (totalUnreadCount > 0) {
                 newMessageHTML = `
                     <div class="new-message">
-                        <span>새 메시지 ${unreadCount}개</span>&nbsp;&nbsp;
-                        <div class="diff">${timeDifference}</div>
+                        <span>새 메시지 \${totalUnreadCount}개</span>&nbsp;&nbsp;
+                        <div class="diff">\${timeDifference}</div>
                     </div>
                 `;
             } else {
                 newMessageHTML = `
                     <div class="before-message">
-                        <span>${messageText}</span>&nbsp;&nbsp;
-                        <div class="diff">${timeDifference}</div>
+                        <span>\${messageText}</span>&nbsp;&nbsp;
+                        <div class="diff">\${timeDifference}</div>
                     </div>
                 `;
             }
@@ -202,42 +206,32 @@
             const chatDiv = chatElement.querySelector('.chat');
             chatDiv.innerHTML = `
                 <div class="user-nickname">
-                    <span>${chatDiv.querySelector('.user-nickname span').textContent}</span>
+                    <span>\${chatDiv.querySelector('.user-nickname span').textContent}</span>
                 </div>
-                ${newMessageHTML}
+                \${newMessageHTML}
             `;
 
-            // 읽지 않은 메시지 배지 업데이트
-            const unreadBadge = chatElement.querySelector('.unread-badge');
-            if (unreadBadge) {
-                unreadBadge.textContent = unreadCount;
-            } else {
-                const badge = document.createElement('span');
-                badge.className = 'unread-badge';
-                badge.textContent = unreadCount;
-                chatElement.appendChild(badge);
-            }
 
             // 채팅 목록을 맨 위로 이동
             const chatList = document.getElementById('chatList');
             chatList.insertBefore(chatElement.parentElement, chatList.firstChild);
         } else {
+        	console.log(userImageUrl);
             // 새로운 채팅 목록 추가 (기존에 없을 경우)
             const chatList = document.getElementById('chatList');
             const newChatHTML = `
-                <a href="${pageContext.request.contextPath}/messageGo?u=${senderId}">
-                    <div class="room-list" id="chat-${senderId}" data-unread-count="1">
-                        <img src="${pageContext.request.contextPath}/static/images/setting/default.png" alt="user-img">
+                <a href="${pageContext.request.contextPath}/messageGo?u=\${senderId}">
+                    <div class="room-list" id="chat-\${senderId}" data-unread-count="1">
+                    <img src="${pageContext.request.contextPath}/static/images/setting/\${userImageUrl}" alt="user-img">
                         <div class="chat">
                             <div class="user-nickname">
-                                <span>${senderId}</span>
+                                <span>\${senderId}</span>
                             </div>
                             <div class="new-message">
                                 <span>새 메시지 1개</span>&nbsp;&nbsp;
-                                <div class="diff">${timeDifference}</div>
+                                <div class="diff">\${timeDifference}</div>
                             </div>
                         </div>
-                        <span class="unread-badge">1</span>
                     </div>
                 </a>
             `;

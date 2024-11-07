@@ -566,16 +566,28 @@ function navigateToLikedTracks() {
 }
 
 // 좋아요 표시한 곡 페이지에서 좋아요 제거
-async function toggleTrackLike(trackId, button) {
+async function toggleTrackLike(artistName, trackName, albumName, trackCover, trackId, button) {
+	const body = {
+        artistName: artistName,
+        trackName: trackName,
+        albumName: albumName,
+        trackCover: trackCover,
+        trackSpotifyId: trackId
+    };
+	
     try {
         const response = await fetch('/whale/streaming/toggleTrackLike', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ trackSpotifyId: trackId })
+            body: JSON.stringify(body)
         });
-        button.querySelector("path").setAttribute("d", "");
+        
+        const data = await response.json();
+        
+        if (data.result === 'deleted') {button.querySelector("path").setAttribute("d", "");}
+        else {button.querySelector("path").setAttribute("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");}
     } catch (error) {
         console.error("Error toggling like status:", error);
     }

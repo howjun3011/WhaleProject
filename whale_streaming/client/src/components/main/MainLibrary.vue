@@ -85,7 +85,7 @@ export default {
             }
         },
         getUserLikeCnt() {
-            fetch('/whale/streaming/getUserLikeCntInfo')
+            fetch(`http://localhost:9002/whale/streaming/likeCnt?userId=${ sessionStorage.userId }`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.likeCnt = data;

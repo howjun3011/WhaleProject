@@ -56,11 +56,21 @@
 			t.TRACK_ARTIST AS track_artist,
 			t.TRACK_NAME AS track_name,
 			t.TRACK_ALBUM AS track_album,
-			t.TRACK_COVER AS track_cover
+			t.TRACK_COVER AS track_cover,
+			tl.TRACK_LIKE_DATE AS track_like_date
 		FROM
 			TRACK_LIKE tl
 				JOIN TRACK t ON tl.TRACK_ID = t.TRACK_ID
 		WHERE
 			tl.USER_ID = #{userId}
 	</select>
+	
+	<select id="getLikeCountInfo" resultType="Integer">
+		SELECT COUNT(*) FROM TRACK_LIKE WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="getTrackLikeCountInfo" resultType="Integer">
+		SELECT COUNT(*) FROM TRACK_LIKE WHERE USER_ID = #{userId} AND TRACK_ID = #{trackSpotifyId}
+	</select>
+	
 </mapper>

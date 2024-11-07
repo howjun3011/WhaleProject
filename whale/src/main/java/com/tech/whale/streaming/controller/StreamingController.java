@@ -193,8 +193,8 @@ public class StreamingController {
 			model.addAttribute("albums", albums.getItems());
 
 			// 연관된 아티스트 가져오기
-//			Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);  // 메서드가 구현되어 있어야 함
-//			model.addAttribute("relatedArtists", relatedArtists);
+			// Artist[] relatedArtists = streamingService.getRelatedArtists(session, artistId);  // 메서드가 구현되어 있어야 함
+			// model.addAttribute("relatedArtists", relatedArtists);
 
 			// 관련 플레이리스트 가져오기
 			List<PlaylistSimplified> relatedPlaylists = streamingService.getRelatedPlaylists(artistDetail.getName(), session);

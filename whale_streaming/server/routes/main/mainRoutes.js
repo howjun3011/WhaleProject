@@ -10,7 +10,6 @@ const playlistService = require('../../service/spotify/playlistService');
 const playerService = require('../../service/spotify/playerService');
 const infoService = require('../../service/spotify/infoService');
 const searchService = require('../../service/spotify/searchService');
-const userLikeService = require('../../service/node/userLikeService');
 
 
 // [ 2. 라우터 사용 ]
@@ -92,29 +91,6 @@ router.get('/getArtistPlaylist', async (req, res) => {
 router.get('/getAlbumInfo', async (req, res) => {
     const results = await infoService.albumInfoService(req, res);
     res.json(results);
-});
-
-router.get('/getUserLikeCntInfo', async (req, res) => {
-    const results = await userLikeService.userLikeCntService(req, res);
-    res.json(results);
-});
-
-router.get('/getUserLikeInfo', async (req, res) => {
-    const results = await userLikeService.userLikeService(req, res);
-    res.json(results);
-});
-
-router.get('/getUserLikeTrackInfo', async (req, res) => {
-    const results = await userLikeService.userLikeTrackService(req, res);
-    res.json(results);
-});
-
-router.get('/userDeleteLikeInfo', async (req, res) => {
-    await userLikeService.userDeleteLikeService(req, res);
-});
-
-router.get('/userInsertLikeInfo', async (req, res) => {
-    await userLikeService.userInsertLikeService(req, res);
 });
 
 

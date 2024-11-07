@@ -155,12 +155,12 @@
                                     <c:forEach var="playHistory" items="${recentlyPlayedTracks}">
                                         <div class="recentlyPlayedTrack" data-track-id="${playHistory.track.id}">
                                             <div class="recentlyPlayedTrackLike"
-                                                 onclick="insertTrackLike('<c:out
-                                                         value="${playHistory.track.album.images[0].url}"/>', '<c:out
-                                                         value="${fn:escapeXml(playHistory.track.name)}"/>', '<c:out
-                                                         value="${fn:escapeXml(playHistory.track.artists[0].name)}"/>', '
-                                                     <c:out
-                                                             value="${fn:escapeXml(playHistory.track.album.name)}"/>', '${playHistory.track.id}', false)">
+                                                 onclick="insertTrackLike('<c:out value="${playHistory.track.album.images[0].url}"/>',
+                                                 						  '<c:out value="${fn:escapeXml(playHistory.track.name)}"/>',
+                                                 						  '<c:out value="${fn:escapeXml(playHistory.track.artists[0].name)}"/>',
+                                                 						  '<c:out value="${fn:escapeXml(playHistory.track.album.name)}"/>',
+                                                 						  '${playHistory.track.id}',
+                                                 						  false)">
                                                 <img src="${pageContext.request.contextPath}/static/images/streaming/like.png"
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -730,23 +730,23 @@
                         </div>
                     </c:when>
                     <c:when test="${page == 'likedTracks'}">
-                        <div class="likedTracks">
-                            <div class="likedTracksHeader">
+                        <div class="playlistDetail">
+                        	<div class="playListInfo">
                                 <img src="https://misc.scdn.co/liked-songs/liked-songs-300.png" width="170"
                                      height="170" style="border-radius: 8px;">
-                                <div class="likedTracksInfo">
-                                    <p class="detailSort">플레이리스트</p>
-                                    <h1 id="likedTracksName">좋아요 표시한 곡</h1>
-                                    <p>WHALE • ${fn:length(likedTracks)}곡</p>
+                                <div>
+                                    <p class="detailSort" style="padding-bottom: 5px;">플레이리스트</p>
+                                    <h1 id="playlistName">좋아요 표시한 곡</h1>
+                                    <p class="playlistOpt" style="margin-left: 5px;">WHALE • ${fn:length(likedTracks)}곡</p>
                                 </div>
                             </div>
-                            <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
+                            <div class="playlist-tracks" style="height: 25px; margin-top: 40px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">앨범</div>
                                 <div class="playlist-tracks-top" style="justify-content: center;">좋아요</div>
                             </div>
-                            <div class="likedTracksList">
+                            <div class="playlistTracks">
                                 <c:forEach var="track" items="${likedTracks}" varStatus="status">
                                     <div class="trackItem" style="${status.last ? 'padding-bottom: 20px;' : ''}">
                                         <!-- 순위 표시 -->
@@ -778,7 +778,7 @@
                                            onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
                                         <!-- 좋아요 제거 버튼 -->
                                         <button class="toggleLikeButton"
-                                                onclick="toggleTrackLike('${track.track_id}', this)"
+                                                onclick="toggleTrackLike('${track.track_artist}', '${track.track_name}', '${track.track_album}', '${track.track_cover}', '${track.track_id}', this)"
                                                 style="cursor: pointer;">
                                             <svg class="icon" style="width: 20px; filter: invert(1);"
                                                  viewBox="0 0 24 24">

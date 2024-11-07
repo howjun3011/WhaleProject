@@ -128,5 +128,4 @@
 		ORDER BY
 		MAX(M.MESSAGE_CREATE_DATE) DESC
 	</select>
-	    
 </mapper>

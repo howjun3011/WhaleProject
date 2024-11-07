@@ -183,7 +183,7 @@
 		    </c:choose>">
 		        <div class="message-bubble">
 		        <c:choose>
-		        	<c:when test="${msg.message_type eq TEXT}">
+		        	<c:when test="${msg.message_type eq 'TEXT'}">
 			            <div>${msg.message_text}</div>		        	
 		        	</c:when>
 		        	<c:otherwise>

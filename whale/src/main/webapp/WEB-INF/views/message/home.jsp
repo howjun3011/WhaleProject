@@ -38,7 +38,7 @@
         .room-list {
             display: flex;
             align-items: center;
-            margin: 10px 10px;
+            margin: 20px 10px;
             padding: 0px 35px;
         }
         .user-nickname {

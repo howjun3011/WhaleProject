@@ -297,6 +297,7 @@
 	    }
 	};
 
+
     // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.
     window.onload = function() {
         const chatMessages = document.getElementById('chatMessages');

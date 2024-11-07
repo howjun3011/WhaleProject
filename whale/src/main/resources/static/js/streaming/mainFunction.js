@@ -517,8 +517,6 @@ async function insertTrackLike(coverUrl, trackName, artistName, albumName, track
             method: 'POST',
             body: JSON.stringify(body)
         });
-
-        toggleLikeButton(trackId);
     } catch (error) {
         console.error('Error while updating the Track Like Data:', error);
     } finally {
@@ -643,7 +641,7 @@ async function checkTrackLikeStatus(trackId, trackElement) {
             imgElement.src = `${window.contextPath}/static/images/streaming/like.png`;
         }
     } catch (error) {
-        console.error("Error checking track like status:", error);
+        // console.error("Error checking track like status:", error);
     }
 }
 
@@ -878,21 +876,23 @@ function updateSearchAlbumsLeftContentScrollButtons() {
     const container = document.querySelector('.searchAlbumsWrap');
     const scrollLeftBtn = document.getElementById('searchAlbumsScrollLeftBtn');
     const scrollRightBtn = document.getElementById('searchAlbumsScrollRightBtn');
-
-    // 왼쪽 버튼 보이기/숨기기
-    if (container.scrollLeft > 0) {
-        scrollLeftBtn.classList.remove('hidden');
-    } else {
-        scrollLeftBtn.classList.add('hidden');
-    }
-
-    // 오른쪽 버튼 보이기/숨기기
-    const maxScrollLeft = container.scrollWidth - container.clientWidth;
-    if (container.scrollLeft < maxScrollLeft) {
-        scrollRightBtn.classList.remove('hidden');
-    } else {
-        scrollRightBtn.classList.add('hidden');
-    }
+    
+    if (container) {
+		// 왼쪽 버튼 보이기/숨기기
+	    if (container.scrollLeft > 0) {
+	        scrollLeftBtn.classList.remove('hidden');
+	    } else {
+	        scrollLeftBtn.classList.add('hidden');
+	    }
+	
+	    // 오른쪽 버튼 보이기/숨기기
+	    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+	    if (container.scrollLeft < maxScrollLeft) {
+	        scrollRightBtn.classList.remove('hidden');
+	    } else {
+	        scrollRightBtn.classList.add('hidden');
+	    }
+	}
 }
 
 // 왼쪽으로 스크롤하는 함수
@@ -913,7 +913,9 @@ function scrollRightSearchAlbumsContent() {
 document.addEventListener("DOMContentLoaded", () => {
     updateSearchAlbumsLeftContentScrollButtons(); // 초기 상태 설정
     const container = document.querySelector('.searchAlbumsWrap');
-    container.addEventListener('scroll', updateSearchAlbumsLeftContentScrollButtons); // 스크롤 이벤트 감지
+    if (container) {
+		container.addEventListener('scroll', updateSearchAlbumsLeftContentScrollButtons); // 스크롤 이벤트 감지
+	}
 });
 
 // 검색창 플레이리스트 스크롤 이동 함수
@@ -921,21 +923,23 @@ function updateSearchPlayListContentScrollButtons() {
     const container = document.querySelector('.searchRelatedPlaylists');
     const scrollLeftBtn = document.getElementById('searchPlayListScrollLeftBtn');
     const scrollRightBtn = document.getElementById('searchPlayListScrollRightBtn');
-
-    // 왼쪽 버튼 보이기/숨기기
-    if (container.scrollLeft > 0) {
-        scrollLeftBtn.classList.remove('hidden');
-    } else {
-        scrollLeftBtn.classList.add('hidden');
-    }
-
-    // 오른쪽 버튼 보이기/숨기기
-    const maxScrollLeft = container.scrollWidth - container.clientWidth;
-    if (container.scrollLeft < maxScrollLeft) {
-        scrollRightBtn.classList.remove('hidden');
-    } else {
-        scrollRightBtn.classList.add('hidden');
-    }
+    
+    if (container) {
+		// 왼쪽 버튼 보이기/숨기기
+	    if (container.scrollLeft > 0) {
+	        scrollLeftBtn.classList.remove('hidden');
+	    } else {
+	        scrollLeftBtn.classList.add('hidden');
+	    }
+	
+	    // 오른쪽 버튼 보이기/숨기기
+	    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+	    if (container.scrollLeft < maxScrollLeft) {
+	        scrollRightBtn.classList.remove('hidden');
+	    } else {
+	        scrollRightBtn.classList.add('hidden');
+	    }
+	}
 }
 
 // 왼쪽으로 스크롤하는 함수
@@ -956,5 +960,7 @@ function scrollRightSearchPlayListContent() {
 document.addEventListener("DOMContentLoaded", () => {
     updateSearchPlayListContentScrollButtons(); // 초기 상태 설정
     const container = document.querySelector('.searchRelatedPlaylists');
-    container.addEventListener('scroll', updateSearchPlayListContentScrollButtons); // 스크롤 이벤트 감지
+    if (container) {
+		container.addEventListener('scroll', updateSearchPlayListContentScrollButtons); // 스크롤 이벤트 감지
+	}
 });

@@ -352,6 +352,7 @@ public class StreamingController {
 
 	// 스트리밍 메인 좋아요 버튼
 	@PostMapping(value = "/streaming/toggleTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public HashMap<String, Object> toggleTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
 		HashMap<String, Object> response = new HashMap<>();
 		String trackSpotifyId = map.get("trackSpotifyId").toString();

@@ -255,11 +255,13 @@
     function sendMessage() {
         const messageInput = document.getElementById("messageInput");
         const message = messageInput.value.trim();
-        if (message) {
+
+		if (message) {
             const payload = `${roomId}:${now_id}:\${message}`;
             socket.send(payload);
             messageInput.value = "";
         }
+
     }
 
     // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.

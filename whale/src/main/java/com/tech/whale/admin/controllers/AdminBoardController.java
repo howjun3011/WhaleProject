@@ -60,6 +60,12 @@ public class AdminBoardController {
     public String addUserIdToModel(HttpSession session) {
         return (String) session.getAttribute("user_id");
     }
+	@ModelAttribute("myImgUrl")
+	public String myImgUrl(Model model) {
+		String myId = (String)model.getAttribute("myId");
+		String myImgSty = adminIDao.myImg(myId);
+		return myImgSty;
+	}
 	
 	public void boardSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();

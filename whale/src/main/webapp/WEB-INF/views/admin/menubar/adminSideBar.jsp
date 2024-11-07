@@ -12,9 +12,9 @@
 
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
  	<div class="profile">
- 	<div style="height:60px; width:100px;
- 					 background-color: #999; margin: 20px auto;" >
- 		<img src="" alt="" /> <br />
+ 	<div style="height:80px; width:80px; border-radius: 50%;
+ 					 background-color: #fff; margin: 20px auto;" >
+ 		<img src="/whale/static/images/setting/${myImgUrl }" alt="user_img" style="height:80px; width:80px; border-radius: 50%" /> <br />
  	</div>
     </div>
  	<div class="logoutstr">
@@ -23,10 +23,10 @@
     </div>
     <ul>
 		<li><a href="adminMainView">관리자메인</a></li>
-	    <li><a href="adminAccountOfficialListView">계정관리</a></li>
+	    <li><a href="adminAccountUserListView">계정관리</a></li>
 	    <li><a href="adminBoardListView">게시판</a></li>
 	    <li><a href="adminReportListView">신고|문의</a></li>
-	    <li><a href="">광고현황</a></li>
+	    <li><a href="adminNoticeListView">공지사항</a></li>
 	    <li><a href="">매출</a></li>
 	    <li><a href="">통계</a></li>
 	    <li><a href="">관리자설정</a></li>

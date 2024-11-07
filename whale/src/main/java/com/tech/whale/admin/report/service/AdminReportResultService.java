@@ -3,7 +3,6 @@ package com.tech.whale.admin.report.service;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,6 @@ import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dao.AdminReportIDao;
-import com.tech.whale.admin.dto.AdminAccessDto;
-import com.tech.whale.admin.dto.AdminReportResultDto;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 
 @Service
@@ -25,7 +21,6 @@ public class AdminReportResultService implements AdminServiceInter{
 	@Autowired
 	private AdminIDao adminIDao;
 	
-	
 	@Override
 	@Transactional
 	public void execute(Model model) {
@@ -35,49 +30,32 @@ public class AdminReportResultService implements AdminServiceInter{
 		
 		int report_id = Integer.parseInt(request.getParameter("report_id"));
 		String writingType = request.getParameter("writingType");
-		String writingId = request.getParameter("writingId");
+		int writingId = Integer.parseInt(request.getParameter("writingId"));
 		String userStatus = request.getParameter("userStatus");
 		String writingStatus = request.getParameter("writingStatus");
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
-		System.out.println("신고결과 서비스 1번 : " + report_id);
-		System.out.println("신고결과 서비스 1번 : " + writingType);
-		System.out.println("신고결과 서비스 1번 : " + writingId);
-		System.out.println("신고결과 서비스 1번 : " + userStatus);
-		System.out.println("신고결과 서비스 1번 : " + writingStatus);
-		System.out.println("신고결과 서비스 1번 : " + myId);
-		System.out.println("신고결과 서비스 1번 : " + statusReason);
-		System.out.println("신고결과 서비스 1번 : " + userId);
 		int myAdminId = adminIDao.myAdminId(myId);
 		
-		if(userStatus =="0") {
+		if(writingStatus.equals("0")) {
+			writingStatus="-";
+		}else if(writingStatus.equals("1")) {
+			writingStatus="작성글 삭제";
+		}
+		
+		if(userStatus.equals("0")) {
 			userStatus="-";
-		}else if(userStatus =="1") {
+			adminReportIDao.reportResult(
+					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,0);
+		}else if(userStatus.equals("1")) {
 			userStatus="1일 정지";
-		}else if(userStatus =="2") {
+			adminReportIDao.reportResult(
+					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,1);
+		}else if(userStatus.equals("2")) {
 			userStatus="영구 정지";
 		}
 		
-		if(writingStatus =="0") {
-			writingStatus="-";
-		}else if(writingStatus =="1") {
-			writingStatus="1일 정지";
-		}
-		
-		if(userStatus !="0") {
-			adminReportIDao.reportResult(
-					report_id,"user",userId,myAdminId,userStatus,statusReason);
-		}
-		if(writingStatus !="0") {
-			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myAdminId,writingStatus,statusReason);
-		}
-		if(userStatus == "0" && writingStatus =="0"){
-			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myAdminId,userStatus,statusReason);
-		}
-		System.out.println("reportAdminCh 전까지");
 		adminReportIDao.reportAdminCh(report_id);
 	}
 	
@@ -91,6 +69,7 @@ public class AdminReportResultService implements AdminServiceInter{
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
+		
 		
 		if(userStatus >= 1) {
 			userStatus = 1;
@@ -123,10 +102,15 @@ public class AdminReportResultService implements AdminServiceInter{
 			adminIDao.feedCommentsDel(writingId);
 			adminIDao.feedDel(writingId);
 		} else if(writingType.equals("feed_comments")) {
-			int feed_id = adminIDao.pfIdFind(writingType,writingId);
-			adminIDao.feedCommentsOneDelLog(writingId,feed_id,myId,statusReason);
-			adminIDao.feedCommentsLikeOneDel(writingId);
-			adminIDao.feedCommentsOneDel(writingId);
+			Integer feed_id = adminIDao.pfIdFind(writingType,writingId);
+			if(feed_id != null) {
+				adminIDao.feedCommentsOneDelLog(writingId,feed_id,myId,statusReason);
+				adminIDao.feedCommentsParentDelLog(writingId,feed_id,myId,comments_del_reason);
+				adminIDao.feedCommentsLikeOneDel(writingId);
+				adminIDao.feedCommentsLikeParentDel(writingId);
+				adminIDao.feedCommentsParentDel(writingId);
+				adminIDao.feedCommentsOneDel(writingId);
+			}
 		} else if(writingType.equals("post")) {
 			adminIDao.postDelLog(writingId,myId,statusReason);
 			adminIDao.postCommentsDelLog(writingId,myId,comments_del_reason);
@@ -135,13 +119,15 @@ public class AdminReportResultService implements AdminServiceInter{
 			adminIDao.postCommentsDel(writingId);
 			adminIDao.postDel(writingId);
 		} else if(writingType.equals("post_comments")) {
-			int post_id = adminIDao.pfIdFind(writingType,writingId);
-			adminIDao.postCommentsOneDelLog(writingId,post_id,myId,statusReason);
-			adminIDao.postCommentsParentDelLog(writingId,post_id,myId,statusReason);
-			adminIDao.postCommentsLikeOneDel(writingId);
-			adminIDao.postCommentsLikeParentDel(writingId);
-			adminIDao.postCommentsParentDel(writingId);
-			adminIDao.postCommentsOneDel(writingId);
+			Integer post_id = adminIDao.pfIdFind(writingType,writingId);
+			if(post_id != null) {
+				adminIDao.postCommentsOneDelLog(writingId,post_id,myId,statusReason);
+				adminIDao.postCommentsParentDelLog(writingId,post_id,myId,comments_del_reason);
+				adminIDao.postCommentsLikeOneDel(writingId);
+				adminIDao.postCommentsLikeParentDel(writingId);
+				adminIDao.postCommentsParentDel(writingId);
+				adminIDao.postCommentsOneDel(writingId);
+			}
 		} else if(writingType.equals("message")) {
 			
 		}

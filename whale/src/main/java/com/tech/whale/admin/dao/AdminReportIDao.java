@@ -27,9 +27,13 @@ public interface AdminReportIDao {
 	public void reportResult(
 			@Param("report_id") int report_id, 
 			@Param("target_type") String target_type, 
-			@Param("target_id") String target_id, 
+			@Param("target_id") int target_id, 
 			@Param("myAdminId") int myAdminId, 
 			@Param("action") String action,
-			@Param("actionReason") String actionReason);
+			@Param("actionReason") String actionReason,
+			@Param("userId") String userId,
+			@Param("userStatus") String userStatus,
+			@Param("endDate") int endDate
+			);
 	public void reportAdminCh(int report_id);
 }

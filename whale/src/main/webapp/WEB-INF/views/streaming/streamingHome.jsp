@@ -631,7 +631,7 @@
                                                      style="border-radius: 4px; padding-left: 5px; cursor: pointer;">
                                             </c:if>
                                             <!-- 트랙 제목과 아티스트 이름 표시 -->
-                                            <p>${trackItem.track.name} - ${trackItem.track.artists[0].name}</p>
+                                            <p class="trackHover">${trackItem.track.name} - ${trackItem.track.artists[0].name}</p>
                                         </div>
                                         <!-- 앨범 이름 -->
                                         <p class="albumName"
@@ -776,11 +776,20 @@
                                         <p class="albumName"
                                            style="padding-left: 5px; cursor: pointer;"
                                            onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
+                                        <!-- 트랙의 길이 표시 (분/초 변환) -->
+<%--                                        <c:set var="minutes" value="${track.durationMs / 60000}"/>--%>
+<%--                                        <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}"/>--%>
+
+                                        <!-- 소수점 제거 후 출력 -->
+<%--                                        <p class="trackDuration" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>--%>
+                                        <p class="trackDuration">
+                                            <fmt:formatDate value="${track.track_like_date}" pattern="yyyy-MM-dd" />
+                                        </p>
                                         <!-- 좋아요 제거 버튼 -->
                                         <button class="toggleLikeButton"
                                                 onclick="toggleTrackLike('${track.track_artist}', '${track.track_name}', '${track.track_album}', '${track.track_cover}', '${track.track_id}', this)"
                                                 style="cursor: pointer;">
-                                            <svg class="icon" style="width: 20px; filter: invert(1);"
+                                            <svg class="icon" style="width: 20px; filter: invert(1); display: none;"
                                                  viewBox="0 0 24 24">
                                                 <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
                                                 <path d="${track.liked ? 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' : 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'}"></path>

@@ -21,5 +21,6 @@ public class AllChatListDto {
     private String last_message_text;
     private Timestamp last_message_create_date;
     private String last_message_sender_id;
+    private String last_message_type;
 
 }

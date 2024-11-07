@@ -68,21 +68,32 @@ public class MessageController2 {
 			}
 		}
 		
-		// 마지막으로 보낸 메시지가 텍스트면 그대로 저장 / 이미지면 이미지를 보냈습니다. / 음악이면 음악을 보냈습니다. 로 나눠서 last_message_text에 저장하기
+		// message_type에 따라서 text 다르게 출력
 		for (AllChatListDto list : allChatList) {
-			String lastMessageText = list.getLast_message_text();
+			String lastMessageType = list.getLast_message_type();
+			System.out.println(lastMessageType);
 
-			// 파일 확장자를 소문자로 변환해서 처리
-			String lowerCaseText = lastMessageText.toLowerCase();
-
-			// 이미지 파일 확장자 체크
-			if(lowerCaseText.endsWith(".jpg") || lowerCaseText.endsWith(".jpeg") || lowerCaseText.endsWith(".png")) {
+			if (lastMessageType == null) {
+				list.setLast_message_text("????");
+			} else if (lastMessageType.equals("IMAGE")) {
 				list.setLast_message_text("이미지를 보냈습니다.");
-			} else if(lowerCaseText.endsWith(".gif")) {
-				list.setLast_message_text("움짤을 보냈습니다.");
-			} else if (lowerCaseText.endsWith(".mp3") || lowerCaseText.endsWith(".wav") || lowerCaseText.endsWith(".flac")) {
+			} else if (lastMessageType.equals("LINK")) {
+				list.setLast_message_text("링크를 보냈습니다.");
+			} else if (lastMessageType.equals("MUSIC")) {
 				list.setLast_message_text("음악을 보냈습니다.");
-			} else{
+			} else if (lastMessageType.equals("TEXT")) {
+				// text가 너무 길면 앞부분 어느정도만 잘라서 뒤는 ...처리
+				String messageText = list.getLast_message_text();
+				int maxLength = 20;
+
+				if(messageText.length() > maxLength) {
+					String shortenedText = messageText.substring(0, maxLength) + "...";
+					list.setLast_message_text(shortenedText);
+				} else{
+					// 길이가 짧으면 그대로 사용
+					list.setLast_message_text(messageText);
+				}
+			} else {
 			}
 		}
 
@@ -91,6 +102,7 @@ public class MessageController2 {
 			System.out.println("User_id: " + list.getUser_id());
 			System.out.println("Last_message_text: " + list.getLast_message_text());
 			System.out.println("Time_difference: " + list.getTime_difference());
+			System.out.println("Message_type: " + list.getLast_message_type());
 			System.out.println("--------------------------");
 		}
 

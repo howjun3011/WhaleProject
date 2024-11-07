@@ -10,6 +10,8 @@
     <style>
         .container {
             padding: 20px 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .scroll-content {
             flex: 1;
@@ -20,6 +22,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
         }
         .header #back {
             position: absolute;
@@ -41,6 +45,9 @@
             background-color: whitesmoke;
             font-size: 15px;
             color: #B8B8B8;
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
         }
         .new-message{
             font-size: 20px;
@@ -88,7 +95,6 @@
     </style>
 </head>
 <body>
-<h1>newChat</h1>
 <div class="container">
     <div class="header">
         <a href="${pageContext.request.contextPath}/message/home" id="back"><img src="${pageContext.request.contextPath}/static/images/message/back.png" alt="back"></a>

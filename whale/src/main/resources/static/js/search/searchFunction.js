@@ -24,13 +24,13 @@ $(document).ready(() => {
     resize();
 
     // 검색 입력 변화 감지
-    $('#searchInput').on('input', function() {
+    $('#searchInput').on('input', function () {
         let keyword = $(this).val();
         getSearchResults(keyword);
     });
 
     // 탭 클릭 이벤트 처리
-    $('.mainSearchTab p').on('click', function() {
+    $('.mainSearchTab p').on('click', function () {
         // 활성 탭 스타일 업데이트
         $('.mainSearchTab p').removeClass('active');
         $(this).addClass('active');
@@ -62,9 +62,9 @@ function getSearchResults(keyword) {
     $.ajax({
         url: url,
         type: 'GET',
-        data: { keyword: keyword },
+        data: {keyword: keyword},
         dataType: 'json',
-        success: function(response) {
+        success: function (response) {
             if (response.success) {
                 if (currentSearchType === 'user') {
                     displayUserResults(response.userList);
@@ -78,7 +78,7 @@ function getSearchResults(keyword) {
                 $('.mainSearchResult').html('<p>검색 결과가 없습니다.</p>');
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             // AJAX 오류 처리
             $('.mainSearchResult').html('<p>오류가 발생했습니다. 다시 시도해주세요.</p>');
         }
@@ -94,12 +94,14 @@ function displayUserResults(userList) {
         return;
     }
 
-    userList.forEach(function(user) {
+    userList.forEach(function (user) {
         let userHtml = `
-            <div class="userItem">
-                <img src="/whale/static/images/setting/${user.user_image_url}" alt="${user.user_nickname}" />
-                <p>${user.user_nickname}</p>
-            </div>`;
+            <a href="/whale/profileHome?u=${encodeURIComponent(user.user_id)}" class="userLink">
+                <div class="userItem">
+                    <img src="/whale/static/images/setting/${user.user_image_url}" alt="${user.user_nickname}" />
+                    <p>${user.user_nickname}</p>
+                </div>
+            </a>`;
         resultDiv.append(userHtml);
     });
 }
@@ -113,7 +115,7 @@ function displayPostResults(postList) {
         return;
     }
 
-    postList.forEach(function(post) {
+    postList.forEach(function (post) {
         // 1. 이미지 태그 제거
         let cleanText = post.post_text.replace(/<img[^>]*>/g, '');
 
@@ -129,7 +131,7 @@ function displayPostResults(postList) {
                     textNodes.push(node);
                 }
             } else {
-                node.childNodes.forEach(function(child) {
+                node.childNodes.forEach(function (child) {
                     textNodes = textNodes.concat(getTextNodes(child));
                 });
             }
@@ -140,7 +142,7 @@ function displayPostResults(postList) {
 
         // 4. 텍스트 노드를 <p> 태그로 감싸고, 최대 두 개만 사용
         let fragment = doc.createDocumentFragment();
-        textNodes.slice(0, 1).forEach(function(textNode) {
+        textNodes.slice(0, 1).forEach(function (textNode) {
             let p = doc.createElement('p');
             p.textContent = textNode.textContent.trim();
             fragment.appendChild(p);
@@ -175,7 +177,7 @@ function displayFeedResults(feedList) {
     // 새로운 컨테이너 div 생성
     let containerDiv = $('<div class="feedContainer"></div>');
 
-    feedList.forEach(function(feed) {
+    feedList.forEach(function (feed) {
         let feedHtml = `
             <div class="feedItem">
 <!--                <p>${feed.feed_text}</p>-->

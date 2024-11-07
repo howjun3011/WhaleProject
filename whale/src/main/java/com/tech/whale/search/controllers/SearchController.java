@@ -10,11 +10,11 @@ import com.tech.whale.community.dto.PostDto;
 import com.tech.whale.feed.dto.FeedDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tech.whale.community.dto.PostDto;
+import com.tech.whale.feed.dto.FeedDto;
 import com.tech.whale.search.service.SearchService;
 import com.tech.whale.setting.dto.UserInfoDto;
 

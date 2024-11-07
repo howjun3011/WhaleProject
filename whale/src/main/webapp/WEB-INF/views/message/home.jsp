@@ -12,75 +12,62 @@
         .container {
             padding: 20px 20px;
         }
-
         .scroll-content {
             flex: 1;
             overflow-y: auto;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
-
         .left {
             display: flex;
             align-items: center;
         }
-
         .nowId {
             font-size: 25px;
             line-height: 30px; /* 이미지 높이와 동일하게 설정 */
         }
-
         #back img, #new-chat img {
             display: block;
             width: 30px;
             height: 30px;
         }
-
         .room-list {
             display: flex;
             align-items: center;
-            padding: 5px 5px;
             margin: 10px 10px;
+            padding: 0px 35px;
         }
-
         .user-nickname {
             font-weight: bold;
         }
-
         .room-list img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             margin-right: 10px;
         }
-
         .new-message {
             display: flex;
             font-weight: bold;
             line-height: 30px;
         }
-
         .before-message {
             display: flex;
             line-height: 30px;
         }
-
         .diff {
             font-weight: normal;
             display: flex;
             color: #999999;
         }
-
         a {
             text-decoration: none;
             color: black;
         }
-
         a:visited, a:hover, a:focus, a:active {
             color: black;
             text-decoration: none;

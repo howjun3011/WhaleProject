@@ -48,6 +48,7 @@
 
 	<select id="getFollowList" resultType="com.tech.whale.message.dto.FollowListDto">
 		<![CDATA[
+		-- minji를 팔로우하는 사람들 목록(팔로워)
 		SELECT
 			UI.USER_ID AS FOLLOW_USER_ID,
 			UI.USER_NICKNAME AS FOLLOW_USER_NICKNAME,
@@ -60,10 +61,23 @@
 						  WHERE USER_ID = #{now_id}
 					  )
 					 CONNECT BY LEVEL <= LENGTH(FOLLOW_USER_ID)
-		- LENGTH(REPLACE(FOLLOW_USER_ID, ',', '')) + 1
+                                 - LENGTH(REPLACE(FOLLOW_USER_ID, ',', '')) + 1
 			 ) B
-				 JOIN USER_INFO UI
-					  ON B.FOLLOW_USER_ID = UI.USER_ID
+				 JOIN USER_INFO UI ON B.FOLLOW_USER_ID = UI.USER_ID
+		UNION
+		-- minji가 팔로우하는 사람들 목록(팔로잉)
+		SELECT
+			UI.USER_ID AS FOLLOW_USER_ID,
+			UI.USER_NICKNAME AS FOLLOW_USER_NICKNAME,
+			UI.USER_IMAGE_URL AS FOLLOW_USER_IMAGE_URL
+		FROM (
+				 SELECT REGEXP_SUBSTR(USER_ID, '[^,]+', 1, LEVEL) AS FOLLOW_USER_ID
+				 FROM FOLLOW
+				 WHERE FOLLOW_USER_ID LIKE '%' || #{now_id} || '%'
+					 CONNECT BY LEVEL <= LENGTH(FOLLOW_USER_ID) - LENGTH(REPLACE(FOLLOW_USER_ID, ',', '')) + 1
+                AND ROWNUM = 1
+			 ) A
+				 JOIN USER_INFO UI ON A.FOLLOW_USER_ID = UI.USER_ID
 		]]>
 	</select>
 

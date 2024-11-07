@@ -7,6 +7,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.whale.Image.controller.LinkPreviewUtils;
 import com.tech.whale.message.dao.MessageDao;
 import com.tech.whale.message.dto.MessageDto;
@@ -49,7 +50,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
@@ -69,21 +69,27 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             messageDto.setUser_id(userId);
             messageDto.setMessage_create_date(new Date());
             messageDto.setMessage_type(messageType);
-            
+
             if ("TEXT".equals(messageType) && containsUrl(messageContent)) {
                 messageType = "LINK";
                 String url = extractUrl(messageContent);
                 
-                // 유튜브 링크인지 확인 후 iframe 생성
                 if (url.contains("youtube.com") || url.contains("youtu.be")) {
                     String embedHtml = fetchYouTubeEmbedHtml(url);
                     messageDto.setMessage_text(embedHtml);
-                    messageDto.setMessage_type(messageType);
+                    System.out.println("YouTube embed HTML created: " + embedHtml);
                 } else {
-                    // 일반 링크의 경우 미리보기 생성
                     Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(url);
-                    messageDto.setMessage_text(messageContent + "#preview=" + previewData);
-                    messageDto.setMessage_type(messageType);
+                    
+                    // 미리보기 데이터 확인
+                    if (previewData != null && !previewData.isEmpty()) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        String previewJson = mapper.writeValueAsString(previewData);
+                        messageDto.setMessage_text(messageContent + "#preview=" + previewJson);
+                        System.out.println("Preview data created for URL " + url + ": " + previewJson);
+                    } else {
+                        System.out.println("No preview data available for URL: " + url);
+                    }
                 }
             } else if ("IMAGE".equals(messageType)) {
                 messageDto.setMessage_text(messageContent);

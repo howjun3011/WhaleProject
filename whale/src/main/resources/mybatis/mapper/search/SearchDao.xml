@@ -37,19 +37,22 @@
 
 	<select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
         SELECT
-        	F.FEED_ID AS FEED_ID,
-        	F.USER_ID AS USER_ID,
-        	F.FEED_TEXT AS FEED_TEXT,
-        	F.FEED_DATE AS FEED_DATE,
-        	FM.TRACK_ID AS TRACK_ID,
-        	FT.FEED_TAG_TEXT AS FEED_TAG_TEXT,
-        	UI.USER_NICKNAME AS USER_NICKNAME,
-        	UI.USER_IMAGE_URL AS USER_IMAGE_URL
+			F.FEED_ID AS feed_id,
+			F.USER_ID AS user_id,
+			F.FEED_TEXT AS feed_text,
+			F.FEED_DATE AS feed_date,
+			FI.FEED_IMG_NAME AS feed_img_name,
+			FI.FEED_IMG_URL AS feed_img_url,
+			FM.TRACK_ID AS track_id,
+			FT.FEED_TAG_TEXT AS feed_tag_text,
+			UI.USER_NICKNAME AS user_nickname,
+			UI.USER_IMAGE_URL AS user_image_url
         FROM
         	FEED F
         		LEFT JOIN FEED_MUSIC FM ON FM.FEED_ID = F.FEED_ID
         		LEFT JOIN FEED_TAG FT ON FT.FEED_ID = F.FEED_ID
         		LEFT JOIN USER_INFO UI ON UI.USER_ID = F.USER_ID
+				LEFT JOIN FEED_IMG FI ON FI.FEED_ID = F.FEED_ID
         WHERE
         	F.FEED_OPEN = 0
         ORDER BY F.USER_ID, F.FEED_TEXT, UI.USER_NICKNAME

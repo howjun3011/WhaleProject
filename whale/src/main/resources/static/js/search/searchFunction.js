@@ -14,7 +14,7 @@ function resize() {
     const headerHeight = headerElement ? headerElement.offsetHeight : 0;
 
     if (mainElement) {
-        mainElement.style.height = `${windowHeight - headerHeight}px`;
+        mainElement.style.height = `${windowHeight - headerHeight - headerHeight}px`;
     }
 }
 
@@ -97,7 +97,7 @@ function displayUserResults(userList) {
     userList.forEach(function(user) {
         let userHtml = `
             <div class="userItem">
-                <img src="${user.user_image_url}" alt="${user.user_nickname}" />
+                <img src="/whale/static/images/setting/${user.user_image_url}" alt="${user.user_nickname}" />
                 <p>${user.user_nickname}</p>
             </div>`;
         resultDiv.append(userHtml);
@@ -114,15 +114,54 @@ function displayPostResults(postList) {
     }
 
     postList.forEach(function(post) {
+        // 1. 이미지 태그 제거
+        let cleanText = post.post_text.replace(/<img[^>]*>/g, '');
+
+        // 2. DOMParser를 사용하여 HTML 파싱
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(cleanText, 'text/html');
+
+        // 3. 모든 텍스트 노드 수집 (내용이 있는 것만)
+        function getTextNodes(node) {
+            let textNodes = [];
+            if (node.nodeType === Node.TEXT_NODE) {
+                if (node.textContent.trim() !== '') {
+                    textNodes.push(node);
+                }
+            } else {
+                node.childNodes.forEach(function(child) {
+                    textNodes = textNodes.concat(getTextNodes(child));
+                });
+            }
+            return textNodes;
+        }
+
+        let textNodes = getTextNodes(doc.body);
+
+        // 4. 텍스트 노드를 <p> 태그로 감싸고, 최대 두 개만 사용
+        let fragment = doc.createDocumentFragment();
+        textNodes.slice(0, 1).forEach(function(textNode) {
+            let p = doc.createElement('p');
+            p.textContent = textNode.textContent.trim();
+            fragment.appendChild(p);
+        });
+
+        // 5. 결과 HTML 생성
+        let tempDiv = doc.createElement('div');
+        tempDiv.appendChild(fragment);
+        let finalContent = tempDiv.innerHTML;
+
+        // 6. 게시글 HTML 구성
         let postHtml = `
             <div class="postItem">
                 <h3>${post.post_title}</h3>
-                <p>${post.post_text}</p>
+                ${finalContent}
                 <span>${post.user_nickname}</span>
             </div>`;
         resultDiv.append(postHtml);
     });
 }
+
 
 function displayFeedResults(feedList) {
     let resultDiv = $('.mainSearchResult');
@@ -133,12 +172,18 @@ function displayFeedResults(feedList) {
         return;
     }
 
+    // 새로운 컨테이너 div 생성
+    let containerDiv = $('<div class="feedContainer"></div>');
+
     feedList.forEach(function(feed) {
         let feedHtml = `
             <div class="feedItem">
-                <p>${feed.feed_text}</p>
-                <span>${feed.user_nickname}</span>
+<!--                <p>${feed.feed_text}</p>-->
+<!--                <span>${feed.user_nickname}</span>-->
+                ${feed.feed_img_url ? `<img src="/whale/static/images/feed/${feed.feed_img_name}" alt="Feed Image">` : ''}
             </div>`;
-        resultDiv.append(feedHtml);
+        containerDiv.append(feedHtml);
     });
+
+    resultDiv.append(containerDiv);
 }

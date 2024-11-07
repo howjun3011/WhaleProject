@@ -42,7 +42,22 @@
                     <p style="cursor: pointer;" @click="redirectRouter('track',item.id)">{{ item.name }} - {{ item.artists[0].name }}</p>
                 </div>
                 <div class="playlist-tracks-content" style="padding-left: 5px; font-size: 13px; cursor: pointer;" @click="redirectRouter('album',item.album.id)">{{ item.album.name }}</div>
-                <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
+                <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;" v-if="!isShow[i]">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
+                <div class="playlist-tracks-content" style="justify-content: center;" v-if="isShow[i]">
+                    <svg
+                        data-encore-id="icon"
+                        role="img"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        class="playlistTrackBtn likeBtn"
+                        :style="{ fill: like[i] === true ? 'rgb(203, 130, 163)' : '#000000' }"
+                        @click="changeTrackLikeInfo(item.artists[0].name, item.name, item.album.name, item.album.images[0].url, item.id, i)"
+                    >
+                        <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                        ></path>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
@@ -110,6 +125,9 @@ export default {
             album: null,
             playlist: null,
             isShow: [],
+            like: [],
+            isPlayed: [],
+            position: [],
         }
     },
     mounted() {
@@ -127,6 +145,9 @@ export default {
                     .then((response) => response.json())
                     .then((data) => {
                         this.track = data;
+                        this.track.tracks.forEach((el, index) => {
+                            this.getTrackLikeInfo(el.id,index);
+                        });
                     })
                 fetch(`/whale/streaming/getArtistAlbum?id=${this.$route.params.id}`)
                     .then((response) => response.json())
@@ -144,6 +165,7 @@ export default {
                             this.checkArtistDetailPlaylistScroll();
                         });
                     })
+
             } else {
                 console.error('Failed to fetch user top items:', result.statusText);
             }
@@ -163,7 +185,9 @@ export default {
             document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
         },
         addIsShow(i) {
+            this.isPlayed.push(false);
             this.isShow.push(false);
+            this.position.push(0);
             return this.isShow[i];
         },
         updateArtistDetailScrollButtons() {
@@ -250,6 +274,38 @@ export default {
         redirectPlaylistRouter(i) {
             this.$router.replace(`/whale/streaming/playlist/${i}`);
         },
+        getTrackLikeInfo(i,j) {
+            fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.like[j] = data;
+                })
+        },
+        changeTrackLikeInfo(a,b,c,d,e,x){
+            if (this.like[x] === false) {
+                const body = {
+                    userId: sessionStorage.userId,
+                    artistName: a,
+                    trackName: b,
+                    albumName: c,
+                    trackCover: d,
+                    trackSpotifyId: e
+                };
+
+                fetch(`http://localhost:9002/whale/streaming/insertTrackLikeNode`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+            else {
+                fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
+            }
+            this.like[x] = !this.like[x];
+        }
     },
 };
 </script>
@@ -267,6 +323,7 @@ export default {
     .playlist-tracks-content {display: flex; align-items: center; height: 32px; color: #ffffff; font-size: 14px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
     .playlistTrackBtn:hover {opacity: 0.8;}
     .playlistTrackBtn:active {opacity: 0.6;}
+    .likeBtn {height: 16px; cursor: pointer;}
     .artistContainer {position: relative; margin: 40px 0 10px 20px; width: 95%;}
     .artistFont {color: white; margin: 0 0 15px 10px;}
     .albumsWrap{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin-left: 5px;}

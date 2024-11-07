@@ -36,19 +36,24 @@ public class MessageController2 {
 		}
 
 		// allChatList를 순회하면서 필요한 데이터 설정
+		// allChatList를 순회하면서 필요한 데이터 설정
 		for (AllChatListDto list : allChatList) {
 			// 시간 차이 계산 (항상 수행)
 			Timestamp lastMessageDate = list.getLast_message_create_date();
 			long diffMillis = System.currentTimeMillis() - lastMessageDate.getTime();
-			int minutes = (int) (diffMillis / (60 * 1000));
+			int seconds = (int) (diffMillis / 1000);
 			String timeDifference = "";
-			if (minutes < 60) {
+
+			if (seconds < 60) {
+				timeDifference = seconds + "초 전";
+			} else if (seconds < 3600) {
+				int minutes = seconds / 60;
 				timeDifference = minutes + "분 전";
-			} else if (minutes < 1440) {
-				int hours = minutes / 60;
+			} else if (seconds < 86400) {
+				int hours = seconds / 3600;
 				timeDifference = hours + "시간 전";
 			} else {
-				int days = minutes / 1440;
+				int days = seconds / 86400;
 				timeDifference = days + "일 전";
 			}
 			list.setTime_difference(timeDifference);

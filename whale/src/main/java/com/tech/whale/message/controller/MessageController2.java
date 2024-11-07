@@ -24,6 +24,7 @@ public class MessageController2 {
 
 	@RequestMapping("/message/home")
 	public String messageHome(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("messageHome() ctr");
 		String now_id = (String) session.getAttribute("user_id");
 
 		List<AllChatListDto> allChatList = messageDao.getAllChatList(now_id);
@@ -35,7 +36,6 @@ public class MessageController2 {
 			readChatMap.put(readChatDto.getUser_id(), readChatDto);
 		}
 
-		// allChatList를 순회하면서 필요한 데이터 설정
 		// allChatList를 순회하면서 필요한 데이터 설정
 		for (AllChatListDto list : allChatList) {
 			// 시간 차이 계산 (항상 수행)
@@ -67,13 +67,30 @@ public class MessageController2 {
 				list.setUnread_message_count(0);
 			}
 		}
+		
+		// 마지막으로 보낸 메시지가 텍스트면 그대로 저장 / 이미지면 이미지를 보냈습니다. / 음악이면 음악을 보냈습니다. 로 나눠서 last_message_text에 저장하기
+		for (AllChatListDto list : allChatList) {
+			String lastMessageText = list.getLast_message_text();
+
+			// 파일 확장자를 소문자로 변환해서 처리
+			String lowerCaseText = lastMessageText.toLowerCase();
+
+			// 이미지 파일 확장자 체크
+			if(lowerCaseText.endsWith(".jpg") || lowerCaseText.endsWith(".jpeg") || lowerCaseText.endsWith(".png")) {
+				list.setLast_message_text("이미지를 보냈습니다.");
+			} else if(lowerCaseText.endsWith(".gif")) {
+				list.setLast_message_text("움짤을 보냈습니다.");
+			} else if (lowerCaseText.endsWith(".mp3") || lowerCaseText.endsWith(".wav") || lowerCaseText.endsWith(".flac")) {
+				list.setLast_message_text("음악을 보냈습니다.");
+			} else{
+			}
+		}
 
 		// debug
 		for (AllChatListDto list : allChatList) {
 			System.out.println("User_id: " + list.getUser_id());
-			System.out.println("Last_message_sender_id: " + list.getLast_message_sender_id());
+			System.out.println("Last_message_text: " + list.getLast_message_text());
 			System.out.println("Time_difference: " + list.getTime_difference());
-			System.out.println("Unread_message_count: " + list.getUnread_message_count());
 			System.out.println("--------------------------");
 		}
 

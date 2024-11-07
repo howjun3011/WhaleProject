@@ -190,7 +190,9 @@
 		    </c:choose>">
 		        <div class="message-bubble">
 		        <c:choose>
+
 		        	<c:when test="${msg.message_type eq 'TEXT' || msg.message_type eq 'LINK'}">
+
 			            <div>${msg.message_text}</div>		        	
 		        	</c:when>
 		        	<c:otherwise>

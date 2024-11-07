@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -189,16 +190,29 @@
 		        </c:otherwise>
 		    </c:choose>">
 		        <div class="message-bubble">
-		        <c:choose>
+			<c:choose>
+			    <c:when test="${msg.message_type eq 'TEXT'}">
+			        <div>${msg.message_text}</div>
+			    </c:when>
+			    <c:when test="${msg.message_type eq 'LINK'}">
+			        <div>${msg.message_text}</div>
+			        <c:if test="${!empty msg.previewData}">
+			            <div class="preview">
+			                <a href="${msg.previewData['url']}" target="_blank" style="text-decoration: none; color: inherit;">
+			                    <img src="${msg.previewData['image']}" alt="${msg.previewData['title']}" style="width: 60px; height: 60px; border-radius: 5px; margin-right: 10px;">
+			                    <div style="display: inline-block; vertical-align: top;">
+			                        <div><strong>${msg.previewData['title']}</strong></div>
+			                        <div>${msg.previewData['description']}</div>
+			                    </div>
+			                </a>
+			            </div>
+			        </c:if>
+			    </c:when>
+			    <c:otherwise>
+			        <div><img src="${msg.message_text}" alt="Image" style="max-width: 100%; border-radius: 5px;"></div>
+			    </c:otherwise>
+			</c:choose>
 
-		        	<c:when test="${msg.message_type eq 'TEXT' || msg.message_type eq 'LINK'}">
-
-			            <div>${msg.message_text}</div>		        	
-		        	</c:when>
-		        	<c:otherwise>
-		        		<div><img src="${msg.message_text}" alt="Image" style="max-width: 100%; border-radius: 5px;"></div>
-		        	</c:otherwise>
-		        </c:choose>
 		            <div class="message-info">
 		                ${msg.user_id} • 
 		                <fmt:formatDate value="${msg.message_create_date}" pattern="yyyy-MM-dd HH:mm:ss" />

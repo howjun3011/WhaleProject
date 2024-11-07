@@ -238,7 +238,7 @@
 	        formData.append("file", file);
 	
 	        $.ajax({
-	            url: "/whale/uploadImageGG",  // 이미지 업로드 엔드포인트
+	            url: "/whale/uploadImageMessage",  // 이미지 업로드 엔드포인트
 	            type: "POST",
 	            data: formData,
 	            contentType: false,

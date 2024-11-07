@@ -22,7 +22,7 @@ input:-webkit-autofill:active {-webkit-text-fill-color: #000; -webkit-box-shadow
 
 .mainSearchTab p.active {font-weight: bold; background: #6a6a6a;}
 
-.mainSearchResult > a{text-decoration: none;}
+.mainSearchResult > a{text-decoration: none; color: inherit;}
 
 .userItem{display: flex; align-items: center; padding: 15px 30px; border-bottom: 1px solid #1f1f1f; gap: 20px;}
 .userItem:hover{background: #4d4d4d;}

@@ -155,15 +155,16 @@ function displayPostResults(postList) {
 
         // 6. 게시글 HTML 구성
         let postHtml = `
-            <div class="postItem">
-                <h3>${post.post_title}</h3>
-                ${finalContent}
-                <span>${post.user_nickname}</span>
-            </div>`;
+            <a href="communityDetail?c=${encodeURIComponent(post.community_id)}&p=${encodeURIComponent(post.post_id)}">
+                <div class="postItem">
+                    <h3>${post.post_title}</h3>
+                    ${finalContent}
+                    <span>${post.user_nickname}</span>
+                </div>
+            </a>`;
         resultDiv.append(postHtml);
     });
 }
-
 
 function displayFeedResults(feedList) {
     let resultDiv = $('.mainSearchResult');
@@ -179,11 +180,14 @@ function displayFeedResults(feedList) {
 
     feedList.forEach(function (feed) {
         let feedHtml = `
-            <div class="feedItem">
-<!--                <p>${feed.feed_text}</p>-->
-<!--                <span>${feed.user_nickname}</span>-->
-                ${feed.feed_img_url ? `<img src="/whale/static/images/feed/${feed.feed_img_name}" alt="Feed Image">` : ''}
-            </div>`;
+            <a href="feedDetail?f=${encodeURIComponent(feed.feed_id)}" class="feedLink">
+                <div class="feedItem">
+                    <!-- 피드 텍스트와 닉네임을 포함하려면 주석을 해제하세요 -->
+                    <!-- <p>${feed.feed_text}</p> -->
+                    <!-- <span>${feed.user_nickname}</span> -->
+                    ${feed.feed_img_url ? `<img src="/whale/static/images/feed/${encodeURIComponent(feed.feed_img_name)}" alt="Feed Image">` : ''}
+                </div>
+            </a>`;
         containerDiv.append(feedHtml);
     });
 

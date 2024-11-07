@@ -247,15 +247,15 @@
 	        formData.append("file", file);
 	
 	        $.ajax({
-	            url: "/whale/uploadImageMessage",  // 이미지 업로드 엔드포인트
+	            url: "/whale/uploadImageMessage",
 	            type: "POST",
 	            data: formData,
 	            contentType: false,
 	            processData: false,
 	            success: function(response) {
-	                const imageUrl = response.imageUrl; // 업로드 후 반환된 이미지 URL
+	                const imageUrl = response.imageUrl;
 	                const payload = roomId + ":" + now_id + ":IMAGE:" + imageUrl;
-	                socket.send(payload); // WebSocket으로 이미지 URL 전송
+	                socket.send(payload);
 	            },
 	            error: function(error) {
 	                console.error("Image upload failed:", error);
@@ -275,57 +275,73 @@
 	    }
 	}
 	
-	// WebSocket 수신 시 메시지 처리
-socket.onmessage = function(event) {
-    const chatMessages = document.getElementById('chatMessages');
-    const data = event.data.split('#');
-    const msgRoomId = data[0];
-    const msgUserId = data[1];
-    const msgType = data[2];
-    const msgContent = data[3];
-    const msgRead = data[4];
-    const msgDate = data[5];
+	socket.onmessage = function(event) {
+	    console.log("Received message:", event.data);
 
-    if (msgRoomId === roomId) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
+	    const chatMessages = document.getElementById('chatMessages');
 
-        let contentHTML = '';
-        if (msgType === 'TEXT') {
-            contentHTML = '<div>' + msgContent + '</div>';
-        } else if (msgType === 'IMAGE') {
-            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
-        } else if (msgType === 'LINK') {
-            if (msgContent.includes('<iframe')) {
-                contentHTML = msgContent; // YouTube HTML
-            } else {
-                const previewParts = msgContent.split('#preview=');
-                const textContent = previewParts[0];
-                const previewData = JSON.parse(previewParts[1]);
-                contentHTML = 
-                    '<div>' + textContent + '</div>' +
-                    '<div class="preview">' +
-                        '<a href="' + previewData.url + '" target="_blank">' +
-                            '<img src="' + previewData.image + '" alt="' + previewData.title + '" style="width: 60px; height: 60px; border-radius: 5px;">' +
-                            '<div><strong>' + previewData.title + '</strong></div>' +
-                            '<div>' + previewData.description + '</div>' +
-                        '</a>' +
-                    '</div>';
-            }
-        }
+	    // Split only the first 3 `#` delimiters, then treat the rest as `msgContent`
+	    const data = event.data.split('#');
+	    const msgRoomId = data[0];
+	    const msgUserId = data[1];
+	    const msgType = data[2];
+	    const msgContent = event.data.split('#').slice(3).join('#'); // Treat rest as msgContent
 
-        msgDiv.innerHTML =
-            '<div class="message-bubble">' +
-                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
-                contentHTML +
-                '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>' +
-            '</div>';
-        
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-};
+	    const msgRead = data[data.length - 2]; // Second-to-last item for read status
+	    const msgDate = data[data.length - 1]; // Last item for date
 
+	    if (msgRoomId === roomId) {
+	        const msgDiv = document.createElement('div');
+	        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
+
+	        let contentHTML = '';
+	        if (msgType === 'TEXT') {
+	            contentHTML = '<div>' + msgContent + '</div>';
+	        } else if (msgType === 'IMAGE') {
+	            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
+	        } else if (msgType === 'LINK') {
+	            console.log("LINK message content:", msgContent);
+
+	            // Use regex to find #preview= and JSON data after it
+	            const previewMatch = msgContent.match(/#preview=(\{.*\})/);
+	            if (!previewMatch) {
+	                console.log("Preview data not found in message content");
+	                contentHTML = '<div>' + msgContent + '</div>';
+	            } else {
+	                const textContent = msgContent.substring(0, previewMatch.index); // Text before #preview=
+	                const previewJsonString = previewMatch[1]; // JSON part only
+
+	                try {
+	                    const previewData = JSON.parse(previewJsonString);
+	                    contentHTML = 
+	                        '<div>' + textContent + '</div>' +
+	                        '<div class="preview">' +
+	                            '<a href="' + previewData.url + '" target="_blank" style="text-decoration: none; color: inherit;">' +
+	                                '<img src="' + previewData.image + '" alt="' + previewData.title + '" style="width: 60px; height: 60px; border-radius: 5px; margin-right: 10px;">' +
+	                                '<div style="display: inline-block; vertical-align: top;">' +
+	                                    '<div><strong>' + previewData.title + '</strong></div>' +
+	                                    '<div>' + previewData.description + '</div>' +
+	                                '</div>' +
+	                            '</a>' +
+	                        '</div>';
+	                } catch (e) {
+	                    console.error("Failed to parse preview data:", e);
+	                    contentHTML = '<div>' + msgContent + '</div>';
+	                }
+	            }
+	        }
+
+	        msgDiv.innerHTML =
+	            '<div class="message-bubble">' +
+	                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
+	                contentHTML +
+	                '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>' +
+	            '</div>';
+
+	        chatMessages.appendChild(msgDiv);
+	        chatMessages.scrollTop = chatMessages.scrollHeight;
+	    }
+	};
 
     // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.
     window.onload = function() {

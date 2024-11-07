@@ -44,13 +44,19 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         // roomId를 세션 URL에서 가져옵니다.
         String roomId = getRoomIdFromSession(session);
+        String userId = getUserIdFromSession(session);
         if (roomId != null) {
             session.getAttributes().put("roomId", roomId); // session에 roomId 저장
+            session.getAttributes().put("userId", userId);
 
             // roomId에 해당하는 세션 목록에 추가
             roomSessions.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<>()).add(session);
-            System.out.println("WebSocket 연결 성공: " + session.getId() + " | Room ID: " + roomId);
-            messageDao.readMessage(roomId, session.getAttributes().get("userId").toString());
+            System.out.println("WebSocket 연결 성공: " + userId + " | Room ID: " + roomId);
+            System.out.println(roomId);
+
+			String otherUserId = messageDao.getOtherUserInRoom(roomId, userId);
+			messageDao.readMessage(roomId, otherUserId);
+
         } else {
             System.out.println("Room ID 없음으로 세션 거부: " + session.getId());
             session.close(CloseStatus.BAD_DATA);
@@ -198,10 +204,27 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     private String getRoomIdFromSession(WebSocketSession session) {
-        // 쿼리에서 roomId 추출 예: /chat?roomId=1 형태일 경우 사용
         String query = session.getUri().getQuery();
-        if (query != null && query.startsWith("roomId=")) {
-            return query.split("=")[1];
+        if (query != null && query.contains("roomId=")) {
+            String[] params = query.split("&");
+            for (String param : params) {
+                if (param.startsWith("roomId=")) {
+                    return param.split("=")[1];
+                }
+            }
+        }
+        return null;
+    }
+    
+    private String getUserIdFromSession(WebSocketSession session) {
+        String query = session.getUri().getQuery();
+        if (query != null && query.contains("userId=")) {
+            String[] params = query.split("&");
+            for (String param : params) {
+                if (param.startsWith("userId=")) {
+                    return param.split("=")[1];
+                }
+            }
         }
         return null;
     }

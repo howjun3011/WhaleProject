@@ -10,7 +10,7 @@ import com.tech.whale.setting.dto.UserInfoDto;
 
 @Mapper
 public interface SearchDao {
-	public List<UserInfoDto> selectSearchUserInfo(String keyword);
+	public List<UserInfoDto> selectSearchUserInfo();
 	public List<PostDto> selectSearchPostInfo(String keyword);
 	public List<FeedDto> selectSearchFeedInfo(String keyword);
 }

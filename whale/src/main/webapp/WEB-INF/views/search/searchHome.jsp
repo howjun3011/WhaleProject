@@ -8,19 +8,25 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Whale</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/static/images/main/whaleLogo.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/search/searchStyles.css"/>
+    <title>Whale Search</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/search/searchFunction.js"></script>
 </head>
 <body>
 <header>
-    <div class="headerSearch">
-        <form action="searchResult" method="get">
-            <button class="searchBtn">
-                <input type="image" src="/whale/static/images/streaming/searchBtn.png" alt="검색" style="height: 14px;" class="searchBtn"/>
-            </button>
-            <input class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
-        </form>
-    </div>
+	<div class="header">
+		<div class="headerSearch">
+	        <form action="searchResult" method="get">
+	            <button class="searchBtn">
+	                <input type="image" src="/whale/static/images/streaming/searchBtn.png" alt="검색" style="height: 14px;" class="searchBtn"/>
+	            </button>
+	            <input class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
+	        </form>
+	    </div>
+	</div>
+    <div class="mainSearch"></div>
 </header>
 </body>
 </html>

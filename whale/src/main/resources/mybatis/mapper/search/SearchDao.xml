@@ -14,28 +14,28 @@
         	USER_INFO
         ORDER BY USER_ID, USER_NICKNAME
     </select>
-    
-    <select id="selectSearchPostInfo" resultType="com.tech.whale.community.dto.PostDto">
-        SELECT
-        	P.POST_ID AS POST_ID,
-        	P.COMMUNITY_ID AS COMMUNITY_ID,
-        	P.USER_ID AS USER_ID,
-        	P.POST_TITLE AS POST_TITLE,
-        	P.POST_TEXT AS POST_TEXT,
-        	P.POST_DATE AS POST_DATE,
-        	PM.TRACK_ID AS TRACK_ID,
-        	PT.POST_TAG_TEXT AS POST_TAG_TEXT,
-        	UI.USER_NICKNAME AS USER_NICKNAME,
-        	UI.USER_IMAGE_URL AS USER_IMAGE_URL
-        FROM
-        	POST P
-        		LEFT JOIN POST_MUSIC PM ON PM.POST_ID = P.POST_ID
-        		LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
-        		LEFT JOIN USER_INFO UI ON UI.USER_ID = P.USER_ID
-        ORDER BY P.POST_TITLE, P.POST_TEXT, P.USER_ID, UI.USER_NICKNAME
-    </select>
-    
-    <select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
+
+	<select id="selectSearchPostInfo" resultType="com.tech.whale.community.dto.PostDto">
+		SELECT
+			P.POST_ID AS post_id,
+			P.COMMUNITY_ID AS community_id,
+			P.USER_ID AS user_id,
+			P.POST_TITLE AS post_title,
+			P.POST_TEXT AS post_text,
+			P.POST_DATE AS post_date,
+			PM.TRACK_ID AS track_id,
+			PT.POST_TAG_TEXT AS post_tag_text,
+			UI.USER_NICKNAME AS user_nickname,
+			UI.USER_IMAGE_URL AS user_image_url
+		FROM
+			POST P
+				LEFT JOIN POST_MUSIC PM ON PM.POST_ID = P.POST_ID
+				LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
+				LEFT JOIN USER_INFO UI ON UI.USER_ID = P.USER_ID
+		ORDER BY P.POST_TITLE, P.POST_TEXT, P.USER_ID, UI.USER_NICKNAME
+	</select>
+
+	<select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
         SELECT
         	F.FEED_ID AS FEED_ID,
         	F.USER_ID AS USER_ID,

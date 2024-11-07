@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -48,64 +49,55 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
-            String[] parts = payload.split(":", 3);
-            if (parts.length < 3) {
+            String[] parts = payload.split(":", 4); // 이미지 URL을 포함하기 위해 4개로 분할
+            if (parts.length < 4) {
                 System.err.println("Invalid message format: " + payload);
                 return;
             }
+
             String roomId = parts[0];
             String userId = parts[1];
-            String messageText = parts[2];
+            String messageType = parts[2];
+            String messageContent = parts[3];
 
-            // 메시지 객체 생성 및 기본 설정
+            // 메시지 객체 생성
             MessageDto messageDto = new MessageDto();
             messageDto.setMessage_room_id(roomId);
             messageDto.setUser_id(userId);
-            messageDto.setMessage_text(messageText);
-            Date messageDate = new Date();  // 서버에서 날짜 생성
-            messageDto.setMessage_create_date(messageDate);
-
-            // 날짜 포맷 설정
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = dateFormat.format(messageDate);
-
-            // 로그로 formattedDate 값 확인
-            System.out.println("Formatted Date: " + formattedDate);
-
-            // 같은 roomId의 세션들 가져오기
-            List<WebSocketSession> sessions = roomSessions.get(roomId);
+            messageDto.setMessage_create_date(new Date());
+            messageDto.setMessage_type(messageType);
             
-            boolean isRecipientConnected = false;
-            for (WebSocketSession sess : sessions) {
-                if (sess.isOpen() && !sess.equals(session)) { // 본인의 세션이 아닌 경우 (상대방 세션)
-                    isRecipientConnected = true;
-                    break;
-                }
+            // 메시지 타입에 따라 처리
+            if ("TEXT".equals(messageType)) {
+                messageDto.setMessage_text(messageContent);
+            } else if ("IMAGE".equals(messageType)) {
+                messageDto.setMessage_text(messageContent); // Google Cloud Storage의 이미지 URL을 저장
             }
 
-            // 본인의 메시지이므로 상대방이 접속 중인지 확인하여 읽음 상태 설정
-            messageDto.setMessage_read(isRecipientConnected ? 0 : 1); // 접속 중이면 읽음(0), 아니면 안 읽음(1)
+            // 포맷팅된 메시지 생성
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(new Date());
 
-            // 서버에서 포맷된 날짜와 읽음 상태를 포함하여 5개 필드로 메시지 생성
-            String formattedMessage = String.format("%s#%s#%s#%s#%d",
-                    roomId, userId, messageText, formattedDate, messageDto.getMessage_read());
+            String formattedMessage = String.format("%s#%s#%s#%s#%d#%s",
+                    roomId, userId, messageType, messageDto.getMessage_text(), messageDto.getMessage_read(), formattedDate);
 
-            TextMessage broadcastMessage = new TextMessage(formattedMessage);
-
-            for (WebSocketSession sess : sessions) {
-                if (sess.isOpen()) {
-                    sess.sendMessage(broadcastMessage);
-                    System.out.println("Message sent to session: " + sess.getId());
-                }
-            }
-
-            // 메시지 저장
+            // 메시지 전송 및 저장
+            broadcastToRoom(roomId, new TextMessage(formattedMessage));
             messageDao.saveMessage(messageDto);
 
         } catch (Exception e) {
             e.printStackTrace();
             session.sendMessage(new TextMessage("Error: " + e.getMessage()));
             session.close(CloseStatus.SERVER_ERROR);
+        }
+    }
+    
+    private void broadcastToRoom(String roomId, TextMessage message) throws IOException {
+        List<WebSocketSession> sessions = roomSessions.get(roomId);
+        for (WebSocketSession sess : sessions) {
+            if (sess.isOpen()) {
+                sess.sendMessage(message);
+            }
         }
     }
 

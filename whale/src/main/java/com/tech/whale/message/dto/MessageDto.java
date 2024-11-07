@@ -28,4 +28,6 @@ public class MessageDto {
 
 	private String message_type;
 	private Map<String, String> previewData;
+	
+	private String receiver_id;
 }

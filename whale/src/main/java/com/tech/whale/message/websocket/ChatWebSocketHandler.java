@@ -1,16 +1,17 @@
+// src/main/java/com/tech/whale/message/websocket/ChatWebSocketHandler.java
+
 package com.tech.whale.message.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.whale.Image.controller.LinkPreviewUtils;
 import com.tech.whale.message.dao.MessageDao;
 import com.tech.whale.message.dto.MessageDto;
+import com.tech.whale.message.dto.HomeMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     // roomId별로 WebSocketSession 목록을 관리
     private final Map<String, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final MessageDao messageDao;
+
+    @Autowired
+    private HomeWebSocketHandler homeWebSocketHandler;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public ChatWebSocketHandler(MessageDao messageDao) {
@@ -50,6 +56,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String payload = message.getPayload();
@@ -74,18 +81,17 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 messageType = "LINK";
                 String url = extractUrl(messageContent);
                 messageDto.setMessage_type(messageType);
-                
+
                 if (url.contains("youtube.com") || url.contains("youtu.be")) {
                     String embedHtml = fetchYouTubeEmbedHtml(url);
                     messageDto.setMessage_text(embedHtml);
                     System.out.println("YouTube embed HTML created: " + embedHtml);
                 } else {
                     Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(url);
-                    
+
                     // 미리보기 데이터 확인
                     if (previewData != null && !previewData.isEmpty()) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        String previewJson = mapper.writeValueAsString(previewData);
+                        String previewJson = objectMapper.writeValueAsString(previewData);
                         messageDto.setMessage_text(messageContent + "#preview=" + previewJson);
                         System.out.println("Preview data created for URL " + url + ": " + previewJson);
                     } else {
@@ -104,8 +110,22 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String formattedMessage = String.format("%s#%s#%s#%s#%d#%s",
                     roomId, userId, messageType, messageDto.getMessage_text(), messageDto.getMessage_read(), formattedDate);
 
+            // 채팅방에 메시지 브로드캐스트
             broadcastToRoom(roomId, new TextMessage(formattedMessage));
+
+            // DB에 메시지 저장
             messageDao.saveMessage(messageDto);
+
+            // Home 페이지에 메시지 알림 전송
+            HomeMessage homeMessage = new HomeMessage();
+            homeMessage.setReceiverId(messageDto.getReceiver_id()); // receiver_id는 추가로 설정 필요
+            homeMessage.setSenderId(userId);
+            homeMessage.setMessageType(messageType);
+            homeMessage.setMessageText(messageDto.getMessage_text());
+            homeMessage.setTimeDifference(calculateTimeDifference());
+
+            String homeMessageJson = objectMapper.writeValueAsString(homeMessage);
+            homeWebSocketHandler.sendMessageToUser(homeMessage.getReceiverId(), homeMessageJson);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +150,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private String fetchYouTubeEmbedHtml(String url) {
         return "<iframe src=\"https://www.youtube.com/embed/" + extractYouTubeId(url) +
-               "\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+                "\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
     }
 
     private String extractYouTubeId(String url) {
@@ -139,12 +159,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         Matcher matcher = compiledPattern.matcher(url);
         return matcher.find() ? matcher.group() : "";
     }
-    
+
     private void broadcastToRoom(String roomId, TextMessage message) throws IOException {
         List<WebSocketSession> sessions = roomSessions.get(roomId);
-        for (WebSocketSession sess : sessions) {
-            if (sess.isOpen()) {
-                sess.sendMessage(message);
+        if (sessions != null) {
+            for (WebSocketSession sess : sessions) {
+                if (sess.isOpen()) {
+                    sess.sendMessage(message);
+                }
             }
         }
     }
@@ -172,5 +194,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             return query.split("=")[1];
         }
         return null;
+    }
+
+    private String calculateTimeDifference() {
+        // 실제 시간 차이 계산 로직 구현
+        return "방금 전"; // 예시
     }
 }

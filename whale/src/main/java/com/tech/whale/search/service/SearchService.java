@@ -58,11 +58,11 @@ public class SearchService {
 	    
 	    return resultList;
 	}
-	
+
 	public void getSearchPostService(Model model, String keyword) {
 		List<PostDto> resultList = new ArrayList<>();
 		List<PostDto> postLists = searchDao.selectSearchPostInfo();
-		
+
 		if (keyword == null) {
 			keyword="";
 		}
@@ -71,13 +71,13 @@ public class SearchService {
 
 	    // 검색어를 한 글자씩 나누기
 	    String[] keywordChars = cleanedKeyword.split("");
-	    
+
 	    for (PostDto postList : postLists) {
 	        String cleanedUserName = postList.getUser_id().replaceAll("\\s+", "").toLowerCase();
 	        String cleanedUserNick = postList.getUser_nickname().replaceAll("\\s+", "").toLowerCase();
 	        String cleanedPostTitle = postList.getPost_title().replaceAll("\\s+", "").toLowerCase();
 	        String cleanedPostText = postList.getPost_text().replaceAll("\\s+", "").toLowerCase();
-	             
+
 
 	        // 검색어의 각 문자가 포함되는지 체크
 	        boolean[] isMatch = new boolean[] { true, true, true, true };
@@ -93,14 +93,14 @@ public class SearchService {
 	                break;
 	            }
 	        }
-	        
+
 	        for (String searchChar : keywordChars) {
 	            if (!cleanedPostTitle.contains(searchChar)) {
 	                isMatch[2] = false;
 	                break;
 	            }
 	        }
-	        
+
 	        for (String searchChar : keywordChars) {
 	            if (!cleanedPostText.contains(searchChar)) {
 	                isMatch[3] = false;
@@ -113,7 +113,7 @@ public class SearchService {
 	            resultList.add(postList);
 	        }
 	    }
-	    
+
 	    model.addAttribute("postList",resultList);
 	}
 	
@@ -165,5 +165,84 @@ public class SearchService {
 	    }
 	    
 	    model.addAttribute("feedList",resultList);
+	}
+
+	public List<PostDto> getSearchPostService(String keyword) {
+		List<PostDto> resultList = new ArrayList<>();
+		List<PostDto> postLists = searchDao.selectSearchPostInfo();
+
+		if (keyword == null || keyword.isEmpty()) {
+			return resultList;
+		}
+
+		// 검색어 공백 제거
+		String cleanedKeyword = keyword.replaceAll("\\s+", "").toLowerCase();
+
+		// 검색어를 한 글자씩 나누기
+		String[] keywordChars = cleanedKeyword.split("");
+
+		for (PostDto postList : postLists) {
+			String cleanedPostTitle = postList.getPost_title().replaceAll("\\s+", "").toLowerCase();
+			String cleanedPostText = postList.getPost_text().replaceAll("\\s+", "").toLowerCase();
+
+
+			// 검색어의 각 문자가 포함되는지 체크
+			boolean[] isMatch = new boolean[] { true, true };
+			for (String searchChar : keywordChars) {
+				if (!cleanedPostTitle.contains(searchChar)) {
+					isMatch[0] = false;
+					break;
+				}
+			}
+			for (String searchChar : keywordChars) {
+				if (!cleanedPostText.contains(searchChar)) {
+					isMatch[1] = false;
+					break;
+				}
+			}
+
+			// 모든 문자들이 포함되면 결과 리스트에 추가
+			if (isMatch[0] || isMatch[1]) {
+				resultList.add(postList);
+			}
+		}
+
+		return resultList;
+	}
+
+	public List<FeedDto> getSearchFeedService(String keyword) {
+		List<FeedDto> resultList = new ArrayList<>();
+		List<FeedDto> feedLists = searchDao.selectSearchFeedInfo();
+
+		if (keyword == null || keyword.isEmpty()) {
+			return resultList;
+		}
+
+		// 검색어 공백 제거
+		String cleanedKeyword = keyword.replaceAll("\\s+", "").toLowerCase();
+
+		// 검색어를 한 글자씩 나누기
+		String[] keywordChars = cleanedKeyword.split("");
+
+		for (FeedDto feedList : feedLists) {
+			String cleanedFeedText = feedList.getFeed_text().replaceAll("\\s+", "").toLowerCase();
+
+
+			// 검색어의 각 문자가 포함되는지 체크
+			boolean[] isMatch = new boolean[] { true, true };
+			for (String searchChar : keywordChars) {
+				if (!cleanedFeedText.contains(searchChar)) {
+					isMatch[0] = false;
+					break;
+				}
+			}
+
+			// 모든 문자들이 포함되면 결과 리스트에 추가
+			if (isMatch[0]) {
+				resultList.add(feedList);
+			}
+		}
+
+		return resultList;
 	}
 }

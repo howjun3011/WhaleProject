@@ -22,11 +22,22 @@
 	            <button class="searchBtn">
 	                <input type="image" src="/whale/static/images/streaming/searchBtn.png" alt="검색" style="height: 14px;" class="searchBtn"/>
 	            </button>
-	            <input class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
+	            <input id="searchInput" class="headerSearchInput" type="text" name="keyword" placeholder="검색어를 입력하세요" required/>
 	        </form>
 	    </div>
 	</div>
-    <div class="mainSearch"></div>
 </header>
+<div class="mainSearch">
+<div class="mainSearchContainer">
+	<div class="mainSearchTab">
+		<p class="mainSearchUser active" data-type="user">유저</p>
+		<p class="mainSearchCommunity" data-type="post">게시글</p>
+		<p class="mainSearchFeed" data-type="feed">피드</p>
+	</div>
+	<div class="mainSearchResult">
+		<!-- 검색 결과가 여기 표시됩니다 -->
+	</div>
+</div>
+</div>
 </body>
 </html>

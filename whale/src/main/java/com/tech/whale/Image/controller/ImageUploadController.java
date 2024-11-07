@@ -19,9 +19,9 @@ public class ImageUploadController {
     private final Storage storage = StorageOptions.getDefaultInstance().getService();
     private final String BUCKET_NAME = "whale_project";
 
-    @PostMapping("/uploadImageGG")
+    @PostMapping("/uploadImageMessage")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
-        String fileName = "whale/" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        String fileName = "whale/message/" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
         
         BlobInfo blobInfo = BlobInfo.newBuilder(BUCKET_NAME, fileName).build();
         storage.create(blobInfo, file.getBytes());

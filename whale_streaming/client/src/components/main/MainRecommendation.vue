@@ -10,13 +10,14 @@
         <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
         <div class="recommendationContents">
             <div class="recommendationContent" v-for="(recommendation, i) in recommendations" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false">
-                <div class="recommendationLike" style="left: 15px;" v-if="addIsShow(i)" @click="insertTrack(i)">
-                    <img src="../../../public/images/main/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;">
+                <div class="recommendationLike" style="left: 15px;" v-if="addIsShow(i)" @click="changeTrackLikeInfo(recommendation.artists[0].name, recommendation.name, recommendation.album.name, recommendation.album.images[0].url, recommendation.id, i)">
+                    <img src="../../../public/images/main/like.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;" v-show="like[i] === false">
+                    <img src="../../../public/images/main/liked.png" alt="Like Button" width="30" height="30" style="border-radius: 8px; opacity: 0.75;" v-show="like[i] === true">
                 </div>
                 <div class="recommendationCover">
                     <img :src="recommendation.album.images[0].url" :alt="recommendation.name" width="120" height="120" style="border-radius: 8px; cursor: pointer;" @click="redirectRouter('track',recommendation.id)">
                 </div>
-                <div class="recommendationLike" style="right: 15px;" v-if="addIsShow(i)" @click="playPlayer(recommendation.uri)">
+                <div class="recommendationLike" style="right: 15px;" v-if="isShow[i]" @click="playPlayer(recommendation.uri)">
                     <img src="../../../public/images/main/play.png"
                             alt="Play Button" width="30"
                             height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -42,6 +43,7 @@ export default {
         return {
             recommendations: null,
             isShow: [],
+            like: [],
         }
     },
     mounted() {
@@ -54,6 +56,9 @@ export default {
                 const data = await result.json();
                 if (data.items && data.items.length > 0) {
                     this.recommendations = data.items;
+                    this.recommendations.forEach((el, index) => {
+                        this.getTrackLikeInfo(el.id,index);
+                    });
                     this.$nextTick(() => {
                         this.checkScroll();
                     });
@@ -62,32 +67,6 @@ export default {
                 }
             } else {
                 console.error('Failed to fetch user top items:', result.statusText);
-            }
-        },
-        async insertTrack(i) {
-            try {
-                const body = {
-                    trackArtist: this.recommendations[i].artists[0].name,
-                    trackName: this.recommendations[i].name,
-                    trackAlbum: this.recommendations[i].album.name,
-                    trackCover: this.recommendations[i].album.images[0].url,
-                    trackSpotifyId: this.recommendations[i].id,
-                };
-                const response = await fetch('http://localhost:9002/whale/streaming/insertTrack', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    method: 'POST',
-                    body: JSON.stringify(body)
-                });
-                if (response.ok) {
-                    console.log("Success fetching Data to the Spring Wep App");
-                } else {
-                    console.error('Failed to fetch the track info: ', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error while fetching the track info:', error);
             }
         },
         addIsShow(i) {
@@ -139,6 +118,38 @@ export default {
         redirectRouter(i,y) {
             this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
+        getTrackLikeInfo(i,j) {
+            fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.like[j] = data;
+                })
+        },
+        changeTrackLikeInfo(a,b,c,d,e,x){
+            if (this.like[x] === false) {
+                const body = {
+                    userId: sessionStorage.userId,
+                    artistName: a,
+                    trackName: b,
+                    albumName: c,
+                    trackCover: d,
+                    trackSpotifyId: e
+                };
+
+                fetch(`http://localhost:9002/whale/streaming/insertTrackLikeNode`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+            else {
+                fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
+            }
+            this.like[x] = !this.like[x];
+        },
     },
 };
 </script>
@@ -150,7 +161,7 @@ export default {
     .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
     .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
     .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
-    .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; background: transparent;}
+    .recommendationLike{position: absolute; width: 30px; height: 30px; top: 105px; background: transparent;}
     .recommendationLike:hover{opacity: 0.7;}
     .recommendationLike:active{opacity: 0.6;}
     .recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}

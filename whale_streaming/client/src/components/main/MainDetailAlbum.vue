@@ -50,9 +50,9 @@
                     viewBox="0 0 24 24"
                     class="playlistTrackBtn"
                     style="height: 16px;"
-                    @click="playPlayer(item.uri)"
+                    @click="playPlayer(item.uri,i)"
                 >
-                    <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
+                <path :d=" isPlayed[i] === false ? 'm7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z' : 'M6 19h4V5H6zm8-14v14h4V5z'"
                     ></path>
                 </svg>
             </div>
@@ -60,7 +60,22 @@
                 <p style="font-weight: 400; cursor: pointer;"  @click="redirectRouter('track',item.id)">{{ item.name }}</p>
                 <p style="cursor: pointer;" @click="redirectRouter('artist',item.artists[0].id)">{{ item.artists[0].name }}</p>
             </div>
-            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
+            <div class="playlist-tracks-content" style="justify-content: center; font-size: 12px;" v-if="!isShow[i]">{{ String(Math.floor(( item.duration_ms / (1000 * 60 )) )).padStart(2, "0") }}분 {{ String(Math.floor(( item.duration_ms % (1000 * 60 )) / 1000 )).padStart(2, "0") }}초</div>
+            <div class="playlist-tracks-content" style="justify-content: center;" v-if="isShow[i]">
+                <svg
+                    data-encore-id="icon"
+                    role="img"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    class="playlistTrackBtn likeBtn"
+                    :style="{ fill: like[i] === true ? 'rgb(203, 130, 163)' : '#000000' }"
+                    @click="changeTrackLikeInfo(item.artists[0].name, item.name, album.name, album.images[0].url, item.id, i)"
+                >
+                    <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    ></path>
+                </svg>
+            </div>
         </div>
     </div>
 </template>
@@ -73,6 +88,9 @@ export default {
             album: null,
             totalTrack: null,
             isShow: [],
+            like: [],
+            isPlayed: [],
+            position: [],
         }
     },
     mounted() {
@@ -86,7 +104,10 @@ export default {
                 const data = await result.json();
                 this.album = await data;
 
-                this.album.tracks.items.forEach((item) => {this.totalTrack += item.duration_ms;});
+                this.album.tracks.items.forEach((el, index) => {
+                    this.totalTrack += el.duration_ms;
+                    this.getTrackLikeInfo(el.id,index);
+                });
                 
                 fetch(`/whale/streaming/getArtistInfo?id=${this.album.artists[0].id}`)
                     .then((response) => response.json())
@@ -97,8 +118,20 @@ export default {
                 console.error('Failed to fetch user top items:', result.statusText);
             }
         },
-        async playPlayer(i) {
-            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
+        async playPlayer(i,j) {
+            if (this.isPlayed[j] === false) {
+                fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }&position=${ this.position[j] }`);
+                this.isPlayed.forEach((el, index) => {
+                    if (el === true) {this.isPlayed[index] = false;}
+                });
+            } else {
+                fetch(`/whale/streaming/pause?device_id=${ sessionStorage.device_id }`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.position[j] = data.progress_ms;
+                });
+            }
+            this.isPlayed[j] = !this.isPlayed[j];
         },
         getRandomColor() {
             // 랜덤 RGB 색상 생성 함수
@@ -112,12 +145,46 @@ export default {
             document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
         },
         addIsShow(i) {
+            this.isPlayed.push(false);
             this.isShow.push(false);
+            this.position.push(0);
             return this.isShow[i];
         },
         redirectRouter(i,y) {
             this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
+        getTrackLikeInfo(i,j) {
+            fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.like[j] = data;
+                })
+        },
+        changeTrackLikeInfo(a,b,c,d,e,x){
+            if (this.like[x] === false) {
+                const body = {
+                    userId: sessionStorage.userId,
+                    artistName: a,
+                    trackName: b,
+                    albumName: c,
+                    trackCover: d,
+                    trackSpotifyId: e
+                };
+
+                fetch(`http://localhost:9002/whale/streaming/insertTrackLikeNode`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+            else {
+                fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
+            }
+            this.like[x] = !this.like[x];
+        }
     },
 };
 </script>
@@ -141,4 +208,5 @@ export default {
     .playlist-tracks-content {display: flex; align-items: center; height: 32px; color: #ffffff; font-size: 14px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
     .playlistTrackBtn:hover {opacity: 0.8;}
     .playlistTrackBtn:active {opacity: 0.6;}
+    .likeBtn {height: 16px; cursor: pointer;}
 </style>

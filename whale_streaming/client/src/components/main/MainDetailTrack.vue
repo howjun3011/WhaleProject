@@ -31,6 +31,19 @@
                 ></path>
             </svg>
         </div>
+        <div class="playlistBtnCircle" style="margin-left: 20px; background-color: #d61e3a;">
+            <svg
+                data-encore-id="icon"
+                role="img"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                class="playlistBtn"
+                :style="{ fill: like === true ? '#000000' : '#ffffff' }"
+                @click="changeTrackLikeInfo(track.artists[0].name,track.name,track.album.name,track.album.images[0].url,track.id)"
+            >
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+            </svg>
+        </div>
     </div>
     <div class="lyrics">
         <h3>가사</h3>
@@ -45,6 +58,7 @@ export default {
         return {
             track: null,
             artist: null,
+            like: null,
             lyric: null,
         }
     },
@@ -54,25 +68,26 @@ export default {
     },
     methods: {
         async getTrackInfo() {
-            const result = await fetch(`/whale/streaming/getTrackInfo?id=${this.$route.params.id}`);
-            if (await result.ok) {
-                const data = await result.json();
-                this.track = await data;
-                
-                fetch(`/whale/streaming/getArtistInfo?id=${this.track.artists[0].id}`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.artist = data;
-                    })
-                    
-                fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(this.track.artists[0].name)}/${encodeURIComponent(this.track.name)}`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        this.lyric = data.lyrics;
-                    })
-            } else {
-                console.error('Failed to fetch user top items:', result.statusText);
-            }
+            fetch(`/whale/streaming/getTrackInfo?id=${this.$route.params.id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.track = data;
+
+                    fetch(`/whale/streaming/getArtistInfo?id=${this.track.artists[0].id}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            this.artist = data;
+                        })
+                        
+                    fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(this.track.artists[0].name)}/${encodeURIComponent(this.track.name)}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            this.lyric = data.lyrics;
+                        })
+
+                    this.getTrackLikeInfo(this.track.id);
+
+                });
         },
         async playPlayer(i) {
             await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
@@ -91,6 +106,38 @@ export default {
         redirectRouter(i,y) {
             this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
         },
+        getTrackLikeInfo(i) {
+            fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.like = data;
+                })
+        },
+        changeTrackLikeInfo(a,b,c,d,e){
+            if (this.like === false) {
+                const body = {
+                    userId: sessionStorage.userId,
+                    artistName: a,
+                    trackName: b,
+                    albumName: c,
+                    trackCover: d,
+                    trackSpotifyId: e
+                };
+
+                fetch(`http://localhost:9002/whale/streaming/insertTrackLikeNode`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+            else {
+                fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
+            }
+            this.like = !this.like;
+        }
     },
 };
 </script>
@@ -103,7 +150,7 @@ export default {
     .trackDescription{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8; display: flex; align-items: center; margin-top: 15px; gap: 5px;}
     .trackFont {font-size: 14px; font-weight: bold; cursor: pointer;}
     .playlistName {font-size: 64px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
-    .playlistFunction {width: 100%;}
+    .playlistFunction {display: flex; width: 100%;}
     .playlistBtnCircle {display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin-left: 30px; border-radius: 50%; background-color: rgb(30, 214, 96);}
     .playlistBtnCircle:hover {opacity: 0.8;}
     .playlistBtnCircle:active {opacity: 0.6;}

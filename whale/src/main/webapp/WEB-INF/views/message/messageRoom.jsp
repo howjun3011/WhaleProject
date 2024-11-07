@@ -299,10 +299,19 @@
 	    const msgRoomId = data[0];
 	    const msgUserId = data[1];
 	    const msgType = data[2];
-	    const msgContent = event.data.split('#').slice(3).join('#'); // Treat rest as msgContent
 
-	    const msgRead = data[data.length - 2]; // Second-to-last item for read status
-	    const msgDate = data[data.length - 1]; // Last item for date
+	    let msgContent, msgRead, msgDate;
+	    
+	    if (msgType === 'TEXT') {
+	    	msgContent = data[3];
+		    msgRead = data[4];
+		    msgDate = data[5];
+	    	
+	    } else {
+		    msgContent = event.data.split('#').slice(3).join('#'); // Treat rest as msgContent
+		    msgRead = data[data.length - 2]; // Second-to-last item for read status
+		    msgDate = data[data.length - 1]; // Last item for date
+	    }
 
 	    if (msgRoomId === roomId) {
 	        const msgDiv = document.createElement('div');

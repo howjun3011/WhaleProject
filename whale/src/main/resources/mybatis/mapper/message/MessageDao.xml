@@ -34,9 +34,9 @@
 	</update>
 	    
 	    
-    <insert id="saveMessage">
+	<insert id="saveMessage">
 	    INSERT INTO message (message_id, message_create_date, message_text, message_room_id, message_read, user_id, message_type)
-	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, 1, #{user_id}, #{message_type})
+	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, #{message_read}, #{user_id}, #{message_type})
 	</insert>
 	
 	<select id="getMessagesByRoomId" resultType="com.tech.whale.message.dto.MessageDto">

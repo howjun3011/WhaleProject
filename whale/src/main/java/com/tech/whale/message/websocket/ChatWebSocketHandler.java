@@ -50,6 +50,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // roomId에 해당하는 세션 목록에 추가
             roomSessions.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<>()).add(session);
             System.out.println("WebSocket 연결 성공: " + session.getId() + " | Room ID: " + roomId);
+            messageDao.readMessage(roomId, session.getAttributes().get("userId").toString());
         } else {
             System.out.println("Room ID 없음으로 세션 거부: " + session.getId());
             session.close(CloseStatus.BAD_DATA);
@@ -76,7 +77,16 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             messageDto.setUser_id(userId);
             messageDto.setMessage_create_date(new Date());
             messageDto.setMessage_type(messageType);
+            
+            List<WebSocketSession> sessions = roomSessions.get(roomId);
+            boolean isUserInRoom = sessions != null && sessions.stream().anyMatch(s -> !s.getId().equals(session.getId()));
 
+            if (isUserInRoom) {
+                messageDto.setMessage_read(0);  // 상대방이 현재 방에 있으므로 읽음 처리
+            } else {
+                messageDto.setMessage_read(1);  // 상대방이 방에 없으므로 읽지 않음으로 표시
+            }
+            
             if ("TEXT".equals(messageType) && containsUrl(messageContent)) {
                 messageType = "LINK";
                 String url = extractUrl(messageContent);

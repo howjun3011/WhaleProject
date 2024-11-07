@@ -32,7 +32,7 @@
 				LEFT JOIN POST_MUSIC PM ON PM.POST_ID = P.POST_ID
 				LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
 				LEFT JOIN USER_INFO UI ON UI.USER_ID = P.USER_ID
-		ORDER BY P.POST_TITLE, P.USER_ID, UI.USER_NICKNAME
+		ORDER BY P.POST_DATE DESC, P.POST_ID DESC
 	</select>
 
 	<select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
@@ -55,7 +55,7 @@
 				LEFT JOIN FEED_IMG FI ON FI.FEED_ID = F.FEED_ID
         WHERE
         	F.FEED_OPEN = 0
-        ORDER BY F.USER_ID, F.FEED_TEXT, UI.USER_NICKNAME
+        ORDER BY F.FEED_DATE DESC, F.FEED_ID DESC
     </select>
     
 </mapper>

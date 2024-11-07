@@ -69,33 +69,8 @@ public class SearchService {
 		// 검색어 공백 제거
 		String cleanedKeyword = keyword.replaceAll("\\s+", "").toLowerCase();
 
-		// 검색어를 한 글자씩 나누기
-		String[] keywordChars = cleanedKeyword.split("");
-
 		for (PostDto postList : postLists) {
-//			String cleanedPostTitle = postList.getPost_title().replaceAll("\\s+", "").toLowerCase();
-//			String cleanedPostText = postList.getPost_text().replaceAll("\\s+", "").toLowerCase();
-//
-//			// 검색어의 각 문자가 포함되는지 체크
-//			boolean[] isMatch = new boolean[] { true, true };
-//			for (String searchChar : keywordChars) {
-//				if (!cleanedPostTitle.contains(searchChar)) {
-//					isMatch[0] = false;
-//					break;
-//				}
-//			}
-//			for (String searchChar : keywordChars) {
-//				if (!cleanedPostText.contains(searchChar)) {
-//					isMatch[1] = false;
-//					break;
-//				}
-//			}
-//
-//			// 모든 문자들이 포함되면 결과 리스트에 추가
-//			if (isMatch[0] || isMatch[1]) {
-//				resultList.add(postList);
-//			}
-      
+
 			// 각 필드의 null 체크
 			String userId = postList.getUser_id() != null ? postList.getUser_id() : "";
 			String userNickname = postList.getUser_nickname() != null ? postList.getUser_nickname() : "";
@@ -124,28 +99,6 @@ public class SearchService {
 
 		// 검색어 공백 제거
 		String cleanedKeyword = keyword.replaceAll("\\s+", "").toLowerCase();
-
-		// 검색어를 한 글자씩 나누기
-		String[] keywordChars = cleanedKeyword.split("");
-
-//		for (FeedDto feedList : feedLists) {
-//			String cleanedFeedText = feedList.getFeed_text().replaceAll("\\s+", "").toLowerCase();
-//
-//
-//			// 검색어의 각 문자가 포함되는지 체크
-//			boolean[] isMatch = new boolean[] { true, true };
-//			for (String searchChar : keywordChars) {
-//				if (!cleanedFeedText.contains(searchChar)) {
-//					isMatch[0] = false;
-//					break;
-//				}
-//			}
-//
-//			// 모든 문자들이 포함되면 결과 리스트에 추가
-//			if (isMatch[0]) {
-//				resultList.add(feedList);
-//			}
-//		}
     
 		for (FeedDto feed : feedLists) {
 			String combinedFields = (feed.getUser_id() + feed.getUser_nickname() + feed.getFeed_text())

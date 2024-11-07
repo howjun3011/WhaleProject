@@ -11,26 +11,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MessageController2 {
 
 	@Autowired
 	private MessageDao messageDao;
-	
+
 	@RequestMapping("/message/home")
 	public String messageHome(HttpServletRequest request, HttpSession session, Model model) {
-		System.out.println("maeeageHome() ctr");
 		String now_id = (String) session.getAttribute("user_id");
 
 		List<AllChatListDto> allChatList = messageDao.getAllChatList(now_id);
 		List<ReadChatDto> readChatList = messageDao.getReadChatList(now_id);
 
-		for (ReadChatDto list : readChatList) {
-			int minutes = list.getMinutes_since_last_message();
-			String timeDifference = "";
+		// ReadChatDto를 Map으로 변환하여 빠른 검색 가능
+		Map<String, ReadChatDto> readChatMap = new HashMap<>();
+		for (ReadChatDto readChatDto : readChatList) {
+			readChatMap.put(readChatDto.getUser_id(), readChatDto);
+		}
 
+		// allChatList를 순회하면서 필요한 데이터 설정
+		for (AllChatListDto list : allChatList) {
+			// 시간 차이 계산 (항상 수행)
+			Timestamp lastMessageDate = list.getLast_message_create_date();
+			long diffMillis = System.currentTimeMillis() - lastMessageDate.getTime();
+			int minutes = (int) (diffMillis / (60 * 1000));
+			String timeDifference = "";
 			if (minutes < 60) {
 				timeDifference = minutes + "분 전";
 			} else if (minutes < 1440) {
@@ -40,35 +51,33 @@ public class MessageController2 {
 				int days = minutes / 1440;
 				timeDifference = days + "일 전";
 			}
-
 			list.setTime_difference(timeDifference);
+
+			ReadChatDto readChatDto = readChatMap.get(list.getUser_id());
+			if (readChatDto != null) {
+				// 읽지 않은 메시지가 있는 경우
+				list.setUnread_message_count(readChatDto.getUnread_message_count());
+			} else {
+				// 읽지 않은 메시지가 없는 경우
+				list.setUnread_message_count(0);
+			}
 		}
 
 		// debug
-		/*for (AllChatListDto chatListDto : allChatList) {
-			System.out.println("User_id: " + chatListDto.getUser_id());
-			System.out.println("User_nickname: " + chatListDto.getUser_nickname());
-			System.out.println("User_image_url: " + chatListDto.getUser_image_url());
-			System.out.println("Message_read: " + chatListDto.getMessage_read());
-			System.out.println("Last_message_text: " + chatListDto.getLast_message_text());
-			System.out.println("--------------------------");
-		}*/
-
-		// debug
-		for (ReadChatDto chatListDto : readChatList) {
-			System.out.println("User_id: " + chatListDto.getUser_id());
-			System.out.println("Minutes_since_last_message: " + chatListDto.getMinutes_since_last_message());
-			System.out.println("Last_message_text: " + chatListDto.getLast_message_text());
-			System.out.println("Unread_message_count: " + chatListDto.getUnread_message_count());
+		for (AllChatListDto list : allChatList) {
+			System.out.println("User_id: " + list.getUser_id());
+			System.out.println("Last_message_sender_id: " + list.getLast_message_sender_id());
+			System.out.println("Time_difference: " + list.getTime_difference());
+			System.out.println("Unread_message_count: " + list.getUnread_message_count());
 			System.out.println("--------------------------");
 		}
 
 		model.addAttribute("allChatList", allChatList);
-		model.addAttribute("readChatList", readChatList);
 		model.addAttribute("now_id", now_id);
-		
+
 		return "message/home";
 	}
+
 
 	@RequestMapping("/message/newChat")
 	public String newChat(HttpServletRequest request, HttpSession session, Model model) {

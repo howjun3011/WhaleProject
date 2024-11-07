@@ -744,7 +744,7 @@
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">앨범</div>
-                                <div class="playlist-tracks-top" style="justify-content: center;">좋아요</div>
+                                <div class="playlist-tracks-top" style="justify-content: center;">추가한 날짜</div>
                             </div>
                             <div class="playlistTracks">
                                 <c:forEach var="track" items="${likedTracks}" varStatus="status">

@@ -12,7 +12,7 @@
         	USER_IMAGE_URL AS user_image_url
         FROM
         	USER_INFO
-        ORDER BY USER_ID
+        ORDER BY USER_ID, USER_NICKNAME
     </select>
     
     <select id="selectSearchPostInfo" resultType="com.tech.whale.community.dto.PostDto">
@@ -32,15 +32,7 @@
         		LEFT JOIN POST_MUSIC PM ON PM.POST_ID = P.POST_ID
         		LEFT JOIN POST_TAG PT ON PT.POST_TAG_ID = P.POST_TAG_ID
         		LEFT JOIN USER_INFO UI ON UI.USER_ID = P.USER_ID
-        WHERE
-        	P.USER_ID LIKE '%'||#{keyword}||'%'
-        	OR
-        	UI.USER_NICKNAME LIKE '%'||#{keyword}||'%'
-        	OR
-        	P.POST_TITLE LIKE '%'||#{keyword}||'%'
-        	OR
-        	P.POST_TEXT LIKE '%'||#{keyword}||'%'
-        ORDER BY P.POST_TITLE
+        ORDER BY P.POST_TITLE, P.POST_TEXT, P.USER_ID, UI.USER_NICKNAME
     </select>
     
     <select id="selectSearchFeedInfo" resultType="com.tech.whale.feed.dto.FeedDto">
@@ -59,12 +51,8 @@
         		LEFT JOIN FEED_TAG FT ON FT.FEED_ID = F.FEED_ID
         		LEFT JOIN USER_INFO UI ON UI.USER_ID = F.USER_ID
         WHERE
-        	F.USER_ID LIKE '%'||#{keyword}||'%'
-        	OR
-        	UI.USER_NICKNAME LIKE '%'||#{keyword}||'%'
-        	OR
-        	F.FEED_TEXT LIKE '%'||#{keyword}||'%'
-        ORDER BY F.USER_ID
+        	F.FEED_OPEN = 0
+        ORDER BY F.USER_ID, F.FEED_TEXT, UI.USER_NICKNAME
     </select>
     
 </mapper>

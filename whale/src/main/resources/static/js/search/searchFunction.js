@@ -99,7 +99,10 @@ function displayUserResults(userList) {
             <a href="/whale/profileHome?u=${encodeURIComponent(user.user_id)}" class="userLink">
                 <div class="userItem">
                     <img src="/whale/static/images/setting/${user.user_image_url}" alt="${user.user_nickname}" />
-                    <p>${user.user_nickname}</p>
+                    <div>
+                        <p style="margin-bottom: 0; color: #fff;">${user.user_nickname}</p>
+                        <p style="margin-top: 0; font-size: .85rem;">@${user.user_id}</p>
+                    </div>
                 </div>
             </a>`;
         resultDiv.append(userHtml);

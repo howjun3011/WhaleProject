@@ -243,10 +243,11 @@
 <script>
 	const roomId = '${roomId}';
 	const now_id = '${now_id}';
+	const userId = '${userId}';
 	
 	// WebSocket 설정
 	const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-	const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId);
+	const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId + "&userId=" + userId);
 	
 	socket.onopen = function() {
 	    console.log("WebSocket 연결 성공");

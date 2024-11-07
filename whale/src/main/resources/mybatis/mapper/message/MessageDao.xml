@@ -45,6 +45,14 @@
 	    WHERE message_room_id = #{roomId}
 	    ORDER BY message_create_date ASC
 	</select>
+	
+	<select id="getOtherUserInRoom" resultType="String">
+	    SELECT mru.user_id
+	    FROM message_room_user mru
+	    JOIN message_room mr ON mr.message_room_id = mru.message_room_id
+	    WHERE mru.message_room_id = #{roomId}
+	      AND mru.user_id = #{userId}
+	</select>
 
 	<select id="getFollowList" resultType="com.tech.whale.message.dto.FollowListDto">
 		<![CDATA[

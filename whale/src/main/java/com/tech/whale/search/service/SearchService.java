@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.tech.whale.community.dto.PostDto;
 import com.tech.whale.feed.dto.FeedDto;
@@ -59,7 +58,7 @@ public class SearchService {
 	    return resultList;
 	}
 	
-	public void getSearchPostService(Model model, String keyword) {
+	public List<PostDto> getSearchPostService(String keyword) {
 		List<PostDto> resultList = new ArrayList<>();
 		List<PostDto> postLists = searchDao.selectSearchPostInfo();
 		
@@ -114,10 +113,10 @@ public class SearchService {
 	        }
 	    }
 	    
-	    model.addAttribute("postList",resultList);
+	    return resultList;
 	}
 	
-	public void getSearchFeedService(Model model, String keyword) {
+	public List<FeedDto> getSearchFeedService(String keyword) {
 		List<FeedDto> resultList = new ArrayList<>();
 		List<FeedDto> feedLists = searchDao.selectSearchFeedInfo();
 		
@@ -164,6 +163,6 @@ public class SearchService {
 	        }
 	    }
 	    
-	    model.addAttribute("feedList",resultList);
+	    return resultList;
 	}
 }

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
-    function postDelete(postId,page,searchType) {
+    /* function postDelete(postId,page,searchType) {
         const deleteConfirm = confirm(postId+"번 게시글을 삭제하시겠습니까?");
         const sk = document.getElementsByName("sk")[0].value;
         if (deleteConfirm) {
@@ -13,29 +13,17 @@
         				+"&page="+page
         				+"&searchType="+searchType;
         }
-    }
+    } */
     
-    function feedDelete(feedId,page,searchType) {
-        const deleteConfirm = confirm(feedId+"번 피드를 삭제하시겠습니까?");
-        const sk = document.getElementsByName("sk")[0].value;
-        if (deleteConfirm) {
-        	window.location.href = 
-        		"adminBoardFeedContentDelete?feedId="+feedId
-        				+"&sk="+sk
-        				+"&page="+page
-        				+"&searchType="+searchType;
-        }
-    }
+    
 </script>
 <div class="content" name="content" id="content">
 
     <div class="accountSearch">
 		<form action="adminBoardListView" method="post" >
 	        <select name="searchType" id="searchType">
-			    <option value="user_id" selected >아이디</option>
-			    <option value="post_title" <c:if test="${searchType == 'post_title'}">selected</c:if>>제목</option>
-			    <option value="all_text" <c:if test="${searchType == 'all_text'}">selected</c:if>>내용</option>
-			    <option value="idPostFeed" <c:if test="${searchType == 'idPostFeed'}">selected</c:if>>전체</option>
+			    <option value="user_id" selected >작성자</option>
+			    <option value="notice_title" <c:if test="${searchType == 'post_title'}">selected</c:if>>제목</option>
 			</select>
 	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
 	        <input type="submit" value="검색" />
@@ -45,64 +33,45 @@
     <table>
         <thead>
             <tr>
-                <th>커뮤/피드</th>
+                <th>유저/관리자</th>
                 <th>번호</th>
-                <th>제목/내용</th>
-                <th>태그</th>
-                <th>아이디</th>
+                <th>제목</th>
+                <th>작성자</th>
                 <th>등록일</th>
-                <th>신고</th>
+                <th>조회수</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
 			<c:if test="${empty list}">
 			    <tr>
-			        <td colspan="8" align="center">결과가 없습니다.</td>
+			        <td colspan="6" align="center">결과가 없습니다.</td>
 			    </tr>
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
 				<tr>
-					<c:if test="${not empty dto.feed_id && dto.feed_id != 0}">
-					<td>피드</td>
-					<td>${dto.feed_id }</td>
-					<td>${dto.text }</td>
-					<td></td>
-					<td>${dto.user_id }</td>
-					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_feed_count }</td>
+					<c:if test="${not empty dto.notice_id && dto.notice_id != 0}">
+					<td>${dto.notice_name }</td>
+					<td>${dto.notice_id }</td>
+					<td>${dto.notice_title }</td>
+					<td>${dto.admin_id }</td>
+					<td><fmt:formatDate value="${dto.notice_date}" pattern="yyyy.MM.dd" /></td>
+					<td>${dto.notice_cnt }</td>
 					<td>
-						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
+						<button onclick = "location.href = 'adminNoticeContentView?f=${dto.notice_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<%-- <button onclick = "feedDelete('${dto.notice_id}','${ulsearchVO.page}','${searchType }')" >삭제</button> --%>
 					</td>
 					</c:if>
-					
-					<c:if test="${not empty dto.post_id && dto.post_id !=0}">
-					<td>${dto.community_name }</td>
-					<td>${dto.post_id }</td>
-					<td>${dto.post_title }</td>
-					<td>${dto.post_tag_text }</td>
-					<td>${dto.user_id }</td>
-					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_post_count }</td>
-					<td>
-						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
-							조회
-						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
-					</td>
-					</c:if>
-					
 				</tr>
 			</c:forEach>
 			</c:if>
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="8">
+			    <td colspan="6">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

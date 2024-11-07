@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tech.whale.admin.dao.AdminIDao;
+import com.tech.whale.admin.notice.service.AdminNoticeListService;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.service.AdminAccountUserListService;
 import com.tech.whale.admin.service.AdminAccountUserModifyService;
@@ -31,6 +32,8 @@ public class AdminNoticeController {
 
 	@Autowired
 	private AdminIDao adminIDao;
+	@Autowired
+	private AdminNoticeListService adminNoticeListService;
 	
 	@ModelAttribute("myId")
     public String addUserIdToModel(HttpSession session) {
@@ -44,8 +47,7 @@ public class AdminNoticeController {
 	}
 	public void boardSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
-	    subMenu.put("adminBoardListView", "게시글");
-	    subMenu.put("adminBoardCommentsListView", "댓글");
+	    subMenu.put("adminNoticeListView", "공지사항");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -60,11 +62,12 @@ public class AdminNoticeController {
 		model.addAttribute("searchVO", searchVO);
 		model.addAttribute("pname", "공지사항");
 		model.addAttribute("contentBlockJsp",
-				"../board/adminNoticeListContent.jsp");
+				"../notice/adminNoticeListContent.jsp");
 	    model.addAttribute("contentBlockCss",
 	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
 	    boardSubBar(model);
 	    
+	    adminNoticeListService.execute(model);
 	    
 	    
 		return "/admin/view/adminOutlineForm";

@@ -24,6 +24,7 @@ public class MessageController {
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
 			@RequestParam("u") String userId) {
 		String now_id = (String) session.getAttribute("user_id");
+		System.out.println(userId);
 		MessageDto messageDto = messageDao.getAllRoom(now_id, userId);
 		String roomId = "";
 		if (messageDto == null || messageDto.getMessage_room_id() == null) {

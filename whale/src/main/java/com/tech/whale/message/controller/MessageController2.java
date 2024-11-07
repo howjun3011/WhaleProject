@@ -83,7 +83,6 @@ public class MessageController2 {
 		return "message/home";
 	}
 
-
 	@RequestMapping("/message/newChat")
 	public String newChat(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("newChat() ctr");
@@ -99,9 +98,9 @@ public class MessageController2 {
 			System.out.println("--------------------");
 		}
 
+		model.addAttribute("now_id", now_id);
 		model.addAttribute("followList", followList);
 
 		return "/message/newChat";
 	}
-	
 }

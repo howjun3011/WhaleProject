@@ -73,6 +73,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             if ("TEXT".equals(messageType) && containsUrl(messageContent)) {
                 messageType = "LINK";
                 String url = extractUrl(messageContent);
+                messageDto.setMessage_type(messageType);
                 
                 if (url.contains("youtube.com") || url.contains("youtu.be")) {
                     String embedHtml = fetchYouTubeEmbedHtml(url);

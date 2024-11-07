@@ -1,6 +1,7 @@
 package com.tech.whale.message.dto;
 
 import java.util.Date;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,5 @@ public class MessageDto {
 	private String track_id;
 
 	private String message_type;
+	private Map<String, String> previewData;
 }

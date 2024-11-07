@@ -759,7 +759,7 @@
                                                 <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                             </svg>
                                         </button>
-                                        <div class="trackImageAndTitle" onclick="playAndNavigate('${track.track_id}');">
+                                        <div class="trackImageAndTitle">
                                             <!-- 트랙 이미지 표시 -->
                                             <c:if test="${not empty track.track_cover}">
                                                 <img src="${track.track_cover}" alt="${track.track_name}" width="50"
@@ -768,8 +768,8 @@
                                             </c:if>
                                             <!-- 트랙 제목과 아티스트 이름 표시 -->
                                             <div>
-                                                <p class="trackInfoTitle" style="font-weight: 400;">${track.track_name}</p>
-                                                <p class="trackInfoArtist">${track.track_artist}</p>
+                                                <p class="trackInfoTitle" style="font-weight: 400; cursor: pointer;" onclick="playAndNavigate('${track.track_id}');">${track.track_name}</p>
+                                                <p class="trackInfoArtist" style="cursor: pointer;" onclick="navigateToArtistDetail('${artistIds[track.track_id]}')">${track.track_artist}</p>
                                             </div>
                                         </div>
                                         <!-- 앨범 이름 -->

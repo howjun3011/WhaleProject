@@ -132,8 +132,8 @@ public class StreamingController {
 			model.addAttribute("trackDetail", trackDetail);
 
 			// 앨범 ID 가져오기
-			String albumId = streamingService.getAlbumIdByTrackId(session, trackId);
-			model.addAttribute("albumId", albumId);
+			String[] result = streamingService.getAlbumIdByTrackId(session, trackId);
+			model.addAttribute("albumId", result[0]);
 
 			// Album 정보 추가
 			Album albumDetail = streamingService.getAlbumDetail(session, trackDetail.getAlbum().getId());
@@ -395,13 +395,16 @@ public class StreamingController {
 
 			// 각 트랙의 앨범 ID를 가져오기 위해 Spotify API 호출
 			Map<String, String> albumIds = new HashMap<>();
+			Map<String, String> artistIds = new HashMap<>();
 			for (TrackDto trackDto : likedTracks) {
-				String albumId = streamingService.getAlbumIdByTrackId(session, trackDto.getTrack_id());
-				albumIds.put(trackDto.getTrack_id(), albumId);
+				String[] result = streamingService.getAlbumIdByTrackId(session, trackDto.getTrack_id());
+				albumIds.put(trackDto.getTrack_id(), result[0]);
+				artistIds.put(trackDto.getTrack_id(), result[1]);
 			}
 
 			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
 			model.addAttribute("albumIds", albumIds);        // 각 트랙의 앨범 ID 추가
+			model.addAttribute("artistIds", artistIds);      // 각 트랙의 아티스트 ID 추가
 		} else {
 			model.addAttribute("error", "No liked tracks found.");
 			System.out.println("likedTracks가 비어 있습니다.");

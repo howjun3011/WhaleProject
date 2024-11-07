@@ -2,6 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"); response.setHeader("Pragma", "no-cache"); response.setDateHeader("Expires", 0);%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,17 +76,14 @@
     </style>
 </head>
 <body>
-<h1>message</h1>
 <div class="container">
     <div class="header">
         <div class="left">
-            <a href="##" id="back"><img src="${pageContext.request.contextPath}/static/images/message/back.png"
-                                        alt="back"></a>
-            <div class="nowId">${now_id}</div>
+            <div class="nowId">메시지</div>
         </div>
-        <a href="${pageContext.request.contextPath}/message/newChat" id="new-chat"><img
-                src="${pageContext.request.contextPath}/static/images/message/newchatIcon.png" id="newchat"
-                alt="newchatIcon"></a>
+        <a href="${pageContext.request.contextPath}/message/newChat" id="new-chat">
+            <img src="${pageContext.request.contextPath}/static/images/message/newchatIcon.png" id="newchat" alt="newchatIcon">
+        </a>
     </div>
 
     <div class="scroll-content">

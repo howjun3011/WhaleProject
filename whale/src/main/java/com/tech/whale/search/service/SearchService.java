@@ -205,7 +205,14 @@ public class SearchService {
 //				resultList.add(postList);
 //			}
 
-			String combinedFields = (postList.getUser_id() + postList.getUser_nickname() + postList.getPost_title() + postList.getPost_text())
+			// 각 필드의 null 체크
+			String userId = postList.getUser_id() != null ? postList.getUser_id() : "";
+			String userNickname = postList.getUser_nickname() != null ? postList.getUser_nickname() : "";
+			String postTitle = postList.getPost_title() != null ? postList.getPost_title() : "";
+			String postText = postList.getPost_text() != null ? postList.getPost_text() : "";
+
+			// 필드들을 합치고 공백 제거 및 소문자 변환
+			String combinedFields = (userId + userNickname + postTitle + postText)
 					.replaceAll("\\s+", "").toLowerCase();
 
 			if (combinedFields.contains(cleanedKeyword)) {

@@ -57,4 +57,6 @@ public class MessageController {
 		model.addAttribute("roomId", roomId);
 		return "message/messageRoom";
 	}
+	
+	
 }

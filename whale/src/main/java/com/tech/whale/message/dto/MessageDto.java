@@ -25,4 +25,5 @@ public class MessageDto {
 	private int message_music_id;
 	private String track_id;
 
+	private String message_type;
 }

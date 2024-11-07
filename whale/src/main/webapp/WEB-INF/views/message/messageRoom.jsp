@@ -111,9 +111,10 @@
     .chat-input {
         display: flex;
         align-items: center;
-        padding: 15px;
+        padding: 10px;
         background-color: #ffffff;
         border-top: 1px solid #e9ecef;
+        gap: 10px;
     }
 
     .chat-input textarea {
@@ -127,15 +128,15 @@
     }
 
     .chat-input button {
-        width: 80px;
+        width: 90px;
         height: 50px;
-        margin-left: 10px;
         background-color: #12b886;
         border: none;
         color: #ffffff;
         border-radius: 5px;
         font-size: 1em;
         cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
     .chat-input button:hover {
@@ -181,7 +182,14 @@
 		        </c:otherwise>
 		    </c:choose>">
 		        <div class="message-bubble">
-		            <div>${msg.message_text}</div>
+		        <c:choose>
+		        	<c:when test="${msg.message_type eq TEXT}">
+			            <div>${msg.message_text}</div>		        	
+		        	</c:when>
+		        	<c:otherwise>
+		        		<div><img src="${msg.message_text}" alt="Image" style="max-width: 100%; border-radius: 5px;"></div>
+		        	</c:otherwise>
+		        </c:choose>
 		            <div class="message-info">
 		                ${msg.user_id} • 
 		                <fmt:formatDate value="${msg.message_create_date}" pattern="yyyy-MM-dd HH:mm:ss" />
@@ -196,71 +204,98 @@
     </div>
 
     <!-- 채팅 입력 영역 -->
-    <div class="chat-input">
-		<form onsubmit="sendMessage(); return false;">
-		    <input type="hidden" name="roomId" value="${roomId}">
-		    <input type="hidden" name="userId" value="${userId}">
-		    <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
-		              onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
-		    <button type="submit">전송</button>
-		</form>
-    </div>
+	<div class="chat-input">
+	    <form onsubmit="sendMessage(); return false;" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+	        <input type="hidden" name="roomId" value="${roomId}">
+	        <input type="hidden" name="userId" value="${userId}">
+	        <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
+	                  onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
+	        <input type="file" id="imageInput" accept="image/*" onchange="uploadImageAndSendURL()" style="display:none;">
+	        <button type="button" onclick="document.getElementById('imageInput').click();">이미지 전송</button>
+	        <button type="submit">전송</button>
+	    </form>
+	</div>
 </div>
 
 <script>
-    // JSP에서 컨텍스트 패스를 동적으로 가져옵니다.
-    const contextPath = '${pageContext.request.contextPath}';
-    const roomId = '${roomId}';
-    const now_id = '${now_id}';
-
-    console.log(contextPath);
-    
-    // 프로토콜을 동적으로 설정합니다. HTTPS인 경우 wss, 그렇지 않으면 ws를 사용합니다.
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-
-    // WebSocket URL을 설정합니다. 컨텍스트 패스를 포함합니다.
-
-/*     const socket = new WebSocket(protocol + window.location.host + contextPath + "/chat?roomId=" + roomId); */
+	const roomId = '${roomId}';
+	const now_id = '${now_id}';
+	
+	// WebSocket 설정
+	const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 	const socket = new WebSocket(protocol + "25.5.112.217:9002/whale/chat?roomId=" + roomId);
-
-    socket.onopen = function() {
-        console.log("WebSocket 연결 성공");
-        console.log(socket);
-    };
-
-    socket.onmessage = function(event) {
-        const chatMessages = document.getElementById('chatMessages');
-        const [msgRoomId, msgUserId, msgText, msgDate, msgRead] = event.data.split('#'); // '#' 구분자로 분리
-
-        console.log("Received Date: " + msgDate); // 수정된 날짜 로그로 확인
-
-        if (msgRoomId === roomId) {
-            const msgDiv = document.createElement('div');
-            const isOwnMessage = msgUserId === now_id;
-            msgDiv.className = "chat-message " + (isOwnMessage ? 'right' : 'left');
-
-            msgDiv.innerHTML =
-                '<div class="message-bubble">' +
-                    (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
-                    '<div>' + msgText + '</div>' +
-                    '<div class="message-info">' +
-                        msgUserId + ' • ' + msgDate + // 날짜를 그대로 표시
-                    '</div>' +
-                '</div>';
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight; // 스크롤을 맨 아래로 이동
-        }
-    };
-
-    function sendMessage() {
-        const messageInput = document.getElementById("messageInput");
-        const message = messageInput.value.trim();
-        if (message) {
-            const payload = `${roomId}:${now_id}:\${message}`;
-            socket.send(payload);
-            messageInput.value = "";
-        }
-    }
+	
+	socket.onopen = function() {
+	    console.log("WebSocket 연결 성공");
+	};
+	
+	// 이미지 업로드 및 URL 전송
+	function uploadImageAndSendURL() {
+	    const fileInput = document.getElementById("imageInput");
+	    const file = fileInput.files[0];
+	    if (file) {
+	        const formData = new FormData();
+	        formData.append("file", file);
+	
+	        $.ajax({
+	            url: "/whale/uploadImageGG",  // 이미지 업로드 엔드포인트
+	            type: "POST",
+	            data: formData,
+	            contentType: false,
+	            processData: false,
+	            success: function(response) {
+	                const imageUrl = response.imageUrl; // 업로드 후 반환된 이미지 URL
+	                const payload = roomId + ":" + now_id + ":IMAGE:" + imageUrl;
+	                socket.send(payload); // WebSocket으로 이미지 URL 전송
+	            },
+	            error: function(error) {
+	                console.error("Image upload failed:", error);
+	            }
+	        });
+	    }
+	}
+	
+	// 텍스트 메시지 전송
+	function sendMessage() {
+	    const messageInput = document.getElementById("messageInput");
+	    const message = messageInput.value.trim();
+	    if (message) {
+	        const payload = roomId + ":" + now_id + ":TEXT:" + message;
+	        socket.send(payload);
+	        messageInput.value = "";
+	    }
+	}
+	
+	// WebSocket 수신 시 메시지 처리
+	socket.onmessage = function(event) {
+	    const chatMessages = document.getElementById('chatMessages');
+	    const [msgRoomId, msgUserId, msgType, msgContent, msgRead, msgDate] = event.data.split('#');
+	
+	    if (msgRoomId === roomId) {
+	        const msgDiv = document.createElement('div');
+	        const isOwnMessage = msgUserId === now_id;
+	        msgDiv.className = "chat-message " + (isOwnMessage ? 'right' : 'left');
+	
+	        let contentHTML = '';
+	        if (msgType === 'TEXT') {
+	            contentHTML = '<div>' + msgContent + '</div>';
+	        } else if (msgType === 'IMAGE') {
+	            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
+	        }
+	
+	        msgDiv.innerHTML =
+	            '<div class="message-bubble">' +
+	                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
+	                contentHTML +
+	                '<div class="message-info">' +
+	                    msgUserId + ' • ' + msgDate +
+	                '</div>' +
+	            '</div>';
+	
+	        chatMessages.appendChild(msgDiv);
+	        chatMessages.scrollTop = chatMessages.scrollHeight;
+	    }
+	};
 
     // 페이지 로드 시 자동으로 채팅 메시지 영역을 스크롤합니다.
     window.onload = function() {

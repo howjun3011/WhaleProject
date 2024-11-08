@@ -585,9 +585,8 @@ async function toggleTrackLike(artistName, trackName, albumName, trackCover, tra
         });
         
         const data = await response.json();
-        
-        if (data.result === 'deleted') {button.querySelector("path").setAttribute("d", "");}
-        else {button.querySelector("path").setAttribute("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");}
+        if (data.result === 'deleted') {button.querySelector("path").setAttribute("fill", "#000000");}
+        else {button.querySelector("path").setAttribute("fill", "rgb(203, 130, 163)");}
     } catch (error) {
         console.error("Error toggling like status:", error);
     }
@@ -982,6 +981,7 @@ function toggleIcon(element) {
     const svg = element.querySelector("svg");
     const path = svg.querySelector("path");
 
+	/*
     if (path.getAttribute("d")) {
         // 현재 하트가 채워진 상태일 때, 빈 하트로 변경
         path.setAttribute("d", "");
@@ -989,4 +989,31 @@ function toggleIcon(element) {
         // 현재 빈 하트 상태일 때, 채워진 하트로 변경
         path.setAttribute("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
     }
+    */
+	if (path.getAttribute("fill") === 'rgb(203, 130, 163)') {
+        path.setAttribute("fill", "#000000");
+    } else {
+        path.setAttribute("fill", "rgb(203, 130, 163)");
+    }
+}
+
+// 플레이리스트 추가 및 삭제 함수
+function followPlaylist(i,j) {
+    if (i === 0) {
+        fetch(`/whale/streaming/followPlaylist?id=${ j }`);
+    } else {
+        fetch(`/whale/streaming/unfollowPlaylist?id=${ j }`);
+    }
+    setTimeout(() => {location.href = '/whale/streaming/playlistDetail?playlistId='+j;},500);
+}
+
+// 좋아요 전체 트랙 재생 함수
+function playAllLikeTrack(i) {
+	fetch(`/whale/streaming/playAllLikeTrack`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ uris: i })
+    });
 }

@@ -456,6 +456,43 @@ public class StreamingService {
     	Integer trackLikeId = streamingDao.selectTrackLikeId(userId, trackId);
     	streamingDao.deleteTrackLike(trackLikeId);
     }
+    
+    // 플레이리스트 추가 및 삭제
+    public void followPlaylistService(String playlistId) {
+    	try {
+    		spotifyApi.followPlaylist(playlistId, true).build().execute();
+		} catch (Exception e) {
+		}
+    }
+    
+    public void unfollowPlaylistService(String playlistId) {
+    	try {
+    		spotifyApi.unfollowPlaylist(playlistId).build().execute();
+		} catch (Exception e) {
+		}
+    }
+    
+    // 좋아요 전체 재생
+    public void playAllLikeTrackService(HttpSession session, String uris) {
+        initializeSpotifyApi(session);
+        String[] urisArray = uris.split(",");
+
+        try {
+            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray result = new JsonArray();
+            for (String track : urisArray) {
+            	result.add(new JsonPrimitive(track));
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(result) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play album: " + e.getMessage());
+        }
+    }
 
     //----------------------------------------------------------------------------------------------------------
 

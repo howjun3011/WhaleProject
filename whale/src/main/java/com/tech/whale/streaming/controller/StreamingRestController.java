@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonArray;
 import com.tech.whale.streaming.models.TrackDto;
 import com.tech.whale.streaming.service.StreamingService;
 
@@ -113,5 +114,23 @@ public class StreamingRestController {
     public void deleteTrackLikeNode(@RequestParam("userId") String userId, @RequestParam("trackId") String trackId) {
     	// 트랙 좋아요 테이블 삭제
     	streamingService.deleteTrackLikeNodeService(userId, trackId);
+    }
+    
+    // 플레이리스트 추가 및 삭제
+    @GetMapping(value = "/streaming/followPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void followPlaylist(@RequestParam("id") String playlistId) {
+    	streamingService.followPlaylistService(playlistId);
+    }
+    
+    // 플레이리스트 추가 및 삭제
+    @GetMapping(value = "/streaming/unfollowPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void unfollowPlaylist(@RequestParam("id") String playlistId) {
+    	streamingService.unfollowPlaylistService(playlistId);
+    }
+    
+    // 좋아요 전체 트랙 재생
+    @PostMapping(value = "/streaming/playAllLikeTrack", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void playAllLikeTrack(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	streamingService.playAllLikeTrackService(session, map.get("uris").toString());
     }
 }

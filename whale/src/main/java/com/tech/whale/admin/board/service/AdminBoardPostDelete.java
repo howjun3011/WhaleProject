@@ -61,4 +61,20 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		
 	}
 	
+	@Transactional
+	public void noticeDel(Model model) {
+		
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request = 
+				(HttpServletRequest) map.get("request");
+		
+		int post_id = Integer.parseInt(request.getParameter("postId"));
+		
+		
+		adminIDao.postLikeDel(post_id);
+		adminIDao.postCommentsLikeDel(post_id);
+		adminIDao.postCommentsDel(post_id);
+		adminIDao.postDel(post_id);
+	}
+	
 }

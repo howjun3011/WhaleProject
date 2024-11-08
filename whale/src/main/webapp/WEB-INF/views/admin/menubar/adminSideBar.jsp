@@ -12,10 +12,9 @@
 
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
  	<div class="profile">
- 	<div style="height:80px; width:80px; border-radius: 50%;
- 					 background-color: #fff; margin: 20px auto;" >
- 		<img src="/whale/static/images/setting/${myImgUrl }" alt="user_img" style="height:80px; width:80px; border-radius: 50%" /> <br />
- 	</div>
+	 	<div class="proImgBox">
+	 		<img src="/whale/static/images/setting/${myImgUrl }" alt="user_img" class="proImg"/> <br />
+	 	</div>
     </div>
  	<div class="logoutstr">
         <a href="adminMyInfoView">${myId }</a> <br />

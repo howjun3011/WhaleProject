@@ -910,5 +910,46 @@
 	    WHERE P.POST_ID = #{param1}
 	</select>
 	
+	<select id="reportCnt" resultType="int">
+		SELECT COUNT(CASE WHEN REPORT_ADMIN_CHECK IS NULL THEN 1 END)
+		FROM REPORT
+	</select>
+	<select id="reportResultCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM REPORT_RESULT
+		WHERE TRUNC(REPORT_RESULT_DATE) = TRUNC(SYSDATE)
+	</select>
+	<select id="writingCnt" resultType="int">
+		SELECT (
+		    (SELECT COUNT(*)
+		     FROM POST
+		     WHERE TRUNC(POST_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM FEED
+		     WHERE TRUNC(FEED_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM POST_COMMENTS
+		     WHERE TRUNC(POST_COMMENTS_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM FEED_COMMENTS
+		     WHERE TRUNC(FEED_COMMENTS_DATE) = TRUNC(SYSDATE))
+		) AS TOTAL_COUNT
+		FROM DUAL
+	</select>
+	
+	<select id="mainNotice" resultType="com.tech.whale.admin.dto.AdminMainCntDto">
+		SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
+		FROM (
+		    SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
+		    FROM POST
+		    WHERE POST_TAG_ID = 5
+		    ORDER BY POST_ID DESC
+		)
+		WHERE ROWNUM &lt;= 3
+
+	</select>
 	
 </mapper>

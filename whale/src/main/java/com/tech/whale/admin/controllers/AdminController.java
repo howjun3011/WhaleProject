@@ -16,6 +16,7 @@ import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.service.AdminAccountUserListService;
 import com.tech.whale.admin.service.AdminAccountUserModifyService;
+import com.tech.whale.admin.service.AdminMainPageService;
 import com.tech.whale.admin.service.AdminUserImgDeleteService;
 import com.tech.whale.admin.service.AdminUserInfoCommentService;
 import com.tech.whale.admin.service.AdminUserInfoFeedService;
@@ -46,6 +47,8 @@ public class AdminController {
 	private AdminUserNicknameModifyService adminUserNicknameModifyService;
 	@Autowired
 	private AdminUserImgDeleteService adminUserImgDeleteService;
+	@Autowired
+	private AdminMainPageService adminMainPageService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -89,6 +92,9 @@ public class AdminController {
 	    model.addAttribute("subBarBlockCss",
 	    		null);
 	    accountSubBar(model);
+	    
+	    adminMainPageService.execute(model);
+	    
 	    
 		return "/admin/view/adminMainView";
 	}

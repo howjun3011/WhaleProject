@@ -243,7 +243,7 @@ export default {
             return parsedContent.body.innerHTML;
         },
         redirectRouter(i,y) {
-            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
+            this.$router.push(`/whale/streaming/detail/${i}/${y}`);
         },
         getTrackInfo(i,j) {
             fetch(`/whale/streaming/getTrackInfo?id=${i}`)

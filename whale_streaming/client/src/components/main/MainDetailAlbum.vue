@@ -151,7 +151,7 @@ export default {
             return this.isShow[i];
         },
         redirectRouter(i,y) {
-            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
+            this.$router.push(`/whale/streaming/detail/${i}/${y}`);
         },
         getTrackLikeInfo(i,j) {
             fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)

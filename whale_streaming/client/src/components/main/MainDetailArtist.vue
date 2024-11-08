@@ -269,10 +269,10 @@ export default {
             }
         },
         redirectRouter(i,y) {
-            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
+            this.$router.push(`/whale/streaming/detail/${i}/${y}`);
         },
         redirectPlaylistRouter(i) {
-            this.$router.replace(`/whale/streaming/playlist/${i}`);
+            this.$router.push(`/whale/streaming/playlist/${i}`);
         },
         getTrackLikeInfo(i,j) {
             fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)

@@ -2,6 +2,8 @@ package com.tech.whale.streaming.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import com.tech.whale.streaming.models.TrackDto;
 import com.tech.whale.streaming.service.StreamingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,6 +187,15 @@ public class StreamingController {
 			// 아티스트의 상위 곡
 			Track[] topTracks = streamingService.getArtistTopTracks(session, artistId);
 			model.addAttribute("topTracks", topTracks);
+			
+			// 곡 좋아요 확인
+			List<Boolean> trackLike = new ArrayList<Boolean>(topTracks.length);
+			int x = 0;
+			
+			for (Track element : topTracks) {
+				trackLike.add(x++, streamingService.getTrackLikeBoolService((String) session.getAttribute("user_id"), element.getId()));
+			}
+			model.addAttribute("trackLike", trackLike);
 
 			// 아티스트의 앨범 목록
 			Paging<AlbumSimplified> albums = streamingService.getArtistAlbums(session, artistId);
@@ -289,6 +300,21 @@ public class StreamingController {
 		// 사용자 플레이리스트 가져오기
 		List<PlaylistSimplified> userPlaylists = streamingService.getUserPlaylists(session);
 		model.addAttribute("userPlaylists", userPlaylists);
+		
+		// 플레이리스트 현재 사용자에 추가 여부 확인 및 자신이 만든 플레이리스트 여부 확인
+		boolean isAdded = false;
+		boolean isSpotified = false;
+		for (PlaylistSimplified element : userPlaylists) {
+			if (element.getId().equals(playlistId)) {
+				isAdded = true;
+				break;
+			}
+		}
+		if (playlistDetail.getOwner().getDisplayName().equals("Spotify")) {
+			isSpotified = true;
+		}
+		model.addAttribute("isAdded", isAdded);
+		model.addAttribute("isSpotified", isSpotified);
 
 		// 좋아요 표시한 트랙 목록 가져오기
 		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
@@ -306,10 +332,18 @@ public class StreamingController {
 
 		Album albumDetail = streamingService.getAlbumDetail(session, albumId);
 		List<Track> albumTracks = streamingService.getAlbumTracks(session, albumId);
+		
+		List<Boolean> trackLike = new ArrayList<Boolean>(albumTracks.size());
+		int x = 0;
+		
+		for (Track element : albumTracks) {
+			trackLike.add(x++, streamingService.getTrackLikeBoolService((String) session.getAttribute("user_id"), element.getId()));
+		}
 
 		if (albumDetail != null && albumTracks != null) {
 			model.addAttribute("albumDetail", albumDetail);
 			model.addAttribute("tracks", albumTracks);
+			model.addAttribute("trackLike", trackLike);
 		} else {
 			model.addAttribute("error", "앨범 정보를 불러오지 못했습니다.");
 		}
@@ -391,27 +425,33 @@ public class StreamingController {
 
 		// 좋아요 표시한 트랙 목록 가져오기
 		List<TrackDto> likedTracks = streamingService.getLikedTracks(userId);
+		
+		// 각 TrackSimplified 정보를 가져와 URI 배열 생성
+        String uris = "";
 
 		if (likedTracks != null && !likedTracks.isEmpty()) {
 			// 각 트랙의 좋아요 여부를 확인하여 TrackDto의 필드에 추가
 			for (TrackDto track : likedTracks) {
 				boolean isLiked = streamingService.selectTrackLikeService(session, track.getTrack_id());
 				track.setLiked(isLiked); // TrackDto에 isLiked 필드를 설정
+				
+				uris += "spotify:track:"+track.getTrack_id()+",";
 			}
 
 			// 각 트랙의 앨범 ID를 가져오기 위해 Spotify API 호출
 			Map<String, String> albumIds = new HashMap<>();
 			Map<String, String> artistIds = new HashMap<>();
 
-//			for (TrackDto trackDto : likedTracks) {
-//				String[] result = streamingService.getAlbumIdByTrackId(session, trackDto.getTrack_id());
-//				albumIds.put(trackDto.getTrack_id(), result[0]);
-//				artistIds.put(trackDto.getTrack_id(), result[1]);
-//			}
+			// for (TrackDto trackDto : likedTracks) {
+			//	  String[] result = streamingService.getAlbumIdByTrackId(session, trackDto.getTrack_id());
+			//	  albumIds.put(trackDto.getTrack_id(), result[0]);
+			//	  artistIds.put(trackDto.getTrack_id(), result[1]);
+			// }
 
 			model.addAttribute("likedTracks", likedTracks);  // Model에 좋아요 트랙 추가
 			model.addAttribute("albumIds", albumIds);        // 각 트랙의 앨범 ID 추가
 			model.addAttribute("artistIds", artistIds);      // 각 트랙의 아티스트 ID 추가
+			model.addAttribute("uris", uris);      // 각 트랙의 아티스트 ID 추가
 		} else {
 			model.addAttribute("error", "No liked tracks found.");
 			System.out.println("likedTracks가 비어 있습니다.");

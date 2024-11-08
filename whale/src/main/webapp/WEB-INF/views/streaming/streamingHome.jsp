@@ -312,12 +312,12 @@
                         <!-- 가사 출력 -->
                         <div class="lyrics">
                             <h3>가사</h3>
-                            <pre>${lyrics}</pre>
+                            <pre style="padding-top: 10px">${lyrics}</pre>
                         </div>
                     </c:when>
                     <c:when test="${page == 'search'}">
                         <div class="searchFirstContainer">
-                            <div>
+                            <div style="padding-left: 10px;">
                                 <!-- 연관 아티스트가 있을 때만 표시 -->
                                 <c:if test="${not empty searchedArtist}">
                                     <h3 class="resultContainerTitle">연관 아티스트</h3>
@@ -495,8 +495,29 @@
                                                 <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}"/>
 
                                                 <!-- 소수점 제거 후 출력 -->
-                                                <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
-
+                                                <p class="trackTime" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+		                                        <div class="trackLike"
+		                                             onclick="insertTrackLike('<c:out
+		                                                     value="${track.album.images[0].url}"/>', '<c:out
+		                                                     value="${fn:escapeXml(track.name)}"/>', '<c:out
+		                                                     value="${fn:escapeXml(artistDetail.name)}"/>', '<c:out
+		                                                     value="${fn:escapeXml(track.album.name)}"/>', '${track.id}', false);
+		                                                     toggleIcon(this)">
+		                                            <c:choose>
+		                                                <c:when test="${trackLike[status.index]}">
+		                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
+		                                                    <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
+		                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+		                                                    </svg>
+		                                                </c:when>
+		                                                <c:otherwise>
+		                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
+		                                                    <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
+		                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+		                                                    </svg>
+		                                                </c:otherwise>
+		                                            </c:choose>
+		                                        </div>
                                             </div>
                                         </c:forEach>
                                     </div>
@@ -595,13 +616,40 @@
                                 </div>
                             </div>
                             <!-- 전체 재생 버튼 추가 -->
-                            <button class="playAllButton" onclick="playAllPlaylist('${playlistDetail.id}')">
-                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
-                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
-                                    <path data-v-057e38be=""
-                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
-                                </svg>
-                            </button>
+                            <div class="playlistFunction">
+	                            <button class="playAllButton" onclick="playAllPlaylist('${playlistDetail.id}')">
+	                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
+	                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
+	                                    <path data-v-057e38be=""
+	                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+	                                </svg>
+	                            </button>
+	                            <c:if test="${isSpotified == true}">
+		                            <div class="playlistAddContainer">
+		                            	<c:choose>
+		                            		<c:when test="${isAdded == false}">
+	                                            <svg
+									                data-encore-id="icon"
+									                role="img"
+									                aria-hidden="true"
+									                viewBox="0 0 24 24"
+									                class="playlistAddBtn"
+									                onclick="followPlaylist(0,`${playlistDetail.id}`)"
+									            >
+									                <path d="M11.999 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm-11 9c0-6.075 4.925-11 11-11s11 4.925 11 11-4.925 11-11 11-11-4.925-11-11z"
+									                ></path>
+									                <path d="M17.999 12a1 1 0 0 1-1 1h-4v4a1 1 0 1 1-2 0v-4h-4a1 1 0 1 1 0-2h4V7a1 1 0 1 1 2 0v4h4a1 1 0 0 1 1 1z"
+									                ></path>
+									            </svg>
+	                                        </c:when>
+	                                        <c:otherwise>
+	                                            <img src="${pageContext.request.contextPath}/static/images/streaming/player/cross.png" alt="cross" width="30" height="30" class="crossBtn" style="cursor: pointer;"
+	                                            	 onclick="followPlaylist(1,`${playlistDetail.id}`)">
+	                                        </c:otherwise>
+	                                    </c:choose>
+							        </div>
+						        </c:if>
+                            </div>
                             <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
                                 <div class="playlist-tracks-top" style="padding-left: 10px;">제목</div>
@@ -652,14 +700,14 @@
                                             <c:choose>
                                                 <c:when test="${trackLike[status.index]}">
                                                     <!-- 좋아요 상태일 때 채워진 하트 -->
-                                                    <svg class="icon likeIcon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                    <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <!-- 좋아요 상태가 아닐 때 빈 하트 -->
-                                                    <svg class="icon likeIcon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
-                                                        <path d=""></path>
+                                                    <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
+                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
                                                 </c:otherwise>
                                             </c:choose>
@@ -704,14 +752,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- 전체 재생 버튼 추가 -->
-                            <button class="playAllButton" onclick="playAllAlbum('<c:out value="${albumDetail.id}"/>')">
-                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
-                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
-                                    <path data-v-057e38be=""
-                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
-                                </svg>
-                            </button>
+                            <div class="playlistFunction">
+	                            <!-- 전체 재생 버튼 추가 -->
+	                            <button class="playAllButton" onclick="playAllAlbum('<c:out value="${albumDetail.id}"/>')">
+	                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
+	                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
+	                                    <path data-v-057e38be=""
+	                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+	                                </svg>
+	                            </button>
+                            </div>
                             <div class="playlist-tracks"
                                  style="height: 25px; grid-template-columns: 6% 83% 11%; margin-top: 5px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
@@ -745,7 +795,29 @@
                                         <c:set var="minutes" value="${trackItem.durationMs / 60000}"/>
                                         <c:set var="seconds" value="${(trackItem.durationMs % 60000) / 1000}"/>
                                         <!-- 소수점 제거 후 출력 -->
-                                        <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                        <p class="trackTime" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                        <div class="trackLike"
+                                             onclick="insertTrackLike('<c:out
+                                                     value="${albumDetail.images[0].url}"/>', '<c:out
+                                                     value="${fn:escapeXml(trackItem.name)}"/>', '<c:out
+                                                     value="${fn:escapeXml(trackItem.artists[0].name)}"/>', '<c:out
+                                                     value="${fn:escapeXml(albumDetail.name)}"/>', '${trackItem.id}', false);
+                                                     toggleIcon(this)">
+                                            <c:choose>
+                                                <c:when test="${trackLike[status.index]}">
+                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
+                                                    <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
+                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                                                    </svg>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
+                                                    <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
+                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                                                    </svg>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                     </div>
                                 </c:forEach>
                             </div>
@@ -762,7 +834,17 @@
                                     <p class="playlistOpt" style="margin-left: 5px;">WHALE • ${fn:length(likedTracks)}곡</p>
                                 </div>
                             </div>
-                            <div class="playlist-tracks" style="height: 25px; margin-top: 40px; pointer-events: none;">
+                            <div class="playlistFunction">
+						        <button class="playAllButton"
+						        		onclick="playAllLikeTrack('<c:out value="${uris}"/>')">
+	                                <svg style="width: 20px;" data-v-057e38be="" data-encore-id="icon" role="img"
+	                                     aria-hidden="true" viewBox="0 0 24 24" class="playlistBtn">
+	                                    <path data-v-057e38be=""
+	                                          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
+	                                </svg>
+	                            </button>
+						    </div>
+                            <div class="playlist-tracks" style="height: 25px; margin-top: 30px; pointer-events: none;">
                                 <div class="playlist-tracks-top" style="justify-content: center;">#</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">앨범</div>
@@ -811,7 +893,7 @@
                                         <button class="toggleLikeButton"
                                                 onclick="toggleTrackLike('${track.track_artist}', '${track.track_name}', '${track.track_album}', '${track.track_cover}', '${track.track_id}', this)"
                                                 style="cursor: pointer;">
-                                            <svg class="icon" style="width: 20px; filter: invert(1); display: none;"
+                                            <svg class="icon" style="width: 20px; fill: rgb(203, 130, 163); display: none;"
                                                  viewBox="0 0 24 24">
                                                 <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
                                                 <path d="${track.liked ? 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' : 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'}"></path>

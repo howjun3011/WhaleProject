@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.tech.whale.admin.dto.AdminAdInfoDto;
+import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
@@ -124,6 +125,16 @@ public interface AdminIDao {
 	public void feedCommentsLikeParentDel(int feed_comments_id);
 	public void updateUserStatus(String userId);
 	public String myImg(String userId);
+	
+	////////////////
+	public ArrayList<AdminPFCDto> adminNoticeList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectNoticeCnt(String sk, String selNum);
+	public ArrayList<AdminCommunityDto> communitySelect();
+	
 	
 	
 }

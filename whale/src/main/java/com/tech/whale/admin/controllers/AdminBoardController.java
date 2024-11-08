@@ -1,5 +1,6 @@
 package com.tech.whale.admin.controllers;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.tech.whale.admin.board.service.AdminBoardPostContentService;
 import com.tech.whale.admin.board.service.AdminBoardFeedDelete;
 import com.tech.whale.admin.board.service.AdminBoardListService;
 import com.tech.whale.admin.board.service.AdminBoardPostDelete;
+import com.tech.whale.admin.board.service.AdminNoticeListService;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.util.AdminSearchVO;
@@ -26,6 +28,7 @@ import com.tech.whale.community.dto.CommentDto;
 import com.tech.whale.community.dto.PostDto;
 import com.tech.whale.community.service.ComDetailService;
 import com.tech.whale.community.service.ComLikeCommentService;
+import com.tech.whale.community.service.ComRegService;
 import com.tech.whale.feed.dao.FeedDao;
 import com.tech.whale.feed.dto.FeedCommentDto;
 import com.tech.whale.feed.dto.FeedDto;
@@ -48,6 +51,11 @@ public class AdminBoardController {
 	private AdminBoardFeedDelete adminBoardFeedDelete;
 	@Autowired
 	private FeedCommentService feedCommentsService;
+	@Autowired
+	private AdminNoticeListService adminNoticeListService;
+	
+	@Autowired
+	private ComRegService comRegService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -60,6 +68,7 @@ public class AdminBoardController {
     public String addUserIdToModel(HttpSession session) {
         return (String) session.getAttribute("user_id");
     }
+	
 	@ModelAttribute("myImgUrl")
 	public String myImgUrl(Model model) {
 		String myId = (String)model.getAttribute("myId");
@@ -71,6 +80,7 @@ public class AdminBoardController {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminBoardListView", "게시글");
 	    subMenu.put("adminBoardCommentsListView", "댓글");
+	    subMenu.put("adminNoticeListView", "공지사항");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -125,8 +135,6 @@ public class AdminBoardController {
 		model.addAttribute("postId", postId);
 		model.addAttribute("postDetail", postDetail);
 		adminBoardPostContentService.execute(model);
-
-//		adminBoardListService.execute(model);
 		
 		return "/admin/view/adminOutlineForm";
 	}
@@ -302,5 +310,125 @@ public class AdminBoardController {
 				"&sk="+sk+"&searchType="+searchType;
 	}
 	
+	
+	@RequestMapping("/adminNoticeListView")
+	public String adminNoticeListView(
+			HttpServletRequest request,
+			AdminSearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "공지사항");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminNoticeListContent.jsp");
+	    model.addAttribute("contentBlockCss",
+	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
+	    boardSubBar(model);
+	    
+	    adminNoticeListService.execute(model);
+	    
+	    
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminNoticeRegView")
+	public String adminNoticeRegView(
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "공지사항");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminNoticeRegContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/board/adminNoticeRegContent.css");
+		boardSubBar(model);
+		
+		adminNoticeListService.communitySelect(model);
+		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminNoticeRegDo")
+	public String communityRegDo(
+			@RequestParam("community_id") int communityId,
+            @RequestParam("post_title") String post_title,
+            @RequestParam("post_text") String post_text,
+            @RequestParam("user_id") String user_id,
+            @RequestParam("post_tag_id") int post_tag_id,
+            HttpSession session, Model model) {
+		
+		PostDto postDto = new PostDto();
+		postDto.setCommunity_id(communityId);
+		postDto.setUser_id(user_id);
+		postDto.setPost_title(post_title);
+		postDto.setPost_text(post_text);
+		postDto.setPost_tag_id(post_tag_id);
+		
+        try {
+            // 게시글 및 이미지 저장
+            comRegService.registerPost(postDto);
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "이미지 업로드 중 오류가 발생했습니다.");
+            return "errorPage";
+        }
+
+        return "redirect:adminNoticeListView";
+	}
+	
+	@RequestMapping("/adminNoticeUpdateView")
+	public String adminNoticeUpdateView(
+			@RequestParam("postId") String postId,
+			HttpServletRequest request,
+			HttpSession session,
+			Model model) {
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "공지사항");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminNoticeUpdateContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/board/adminNoticeRegContent.css");
+		boardSubBar(model);
+		
+		adminBoardPostContentService.execute(model);
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminNoticeContentView")
+	public String adminNoticeContentView(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("communityName") String communityName,
+			@RequestParam("postId") String postId,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "게시글");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminNoticeContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/board/adminBoardPostContent.css");
+		boardSubBar(model);
+		
+		PostDto postDetail = comDao.getPost(postId);
+		List<CommentDto> commentsList = comLikeCommentService.getCommentsForPost(postId);
+		postDetail.setComments(commentsList);
+
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("sk", sk);
+		model.addAttribute("communityName", communityName);
+		model.addAttribute("postId", postId);
+		model.addAttribute("postDetail", postDetail);
+		adminBoardPostContentService.execute(model);
+		
+		return "/admin/view/adminOutlineForm";
+	}
 	
 }

@@ -1,7 +1,6 @@
-package com.tech.whale.admin.notice.service;
+package com.tech.whale.admin.board.service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.dao.AdminNoticeIDao;
-import com.tech.whale.admin.dto.AdminNoticeListDto;
-import com.tech.whale.admin.dto.AdminOfficialInfoDto;
+import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
 
@@ -23,7 +19,7 @@ import com.tech.whale.admin.util.AdminSearchVO;
 public class AdminNoticeListService implements AdminServiceInter{
 	
 	@Autowired
-	private AdminNoticeIDao adminNoticeIDao;
+	private AdminIDao adminIDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -39,7 +35,7 @@ public class AdminNoticeListService implements AdminServiceInter{
 		}
 		
 		String user_id = "";
-	    String notice_title = "";
+	    String post_title = "";
 	 	
 		String brdTitle = request.getParameter("searchType");
 		
@@ -50,9 +46,9 @@ public class AdminNoticeListService implements AdminServiceInter{
 			if(brdTitle.equals("user_id")) {
 				model.addAttribute("user_id", "true");
 				user_id="user_id";
-			}else if(brdTitle.equals("notice_title")) {
-				model.addAttribute("notice_title", "true");
-				notice_title="notice_title";
+			}else if(brdTitle.equals("post_title")) {
+				model.addAttribute("post_title", "true");
+				post_title="post_title";
 			}
 		}
 		String searchKeyword = request.getParameter("sk");
@@ -62,9 +58,9 @@ public class AdminNoticeListService implements AdminServiceInter{
 
 		int total = 0;
 		if(user_id.equals("user_id")) {
-			total = adminNoticeIDao.selectNoticeCnt(searchKeyword,"1");
-		}else if(notice_title.equals("notice_title")) {
-			total = adminNoticeIDao.selectNoticeCnt(searchKeyword,"2");
+			total = adminIDao.selectNoticeCnt(searchKeyword,"1");
+		}else if(post_title.equals("post_title")) {
+			total = adminIDao.selectNoticeCnt(searchKeyword,"2");
 		}
 		
 		String strPage = request.getParameter("page");
@@ -81,23 +77,14 @@ public class AdminNoticeListService implements AdminServiceInter{
 		int rowStart = searchVO.getRowStart();
 		int rowEnd = searchVO.getRowEnd();
 		
-		ArrayList<AdminNoticeListDto> list = null;
+		ArrayList<AdminPFCDto> list = null;
 		if(user_id.equals("user_id")) {
-			list = adminNoticeIDao.adminNoticeList(rowStart,rowEnd, searchKeyword,"1");
+			list = adminIDao.adminNoticeList(rowStart,rowEnd, searchKeyword,"1");
 		}
-		else if(notice_title.equals("notice_title")) {
-			list = adminNoticeIDao.adminNoticeList(rowStart,rowEnd,searchKeyword,"2");
+		else if(post_title.equals("post_title")) {
+			list = adminIDao.adminNoticeList(rowStart,rowEnd,searchKeyword,"2");
 		}
 		
-		if(list != null) {
-			for(AdminNoticeListDto val : list) {
-				if(val.getNotice_group() == 0) {
-					val.setNotice_name("유저");
-				}else if(val.getNotice_group() == 1) {
-					val.setNotice_name("관리자");
-				}
-			}
-		}
 		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchType", brdTitle);
@@ -105,6 +92,12 @@ public class AdminNoticeListService implements AdminServiceInter{
 		model.addAttribute("ultotRowcnt", total);
 		model.addAttribute("ulsearchVO", searchVO);
 		
+	}
+	
+	public void communitySelect(Model model) {
+		
+		ArrayList<AdminCommunityDto> communityList = adminIDao.communitySelect();
+		model.addAttribute("communityList", communityList);
 	}
 	
 }

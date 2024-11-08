@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 
 import com.tech.whale.streaming.service.LyricsService;
 
-import se.michaelthelin.spotify.model_objects.specification.Track;
-
 @Controller
 public class StreamingController {
 
@@ -269,10 +267,18 @@ public class StreamingController {
 	@RequestMapping("/streaming/playlistDetail")
 	public String playlistDetail(@RequestParam("playlistId") String playlistId, HttpSession session, Model model) {
 		Playlist playlistDetail = streamingService.getPlaylistDetail(session, playlistId);
+		
+		List<Boolean> trackLike = new ArrayList<Boolean>(playlistDetail.getTracks().getItems().length);
+		int x = 0;
+		
+		for (PlaylistTrack element : playlistDetail.getTracks().getItems()) {
+			trackLike.add(x++, streamingService.getTrackLikeBoolService((String) session.getAttribute("user_id"), element.getTrack().getId()));
+		}
 
 		if (playlistDetail != null) {
 			model.addAttribute("playlistDetail", playlistDetail);
 			model.addAttribute("tracks", Arrays.asList(playlistDetail.getTracks().getItems()));
+			model.addAttribute("trackLike", trackLike);
 		} else {
 			model.addAttribute("error", "Unable to retrieve playlist details");
 		}

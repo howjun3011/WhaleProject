@@ -641,7 +641,29 @@
                                         <c:set var="minutes" value="${trackItem.track.durationMs / 60000}"/>
                                         <c:set var="seconds" value="${(trackItem.track.durationMs % 60000) / 1000}"/>
                                         <!-- 소수점 제거 후 출력 -->
-                                        <p style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                        <p class="trackTime" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
+                                        <div class="trackLike"
+                                             onclick="insertTrackLike('<c:out
+                                                     value="${trackItem.track.album.images[0].url}"/>', '<c:out
+                                                     value="${fn:escapeXml(trackItem.track.name)}"/>', '<c:out
+                                                     value="${fn:escapeXml(trackItem.track.artists[0].name)}"/>', '<c:out
+                                                     value="${fn:escapeXml(trackItem.track.album.name)}"/>', '${trackItem.track.id}', false);
+                                                     toggleIcon(this)">
+                                            <c:choose>
+                                                <c:when test="${trackLike[status.index]}">
+                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
+                                                    <svg class="icon likeIcon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                                                    </svg>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
+                                                    <svg class="icon likeIcon" style="width: 20px; filter: invert(1);" viewBox="0 0 24 24">
+                                                        <path d=""></path>
+                                                    </svg>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                     </div>
                                 </c:forEach>
                             </div>

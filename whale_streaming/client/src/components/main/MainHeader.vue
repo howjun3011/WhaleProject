@@ -28,9 +28,9 @@ export default {
         this.checkEnter();
     },
     methods: {
-        goMain() {this.$router.replace('/whale/streaming/recommend'); this.changeBackground();},
-        goSearchHome() {this.$router.replace(`/whale/streaming/searchHome`); this.changeBackground();},
-        goSearch() {this.$router.replace(`/whale/streaming/search/${ this.query }`); this.changeBackground();},
+        goMain() {this.$router.push('/whale/streaming/recommend'); this.changeBackground();},
+        goSearchHome() {this.$router.push(`/whale/streaming/searchHome`); this.changeBackground();},
+        goSearch() {this.$router.push(`/whale/streaming/search/${ this.query }`); this.changeBackground();},
         changeBackground() {
             document.querySelector('.mainContent').style.backgroundImage = '';
             document.querySelector('.mainContent').style.backgroundColor = '#2e2e2e';

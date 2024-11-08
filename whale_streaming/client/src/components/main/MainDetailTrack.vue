@@ -104,7 +104,7 @@ export default {
             document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
         },
         redirectRouter(i,y) {
-            this.$router.replace(`/whale/streaming/detail/${i}/${y}`);
+            this.$router.push(`/whale/streaming/detail/${i}/${y}`);
         },
         getTrackLikeInfo(i) {
             fetch(`http://localhost:9002/whale/streaming/userLikeBoolInfo?userId=${ sessionStorage.userId }&trackId=${ i }`)

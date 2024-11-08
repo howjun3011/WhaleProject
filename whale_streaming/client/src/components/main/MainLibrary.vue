@@ -92,7 +92,7 @@ export default {
                 })
         },
         redirectPlaylist(i) {
-            this.$router.replace(`/whale/streaming/playlist/${ i }`);
+            this.$router.push(`/whale/streaming/playlist/${ i }`);
         },
     },
 };

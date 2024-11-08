@@ -107,24 +107,24 @@
 <div class="content" name="content" id="content">
     <div class="container">
         <h1>게시글 수정</h1>
-        <form action="communityUpdateDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
+        <form action="adminNoticeUpdateDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
             <!-- 포스트 아이디 전달 -->
-            <input type="hidden" name="post_id" value="${post.post_id}" />
+            <input type="hidden" name="post_id" value="${postDetail.post_id}" />
             <div class="form-group">
                 <label for="post_tag_id">태그</label>
-                <input type="text" name="post_tag_text" id="post_tag_text" value="${post.post_tag_text}" readonly />
-                <input type="hidden" name="post_tag_id" id="post_tag_id" value="${post.post_tag_id}"/>
+                <input type="text" name="post_tag_text" id="post_tag_text" value="${postDetail.post_tag_text}" readonly />
+                <input type="hidden" name="post_tag_id" id="post_tag_id" value="${postDetail.post_tag_id}"/>
             </div>
 
             <div class="form-group">
                 <label for="community_name">커뮤니티</label>
-                <input type="text" name="community_name" id="community_name" value="${communityName}" readonly />
-                <input type="hidden" name="community_id" value="${communityId}" />
+                <input type="text" name="community_name" id="community_name" value="${comIdName.community_name}" readonly />
+                <input type="hidden" name="community_id" value="${comIdName.community_id}" />
             </div>
 
             <div class="form-group">
                 <label for="post_title">제목</label>
-                <input type="text" name="post_title" id="post_title" value="${post.post_title}" />
+                <input type="text" name="post_title" id="post_title" value="${postDetail.post_title}" />
             </div>
 
             <div class="form-group">
@@ -134,12 +134,15 @@
 
             <div class="form-group">
                 <label for="post_text">내용</label>
-                <textarea name="post_text" id="post_text">${post.post_text}</textarea>
+                <textarea name="post_text" id="post_text">${postDetail.post_text}</textarea>
             </div>
 
             <div class="button-group">
+                <input type="hidden" name="searchType" value="${searchType }" />
+                <input type="hidden" name="sk" value="${sk}" />
+                <input type="hidden" name="page" value="${page}" />
                 <input type="submit" value="업데이트" />
-                <input type="button" value="취소" onClick="location.href='adminNoticeListView'" />
+                <input type="button" value="취소" onClick="location.href='adminNoticeContentView?postId=${postDetail.post_id}&searchType=${searchType }&sk=${sk }$page=${page }'" />
             </div>
         </form>
     </div>

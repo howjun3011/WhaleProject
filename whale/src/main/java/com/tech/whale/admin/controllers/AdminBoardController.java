@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tech.whale.admin.board.service.AdminBoardPostContentService;
 import com.tech.whale.admin.board.service.AdminBoardFeedDelete;
@@ -29,6 +30,7 @@ import com.tech.whale.community.dto.PostDto;
 import com.tech.whale.community.service.ComDetailService;
 import com.tech.whale.community.service.ComLikeCommentService;
 import com.tech.whale.community.service.ComRegService;
+import com.tech.whale.community.service.PostUpdateService;
 import com.tech.whale.feed.dao.FeedDao;
 import com.tech.whale.feed.dto.FeedCommentDto;
 import com.tech.whale.feed.dto.FeedDto;
@@ -56,6 +58,8 @@ public class AdminBoardController {
 	
 	@Autowired
 	private ComRegService comRegService;
+	@Autowired
+	private PostUpdateService postUpdateService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -334,7 +338,6 @@ public class AdminBoardController {
 	
 	@RequestMapping("/adminNoticeRegView")
 	public String adminNoticeRegView(
-			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
 		
@@ -358,7 +361,7 @@ public class AdminBoardController {
             @RequestParam("post_text") String post_text,
             @RequestParam("user_id") String user_id,
             @RequestParam("post_tag_id") int post_tag_id,
-            HttpSession session, Model model) {
+            Model model) {
 		
 		PostDto postDto = new PostDto();
 		postDto.setCommunity_id(communityId);
@@ -381,9 +384,11 @@ public class AdminBoardController {
 	
 	@RequestMapping("/adminNoticeUpdateView")
 	public String adminNoticeUpdateView(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
 			@RequestParam("postId") String postId,
 			HttpServletRequest request,
-			HttpSession session,
 			Model model) {
 		model.addAttribute("request", request);
 		model.addAttribute("pname", "공지사항");
@@ -393,6 +398,9 @@ public class AdminBoardController {
 				"/whale/static/css/admin/board/adminNoticeRegContent.css");
 		boardSubBar(model);
 		
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("sk", sk);
 		adminBoardPostContentService.execute(model);
 		return "/admin/view/adminOutlineForm";
 	}
@@ -402,9 +410,7 @@ public class AdminBoardController {
 			@RequestParam("page") int page,
 			@RequestParam("searchType") String searchType,
 			@RequestParam("sk") String sk,
-			@RequestParam("communityName") String communityName,
 			@RequestParam("postId") String postId,
-			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
 		
@@ -423,12 +429,76 @@ public class AdminBoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("sk", sk);
-		model.addAttribute("communityName", communityName);
 		model.addAttribute("postId", postId);
 		model.addAttribute("postDetail", postDetail);
 		adminBoardPostContentService.execute(model);
 		
 		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminBoardNoticeCommentsContentDelete")
+	public String adminBoardNoticeCommentsContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("postId") String postId,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardPostDelete.commentsDelete(model);
+		
+		///////  자식 댓글있으면 전부 삭제?
+		
+		return "redirect:adminNoticeContentView?page="+page+
+				"&sk="+sk+"&searchType="+searchType+"&postId="+postId;
+	}
+	
+	@RequestMapping("/adminNoticeContentDelete")
+	public String adminNoticeContentDelete(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpSession session,
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		String user_id = (String)session.getAttribute("user_id");
+		model.addAttribute("user_id", user_id);
+		adminBoardPostDelete.noticeDel(model);
+		
+		return "adminNoticeListView?page="+page+
+				"&sk="+sk+"&searchType="+searchType;
+	}
+	
+	
+	@RequestMapping("/adminNoticeUpdateDo")
+	public String adminNoticeUpdateDo(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("post_id") int postId,
+			@RequestParam("community_id") int communityId,
+            @RequestParam("post_title") String postTitle,
+            @RequestParam("post_text") String postText,
+            @RequestParam("post_tag_id") int postTagId,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+		
+		PostDto postDto = new PostDto();
+	    postDto.setPost_id(postId);
+	    postDto.setPost_title(postTitle);
+	    postDto.setPost_text(postText);
+	    postDto.setPost_tag_id(postTagId);
+		
+	    postUpdateService.updatePost(postDto);
+
+        return "redirect:adminNoticeContentView?postId="+postId
+        		+ "&page=" + page
+        		+ "&searchType=" + searchType
+        		+ "&sk=" + sk;
 	}
 	
 }

@@ -59,7 +59,12 @@
     color: #868e96;
     font-size: 0.9em;
 }
-
+.post-btn-box{
+	margin-left: auto;
+}
+.post-btn-box button{
+	margin-right: 10px;
+}
 .post-meta .profile-pic {
     width: 40px;
     height: 40px;

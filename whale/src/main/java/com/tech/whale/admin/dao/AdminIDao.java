@@ -10,6 +10,7 @@ import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.community.dto.PostDto;
 
 @Mapper
 public interface AdminIDao {
@@ -134,6 +135,8 @@ public interface AdminIDao {
 			@Param("selNum") String selNum);
 	public int selectNoticeCnt(String sk, String selNum);
 	public ArrayList<AdminCommunityDto> communitySelect();
+	public AdminCommunityDto comIdName(String postId);
+	public PostDto getAdminPost(String postId);
 	
 	
 	

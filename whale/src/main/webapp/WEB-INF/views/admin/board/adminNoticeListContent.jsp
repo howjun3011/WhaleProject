@@ -59,12 +59,12 @@
 					<td><fmt:formatDate value="${dto.post_date}" pattern="yyyy.MM.dd" /></td>
 					<td>${dto.post_cnt }</td>
 					<td>
-						<button onclick = "location.href = 'adminNoticeContentView?f=${dto.post_id }&communityName=${dto.community_name }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
+						<button onclick = "location.href = 'adminNoticeContentView?postId=${dto.post_id }&communityName=${dto.community_name }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "location.href = 'adminNoticeContentView?f=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'" >
+						<%-- <button onclick = "location.href = 'adminNoticeContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'" >
 							수정
-						</button>
+						</button> --%>
 					</td>
 					</c:if>
 				</tr>

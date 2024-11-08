@@ -48,6 +48,16 @@ router.get('/getPlaylist', async (req, res) => {
     res.json(results);
 });
 
+router.get('/followPlaylist', async (req, res) => {
+    const results = await playlistService.followPlaylistService(req, res);
+    res.json(results);
+});
+
+router.get('/unfollowPlaylist', async (req, res) => {
+    const results = await playlistService.unfollowPlaylistService(req, res);
+    res.json(results);
+});
+
 router.get('/play', async (req, res) => {
     const results = await playerService.playerService(req, res);
     res.json(results);

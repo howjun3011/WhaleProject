@@ -34,6 +34,23 @@
                 ></path>
             </svg>
         </div>
+        <div class="playlistAddContainer" v-if="isLiked === false && playlist !== null && playlist.owner.display_name === 'Spotify'">
+            <svg
+                data-encore-id="icon"
+                role="img"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                class="playlistAddBtn"
+                v-if="isAdded === false"
+                @click="followPlaylist(playlist.id)"
+            >
+                <path d="M11.999 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm-11 9c0-6.075 4.925-11 11-11s11 4.925 11 11-4.925 11-11 11-11-4.925-11-11z"
+                ></path>
+                <path d="M17.999 12a1 1 0 0 1-1 1h-4v4a1 1 0 1 1-2 0v-4h-4a1 1 0 1 1 0-2h4V7a1 1 0 1 1 2 0v4h4a1 1 0 0 1 1 1z"
+                ></path>
+            </svg>
+            <img src="../../../public/images/main/cross.png" alt="cross" width="30" height="30" class="crossBtn" style="cursor: pointer;" v-if="isAdded === true" @click="followPlaylist(playlist.id)">
+        </div>
     </div>
     <div class="playlist-tracks" style="height: 25px; margin-top: 5px; pointer-events: none;">
         <div class="playlist-tracks-top" style="justify-content: center;">#</div>
@@ -126,6 +143,9 @@
 
 <script>
 export default {
+    props: {
+        libraries: Object,
+    },
     data() {
         return {
             playlist: null,
@@ -138,6 +158,7 @@ export default {
             like: [],
             isPlayed: [],
             position: [],
+            isAdded: false,
         }
     },
     mounted() {
@@ -169,6 +190,9 @@ export default {
 
                         this.playlist.tracks.items.forEach((el, index) => {
                             this.getTrackLikeInfo(el.track.id,index);
+                        });
+                        this.libraries.forEach((el) => {
+                            if (el.id === this.playlist.id) {this.isAdded = true;}
                         });
                     } else {
                         console.error('No items found');
@@ -283,6 +307,15 @@ export default {
                 fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
             }
             this.like[x] = !this.like[x];
+        },
+        followPlaylist(i) {
+            if (this.isAdded === false) {
+                fetch(`/whale/streaming/followPlaylist?id=${ i }`);
+            } else {
+                fetch(`/whale/streaming/unfollowPlaylist?id=${ i }`);
+            }
+            this.isAdded = !this.isAdded;
+            setTimeout(() => {this.$emit('updateLibrary');},500);
         }
     },
 };
@@ -296,11 +329,15 @@ export default {
     .playlistName {font-size: 64px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
     .playlistDesc {font-size: 12px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
     .playlistOpt {margin-top: 5px; font-size: 14px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
-    .playlistFunction {width: 100%;}
+    .playlistFunction {display: flex; width: 100%;}
     .playlistBtnCircle {display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin-left: 30px; border-radius: 50%; background-color: rgb(30, 214, 96);}
     .playlistBtnCircle:hover {opacity: 0.8;}
     .playlistBtnCircle:active {opacity: 0.6;}
     .playlistBtn {height: 22px;}
+    .playlistAddContainer {display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin-left: 15px; background: transparent;}
+    .playlistAddBtn {height: 40px; fill: rgb(178, 179, 178); cursor: pointer; transition: all 0.1s ease;}
+    .playlistAddBtn:hover {height: 41px; fill: #ffffff; opacity: 0.8;}
+    .playlistAddBtn:active {height: 41px; fill: #ffffff; opacity: 0.6;}
     .playlist-tracks {position: relative; display: grid; grid-template-columns: 7% 48% 35% 10%; width: 100%;}
     .playlist-tracks:hover {border-radius: 5px; background-color: #5e5e5e;}
     .playlist-tracks-top {display: flex; align-items: center; height: 25px; border-bottom: 1.5px solid #c6c6c6; padding-top: 10px; padding-bottom: 6px; font-size: 13px; color: #ffffff; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
@@ -308,4 +345,7 @@ export default {
     .playlistTrackBtn:hover {opacity: 0.8;}
     .playlistTrackBtn:active {opacity: 0.6;}
     .likeBtn {height: 16px; cursor: pointer;}
+    .crossBtn {opacity: 0.8;}
+    .crossBtn:hover {opacity: 0.6;}
+    .crossBtn:active {opacity: 0.4;}
 </style>

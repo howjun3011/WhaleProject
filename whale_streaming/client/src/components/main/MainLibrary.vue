@@ -55,34 +55,22 @@
 
 <script>
 export default {
+    props: {
+        libraries: Object,
+    },
     data() {
         return {
             isExpanded: false,
-            libraries: null,
             isShow: [],
             likeCnt: null,
         };
     },
     mounted() {
-        this.getUserLibraries();
         this.getUserLikeCnt();
     },
     methods: {
         expandLibrary() {
             this.isExpanded = !this.isExpanded;
-        },
-        async getUserLibraries() {
-            const result = await fetch('/whale/streaming/getLibraries');
-            if (await result.ok) {
-                const data = await result.json();
-                if (data.items && data.items.length > 0) {
-                    this.libraries = data.items;
-                } else {
-                    console.error('No items found');
-                }
-            } else {
-                console.error('Failed to fetch user top items:', result.statusText);
-            }
         },
         getUserLikeCnt() {
             fetch(`http://localhost:9002/whale/streaming/likeCnt?userId=${ sessionStorage.userId }`)

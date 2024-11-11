@@ -19,6 +19,7 @@ public class MessageDto {
 	private String message_room_id;
 	private int message_read;
 	private String user_id;
+	private String user_image_url;
 	
 	private int message_image_id;
 	private String message_image_url;

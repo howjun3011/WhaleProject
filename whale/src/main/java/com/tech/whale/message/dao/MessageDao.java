@@ -46,5 +46,11 @@ public interface MessageDao {
 	String findFeedUser(String feed_id);
 
 	List<LinkMessageDto> getLinkUser(String user_id);
+	
+	MessageDto getMessageById(int messageId);
+	
+	void deleteMessage(int messageId);
+
+	int getNextMessageId();
 }
 

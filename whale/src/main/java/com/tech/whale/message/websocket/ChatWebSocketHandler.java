@@ -119,23 +119,29 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             } else {
                 messageDto.setMessage_text(messageContent);
             }
+            
+            int messageId = messageDao.getNextMessageId();
+            
+            messageDto.setMessage_id(messageId);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = dateFormat.format(new Date());
 
-            String formattedMessage = String.format("%s#%s#%s#%s#%d#%s",
-                    roomId, userId, messageType, messageDto.getMessage_text(), messageDto.getMessage_read(), formattedDate);
+            String formattedMessage = String.format("%s#%s#%s#%d#%s#%d#%s",
+                    roomId, userId, messageType, messageId, messageDto.getMessage_text(), messageDto.getMessage_read(), formattedDate);
 
             // 채팅방에 메시지 브로드캐스트
             broadcastToRoom(roomId, new TextMessage(formattedMessage));
 
             // DB에 메시지 저장
             messageDao.saveMessage(messageDto);
+            
+
 
             String otherUserId = messageDao.getOtherUserInRoom2(roomId, userId);
             
             String userImgUrl = messageDao.getUserImage(userId);
-            
+           
             // Home 페이지에 메시지 알림 전송
             HomeMessage homeMessage = new HomeMessage();
             homeMessage.setReceiverId(otherUserId); // receiver_id는 추가로 설정 필요

@@ -31,11 +31,14 @@
 		SET MESSAGE_READ = 0
 		WHERE MESSAGE_ROOM_ID = #{roomId} AND USER_ID = #{userId}
 	</update>
-	    
-	    
+	
+	<select id="getNextMessageId" resultType="int">
+		SELECT MESSAGE_SEQ.NEXTVAL FROM DUAL
+	</select>    
+	
 	<insert id="saveMessage">
 	    INSERT INTO message (message_id, message_create_date, message_text, message_room_id, message_read, user_id, message_type)
-	    VALUES (MESSAGE_SEQ.NEXTVAL, #{message_create_date}, #{message_text}, #{message_room_id}, #{message_read}, #{user_id}, #{message_type})
+	    VALUES (#{message_id}, #{message_create_date}, #{message_text}, #{message_room_id}, #{message_read}, #{user_id}, #{message_type})
 	</insert>
 	
 	<select id="getUserImage" resultType="String">
@@ -163,4 +166,14 @@
 		ORDER BY
 		MAX(M.MESSAGE_CREATE_DATE) DESC
 	</select>
+	
+	<select id="getMessageById" parameterType="int" resultType="com.tech.whale.message.dto.MessageDto">
+	    SELECT * FROM message WHERE message_id = #{messageId}
+	</select>
+	
+	<delete id="deleteMessage" parameterType="int">
+	    DELETE FROM message WHERE message_id = #{messageId}
+	</delete>
+	
+	
 </mapper>

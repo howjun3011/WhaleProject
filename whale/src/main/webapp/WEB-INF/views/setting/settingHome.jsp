@@ -30,7 +30,7 @@ a:visited, a:hover, a:focus, a:active {
 						<img src="static/images/setting/account.png" alt="계정" />
 						<div class="setting-item-text">
 							<p>계정</p>
-							<p class="sub-text">aaa</p>
+							<p class="sub-text">account</p>
 						</div>
 					</div>
 				</a>
@@ -39,7 +39,7 @@ a:visited, a:hover, a:focus, a:active {
 						<img src="static/images/setting/archive1.png" alt="보관" />
 						<div class="setting-item-text">
 							<p>보관</p>
-							<p class="sub-text">aaa</p>
+							<p class="sub-text">storage</p>
 						</div>
 					</div>
 				</a>

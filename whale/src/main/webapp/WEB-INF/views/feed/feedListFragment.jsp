@@ -6,7 +6,7 @@
     <div class="post" data-post-id="${feed.feed_id}" data-user-id="${feed.user_id}">
         <div class="user-info">
             <a href="profileHome?u=${feed.user_id}">
-                <img src="static/images/setting/${feed.user_image_url}" alt="User Profile" class="profile-pic">
+                <img src="${feed.user_image_url}" alt="User Profile" class="profile-pic">
             </a>
             <span class="username">${feed.user_id}</span>
         </div>
@@ -17,7 +17,7 @@
 
         <!-- 이미지가 존재할 때만 출력 -->
         <c:if test="${not empty feed.feed_img_name}">
-            <img src="static/images/feed/${feed.feed_img_name}" alt="Post Image" class="post-image">
+            <img src="${feed.feed_img_url}" alt="Post Image" class="post-image">
         </c:if>
 
         <!-- 음악 정보가 존재할 때만 출력 -->

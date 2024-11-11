@@ -281,7 +281,7 @@
         // 모달에 값 채우기
         document.getElementById("modal-user-id").innerText = "@" + userId;
         document.getElementById("modal-user-nickname").innerText = userNickname;
-        document.getElementById("modal-user-image").src = "static/images/setting/" + userImageUrl;
+        document.getElementById("modal-user-image").src = userImageUrl;
 
         // 링크 설정
         document.getElementById('profile-link').href = "profileHome?u=" + userId;

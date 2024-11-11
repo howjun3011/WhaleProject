@@ -86,7 +86,7 @@
             <c:forEach items="${followingList}" var="following">
                 <li>
                     <div style="display: flex; align-items: center;">
-                        <a href="profileHome?u=${following.user_id }"><img src="static/images/setting/${following.user_image_url}" alt="${following.user_nickname}의 프로필 사진"></a>
+                        <a href="profileHome?u=${following.user_id }"><img src="${following.user_image_url}" alt="${following.user_nickname}의 프로필 사진"></a>
                         <div class="following-info">
                             <div class="nickname">${following.user_nickname}</div>
                             <div class="name">@${following.user_id}</div>

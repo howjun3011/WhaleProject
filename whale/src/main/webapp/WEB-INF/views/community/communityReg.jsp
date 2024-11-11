@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>게시글 작성</title>
 <!-- CKEditor CDN -->
-<script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.20.0/full/ckeditor.js"></script>
 <link rel="stylesheet" href="static/css/streaming/searchView.css" />
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

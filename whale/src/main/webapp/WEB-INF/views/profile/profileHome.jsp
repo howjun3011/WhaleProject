@@ -371,7 +371,7 @@
     <div class="profile-header">
         <div class="profile-info">
             <div>
-                <img class="profile-image" src="static/images/setting/${profile.user_image_url}" alt="User Profile Image">
+                <img class="profile-image" src="${profile.user_image_url}" alt="User Profile Image">
                 <div class="user-id">@${userId}</div>
             </div>
             <div class="details">
@@ -476,7 +476,7 @@
                 <div class="feed-grid">
                     <c:forEach items="${feedList}" var="feed">
                         <a href="feedDetail?f=${feed.feed_id}">
-                            <img src="static/images/feed/${feed.feed_img_name}" onerror="this.style.display='none'">
+                            <img src="${feed.feed_img_url}" onerror="this.style.display='none'">
                         </a>
                     </c:forEach>
                 </div>

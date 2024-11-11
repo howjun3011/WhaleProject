@@ -183,7 +183,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         return matcher.find() ? matcher.group() : "";
     }
 
-    private void broadcastToRoom(String roomId, TextMessage message) throws IOException {
+    protected void broadcastToRoom(String roomId, TextMessage message) throws IOException {
         List<WebSocketSession> sessions = roomSessions.get(roomId);
         if (sessions != null) {
             for (WebSocketSession sess : sessions) {
@@ -192,6 +192,23 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 }
             }
         }
+    }
+    
+    public boolean isUserInRoom(String roomId, String userId) {
+        List<WebSocketSession> sessions = roomSessions.get(roomId);
+        if (sessions != null) {
+            for (WebSocketSession session : sessions) {
+                String sessionUserId = (String) session.getAttributes().get("userId");
+                if (userId.equals(sessionUserId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public void broadcastMessageToRoom(String roomId, String formattedMessage) throws IOException {
+        broadcastToRoom(roomId, new TextMessage(formattedMessage));
     }
 
     @Override

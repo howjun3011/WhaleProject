@@ -75,31 +75,6 @@ public class SettingController {
         return "setting/profileEdit";
     }
 
-    @PostMapping("/updateProfile")
-    public String updateProfile(@RequestParam("user_nickname") String nickname,
-                                @RequestParam("user_email") String email,
-                                HttpSession session) {
-        System.out.println("updateProfile() ctr");
-
-        String session_user_id = (String) session.getAttribute("user_id");
-
-        if (session.getAttribute("user_profile_image") == null) { // 세션에 이미지가 저장 안 되어 있으면
-            session.setAttribute("user_profile_image", userinfoDto.getUser_image_url()); // DB에서 불러온 이미지 url을 세션에 user_profile_image라는 이름으로 저장
-            System.out.println("session에 이미지 저장 안 되어 있어서 새로 저장: " + userinfoDto.getUser_image_url()); // debug
-        }
-
-        // 세션에 저장된 새로운 프로필 이미지 가져오기
-        String newProfileImage = (String) session.getAttribute("user_profile_image");
-        System.out.println("session_storaged_img_url: " + session.getAttribute("user_profile_image")); // debug
-
-        // DB에 변경한 프로필 정보 업데이트
-        settingDao.updateProfile(nickname, email, newProfileImage, session_user_id);
-
-        System.out.println("DB 업데이트 완료");
-
-        return "redirect:/profileEdit";
-    }
-
     @RequestMapping("/updatePassword")
     public String updatePassword(HttpServletRequest request, HttpSession session, Model model) {
         System.out.println("updatePassword() ctr");
@@ -143,46 +118,26 @@ public class SettingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/uploadProfileImage")
-    @ResponseBody
-    public Map<String, String> uploadProfileImage(MultipartHttpServletRequest mtfRequest, HttpSession session) {
-        System.out.println("uploadProfileImage() ctr");
-
-        Map<String, String> response = new HashMap<>();
+    @PostMapping("/updateProfile")
+    public String updateProfile(@RequestParam("user_nickname") String nickname,
+                                @RequestParam("user_email") String email,
+                                @RequestParam(value = "user_profile_image_url", required = false) String userProfileImageUrl,
+                                HttpSession session) {
+        System.out.println("updateProfile() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        String workPath = System.getProperty("user.dir");
-        System.out.println(workPath);
-        String root = workPath + "/src/main/resources/static/images/setting";
-        MultipartFile mf = mtfRequest.getFile("file");
-
-        if (mf != null && !mf.isEmpty()) {
-            String originalFileName = mf.getOriginalFilename();
-            long currentTime = System.currentTimeMillis();
-            String newFileName = currentTime + "_" + originalFileName;
-
-            String savePath = root + "/" + newFileName;
-
-            try {
-                File saveFile = new File(savePath);
-                mf.transferTo(saveFile);
-
-                // 세션에 변경한 이미지 파일명 저장
-                session.setAttribute("user_profile_image", newFileName);
-                System.out.println("session_set_img_url" + session.getAttribute("user_profile_image")); // debug
-                response.put("fileName", newFileName);
-                response.put("status", "success");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.put("status", "error");
-            }
-        } else {
-            response.put("status", "no_file");
+        // 새로운 프로필 이미지가 없을 경우 기존 이미지 사용
+        if (userProfileImageUrl == null || userProfileImageUrl.isEmpty()) {
+            userProfileImageUrl = settingDao.getCurrentProfileImage(session_user_id);
         }
 
-        return response;
+        // DB에 변경한 프로필 정보 업데이트
+        settingDao.updateProfile(nickname, email, userProfileImageUrl, session_user_id);
+
+        System.out.println("DB 업데이트 완료");
+
+        return "redirect:/profileEdit";
     }
 
     @RequestMapping("/representiveSong")

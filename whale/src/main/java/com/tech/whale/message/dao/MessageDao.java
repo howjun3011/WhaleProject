@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.tech.whale.message.dto.AllChatListDto;
 import com.tech.whale.message.dto.FollowListDto;
+import com.tech.whale.message.dto.LinkMessageDto;
 import com.tech.whale.message.dto.ReadChatDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,11 @@ public interface MessageDao {
 	String getOtherUserInRoom2(String roomId, String userId);
 
 	String getUserImage(String userId);
+
+	String findPostUser(String post_id);
+
+	String findFeedUser(String feed_id);
+
+	List<LinkMessageDto> getLinkUser(String user_id);
 }
 

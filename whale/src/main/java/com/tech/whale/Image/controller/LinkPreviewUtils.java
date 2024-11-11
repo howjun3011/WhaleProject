@@ -9,7 +9,19 @@ import java.util.Map;
 public class LinkPreviewUtils {
     public static Map<String, String> fetchOpenGraphData(String url) {
         Map<String, String> metaData = new HashMap<>();
+        
         try {
+            // 내부 Whale 링크인지 확인
+            if (isInternalWhaleLink(url)) {
+                // 기본 미리보기 데이터 설정
+                metaData.put("url", url);
+                metaData.put("title", "Whale");
+                metaData.put("description", "Whale의 콘텐츠를 확인해보세요!");
+                metaData.put("image", "https://storage.googleapis.com/whale_project/whale/setting/whaleLogo.png"); // 실제 이미지 URL로 변경
+
+                return metaData;
+            }
+        
             Document doc = Jsoup.connect(url).get();
             metaData.put("title", doc.select("meta[property=og:title]").attr("content"));
             metaData.put("description", doc.select("meta[property=og:description]").attr("content"));
@@ -19,6 +31,13 @@ public class LinkPreviewUtils {
             e.printStackTrace();
         }
         return metaData;
+    }
+        
+    private static boolean isInternalWhaleLink(String url) {
+        // Whale 애플리케이션의 도메인으로 변경하세요
+        String whaleDomain = "http://25.5.112.217:9002/whale/";
+
+        return url.startsWith(whaleDomain);
     }
     
     public static String fetchYouTubeEmbedHtml(String url) {

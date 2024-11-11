@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.whale.Image.controller.LinkPreviewUtils;
@@ -173,6 +175,9 @@ public class MessageController {
 	        }
 	    }
 
+	    String userImage = messageDao.getUserImage(userId);
+	    
+	    model.addAttribute("userImage", userImage);
 	    model.addAttribute("messages", messages);
 	    model.addAttribute("now_id", now_id);
 	    model.addAttribute("userId", userId);
@@ -180,5 +185,24 @@ public class MessageController {
 	    return "message/messageRoom";
 	}
 	
+	@PostMapping("/deleteMessage")
+	@ResponseBody
+	public Map<String, String> deleteMessage(@RequestParam("messageId") int messageId, HttpSession session) {
+	    Map<String, String> response = new HashMap<>();
+	    String now_id = (String) session.getAttribute("user_id");
+
+	    // 메시지 소유자 확인
+	    MessageDto message = messageDao.getMessageById(messageId);
+	    if (message != null && message.getUser_id().equals(now_id)) {
+	        // 메시지 삭제
+	        messageDao.deleteMessage(messageId);
+	        response.put("status", "success");
+	    } else {
+	        response.put("status", "error");
+	        response.put("message", "권한이 없습니다.");
+	    }
+
+	    return response;
+	}
 	
 }

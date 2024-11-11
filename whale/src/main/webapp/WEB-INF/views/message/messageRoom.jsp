@@ -32,7 +32,7 @@
     .chat-header {
         background: linear-gradient(to right, #e0e0e0, #ffffff);
         padding: 15px 20px;
-        font-size: 1.5em;
+        font-size: 1.0em;
         font-weight: bold;
         color: #343a40;
         margin-bottom: 30px;
@@ -166,6 +166,89 @@
 	    border-radius: 5px;
 	    border: none;
 	}
+	
+	.message-url {
+	    font-size: 0.8em; /* 작은 폰트 크기 */
+	    color: #888888;   /* 회색 톤으로 색상 지정 */
+	    margin-top: 5px;  /* 위쪽에 약간의 간격 추가 */
+	    word-break: break-all; /* 긴 URL이 잘리도록 설정 */
+	}
+	
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 0px;
+    }
+    
+    .menu-button {
+	    position: absolute;
+	    top: 0px;
+	    right: 10px;
+	    font-size: 1.2em;
+	    color: #f0eded;
+	    cursor: pointer;
+	}
+	
+	.menu-button:hover {
+	    color: #555555;
+	}
+	
+	.modal {
+	    display: none; /* 기본적으로 숨김 */
+	    position: fixed;
+	    z-index: 1000;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    background-color: rgba(0,0,0,0.4); /* 검은색 투명 배경 */
+	}
+	
+	/* 모달 내용 스타일 */
+	.modal-content {
+	    background-color: #fefefe;
+	    margin: 15% auto; /* 화면 가운데에 위치 */
+	    padding: 20px;
+	    border: 1px solid #888;
+	    width: 300px; /* 너비 설정 */
+	    border-radius: 10px;
+	    position: relative;
+	}
+	
+	/* 닫기 버튼 스타일 */
+	.close {
+	    color: #aaa;
+	    float: right;
+	    font-size: 28px;
+	    font-weight: bold;
+	    cursor: pointer;
+	}
+	
+	.close:hover,
+	.close:focus {
+	    color: black;
+	    text-decoration: none;
+	    cursor: pointer;
+	}
+	
+	/* 옵션 목록 스타일 */
+	#messageMenuOptions {
+	    list-style: none;
+	    padding: 0;
+	    margin: 0;
+	}
+	
+	#messageMenuOptions li {
+	    padding: 10px;
+	    cursor: pointer;
+	    border-bottom: 1px solid #ddd;
+	}
+	
+	#messageMenuOptions li:hover {
+	    background-color: #f2f2f2;
+	}
 
 </style>
 </head>
@@ -174,7 +257,8 @@
 <div class="container">
     <!-- 채팅 헤더 -->
     <div class="chat-header">
-        ${userId}님과 ${now_id}님의 채팅방
+        <a href="profileHome?u=${userId}"><img src="${userImage}" alt="${userId}" class="profile-pic" /></a>
+        <div>${userId}</div>
     </div>
 
     <!-- 채팅 메시지 영역 -->
@@ -188,14 +272,17 @@
 		        <c:otherwise>
 		            left
 		        </c:otherwise>
-		    </c:choose>">
+		    </c:choose>" id="message-${msg.message_id}">
 		        <div class="message-bubble">
+		            <div class="menu-button" onclick="openMessageMenu(${msg.message_id}, '${msg.user_id}')">
+				        •
+				    </div>
 			<c:choose>
 			    <c:when test="${msg.message_type eq 'TEXT'}">
 			        <div>${msg.message_text}</div>
 			    </c:when>
 			    <c:when test="${msg.message_type eq 'LINK'}">
-			        <div>${msg.message_text}</div>
+<%-- 			        <div>${msg.message_text}</div> --%>
 			        <c:if test="${!empty msg.previewData}">
 			            <div class="preview">
 			                <a href="${msg.previewData['url']}" target="_blank" style="text-decoration: none; color: inherit;">
@@ -207,6 +294,7 @@
 			                </a>
 			            </div>
 			        </c:if>
+			        <div class="message-url">${msg.previewData['url']}</div>
 			    </c:when>
 			    <c:otherwise>
 			        <div><img src="${msg.message_text}" alt="Image" style="max-width: 100%; border-radius: 5px;"></div>
@@ -295,34 +383,41 @@
 
 	    const chatMessages = document.getElementById('chatMessages');
 
-	    // Split only the first 3 `#` delimiters, then treat the rest as `msgContent`
+	    // 메시지 파싱
 	    const data = event.data.split('#');
 	    const msgRoomId = data[0];
 	    const msgUserId = data[1];
 	    const msgType = data[2];
-
+	    const msgId = data[3];
+	    
 	    let msgContent, msgRead, msgDate;
 	    
 	    if (msgType === 'TEXT') {
-	    	msgContent = data[3];
-		    msgRead = data[4];
-		    msgDate = data[5];
-	    	
+	        msgContent = data[4];
+	        msgRead = data[5];
+	        msgDate = data[6];
 	    } else {
-		    msgContent = event.data.split('#').slice(3).join('#'); // Treat rest as msgContent
-		    msgRead = data[data.length - 2]; // Second-to-last item for read status
-		    msgDate = data[data.length - 1]; // Last item for date
+	        msgContent = data.slice(4, data.length - 2).join('#');
+	        msgRead = data[data.length - 2];
+	        msgDate = data[data.length - 1];
 	    }
 
 	    if (msgRoomId === roomId) {
 	        const msgDiv = document.createElement('div');
 	        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
+	        msgDiv.id = 'message-' + msgId;
 
+	        console.log("1: " + msgId);
+	        console.log("2: " + msgUserId);
+	        
 	        let contentHTML = '';
+	        contentHTML += '<div class="message-bubble">';
+	        contentHTML += '<div class="menu-button" onclick="openMessageMenu(' + msgId + ', \'' + msgUserId + '\')">•</div>';
+	        
 	        if (msgType === 'TEXT') {
-	            contentHTML = '<div>' + msgContent + '</div>';
+	            contentHTML += '<div>' + msgContent + '</div>';
 	        } else if (msgType === 'IMAGE') {
-	            contentHTML = '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
+	            contentHTML += '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
 	        } else if (msgType === 'LINK') {
 	            console.log("LINK message content:", msgContent);
 
@@ -330,14 +425,14 @@
 	            const previewMatch = msgContent.match(/#preview=(\{.*\})/);
 	            if (!previewMatch) {
 	                console.log("Preview data not found in message content");
-	                contentHTML = '<div>' + msgContent + '</div>';
+	                contentHTML += '<div>' + msgContent + '</div>';
 	            } else {
 	                const textContent = msgContent.substring(0, previewMatch.index); // Text before #preview=
 	                const previewJsonString = previewMatch[1]; // JSON part only
 
 	                try {
 	                    const previewData = JSON.parse(previewJsonString);
-	                    contentHTML = 
+	                    contentHTML += 
 	                        '<div>' + textContent + '</div>' +
 	                        '<div class="preview">' +
 	                            '<a href="' + previewData.url + '" target="_blank" style="text-decoration: none; color: inherit;">' +
@@ -350,18 +445,21 @@
 	                        '</div>';
 	                } catch (e) {
 	                    console.error("Failed to parse preview data:", e);
-	                    contentHTML = '<div>' + msgContent + '</div>';
+	                    contentHTML += '<div>' + msgContent + '</div>';
 	                }
 	            }
 	        }
 
-	        msgDiv.innerHTML =
-	            '<div class="message-bubble">' +
-	                (msgRead === '1' ? '<span class="unread-badge">1</span>' : '') +
-	                contentHTML +
-	                '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>' +
-	            '</div>';
+	        contentHTML += '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>';
 
+	        // 읽지 않은 메시지 표시
+	        if (msgRead === '1') {
+	            contentHTML += '<span class="unread-badge">1</span>';
+	        }
+
+	        contentHTML += '</div>'; // message-bubble 닫기
+
+	        msgDiv.innerHTML = contentHTML;
 	        chatMessages.appendChild(msgDiv);
 	        chatMessages.scrollTop = chatMessages.scrollHeight;
 	    }
@@ -372,6 +470,98 @@
         const chatMessages = document.getElementById('chatMessages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
+</script>
+
+<div id="messageMenuModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeMessageMenu()">&times;</span>
+        <ul id="messageMenuOptions">
+            <!-- 옵션 목록이 동적으로 생성됩니다. -->
+        </ul>
+    </div>
+</div>
+
+<script>
+	let selectedMessageId = null;
+	let selectedMessageUserId = null;
+	
+	function openMessageMenu(messageId, messageUserId) {
+	    selectedMessageId = messageId;
+	    selectedMessageUserId = messageUserId;
+	
+	    const modal = document.getElementById('messageMenuModal');
+	    const optionsList = document.getElementById('messageMenuOptions');
+	    optionsList.innerHTML = ''; // 기존 옵션 초기화
+	
+	    // 현재 사용자 ID와 메시지의 사용자 ID 비교
+	    if (messageUserId === now_id) {
+	        // 본인 메시지인 경우 삭제 옵션 추가
+	        const deleteOption = document.createElement('li');
+	        deleteOption.innerText = '삭제';
+	        deleteOption.onclick = deleteMessage;
+	        optionsList.appendChild(deleteOption);
+	    } else {
+	        // 상대방 메시지인 경우 신고 옵션 추가
+	        const reportOption = document.createElement('li');
+	        reportOption.innerText = '신고';
+	        reportOption.onclick = reportMessage;
+	        optionsList.appendChild(reportOption);
+	    }
+	
+	    // 모달 창 열기
+	    modal.style.display = 'block';
+	}
+	
+	function closeMessageMenu() {
+	    const modal = document.getElementById('messageMenuModal');
+	    modal.style.display = 'none';
+	}
+	
+	// 모달 바깥 영역 클릭 시 모달 닫기
+	window.onclick = function(event) {
+	    const modal = document.getElementById('messageMenuModal');
+	    if (event.target === modal) {
+	        modal.style.display = 'none';
+	    }
+	}
+	
+	function deleteMessage() {
+	    if (confirm('메시지를 삭제하시겠습니까?')) {
+	        // 서버로 삭제 요청 전송
+	        $.ajax({
+	            url: '/whale/deleteMessage',
+	            type: 'POST',
+	            data: { messageId: selectedMessageId },
+	            success: function(response) {
+	                if (response.status === 'success') {
+	                    // 메시지 삭제 성공 시 화면에서 제거
+	                    removeMessageFromView(selectedMessageId);
+	                } else {
+	                    alert('메시지 삭제에 실패했습니다.');
+	                }
+	            },
+	            error: function(error) {
+	                console.error('Delete message error:', error);
+	                alert('서버 오류로 메시지 삭제에 실패했습니다.');
+	            }
+	        });
+	    }
+	    closeMessageMenu();
+	}
+	
+	function reportMessage() {
+	    // 신고 페이지로 이동
+	    window.location.href = '/whale/reportMessage?messageId=' + selectedMessageId;
+	    closeMessageMenu();
+	}
+	
+	function removeMessageFromView(messageId) {
+	    // 메시지 ID를 기반으로 화면에서 메시지 제거
+	    const messageElement = document.getElementById('message-' + messageId);
+	    if (messageElement) {
+	        messageElement.parentNode.removeChild(messageElement);
+	    }
+	}
 </script>
 
 </body>

@@ -357,7 +357,7 @@
     <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}" data-open-id="${feedDetail.feed_open}">
         <div class="user-info">
             <a href="profileHome?u=${feedDetail.user_id}">
-                <img src="static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
+                <img src="${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
             </a>
             <span class="username">${feedDetail.user_id}</span>
         </div>
@@ -367,8 +367,8 @@
         </button>
 
         <!-- 이미지가 존재할 때만 출력 -->
-        <c:if test="${not empty feedDetail.feed_img_name}">
-            <img src="static/images/feed/${feedDetail.feed_img_name}" alt="Post Image" class="post-image">
+        <c:if test="${not empty feedDetail.feed_img_url}">
+            <img src="${feedDetail.feed_img_url}" alt="Post Image" class="post-image">
         </c:if>
 		<br />
 		<br />
@@ -418,7 +418,7 @@
 	            <div class="comment-header">
 	                <!-- 프로필 사진 -->
 	                <a href="profileHome?u=${comment.user_id}">
-	                    <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+	                    <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
 	                </a>
 	                <!-- 아이디와 날짜 -->
 	                <div class="comment-meta">
@@ -452,7 +452,7 @@
 	                            <div class="comment-header">
 	                                <!-- 프로필 사진 -->
 	                                <a href="profileHome?u=${reply.user_id}">
-	                                    <img src="static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+	                                    <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
 	                                </a>
 	                                <!-- 아이디와 날짜 -->
 	                                <div class="comment-meta">
@@ -503,6 +503,7 @@
 	<div id="otherModal" class="modal">
 	    <div class="modal-content">
 	        <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
+	        <div id="publicPost" class="modal-item">피드 공유</div>
 	        <div id="hidePostItem" class="modal-item" style="display: none;">게시글 비공개</div>
 	        <div id="openPostItem" class="modal-item" style="display: none;">게시글 공개</div>
 	        <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
@@ -590,6 +591,11 @@
 	        closeOtherModal();
 	    });
 	
+        document.getElementById("publicPost").addEventListener("click", function() {
+            window.location.href = `linkMessage?f=\${selectedItemId}`;
+            closeOtherModal();
+        });
+	    
 	    document.getElementById("hidePostItem").addEventListener("click", function() {
 	        alert("게시글을 숨깁니다.");
 	        window.location.href = `feedHide?f=\${selectedItemId}`;

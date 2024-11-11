@@ -4,14 +4,15 @@
     <form action="feedWriteDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
         <div class="form-content">
             <br />
-			<label for="file-upload" class="file-upload-btn">
-			    <img src="static/images/btn/upload_btn.png" alt="업로드" style="vertical-align: middle; width: 40px; height: 40px;">
-			</label>
 			<label for="music-upload" class="music-upload-btn">
 			    <img src="static/images/btn/music_btn.png" alt="업로드" style="vertical-align: middle; width: 40px; height: 40px;">
 			</label>
-            <input id="file-upload" type="file" name="feedImage" accept="image/*" onchange="previewImage(event)">
-            <img id="preview" src="#" alt="이미지 미리보기" style="display:none; max-width:100%; height:auto;">
+			<input type="file" id="imageInput" accept="image/*" onchange="uploadImageAndDisplayPreview()" style="display:none;">
+			<label for="imageInput" class="file-upload-btn">
+			    <img src="static/images/btn/upload_btn.png" alt="이미지 업로드" style="vertical-align: middle; width: 40px; height: 40px;">
+			</label>
+			<img id="preview" src="#" alt="이미지 미리보기" style="display:none; max-width:100%; height:auto;">
+			<input type="hidden" name="feedImageUrl" id="feedImageUrl">
             <br>
             <div id="music-info" class="music-info" style="display: none;">
                 <img id="album-icon" src="" alt="Album Icon" style="width: 50px; height: 50px;">
@@ -138,15 +139,34 @@
 <script src="static/js/streaming/searchView.js"></script>
     
 <script type="text/javascript">
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
+	function uploadImageAndDisplayPreview() {
+	    const fileInput = document.getElementById("imageInput");
+	    const file = fileInput.files[0];
+	    if (file) {
+	        const formData = new FormData();
+	        formData.append("file", file);
+	
+	        $.ajax({
+	            url: "/whale/uploadImageFeed",
+	            type: "POST",
+	            data: formData,
+	            contentType: false,
+	            processData: false,
+	            success: function(response) {
+	                const imageUrl = response.imageUrl;
+	                document.getElementById("feedImageUrl").value = imageUrl;
+	                // 미리보기 이미지 설정
+	                const preview = document.getElementById('preview');
+	                preview.src = imageUrl;
+	                preview.style.display = 'block';
+	            },
+	            error: function(error) {
+	                console.error("Image upload failed:", error);
+	                alert("이미지 업로드에 실패하였습니다.");
+	            }
+	        });
+	    }
+	}
     
     function validateForm(event) {
         var feedImage = document.getElementsByName("feedImage")[0].value.trim();

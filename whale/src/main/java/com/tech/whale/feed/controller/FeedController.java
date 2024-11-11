@@ -1,5 +1,6 @@
 package com.tech.whale.feed.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,26 +138,27 @@ public class FeedController {
 	public String feedWriteDo(HttpServletRequest request, HttpSession session, Model model,
 			@RequestParam(value = "selectedTrackId", required = false) String track_id, 
 			@RequestParam("feedText") String feed_text,
-			@RequestParam("feedImage") MultipartFile file) {
+			@RequestParam(value = "feedImageUrl", required = false) String feedImageUrl) {
 		
 		System.out.println("feedWriteDo");
 		
-		String now_id = (String) session.getAttribute("user_id");
-		
-		FeedDto feedDto = new FeedDto();
-		feedDto.setFeed_text(feed_text);
-		feedDto.setUser_id(now_id);
-		if (track_id != null) {
-			feedDto.setTrack_id(track_id);			
+	    String now_id = (String) session.getAttribute("user_id");
+	    
+	    FeedDto feedDto = new FeedDto();
+	    feedDto.setFeed_text(feed_text);
+	    feedDto.setUser_id(now_id);
+	    if (track_id != null) {
+	        feedDto.setTrack_id(track_id);			
+	    }
+	    
+	    try {
+			feedWriteService.registerFeed(feedDto, feedImageUrl);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		try {
-			feedWriteService.registerFeed(feedDto, file);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		
-		return "redirect:/feedHome";
+	    
+	    return "redirect:/feedHome";
 	}
 	
 	@RequestMapping("/feedLike")

@@ -378,7 +378,7 @@
             <h1 class="post-title">${postDetail.post_title}</h1>
             <div class="post-meta">
                 <a href="profileHome?u=${postDetail.user_id}">
-                    <img src="static/images/setting/${postDetail.user_image_url}" alt="User Profile" class="profile-pic">
+                    <img src="${postDetail.user_image_url}" alt="User Profile" class="profile-pic">
                 </a>
                 <span class="username">${postDetail.user_id}</span>
                 <span class="post-date">${postDetail.post_date}</span>
@@ -441,7 +441,7 @@
                 <div class="comment-item" data-comment-id="${comment.post_comments_id}" data-user-id="${comment.user_id}">
                     <div class="comment-header">
                         <a href="profileHome?u=${comment.user_id}">
-                            <img src="static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+                            <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
                         </a>
                         <span class="username">${comment.user_id}</span>
                         <span class="comment-date">${comment.post_comments_date}</span>
@@ -479,7 +479,7 @@
                             <div class="reply-item" data-comment-id="${reply.post_comments_id}" data-user-id="${reply.user_id}">
                                 <div class="comment-header">
                                     <a href="profileHome?u=${reply.user_id}">
-                                        <img src="static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+                                        <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
                                     </a>
                                     <span class="username">${reply.user_id}</span>
                                     <span class="comment-date">${reply.post_comments_date}</span>
@@ -506,6 +506,7 @@
     <!-- 모달 창 -->
     <div id="otherModal" class="modal">
         <div class="modal-content">
+            <div id="publicItem" class="modal-item white">게시글 공유</div>
             <div id="deleteItem" class="modal-item red" style="display: none;">삭제</div>
             <div id="updateItem" class="modal-item white" style="display:none;">수정</div>
             <div id="reportItem" class="modal-item red" style="display: none;">신고</div>
@@ -673,6 +674,11 @@
             selectedItemType = null;
         }
 
+        document.getElementById("publicItem").addEventListener("click", function() {
+        	const communityId = '${communityId}';
+        	window.location.href = `linkMessage?c=\${communityId}&p=\${selectedItemId}`;
+        })
+        
         document.getElementById("deleteItem").addEventListener("click", function() {
             const communityId = '${communityId}';
             if (confirm("정말로 삭제하시겠습니까?")) {

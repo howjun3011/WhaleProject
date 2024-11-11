@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SettingDao {
 
 	public UserInfoDto getProfile(String session_user_id);
-	public void updateProfile(String nickname, String email, String newProfileImage, String session_user_id);
+	public void updateProfile(String nickname, String email, String userProfileImageUrl, String userId);
 	public String getCurrentPassword(String session_user_id);
 	public void updatePassword(String session_user_id, String encodedPassword);
 	public void updateAccountPrivacy(String session_user_id, int accountPrivacy);
@@ -32,4 +32,5 @@ public interface SettingDao {
 	public List<HiddenFeedDto> getHiddenFeedList(String session_user_id);
 	public void updateRepresentiveSong(String session_user_id, String trackId);
 	public List<String> getFollowRequestList(String session_user_id);
+	String getCurrentProfileImage(String userId);
 }

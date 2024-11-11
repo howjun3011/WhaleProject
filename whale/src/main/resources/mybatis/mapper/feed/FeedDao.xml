@@ -33,7 +33,7 @@
 	    SELECT *
 	    FROM (
 	        SELECT f.FEED_ID, f.USER_ID, f.FEED_TEXT, f.FEED_DATE, f.FEED_URL, f.FEED_OPEN,
-	               u.USER_NICKNAME, u.USER_IMAGE_URL, fi.FEED_IMG_NAME, t.TRACK_ID,
+	               u.USER_NICKNAME, u.USER_IMAGE_URL, fi.FEED_IMG_URL, t.TRACK_ID,
 	               t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER,
 	               (SELECT COUNT(*) FROM feed_like fl WHERE fl.FEED_ID = f.FEED_ID) AS likeCount,
 	               (SELECT COUNT(*) FROM feed_comments fc WHERE fc.FEED_ID = f.FEED_ID) AS commentsCount,
@@ -56,7 +56,7 @@
 	<select id="getFeedsProfile" resultMap="feedResultMap">
 		SELECT
 			f.FEED_ID, f.USER_ID, f.FEED_TEXT, f.FEED_DATE, f.FEED_URL, f.FEED_OPEN,
-			fi.FEED_IMG_NAME, t.TRACK_ID,
+			fi.FEED_IMG_URL, t.TRACK_ID,
 	        t.TRACK_ARTIST, t.TRACK_NAME, t.TRACK_ALBUM, t.TRACK_COVER
 		FROM feed f
 		LEFT JOIN feed_img fi ON f.FEED_ID = fi.FEED_ID
@@ -193,6 +193,7 @@
 
 		<!-- 피드 이미지 -->
 		<result property="feed_img_name" column="FEED_IMG_NAME" />  <!-- 단일 이미지 매핑 -->
+		<result property="feed_img_url" column="FEED_IMG_URL" />  <!-- 단일 이미지 매핑 -->
 
 		<!-- 좋아요 개수 -->
 		<result property="likeCount" column="likeCount" />

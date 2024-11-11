@@ -1,5 +1,8 @@
 package com.tech.whale.message.controller;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,14 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tech.whale.Image.controller.LinkPreviewUtils;
 import com.tech.whale.message.dao.MessageDao;
+import com.tech.whale.message.dto.FollowListDto;
+import com.tech.whale.message.dto.LinkMessageDto;
 import com.tech.whale.message.dto.MessageDto;
+import com.tech.whale.message.websocket.ChatWebSocketHandler;
 
 @Controller
 public class MessageController {
 
 	@Autowired
 	private MessageDao messageDao;
+	
+    @Autowired
+    private ChatWebSocketHandler chatWebSocketHandler;
 
 	@RequestMapping("/messageGo")
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
@@ -43,6 +53,95 @@ public class MessageController {
 		model.addAttribute("roomId", roomId);
 		return "redirect:/messageRoom?r=" + roomId + "&u=" + userId;			
 	}
+	
+	
+	@RequestMapping("/messageLinkGo")
+	public String messageLinkGo(HttpServletRequest request, HttpSession session, Model model,
+	                            @RequestParam("u") String userId,
+	                            @RequestParam("l") String link_id) throws IOException {
+	    String now_id = (String) session.getAttribute("user_id");
+	    MessageDto messageDto = messageDao.getAllRoom(now_id, userId);
+	    String roomId = "";
+
+	    if (messageDto == null || messageDto.getMessage_room_id() == null) {
+	        roomId = messageDao.getNextRoomId();
+	        messageDao.createMessageRoom(roomId);
+	        messageDao.addUserMessageRoom(roomId, userId);
+	        messageDao.addUserMessageRoom(roomId, now_id);
+	        messageDto = messageDao.getAllRoom(now_id, userId);
+	    } else {
+	        roomId = messageDto.getMessage_room_id();
+	    }
+
+	    // 상대방이 해당 채팅방에 접속해 있는지 확인
+	    boolean isRecipientInRoom = chatWebSocketHandler.isUserInRoom(roomId, userId);
+
+	    // 링크 메시지 생성 및 저장
+	    MessageDto newMessage = new MessageDto();
+	    newMessage.setMessage_room_id(roomId);
+	    newMessage.setUser_id(now_id);
+	    newMessage.setMessage_create_date(new Date());
+	    newMessage.setMessage_type("LINK");
+
+	    // 링크에서 미리보기 데이터 생성
+	    Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(link_id);
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    String messageText = link_id;
+
+	    if (previewData != null && !previewData.isEmpty()) {
+	        String previewJson = objectMapper.writeValueAsString(previewData);
+	        messageText = link_id + "#preview=" + previewJson;
+	    }
+
+	    newMessage.setMessage_text(messageText);
+
+	    if (isRecipientInRoom) {
+	        newMessage.setMessage_read(0); // 상대방이 채팅방에 있으므로 읽음 처리
+	    } else {
+	        newMessage.setMessage_read(1); // 상대방이 채팅방에 없으므로 읽지 않음으로 표시
+	    }
+
+	    messageDao.saveMessage(newMessage);
+
+	    // 메시지 전송을 위해 날짜 포맷팅
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String formattedDate = dateFormat.format(new Date());
+
+	    String formattedMessage = String.format("%s#%s#%s#%s#%d#%s",
+	            roomId, now_id, "LINK", messageText, newMessage.getMessage_read(), formattedDate);
+
+	    // 채팅방에 메시지 브로드캐스트
+	    chatWebSocketHandler.broadcastMessageToRoom(roomId, formattedMessage);
+
+	    return "redirect:/messageRoom?r=" + roomId + "&u=" + userId;
+	}
+			
+	
+	@RequestMapping("/linkMessage")
+	public String linkMessage(HttpServletRequest request, HttpSession session, Model model,
+            @RequestParam(value = "p", required = false) String post_id,
+            @RequestParam(value = "f", required = false) String feed_id,
+            @RequestParam(value = "c", required = false) String comm_id) {
+		String now_id = (String) session.getAttribute("user_id");
+		String ip = "http://25.5.112.217:9002/whale/";
+		String link_id = "";
+		String user_id = "";
+		if (post_id != null) {
+			user_id = messageDao.findPostUser(post_id);
+			link_id = ip + "communityDetail?c=" + comm_id + "&p=" + post_id;
+		} else if (feed_id != null) {
+			user_id = messageDao.findFeedUser(feed_id);
+			link_id = ip + "feedDetail?f=" + feed_id;			
+		}
+		List<FollowListDto> followList = messageDao.getFollowList(now_id);
+		List<LinkMessageDto> linkMessageUser = messageDao.getLinkUser(user_id);
+		System.out.println(link_id);
+		model.addAttribute("followList", followList);
+		model.addAttribute("linkMessageUser",linkMessageUser);
+		model.addAttribute("link_id", link_id);
+		return "message/newLinkChat";
+	}
+
 
 	@RequestMapping("/messageRoom")
 	public String messageRoom(HttpServletRequest request, HttpSession session, Model model,

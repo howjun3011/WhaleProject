@@ -280,7 +280,7 @@
         <c:forEach var="feed" items="${feedList}">
             <div class="post" data-post-id="${feed.feed_id}" data-user-id="${feed.user_id}">
                 <div class="user-info">
-                    <a href="profileHome?u=${feed.user_id}"><img src="static/images/setting/${feed.user_image_url}" alt="User Profile" class="profile-pic"></a>
+                    <a href="profileHome?u=${feed.user_id}"><img src="${feed.user_image_url}" alt="User Profile" class="profile-pic"></a>
                     <span class="username">${feed.user_id}</span>
                 </div>
 
@@ -289,8 +289,8 @@
                 </button>
 
                 <!-- 이미지가 존재할 때만 출력 -->
-                <c:if test="${not empty feed.feed_img_name}">
-                    <img src="static/images/feed/${feed.feed_img_name}" alt="Post Image" class="post-image">
+                <c:if test="${not empty feed.feed_img_url}">
+                    <img src="${feed.feed_img_url}" alt="Post Image" class="post-image">
                 </c:if>
                 
                 <c:if test="${not empty feed.track_id}">
@@ -330,6 +330,7 @@
     <div id="otherModal" class="modal">
         <div class="modal-content">
             <div id="goToPost" class="modal-item">게시글로 이동</div>
+            <div id="publicPost" class="modal-item">피드 공유</div>
             <div id="deletePost" class="modal-item red" style="display: none;">게시글 삭제</div>
             <div id="hidePost" class="modal-item" style="display: none;">게시글 숨기기</div>
             <div id="reportPost" class="modal-item red" style="display: none;">게시글 신고</div>
@@ -356,6 +357,11 @@
             document.getElementById("otherModal").style.display = "none";
             selectedPostId = null;
         }
+        
+        document.getElementById("publicPost").addEventListener("click", function() {
+            window.location.href = `linkMessage?f=\${selectedPostId}`;
+            closeOtherModal();
+        });
 
         document.getElementById("goToPost").addEventListener("click", function() {
             window.location.href = `feedDetail?f=\${selectedPostId}`;

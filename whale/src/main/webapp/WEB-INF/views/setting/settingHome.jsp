@@ -24,36 +24,53 @@ a:visited, a:hover, a:focus, a:active {
 	<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
 		<div class="setting-container">
 			<div class="setting-header">환경설정</div>
-			<a href="account">
-				<div class="setting-item">
-					<img src="static/images/setting/account.png" alt="계정" />
-					계정
-				</div>
-			</a>
-			<a href="hiddenFeed">
-				<div class="setting-item">
-					<img src="static/images/setting/archive1.png" alt="보관" />
-					보관
-				</div>
-			</a>
-			<a href="activity">
-				<div class="setting-item">
-					<img src="static/images/setting/activity.png" alt="활동" />
-					활동
-				</div>
-			</a>
-			<a href="notification">
-				<div class="setting-item">
-					<img src="static/images/setting/notification.png" alt="알림" />
-					알림
-				</div>
-			</a>
-			<a href="accessibility">
-				<div class="setting-item">
-					<img src="static/images/setting/accessibility.png" alt="접근성" />
-					접근성
-				</div>
-			</a>
+			<div class="setting-grid">
+				<a href="account">
+					<div class="setting-item">
+						<img src="static/images/setting/account.png" alt="계정" />
+						<div class="setting-item-text">
+							<p>계정</p>
+							<p class="sub-text">aaa</p>
+						</div>
+					</div>
+				</a>
+				<a href="hiddenFeed">
+					<div class="setting-item">
+						<img src="static/images/setting/archive1.png" alt="보관" />
+						<div class="setting-item-text">
+							<p>보관</p>
+							<p class="sub-text">aaa</p>
+						</div>
+					</div>
+				</a>
+				<a href="activity">
+					<div class="setting-item">
+						<img src="static/images/setting/activity.png" alt="활동" />
+						<div class="setting-item-text">
+							<p>활동</p>
+							<p class="sub-text">aaa</p>
+						</div>
+					</div>
+				</a>
+				<a href="notification">
+					<div class="setting-item">
+						<img src="static/images/setting/notification.png" alt="알림" />
+						<div class="setting-item-text">
+							<p>알림</p>
+							<p class="sub-text">aaa</p>
+						</div>
+					</div>
+				</a>
+				<a href="accessibility">
+					<div class="setting-item">
+						<img src="static/images/setting/accessibility.png" alt="접근성" />
+						<div class="setting-item-text">
+							<p>접근성</p>
+							<p class="sub-text">aaa</p>
+						</div>
+					</div>
+				</a>
+			</div>
 		</div>
 	</div>
 </body>

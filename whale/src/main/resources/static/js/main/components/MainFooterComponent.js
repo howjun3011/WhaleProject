@@ -104,17 +104,18 @@ const MainFooterComponent = {
 	computed: {
 		sliderStyle() {
 			const value = (this.sliderValue - 0) / (100 - 0) * 100;
-			const hoverColor = this.isHovered[0] ? 'rgb(24, 174, 79)' : '#828282';
+			const hoverColor = this.isHovered[0] ? 'rgb(51,85,128)' : '#828282';
 			return {
 				background: `linear-gradient(to right, ${hoverColor} ${value}%, #c2c2c2 ${value}%)`,
 			};
 		},
 		volumeStyle() {
 			const value = (this.volumeValue - 0) / (100 - 0) * 100;
-			const hoverColor = this.isHovered[1] ? 'rgb(24, 174, 79)' : '#828282';
+			const hoverColor = this.isHovered[1] ? 'rgb(51,85,128)' : '#828282';
 			return {
 				background: `linear-gradient(to right, ${hoverColor} ${value}%, #c2c2c2 ${value}%)`,
 			};
+		// 	18AE4FFF 원래 초록색
 		},
 	},
 	methods: {

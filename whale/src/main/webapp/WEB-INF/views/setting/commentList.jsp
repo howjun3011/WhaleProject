@@ -82,10 +82,7 @@
 			margin-left: 20px;
 			color: #ccc;
 		}
-		#feed-img {
-			width: 200px;
-			height: 200px;
-		}
+
 		a {
 			text-decoration: none;
 			color: black;
@@ -101,7 +98,7 @@
 			transform: translateY(-50%);
 		}
 
-		#feed-list {
+		#feed-list, #post-list {
 			margin-left: 20px;
 			margin-right: 20px;
 		}
@@ -112,6 +109,16 @@
 			margin-bottom: 10px;
 			justify-content: space-between;
 			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
+
+		.post-item {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 10px;
+			justify-content: space-between;
+			padding: 15px 10px;
 			border: 1px solid #ddd;
 			border-radius: 8px;
 		}
@@ -153,6 +160,12 @@
 			border-radius: 20px;
 		}
 
+		.post-list-writer{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
 	</style>
 </head>
 <body>
@@ -192,34 +205,51 @@
 			<!-- 댓글 목록 출력 -->
 			<div id="comment-list">
 				<c:choose>
-					<c:when test="${empty feedCommentList }">
+					<c:when test="${empty postFeedList && empty postFeedCommentList}">
 						<div class="no-comment-message">댓글 목록이 없습니다.</div>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when test="${selectedPostType == '게시글'}">
-								<c:forEach var="comment" items="${feedCommentList }">
-									<a href="/whale/communityDetail?c=${comment.community_id}&p=${comment.post_id}">
-										<div class="post-list">
-											<div>태그: ${comment.post_tag_text }</div>
-											<div>제목: ${comment.post_title }</div>
-											<div>댓글: ${comment.post_comments_text }</div>
+								<c:forEach var="post" items="${postFeedList }">
+									<a href="/whale/communityDetail?c=${post.community_id}&p=${post.post_id}">
+										<div id="post-list">
+											<div class="post-item">
+												<div class="post-list-writer">
+													<div>${post.post_tag_text}&nbsp;${post.post_title}</div>
+													<div>${post.post_owner_id}</div>
+												</div>
+													<div>${post.post_text}</div>
+											</div>
+
+											<div class="comments-section">
+												<c:forEach var="comment" items="${postFeedCommentList}">
+													<c:if test="${post.post_id == comment.re_post_id}">
+														<div class="${comment.re_post_parent_comments_id != null ? 'reply' : 'comment'}">
+															<img src="static/images/setting/${comment.re_post_commenter_image}" alt="commenter_img" class="comment-img">
+															<div class="comment-text">
+																<span>${comment.re_post_commenter_id}</span>: ${comment.re_post_comments_text}
+															</div>
+														</div>
+													</c:if>
+												</c:forEach>
+											</div>
 										</div>
 									</a>
 								</c:forEach>
 							</c:when>
 							<c:when test="${selectedPostType == '피드'}">
-								<c:forEach var="feed" items="${feedList}">
+								<c:forEach var="feed" items="${postFeedList}">
 									<a href="/whale/feedDetail?f=${feed.feed_id}">
 										<div id="feed-list">
 											<div class="feed-item">
 												<img src="static/images/setting/${feed.feed_owner_image}" alt="owner_image" class="owner-image">
-												&nbsp;${feed.feed_owner_id}&nbsp;&nbsp;${feed.feed_text}
+												${feed.feed_owner_id} ${feed.feed_text}
 												<img src="static/images/feed/${feed.feed_img_name}" alt="feed_img" id="feed-img">
 											</div>
 
 											<div class="comments-section">
-												<c:forEach var="comment" items="${feedCommentList}">
+												<c:forEach var="comment" items="${postFeedCommentList}">
 													<c:if test="${feed.feed_id == comment.re_feed_id}">
 														<div class="${comment.re_parent_comments_id != null ? 'reply' : 'comment'}">
 															<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="comment-img">

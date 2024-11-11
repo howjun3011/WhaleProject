@@ -40,11 +40,6 @@ a:visited, a:hover, a:focus, a:active {
 					프로필 편집
 				</div>
 			</a>
-			<a href="connectAccount"> 
-				<div class="setting-item">
-					계정 연동
-				</div>
-			</a>
 			<a href="accountPrivacy">
 				<div class="setting-item">
 					계정 공개범위

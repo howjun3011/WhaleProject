@@ -22,6 +22,17 @@ a:visited, a:focus, a:active {
 a:hover{
 	color: #ccc;
 }
+.setting-body[data-darkmode="1"] a{
+	text-decoration: none;
+	color: lightgray;
+}
+.setting-body[data-darkmode="1"] a:visited, .setting-body[data-darkmode="1"] a:focus, .setting-body[data-darkmode="1"] a:active {
+	color: lightgray;
+	text-decoration: none;
+}
+.setting-body[data-darkmode="1"] a:hover{
+	color: whitesmoke;
+}
 .complete-btn {
 	font-size: 20px;
 	position: absolute;
@@ -41,14 +52,21 @@ a:hover{
     flex-direction: column; /* 세로 방향으로 정렬 */
     padding: 10px;
 }
-.setting-item img {
+.setting-body[data-darkmode="0"] .setting-item img {
     width: 130px;
     height: 130px;
     border-radius: 100px;
     margin-top: 10px;
     margin-left: 20px;
 }
-.setting-item button {
+.setting-body[data-darkmode="1"] .setting-item img {
+    width: 130px;
+    height: 130px;
+    border-radius: 100px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.setting-body[data-darkmode="0"] .setting-item button {
 	border-color: white;
 	background-color: white;
 	border-style: none;
@@ -57,16 +75,34 @@ a:hover{
     color: blue;
     cursor: pointer;
 }
+.setting-body[data-darkmode="1"] .setting-item button {
+	border-color: rgb(46, 46, 46);
+	background-color: rgb(46, 46, 46);
+	border-style: none;
+    border: none;
+    background: none;
+    color: lightgray;
+    cursor: pointer;
+}
 #editPhotoBtn {
 	font-weight: bold;	
 }
+.setting-body[data-darkmode="1"] #editPhotoBtn {
+	color: lightgray;
+}
+
+.setting-body[data-darkmode="1"] #editPhotoBtn:active,
+.setting-body[data-darkmode="1"] #editPhotoBtn:focus {
+	color: lightgray;
+}
+
 table{
 	margin-top: 10px;
 }
 table tr td {
 	padding: 10px 75px 10px 50px;
 }
-input[type="text"], input[type="password"], input[type="email"] {
+.setting-body[data-darkmode="0"] input[type="text"], .setting-body[data-darkmode="0"] input[type="password"], .setting-body[data-darkmode="0"] input[type="email"] {
 	width: 100%;
 	padding: 5px;
 	background-color: #FCFCFC;
@@ -74,8 +110,20 @@ input[type="text"], input[type="password"], input[type="email"] {
 	border-bottom: 2px solid #ccc; /* 밑줄 추가 */
 	outline: none; /* 포커스 시 파란 테두리 없애기 */
 }
-input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+.setting-body[data-darkmode="1"] input[type="text"], .setting-body[data-darkmode="1"] input[type="password"], .setting-body[data-darkmode="1"] input[type="email"] {
+	width: 100%;
+	padding: 5px;
+	color: whitesmoke;
+	background-color: rgb(46, 46, 46);
+	border: none; /* 테두리 없애기 */
+	border-bottom: 2px solid #ccc; /* 밑줄 추가 */
+	outline: none; /* 포커스 시 파란 테두리 없애기 */
+}
+.setting-body[data-darkmode="0"] input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
 	border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
+}
+.setting-body[data-darkmode="1"] input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+	border-bottom: 2px solid #f1f1f1; /* 포커스 시 밑줄 색 변경 */
 }
 #back {
     position: absolute; 

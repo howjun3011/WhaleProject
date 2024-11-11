@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="static/css/setting/settingStyle.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
+<script src="static/js/setting/darkMode.js"></script>
 <style>
 .setting-item{
     padding: 5px 10px;
@@ -65,7 +66,7 @@ input[type='radio']:checked {
 </style>
 </head>
 <body>
-<div class="setting-body">
+<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
    <div class="setting-container">
       <div class="setting-header">
       <a href="accessibility" id="back"><img src="static/images/setting/back.png" alt="back"></a>

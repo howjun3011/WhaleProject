@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="static/css/setting/settingStyle.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
+<script src="static/js/setting/darkMode.js"></script>
 <style>
 .setting-item{
     justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
@@ -51,7 +52,7 @@ label::after {
 </style>
 </head>
 <body>
-<div class="setting-body">
+<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
 	<div class="setting-container">
 	    <div class="setting-header">
 	    <a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>

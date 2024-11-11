@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="static/css/setting/settingStyle.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="static/js/setting/setting.js"></script>
+<script src="static/js/setting/darkMode.js"></script>
 <style>
 a{
 	text-decoration: none;

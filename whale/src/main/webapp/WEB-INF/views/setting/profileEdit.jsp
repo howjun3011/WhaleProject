@@ -8,6 +8,10 @@
 <title>profileEdit</title>
 <link rel="stylesheet" href="static/css/setting/settingStyle.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<script src="static/js/setting/setting.js"></script>
+<script src="static/js/setting/darkMode.js"></script>
+
 <style>
 /* 기존 스타일 유지 */
 a {
@@ -204,5 +208,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
         });
     });
     </script>
+
 </body>
 </html>

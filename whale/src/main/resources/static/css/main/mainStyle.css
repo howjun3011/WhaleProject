@@ -1,15 +1,14 @@
-#main.dark > *{
-    /*filter: invert(100%);*/
-    /*filter: invert(100%) !important;*/
-}
+#main.dark{background: #1f1f1f;}
 
-#main.dark * {margin: 0; padding: 0; box-sizing: 0;}
-#main.dark body {min-height: 100vh;}
-#main.dark ::-webkit-scrollbar {display: none;}
+* {margin: 0; padding: 0; box-sizing: border-box;}
+body {min-height: 100vh;}
+::-webkit-scrollbar {display: none;}
+#headerLogo > img{scale: .8;}
 
 #main.dark .flexCenter {display: flex; justify-content: center; align-items: center;}
 
-#main.dark .header {position: relative; display: flex; justify-content: space-between; width: 100%; height: 80px; background-color: #1f1f1f; border-bottom: 1.5px solid #cecece;}
+.header {position: relative; display: flex; justify-content: space-between; width: 100%; height: 80px;}
+#main.dark > .header{background-color: #1f1f1f;}
 #main.dark .headerItems {width: 200px;}
 #main.dark #headerLogo{filter: invert(1);}
 #main.dark #headerLogo:hover {cursor: grab;}
@@ -18,7 +17,7 @@
 #main.dark #headerAlarm:hover {opacity: 0.6; cursor: grab;}
 #main.dark #headerAlarm:active {background-color: #efefef; opacity: 0.4; cursor: grab;}
 #main.dark #headerAlarm > img{filter: invert(1);}
-#main.dark #header-noti-count {position: absolute; right: 8px; bottom: 8px; width: 18px; height: 18px; border: 1.5px solid #B2B2B2; border-radius: 50%;}
+#main.dark #header-noti-count {position: absolute; right: 8px; bottom: 8px; width: 18px; height: 18px; border: 1.5px solid #B2B2B2; border-radius: 50%; color: #fff;}
 #main.dark #header-noti-count-font {font-size: 11.5px; font-weight: 400; letter-spacing: 0.3px; opacity: 0.4;}
 #main.dark #headerProfile {width: 47%; background-color: #1f1f1f !important;}
 #main.dark #headerMargin {width: 15%;}
@@ -66,12 +65,12 @@
 #main.dark .menuDock-icon:hover {opacity: 0.4; cursor: grab;}
 #main.dark .menuDock-icon:active {opacity: 0.3; cursor: grab;}
 
-#main.dark .footer {position: relative; width: 100%; height: 70px;}
+.footer {position: relative; width: 100%; height: 70px;}
 #main.dark .player {display: flex; justify-content: space-between; width: 99%; height: 100%; border: 1.8px solid #E2E2E2; border-radius: 20px;}
-#main.dark .playerComponent {width: 15%; height: 100%;}
-#main.dark .footerMargin {width: 100%; height: 10px;}
-#main.dark #playerLeft {display: flex; align-items: center; margin-left: 30px;}
-#main.dark #playerRight {display: flex; flex-direction: row-reverse; align-items: center; margin-right: 20px;}
+.playerComponent {width: 15%; height: 100%;}
+.footerMargin {width: 100%; height: 10px;}
+#playerLeft {display: flex; align-items: center; margin-left: 30px;}
+#playerRight {display: flex; flex-direction: row-reverse; align-items: center; margin-right: 20px;}
 
 #main.dark .playerRightStyle {display: flex; flex-direction: column; justify-content: center; margin: 0 15px;}
 #main.dark .playerTrackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
@@ -125,13 +124,9 @@
     /*filter: invert(100%) !important;*/
 }
 
-#main.light * {margin: 0; padding: 0; box-sizing: 0;}
-#main.light body {min-height: 100vh;}
-#main.light ::-webkit-scrollbar {display: none;}
-
 #main.light .flexCenter {display: flex; justify-content: center; align-items: center;}
 
-#main.light .header {position: relative; display: flex; justify-content: space-between; width: 100%; height: 80px; background-color: #fcfcfc; border-bottom: 1.5px solid #E2E2E2;}
+#main.light > header{background-color: #fcfcfc; border-bottom: 1.5px solid #E2E2E2;}
 #main.light .headerItems {width: 200px;}
 #main.light #headerLogo:hover {cursor: grab;}
 #main.light #headerContents {display: flex;}
@@ -186,12 +181,7 @@
 #main.light .menuDock-icon:hover {opacity: 0.4; cursor: grab;}
 #main.light .menuDock-icon:active {opacity: 0.3; cursor: grab;}
 
-#main.light .footer {position: relative; width: 100%; height: 70px;}
 #main.light .player {display: flex; justify-content: space-between; width: 99%; height: 100%; border: 1.8px solid #E2E2E2; border-radius: 20px;}
-#main.light .playerComponent {width: 15%; height: 100%;}
-#main.light .footerMargin {width: 100%; height: 10px;}
-#main.light #playerLeft {display: flex; align-items: center; margin-left: 30px;}
-#main.light #playerRight {display: flex; flex-direction: row-reverse; align-items: center; margin-right: 20px;}
 
 #main.light .playerRightStyle {display: flex; flex-direction: column; justify-content: center; margin: 0 15px;}
 #main.light .playerTrackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.admin.dao.AdminStatisticIDao">
+	
+	<select id="reportStatistic" resultType="com.tech.whale.admin.dto.AdminUserDataDto">
+		WITH ALL_DAYS AS (
+		    SELECT '월' AS LABEL FROM DUAL
+		    UNION ALL
+		    SELECT '화' FROM DUAL
+		    UNION ALL
+		    SELECT '수' FROM DUAL
+		    UNION ALL
+		    SELECT '목' FROM DUAL
+		    UNION ALL
+		    SELECT '금' FROM DUAL
+		    UNION ALL
+		    SELECT '토' FROM DUAL
+		    UNION ALL
+		    SELECT '일' FROM DUAL
+		)
+		SELECT AD.LABEL,
+		       NVL(COUNT(R.REPORT_DATE), 0) AS VALUE
+		FROM ALL_DAYS AD
+		LEFT JOIN REPORT R
+		  ON TO_CHAR(R.REPORT_DATE, 'DY', 'NLS_DATE_LANGUAGE=KOREAN') = AD.LABEL
+		GROUP BY AD.LABEL
+		ORDER BY CASE 
+		             WHEN AD.LABEL = '일' THEN 1
+		             WHEN AD.LABEL = '월' THEN 2
+		             WHEN AD.LABEL = '화' THEN 3
+		             WHEN AD.LABEL = '수' THEN 4
+		             WHEN AD.LABEL = '목' THEN 5
+		             WHEN AD.LABEL = '금' THEN 6
+		             WHEN AD.LABEL = '토' THEN 7
+		         END
+
+
+	</select>
+	
+</mapper>

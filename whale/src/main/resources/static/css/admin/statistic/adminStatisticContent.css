@@ -19,3 +19,21 @@
     height: 100%;
     min-width: 800px;
 }
+
+.container{
+	height: 600px;
+	margin-right: 200px;
+}
+
+canvas {
+	max-width: 800px;
+	height: 400px;
+}
+
+button{
+	margin-left: 5px;
+}
+.btnBox{
+	flex-direction: row;
+	margin: 10px auto;
+}

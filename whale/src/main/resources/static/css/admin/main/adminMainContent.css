@@ -28,13 +28,15 @@ body{
 }
 #memo textarea{
 	border: none;
-	resize: none;
+	/* resize: none; */
 	width:450px;
-	height:80vh;
+	height:75vh;
 	border-radius: 10px;
 	padding:5px;
 	outline: none;
 	font-size:20px;
+	overflow-y: auto;
+	resize: none;
 }
 .blockContainer{
 	display: flex;
@@ -42,11 +44,13 @@ body{
 	flex-grow: 1;
 	margin: 10px 5px 0 0;
 	align-items: flex-start;
+	width: 1180px;
 }
 .divStep{
 	display: flex;
 	flex-direction: row;
 	flex-grow: 1;
+	width: 1180px;
 }
 .block{
 	display: flex;

@@ -952,4 +952,25 @@
 
 	</select>
 	
+	<select id="adminMemo" resultType="com.tech.whale.admin.dto.AdminMemoDto">
+		SELECT MEMO_WRITING,MEMO_UPDATE_DATE FROM ADMIN_MEMO 
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</select>
+	<select id="memoCheck" resultType="int">
+		SELECT COUNT(*) FROM ADMIN_MEMO 
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</select>
+	<insert id="memoCreate">
+		INSERT INTO ADMIN_MEMO VALUES(
+			ADMIN_MEMO_SEQ.NEXTVAL,
+			(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId}),
+			NULL, 
+			SYSDATE
+		)
+	</insert>
+	<update id="memoUpdate">
+		UPDATE ADMIN_MEMO SET MEMO_WRITING = #{memoUpdateStr}, MEMO_UPDATE_DATE = SYSDATE
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</update>
+	
 </mapper>

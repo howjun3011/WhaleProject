@@ -55,9 +55,12 @@ public class AdminBoardFeedDelete implements AdminServiceInter{
 		int feed_comments_id = Integer.parseInt(request.getParameter("commentId"));
 		String user_id = (String)model.getAttribute("user_id");
 		String comments_del_reason = "글작성 규칙 위반";
-		
+		String comments_del_parent_reason = "부모글 삭제";
 		adminIDao.feedCommentsOneDelLog(feed_comments_id,feed_id,user_id,comments_del_reason);
+		adminIDao.feedCommentsDelLog(feed_comments_id,user_id,comments_del_parent_reason);
+		adminIDao.feedCommentsLikeParentDel(feed_comments_id);
 		adminIDao.feedCommentsLikeOneDel(feed_comments_id);
+		adminIDao.feedCommentsParentDel(feed_comments_id);
 		adminIDao.feedCommentsOneDel(feed_comments_id);
 		
 	}

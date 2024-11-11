@@ -42,5 +42,36 @@
 	        <div class="block" id="block8" onclick="window.location.href=''">작성글</div>
 	    </div>
     </div>
-    <div id="memo">메모장 <br /> <textarea rows="" cols=""></textarea></div>
+    <div id="memo">
+    	메모장 <br />
+    	<form id="memoForm" action="adminMemoSave" method="post">
+	    	<textarea id="admin_Memo" name="admin_Memo" rows="" cols="" oninput="checkByteLimit(this, 3000)">${admin_Memo.memo_writing }</textarea> <br />
+	    	<div id="byteCount">0 / 3000 bytes  <fmt:formatDate value="${admin_Memo.memo_update_date }" pattern="yyyy.MM.dd" /> </div>
+	    	<input type="submit" value="저장하기" />
+    	</form>
+    </div>
 </div>
+
+<script>
+function checkByteLimit(textarea, maxBytes) {
+    let text = textarea.value;
+    let byteCount = 0;
+    let truncatedText = "";
+
+    // 바이트 수를 한 글자씩 확인
+    for (let i = 0; i < text.length; i++) {
+        let char = text.charAt(i);
+        byteCount += new Blob([char]).size; // 문자당 바이트 계산
+        
+        if (byteCount > maxBytes) break; // 최대 바이트 초과 시 중단
+        truncatedText += char;
+    }
+
+    if (byteCount > maxBytes) {
+        textarea.value = truncatedText; // 초과된 부분 제거
+    }
+
+    document.getElementById("byteCount").textContent = byteCount + " / " + maxBytes + " bytes";
+}
+
+</script>

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,10 +95,22 @@ public class AdminController {
 	    accountSubBar(model);
 	    
 	    adminMainPageService.execute(model);
+	    adminMainPageService.adminMemo(model);
 	    
 	    
 		return "/admin/view/adminMainView";
 	}
+	
+	@RequestMapping("/adminMemoSave")
+	@Transactional
+	public String adminMemoSave(HttpServletRequest request,
+			Model model) {
+		System.out.println("메모 세이브 컨트롤러");
+		model.addAttribute("request", request);
+		adminMainPageService.memoUpdate(model);
+		return "redirect:adminMainView";
+	}
+	
 	
 	@RequestMapping("/adminAccountOfficialListView")
 	public String adminAccountOfficialListView(

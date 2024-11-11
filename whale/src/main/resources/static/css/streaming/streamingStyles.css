@@ -316,59 +316,19 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .hidden {display: none;}
 .searchPlaylistItem p {width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0;}
 
-
-.trackDuration {
-    text-align: center;
-    transition: opacity 0.3s ease;
-}
-
-.toggleLikeButton {
-    cursor: pointer;
-    background: none;
-    border: none;
-}
-
-.trackItem:hover .trackDuration {
-    display: none;
-}
-
-.trackItem:hover .toggleLikeButton .icon {
-    display: block !important;
-}
-
+.trackDuration {text-align: center; transition: opacity 0.3s ease;}
+.toggleLikeButton {cursor: pointer; background: none; border: none;}
+.trackItem:hover .trackDuration {display: none;}
+.trackItem:hover .toggleLikeButton .icon {display: block !important;}
 /* 기본적으로 좋아요 버튼을 숨김 */
-.likeIcon {
-    display: none;
-}
-
+.likeIcon {display: none;}
 /* 트랙 시간은 기본적으로 보임 */
-.trackTime {
-    display: block;
-}
-
+.trackTime {display: block;}
 /* trackItem에 마우스를 올리면 좋아요 버튼 보이게, 재생 시간 숨기기 */
-.trackItem:hover .likeIcon {
-    display: block;
-}
-
-.trackItem:hover .trackTime {
-    display: none;
-}
+.trackItem:hover .likeIcon {display: block;}
+.trackItem:hover .trackTime {display: none;}
 .trackLike{display: flex; align-items: center; justify-content: center;}
-
-
-.topTrackItem:hover .trackDuration {
-    display: none;
-}
-
-.topTrackItem:hover .toggleLikeButton .icon {
-    display: block !important;
-}
-
-.topTrackItem:hover .likeIcon {
-    display: block;
-}
-
-.topTrackItem:hover .trackTime {
-    display: none;
-}
+.topTrackItem:hover .trackDuration {display: none;}
+.topTrackItem:hover .toggleLikeButton .icon {display: block !important;}
+.topTrackItem:hover .likeIcon {display: block;}
+.topTrackItem:hover .trackTime {display: none;}

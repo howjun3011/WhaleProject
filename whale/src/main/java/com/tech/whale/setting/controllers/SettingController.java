@@ -224,13 +224,6 @@ public class SettingController {
         return "setting/account";
     }
 
-    @RequestMapping("/connectAccount")
-    public String connectAccount(HttpSession session, Model model) {
-        System.out.println("connectAccount() ctr");
-
-        return "setting/connectAccount";
-    }
-
     @RequestMapping("/accountPrivacy")
     public String accountPrivacy(HttpSession session, Model model) {
         System.out.println("accountPrivacy() ctr");
@@ -339,25 +332,31 @@ public class SettingController {
 
         String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
 
-        List<CommentListDto> feedList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
-        List<CommentListDto> feedCommentList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> postFeedList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> postFeedCommentList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
 
+        // 게시글과 피드 ID를 각각 중복 없이 저장할 Set
+        Set<Integer> uniquePostIds = new HashSet<>();
         Set<Integer> uniqueFeedIds = new HashSet<>();
-        List<CommentListDto> filteredFeedCommentList = new ArrayList<>();
 
-        for (CommentListDto dto : feedList) {
-            if (uniqueFeedIds.add(dto.getFeed_id())) { // 중복되지 않은 feed_id만 추가
-                filteredFeedCommentList.add(dto);
+        // 중복 제거된 게시글과 피드 리스트를 담을 리스트
+        List<CommentListDto> filteredPostFeedCommentList = new ArrayList<>();
+
+        for (CommentListDto dto : postFeedList) {
+            if ("게시글".equals(postType) && uniquePostIds.add(dto.getPost_id())) {
+                filteredPostFeedCommentList.add(dto);  // 중복되지 않은 post_id만 추가
+            } else if ("피드".equals(postType) && uniqueFeedIds.add(dto.getFeed_id())) {
+                filteredPostFeedCommentList.add(dto);  // 중복되지 않은 feed_id만 추가
             }
         }
 
-        model.addAttribute("feedList", filteredFeedCommentList); // 중복 제거된 리스트
-        model.addAttribute("feedCommentList", feedCommentList);
+        model.addAttribute("postFeedList", filteredPostFeedCommentList); // 중복 제거된 리스트
+        model.addAttribute("postFeedCommentList", postFeedCommentList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);
 
         // debug
-        for (CommentListDto commentListDto : feedCommentList) {
+        for (CommentListDto commentListDto : postFeedCommentList) {
             System.out.println("피드");
             System.out.println("Feed_id: " + commentListDto.getFeed_id());
             System.out.println("Feed_text: " + commentListDto.getFeed_text());

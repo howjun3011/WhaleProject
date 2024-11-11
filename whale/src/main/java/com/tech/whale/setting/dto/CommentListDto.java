@@ -10,17 +10,26 @@ import lombok.Setter;
 @Setter
 @Getter
 public class CommentListDto {
-	private int community_id;
 	private int post_id;
+	private int community_id;
 	private String post_tag_text;
-	private String post_writer_id;
-	private String post_writer_img;
 	private String post_title;
-	private String post_text;
-	private String comments_user_img;
-	private String comments_user_id;
-	private String post_comments_text;
 	private String post_img_name;
+	private String post_text;
+	private String post_owner_image;
+	private String post_owner_id;
+	private int post_comments_id;
+	private Integer post_parent_comments_id;
+	private String post_commenter_image;
+	private String post_commenter_id;
+	private String post_comments_text;
+
+	private int re_post_id;
+	private int re_post_comments_id;
+	private Integer re_post_parent_comments_id;
+	private String re_post_commenter_image;
+	private String re_post_commenter_id;
+	private String re_post_comments_text;
 
 	private int feed_id;
 	private String feed_img_name;

@@ -14,7 +14,7 @@
             justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
         }
 
-        #toggle-slide {
+        #privite-toggle-slide {
             display: none;
         }
 
@@ -41,11 +41,11 @@
             transition: 0.5s;
         }
 
-        #toggle-slide:checked + label {
+        #privite-toggle-slide:checked + label {
             background-color: black; /* 토글 선택 시 배경색 변경 */
         }
 
-        #toggle-slide:checked + label::after {
+        #privite-toggle-slide:checked + label::after {
             left: 29px;
         }
 
@@ -64,10 +64,12 @@
             <a href="account" id="back"><img src="static/images/setting/back.png" alt="back"></a>
             계정 공개범위
         </div>
-        <div class="setting-item">
-            비공개 계정
-            <input type="checkbox" id="toggle-slide"/>
-            <label for="toggle-slide">on/off</label>
+        <div class="setting-grid">
+            <div class="setting-item">
+                비공개 계정
+                <input type="checkbox" id="privite-toggle-slide"/>
+                <label for="privite-toggle-slide">on/off</label>
+            </div>
         </div>
     </div>
 </div>
@@ -77,10 +79,10 @@
 
     window.onload = function () {
         // 비공개 계정이 1이면 토글 버튼을 선택된 상태로 표현
-        document.getElementById('toggle-slide').checked = accountPrivacyOn == 1;
+        document.getElementById('privite-toggle-slide').checked = accountPrivacyOn == 1;
     };
 
-    document.getElementById('toggle-slide').addEventListener('change', function () {
+    document.getElementById('privite-toggle-slide').addEventListener('change', function () {
         let accountPrivacy = this.checked ? 1 : 0; // 토글 상태에 따라 1 또는 0 설정
 
         // AJAX 요청

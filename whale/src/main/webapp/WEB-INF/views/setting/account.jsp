@@ -36,6 +36,7 @@ a:visited, a:hover, a:focus, a:active {
 		<div class="setting-header">
 			<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
 			계정</div>
+		<div class="setting-grid">
 			<a href="profileEdit">
 				<div class="setting-item">
 					프로필 편집
@@ -45,7 +46,8 @@ a:visited, a:hover, a:focus, a:active {
 				<div class="setting-item">
 					계정 공개범위
 				</div>
-			</a>	
+			</a>
+		</div>
 	</div>
 </div>
 </body>

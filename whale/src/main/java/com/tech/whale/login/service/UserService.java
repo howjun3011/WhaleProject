@@ -71,9 +71,21 @@ public class UserService {
         userDao.saveUser(password, encodedPassword, email);
     }
 
-    // 이메일 중복 확인
-    public boolean isEmailRegistered(String email) {
-        Integer count = userDao.existsByEmail(email);
+    // USER_ID 중복 검사
+    public boolean isUsernameTaken(String user_id) {
+        Integer count = userDao.existsByUsername(user_id);
+        return count != null && count > 0;
+    }
+
+    // USER_NICKNAME 중복 검사
+    public boolean isNicknameTaken(String user_nickname) {
+        Integer count = userDao.existsByNickname(user_nickname);
+        return count != null && count > 0;
+    }
+
+    // USER_EMAIL 중복 검사
+    public boolean isEmailTaken(String user_email) {
+        Integer count = userDao.existsByEmail(user_email);
         return count != null && count > 0;
     }
 

@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const settingElement = document.querySelector('.setting-body');
     const feedElement = document.querySelector('.feed-container');
     const communityElement = document.querySelector('.container');
+    const communityDetailElement = document.querySelector('.container');
+    const communityPostElement = document.querySelector('.content-wrapper');
+    const communityPostModalElement = document.querySelector('.modal');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -84,6 +87,63 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (communityDetailElement) {
+        communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        communityDetailElement.classList.toggle("dark", isDarkMode);
+        communityDetailElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                communityDetailElement.classList.toggle("dark", isDarkMode);
+                communityDetailElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
+    if (communityPostElement) {
+        communityPostElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        communityPostElement.classList.toggle("dark", isDarkMode);
+        communityPostElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                communityPostElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                communityPostElement.classList.toggle("dark", isDarkMode);
+                communityPostElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
+    if (communityPostModalElement) {
+        communityPostModalElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        communityPostModalElement.classList.toggle("dark", isDarkMode);
+        communityPostModalElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                communityPostModalElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                communityPostModalElement.classList.toggle("dark", isDarkMode);
+                communityPostModalElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     window.addEventListener('storage', function (event) {
         if (event.key === 'darkmodeOn') {
             darkmodeOn = event.newValue || "0";
@@ -105,6 +165,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityElement.classList.toggle("dark", isDark);
                 communityElement.classList.toggle("light", !isDark);
+            }
+            if (communityDetailElement) {
+                communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                communityDetailElement.classList.toggle("dark", isDark);
+                communityDetailElement.classList.toggle("light", !isDark);
+            }
+            if (communityPostElement) {
+                communityPostElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                communityPostElement.classList.toggle("dark", isDark);
+                communityPostElement.classList.toggle("light", !isDark);
+            }
+            if (communityPostModalElement) {
+                communityPostModalElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                communityPostModalElement.classList.toggle("dark", isDark);
+                communityPostModalElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
         }

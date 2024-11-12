@@ -6,182 +6,73 @@
 <meta charset="UTF-8">
 <title>Community Board</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
+<script src="static/js/setting/darkMode.js"></script>
 <style>
-    body {
-        font-family: 'Noto Sans', sans-serif;
-        margin: 0;
-        padding: 0;
-        color: #333333;
-        background-color: #f8f9fa;
-    }
-
-    h2 {
-        font-size: 24px;
-        font-weight: bold;
-        color: #444;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .content-wrapper {
-        max-width: 1200px;
-        margin: auto;
-        padding: 20px;
-        background-color: #ffffff;
-    }
-
-    .table-container {
-        margin-top: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
-        padding: 10px;
-        border-bottom: 1px solid #e9ecef;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f1f3f5;
-        font-weight: 700;
-        color: #495057;
-    }
-
-    td {
-        color: #495057;
-    }
-
-    tr:hover td {
-        background-color: #f8f9fa;
-    }
-
-    .fixed {
-        color: #f03e3e;
-        font-weight: bold;
-    }
-
-    .notice-icon, .post-stats {
-        color: #adb5bd;
-        font-size: 0.9em;
-    }
-
-    td a {
-        color: #1a73e8;
-        text-decoration: none;
-    }
-
-    td a:hover {
-        text-decoration: underline;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    .pagination a, .pagination span {
-        padding: 8px 12px;
-        margin: 0 4px;
-        background-color: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        color: #495057;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .pagination a:hover {
-        background-color: #e9ecef;
-    }
-
-    .pagination .disabled {
-        color: #adb5bd;
-        pointer-events: none;
-    }
-
-    .footer {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 12px;
-        color: #868e96;
-    }
-    
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-    }
-    
-    .modal-content {
-        background-color: #ffffff;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 8px;
-        width: 300px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    
-    .close:hover,
-    .close:focus {
-        color: #333;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    
-    .modal-links a {
-        display: block;
-        padding: 10px;
-        margin-top: 10px;
-        text-align: center;
-        background-color: #1a73e8;
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    
-    .modal-links a:hover {
-        background-color: #1666c1;
-    }
-    
-    .user-id {
-        font-weight: bold;
-        cursor: pointer; /* 마우스 올렸을 때 포인터 표시 */
-    }
-
-    .user-id:hover {
-        color: #1666c1; /* 호버 시 색상 변경 */
-    }
-    
-    .pagination .current {
-	    font-weight: bold;
-	    color: #1a73e8;
-	}
-    
+    .content-wrapper[data-darkmode="0"] body {font-family: 'Noto Sans', sans-serif; margin: 0; padding: 0; color: #333333; background-color: #f8f9fa;}
+    .content-wrapper[data-darkmode="0"] h2 {font-size: 24px; font-weight: bold; color: #444; text-align: center; margin-bottom: 20px;}
+    .content-wrapper[data-darkmode="0"] h2 a {color: #333333; text-decoration: none;}
+    .content-wrapper[data-darkmode="0"] .content-wrapper {max-width: 1200px; margin: auto; padding: 20px; background-color: #ffffff;}
+    .content-wrapper[data-darkmode="0"] .table-container {margin-top: 10px;}
+    .content-wrapper[data-darkmode="0"] table {width: 100%; border-collapse: collapse;}
+    .content-wrapper[data-darkmode="0"] th, td {padding: 10px; border-bottom: 1px solid #e9ecef; text-align: left;}
+    .content-wrapper[data-darkmode="0"] th {background-color: #f1f3f5; font-weight: 700; color: #495057;}
+    .content-wrapper[data-darkmode="0"] td {color: #495057;}
+    .content-wrapper[data-darkmode="0"] tr:hover td {background-color: #f8f9fa;}
+    .content-wrapper[data-darkmode="0"] .fixed {color: #f03e3e; font-weight: bold;}
+    .content-wrapper[data-darkmode="0"] .notice-icon, .post-stats {color: #adb5bd; font-size: 0.9em;}
+    .content-wrapper[data-darkmode="0"] td a {color: #1a73e8; text-decoration: none;}
+    .content-wrapper[data-darkmode="0"] td a:hover {text-decoration: underline;}
+    .content-wrapper[data-darkmode="0"] .pagination {display: flex; justify-content: center; margin-top: 20px;}
+    .content-wrapper[data-darkmode="0"] .pagination a, .pagination span {padding: 8px 12px; margin: 0 4px; background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 4px; color: #495057; text-decoration: none; font-weight: 500;}
+    .content-wrapper[data-darkmode="0"] .pagination a:hover {background-color: #e9ecef;}
+    .content-wrapper[data-darkmode="0"] .pagination .disabled {color: #adb5bd; pointer-events: none;}
+    .content-wrapper[data-darkmode="0"] .footer {text-align: center; margin-top: 20px; font-size: 12px; color: #868e96;}
+    #userModal[data-darkmode="0"]{display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}
+    #userModal[data-darkmode="0"] .modal-content {background-color: #ffffff; margin: 15% auto; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
+    #userModal[data-darkmode="0"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="0"] .close:hover, .close:focus {color: #333; text-decoration: none; cursor: pointer;}
+    #userModal[data-darkmode="0"] .modal-links a {display: block; padding: 10px; margin-top: 10px; text-align: center; background-color: #1a73e8; color: white; border-radius: 5px; text-decoration: none; font-weight: bold;}
+    #userModal[data-darkmode="0"] .modal-links a:hover {background-color: #1666c1;}
+    #userModal[data-darkmode="0"] .user-id {font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="0"] .user-id:hover {color: #1666c1;}
+    #userModal[data-darkmode="0"] .pagination .current {font-weight: bold; color: #1a73e8;}
+    /* ------------------------------------------------------------------------------------------------ */
+    .content-wrapper[data-darkmode="1"] body {font-family: 'Noto Sans', sans-serif; margin: 0; padding: 0; color: whitesmoke; background-color: #1f1f1f;}
+    .content-wrapper[data-darkmode="1"] h2 {font-size: 24px; font-weight: bold; color: whitesmoke; text-align: center; margin-bottom: 20px;}
+    .content-wrapper[data-darkmode="1"] h2 a {color: whitesmoke; text-decoration: none;}
+    .content-wrapper[data-darkmode="1"] h2 a:visited {color: whitesmoke; text-decoration: none;}
+    .content-wrapper[data-darkmode="1"] .content-wrapper {max-width: 1200px; margin: auto; padding: 20px; background-color: #1f1f1f;}
+    .content-wrapper[data-darkmode="1"] .table-container {margin-top: 10px;}
+    .content-wrapper[data-darkmode="1"] table {width: 100%; border-collapse: collapse;}
+    .content-wrapper[data-darkmode="1"] th, td {padding: 10px; border-bottom: 1px solid whitesmoke; text-align: left;}
+    .content-wrapper[data-darkmode="1"] th {background-color: #1f1f1f; font-weight: 700; color: whitesmoke;}
+    .content-wrapper[data-darkmode="1"] td {color: whitesmoke;}
+    .content-wrapper[data-darkmode="1"] tr:hover td {background-color: #1f1f1f;}
+    .content-wrapper[data-darkmode="1"] .fixed {color: #f03e3e; font-weight: bold;}
+    .content-wrapper[data-darkmode="1"] .notice-icon, .post-stats {color: #adb5bd; font-size: 0.9em;}
+    .content-wrapper[data-darkmode="1"] td a {color: #7aa4d9; text-decoration: none;}
+    .content-wrapper[data-darkmode="1"] td a:hover {text-decoration: underline;}
+    .content-wrapper[data-darkmode="1"] .pagination {display: flex; justify-content: center; margin-top: 20px;}
+    .content-wrapper[data-darkmode="1"] .pagination a, .pagination span {padding: 8px 12px; margin: 0 4px; background-color: #1f1f1f; border: 1px solid #dee2e6; border-radius: 4px; color: whitesmoke; text-decoration: none; font-weight: 500;}
+    .content-wrapper[data-darkmode="1"] .pagination a:hover {background-color: #e9ecef;}
+    .content-wrapper[data-darkmode="1"] .pagination .disabled {color: #adb5bd; pointer-events: none;}
+    .content-wrapper[data-darkmode="1"] .footer {text-align: center; margin-top: 20px; font-size: 12px; color: whitesmoke;}
+    #userModal[data-darkmode="1"]{display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}
+    #userModal[data-darkmode="1"] .modal-content {background-color: #2e2e2e; margin: 15% auto; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
+    #userModal[data-darkmode="1"] .modal-header {color: whitesmoke;}
+    #userModal[data-darkmode="1"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="1"] .close:hover, .close:focus {color: whitesmoke; text-decoration: none; cursor: pointer;}
+    #userModal[data-darkmode="1"] .modal-links a {display: block; padding: 10px; margin-top: 10px; text-align: center; background-color: #335580; color: white; border-radius: 5px; text-decoration: none; font-weight: bold;}
+    #userModal[data-darkmode="1"] .modal-links a:hover {background-color: #335580;}
+    #userModal[data-darkmode="1"] .user-id {font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="1"] .user-id:hover {color: #335580;}
+    #userModal[data-darkmode="1"] .pagination .current {font-weight: bold; color: #335580;}
 </style>
 </head>
 <body>
 
-<div class="content-wrapper">
-    <h2><a href="communityPost?c=${param.c}" class="community-link" style="color: #333333;">${communityName}</a></h2>
+<div class="content-wrapper" data-darkmode="${darkMode.scndAttrName}">
+    <h2><a href="communityPost?c=${param.c}" class="community-link">${communityName}</a></h2>
 
     <div class="table-container">
         <table>
@@ -217,7 +108,7 @@
     </div>
 
     <div style="text-align: right; margin-top: 20px;">
-        <a href="communityReg?c=${param.c}" class="btn" style="background-color: #1a73e8; color: #ffffff; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: bold;">글 작성</a>
+        <a href="communityReg?c=${param.c}" class="btn" style="background-color: #335580; color: #ffffff; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: bold;">글 작성</a>
     </div>
 
     <div class="pagination">
@@ -248,9 +139,13 @@
             </c:otherwise>
         </c:choose>
     </div>
+
+    <div class="footer">
+        &copy; Whale Community
+    </div>
 </div>
 
-<div id="userModal" class="modal" style="display: none;">
+<div id="userModal" class="modal" style="display: none;" data-darkmode="${darkMode.scndAttrName}">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <div class="modal-header">
@@ -267,9 +162,7 @@
     </div>
 </div>
 
-<div class="footer">
-    &copy; Whale Community
-</div>
+
 
 <script>
     // 모달 열기

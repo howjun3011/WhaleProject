@@ -55,6 +55,10 @@ public interface MessageDao {
 
 	int getNextMessageId();
 
-	void addUserMessageRoom(String roomId, String userId, String string);
+	String getUserType(String now_id, String currentMessageRoomId);
+
+	void updateUserTypeA(String message_room_id);
+
+	void updateUserTypeB(String message_room_id);
 }
 

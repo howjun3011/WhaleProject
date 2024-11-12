@@ -151,7 +151,13 @@ public class MessageController {
 	                          @RequestParam("u") String userId) {
 	    String now_id = (String) session.getAttribute("user_id");
 
-	    messageDao.readMessage(roomId, userId);
+	    List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, now_id);
+
+	    // 메시지의 읽음 상태를 업데이트합니다.
+	    if (!updatedMessageIds.isEmpty()) {
+	        messageDao.updateMessageReadStatus(roomId, now_id);
+	    }
+	    
 	    List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);
 
 	    ObjectMapper objectMapper = new ObjectMapper();

@@ -33,7 +33,9 @@ public interface MessageDao {
 
 	List<ReadChatDto> getReadChatList(String now_id);
 
-	void readMessage(String roomId, String userId);
+	List<Integer> getUnreadMessageIds(String roomId, String userId);
+	
+	void updateMessageReadStatus(String roomId, String userId);
 	
 	String getOtherUserInRoom(String roomId, String userId);
 

@@ -53,7 +53,7 @@
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}
-        .feed-container[data-darkmode="1"] .modal-item:hover {background-color: #f9f9f9;}
+        .feed-container[data-darkmode="1"] .modal-item:hover {background-color: #2e2e2e;}
         .feed-container[data-darkmode="1"] .music-info .music-title {font-weight: bold; font-size: 1em; color: #e2e2e2; /* 기본 검정색 */}
         .feed-container[data-darkmode="1"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #e7e7e7; /* 회색 */}
     /*    ---------------------------------------------------------------------------------------------------*/

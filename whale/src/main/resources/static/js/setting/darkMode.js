@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityDetailElement = document.querySelector('.container');
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
+    const streamingElement = document.querySelector('.streamingBody');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -144,6 +145,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (streamingElement) {
+        streamingElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        streamingElement.classList.toggle("dark", isDarkMode);
+        streamingElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                streamingElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                streamingElement.classList.toggle("dark", isDarkMode);
+                streamingElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     window.addEventListener('storage', function (event) {
         if (event.key === 'darkmodeOn') {
             darkmodeOn = event.newValue || "0";
@@ -183,6 +203,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDark);
                 communityPostModalElement.classList.toggle("light", !isDark);
+            }
+            if (streamingElement) {
+                streamingElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                streamingElement.classList.toggle("dark", isDark);
+                streamingElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
         }

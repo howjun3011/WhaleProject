@@ -40,6 +40,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     public ChatWebSocketHandler(MessageDao messageDao) {
         this.messageDao = messageDao;
+        
     }
 
     @Override
@@ -57,7 +58,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             System.out.println("WebSocket 연결 성공: " + userId + " | Room ID: " + roomId);
             System.out.println(roomId);
 
-			String otherUserId = messageDao.getOtherUserInRoom(roomId, userId);
+			String otherUserId = messageDao.getOtherUserInRoom2(roomId, userId);
+			System.out.println(userId);
+			System.out.println(otherUserId);
 			
 			
 			
@@ -67,6 +70,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		            // 메시지의 읽음 상태 업데이트
 		        messageDao.updateMessageReadStatus(roomId, otherUserId);
 	            List<WebSocketSession> senderSessions = userSessions.get(otherUserId);
+	            System.out.println(senderSessions);
 	            if (senderSessions != null) {
 	                String messageIdsStr = updatedMessageIds.stream()
 	                        .map(String::valueOf)
@@ -224,7 +228,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
     
     public boolean isUserInRoom(String roomId, String userId) {
+    	System.out.println("roomId : " + roomId);
         List<WebSocketSession> sessions = roomSessions.get(roomId);
+        System.out.println("sessions : " + sessions);
+        System.out.println("userId : " + userId);
         if (sessions != null) {
             for (WebSocketSession session : sessions) {
                 String sessionUserId = (String) session.getAttributes().get("userId");

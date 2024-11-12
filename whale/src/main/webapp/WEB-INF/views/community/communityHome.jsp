@@ -6,77 +6,36 @@
 <meta charset="UTF-8">
 <title>Community</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
-<style>
-	/* 기본 설정 값 */
-	* {margin: 0; padding: 0; box-sizing: border-box;}
-    body {
-    	min-height: 100vh;
-        font-family: 'Roboto', sans-serif;
-        background-color: #f5f5f5;
-        color: #333333;
-    }
-	.frame {
-	    display: flex;
-	    justify-content: center;
-	    align-items: center;
-	    width: 100%;
-	    background-color: #ffffff;
-	    border-radius: 10px;
-	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	    padding: 20px;
-	    height: auto; /* 여기에서 height: auto; 추가 */
-	}
-    .container {
-        max-width: 900px;
-        width: 100%;
-        padding: 40px;
-        background-color: #ffffff;
-        border-radius: 20px;
-    }
-    h3 {
-    	margin-bottom: 40px;
-        color: #333;
-        text-align: left;
-        font-size: 28px;
-        font-weight: 600;
-        border-bottom: 2px solid #ddd;
-        padding-bottom: 10px;
-    }
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-    }
-    .card {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 20px;
-        transition: all 0.3s ease;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: inherit;
-        text-decoration: none;
-    }
-    .card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .card-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
-    }
-    .card-subtitle {
-        font-size: 14px;
-        color: #777;
-    }
-    .bookmark-btn {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-    }
-</style>
+	<style>
+		/* 기본 설정 값 */
+		.container[data-darkmode="0"] * {margin: 0; padding: 0; box-sizing: border-box;}
+		.container[data-darkmode="0"] body {min-height: 100vh; font-family: 'Roboto', sans-serif; background-color: #f5f5f5; color: #333333;}
+		.container[data-darkmode="0"] .frame {display: flex; justify-content: center; align-items: center; width: 100%; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; height: auto;}
+		.container[data-darkmode="0"] .container {max-width: 900px; width: 100%; padding: 40px; background-color: #ffffff; border-radius: 20px;}
+		.container[data-darkmode="0"] h3 {margin-bottom: 40px; color: #333; text-align: left; font-size: 28px; font-weight: 600; border-bottom: 2px solid #ddd; padding-bottom: 10px;}
+		.container[data-darkmode="0"] .grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px;}
+		.container[data-darkmode="0"] .card {background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; color: inherit; text-decoration: none;}
+		.container[data-darkmode="0"] .card:hover {box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);}
+		.container[data-darkmode="0"] .card-title {font-size: 18px; font-weight: 600; color: #333;}
+		.container[data-darkmode="0"] .card-subtitle {font-size: 14px; color: #777;}
+		.container[data-darkmode="0"] .bookmark-btn {width: 24px; height: 24px; cursor: pointer;}
+	/*	---------------------------------------------------------------------------------------------*/
+		.container[data-darkmode="1"] * {margin: 0; padding: 0; box-sizing: border-box;}
+		.container[data-darkmode="1"] body {min-height: 100vh; font-family: 'Roboto', sans-serif; background-color: #434343; color: whitesmoke;}
+		.container[data-darkmode="1"] .frame {display: flex; justify-content: center; align-items: center; width: 100%; background-color: #434343; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; height: auto;}
+		.container[data-darkmode="1"] .container {max-width: 900px; width: 100%; padding: 40px; background-color: #434343; border-radius: 20px;}
+		.container[data-darkmode="1"] h3 {margin-bottom: 40px; color: whitesmoke; text-align: left; font-size: 28px; font-weight: 600; border-bottom: 2px solid #ddd; padding-bottom: 10px;}
+		.container[data-darkmode="1"] .grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px;}
+		.container[data-darkmode="1"] .card {background-color: #434343; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; color: inherit; text-decoration: none;}
+		.container[data-darkmode="1"] .card:hover {box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);}
+		.container[data-darkmode="1"] .card-title {font-size: 18px; font-weight: 600; color: whitesmoke;}
+		.container[data-darkmode="1"] .card-subtitle {font-size: 14px; color: whitesmoke;}
+		.container[data-darkmode="1"] .bookmark-btn {width: 24px; height: 24px; cursor: pointer; filter: invert(1)}
+
+
+	</style>
+	<style id="darkmode-scrollbar-styles"></style>
+	<script src="static/js/setting/darkMode.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>
 /* 	$(document).ready(function() {
@@ -115,11 +74,34 @@
             }
         });
 	}
+	// 스크롤바
+	document.addEventListener("DOMContentLoaded", function () {
+		// localStorage의 darkmodeOn 값 확인
+		const darkmodeOn = localStorage.getItem("darkmodeOn");
+
+		// darkmodeOn 값에 따라 스크롤바 스타일을 적용
+		const styleSheet = document.getElementById("darkmode-scrollbar-styles");
+		if (darkmodeOn === "1") {
+			styleSheet.innerHTML = `
+				.scroll-content::-webkit-scrollbar { display: block; width: 8px; }
+				.scroll-content::-webkit-scrollbar-track { background: #2e2e2e; }
+				.scroll-content::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
+				.scroll-content { overflow-y: auto; scroll-behavior: smooth; }
+			`;
+		} else {
+			styleSheet.innerHTML = `
+				.scroll-content::-webkit-scrollbar { display: block; width: 8px; }
+				.scroll-content::-webkit-scrollbar-track { background: #fff; }
+				.scroll-content::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+				.scroll-content { overflow-y: auto; scroll-behavior: smooth; }
+			`;
+		}
+	});
 </script>
 </head>
 <body>
 	<div class="frame">
-	    <div class="container">
+	    <div class="container" data-darkmode="${darkMode.scndAttrName}">
 	        <h3>커뮤니티</h3>
 	        <div class="grid">
 	            <c:forEach items="${list}" var="c">

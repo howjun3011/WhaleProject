@@ -211,6 +211,7 @@
             transform: translateY(-50%);
         }
     </style>
+    <style id="darkmode-scrollbar-styles"></style>
 </head>
 <body>
 <div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
@@ -343,6 +344,29 @@
             closeAllDropdowns();
         }
     };
+    // 스크롤바
+    document.addEventListener("DOMContentLoaded", function () {
+        // localStorage의 darkmodeOn 값 확인
+        const darkmodeOn = localStorage.getItem("darkmodeOn");
+
+        // darkmodeOn 값에 따라 스크롤바 스타일을 적용
+        const styleSheet = document.getElementById("darkmode-scrollbar-styles");
+        if (darkmodeOn === "1") {
+            styleSheet.innerHTML = `
+            .scroll-content::-webkit-scrollbar { display: block; width: 8px; }
+            .scroll-content::-webkit-scrollbar-track { background: #2e2e2e; }
+            .scroll-content::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
+            .scroll-content { overflow-y: auto; scroll-behavior: smooth; }
+        `;
+        } else {
+            styleSheet.innerHTML = `
+            .scroll-content::-webkit-scrollbar { display: block; width: 8px; }
+            .scroll-content::-webkit-scrollbar-track { background: #fff; }
+            .scroll-content::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+            .scroll-content { overflow-y: auto; scroll-behavior: smooth; }
+        `;
+        }
+    });
 </script>
 </body>
 </html>

@@ -17,6 +17,8 @@ public interface MainDao {
 	public String selectPostCommentUserId(String commentId);
 	public String selectFeedCommentUserId(String commentId);
 	public Integer selectFollowNotiId(String userId, String targetId);
+	public Integer selectAccountPrivacy(String userId);
+	public Integer selectFollowed(String userId, String targetId);
 	public List<LikeNotiDto> getLikeNoti(String userId);
 	public List<ComNotiDto> getCommentsNoti(String userId);
 	public List<FollowNotiDto> getFollowNoti(String userId);

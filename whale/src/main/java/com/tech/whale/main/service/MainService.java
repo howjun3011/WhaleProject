@@ -31,7 +31,7 @@ public class MainService {
 	// [ 유저 정보 설정 서비스 ]
 	public String[] userInfoMainService(HttpSession session) {
 		UserInfoDto userInfoDto = settingDao.getProfile((String) session.getAttribute("user_id"));
-		return new String[] {userInfoDto.getUser_nickname(),"static/images/setting/"+userInfoDto.getUser_image_url()};
+		return new String[] {userInfoDto.getUser_nickname(),userInfoDto.getUser_image_url()};
 	}
 	
 	// [ 시작 페이지 설정 서비스 ]
@@ -105,5 +105,24 @@ public class MainService {
 		proDao.doFollowing(userId, targetId);
 		mainDao.deleteFollowNoti(userId, targetId);
 		mainDao.insertFollowNoti(2, targetId, userId);
+		// 상대방의 팔로우 목록에 내가 있는지 확인
+		Integer followNoti = mainDao.selectFollowed(targetId, userId);
+		System.out.println(followNoti);
+		if (followNoti == 0) {
+			mainDao.insertFollowNoti(3, userId, targetId);
+        }
+	}
+	
+	// [ 맞팔로우 알림 수락 처리 ]
+	public void followBackNotiMainService(String userId, String targetId) {
+		Integer privacy = mainDao.selectAccountPrivacy(targetId);
+		if (privacy == 0) {
+			proDao.doFollowing(targetId, userId);
+			mainDao.deleteFollowNoti(userId, targetId);
+			mainDao.insertFollowNoti(0, targetId, userId);
+		} else {
+			mainDao.deleteFollowNoti(userId, targetId);
+			mainDao.insertFollowNoti(1, targetId, userId);
+		}
 	}
 }

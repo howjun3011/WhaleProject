@@ -49,6 +49,14 @@
         SELECT FOLLOW_NOTI_ID FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI_USER_ID = #{targetId}
     </select>
     
+    <select id="selectAccountPrivacy" resultType="Integer">
+        SELECT ACCOUNT_PRIVACY FROM USER_SETTING WHERE USER_ID = #{userId}
+    </select>
+    
+    <select id="selectFollowed" resultType="Integer">
+        SELECT COUNT(*) FROM FOLLOW WHERE USER_ID = #{userId} AND FOLLOW_USER_ID LIKE '%'||#{targetId}||'%'
+    </select>
+    
     <select id="getLikeNoti" resultType="com.tech.whale.main.models.LikeNotiDto">
 		SELECT
 	        LN.LIKE_NOTI_ID AS LIKE_NOTI_ID,

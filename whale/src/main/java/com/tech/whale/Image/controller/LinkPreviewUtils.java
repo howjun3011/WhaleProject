@@ -2,11 +2,16 @@ package com.tech.whale.Image.controller;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LinkPreviewUtils {
+	@Value("${image.address}")
+    private static String address;
+	
     public static Map<String, String> fetchOpenGraphData(String url) {
         Map<String, String> metaData = new HashMap<>();
         
@@ -35,7 +40,7 @@ public class LinkPreviewUtils {
         
     private static boolean isInternalWhaleLink(String url) {
         // Whale 애플리케이션의 도메인으로 변경하세요
-        String whaleDomain = "http://25.5.112.217:9002/whale/";
+        String whaleDomain = address;
 
         return url.startsWith(whaleDomain);
     }

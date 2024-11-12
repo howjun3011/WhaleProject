@@ -127,4 +127,10 @@ public class MainRestController {
 	public void privateFollowNotiMain(@RequestParam HashMap<String, Object> map) {
 		mainService.privateFollowNotiMainService((String) map.get("ui"),(String) map.get("ti"));
 	}
+	
+	// [ 맞팔로우 알림 수락 처리 ]
+	@GetMapping("/followBackNoti")
+	public void followBackNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.followBackNotiMainService((String) map.get("ui"),(String) map.get("ti"));
+	}
 }

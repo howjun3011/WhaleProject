@@ -56,7 +56,7 @@
 	</select>
 	
 	<select id="getReportFeed" resultType="com.tech.whale.setting.dto.ReportDto">
-		SELECT F.FEED_TEXT AS REPORT_TEXT, FI.FEED_IMG_NAME AS REPORT_IMG_URL
+		SELECT F.FEED_TEXT AS REPORT_TEXT, FI.FEED_IMG_URL AS REPORT_IMG_URL
 		FROM FEED F
 		JOIN FEED_IMG FI
 		ON F.FEED_ID = FI.FEED_ID

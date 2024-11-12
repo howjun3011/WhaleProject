@@ -54,5 +54,7 @@ public interface MessageDao {
 	void deleteMessage(int messageId);
 
 	int getNextMessageId();
+
+	void addUserMessageRoom(String roomId, String userId, String string);
 }
 

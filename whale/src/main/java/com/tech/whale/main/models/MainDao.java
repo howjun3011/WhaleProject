@@ -8,8 +8,10 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MainDao {
 	public Integer selectLikeNotiPostId(String postId);
 	public Integer selectLikeNotiFeedId(String feedId);
-	public Integer selectCommentsNotiPostId(String commentId);
-	public Integer selectCommentsNotiFeedId(String commentId);
+	public Integer selectCommentsNotiPostId(String postId);
+	public Integer selectCommentsNotiFeedId(String feedId);
+	public Integer selectCommentsNotiPostCommentId(String commentId);
+	public Integer selectCommentsNotiFeedCommentId(String commentId);
 	public String selectPostUserId(String postId);
 	public String selectFeedUserId(String feedId);
 	public String selectPostCommentUserId(String commentId);
@@ -22,8 +24,8 @@ public interface MainDao {
 	public void insertFeedLikeNoti(String feedId, String userId);
 	public void insertPostCommentLikeNoti(String commentId, String userId);
 	public void insertFeedCommentLikeNoti(String commentId, String userId);
-	public void insertPostCommentsNoti(String postId, String userId, String commentText);
-	public void insertFeedCommentsNoti(String feedId, String userId, String commentText);
+	public void insertPostCommentsNoti(String commentType, String postId, String userId, String commentText);
+	public void insertFeedCommentsNoti(String commentType, String feedId, String userId, String commentText);
 	public void insertFollowNoti(int followNotiType, String userId, String targetId);
 	public void updateLikeNoti(String like_noti_id);
 	public void updateCommentsNoti(String comments_noti_id);

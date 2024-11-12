@@ -51,7 +51,7 @@ public class ComLikeCommentService {
             // 좋아요 추가
             comDao.insertCommentLike(commentId, userId);
             // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 게시물 댓글이 아니라면 알람 테이블 추가 ]
-            Integer likeNoti = mainDao.selectCommentsNotiPostId(commentId);
+            Integer likeNoti = mainDao.selectCommentsNotiPostCommentId(commentId);
             String postCommentUserId = mainDao.selectPostCommentUserId(commentId);
             if (likeNoti == 1 && !postCommentUserId.equals(userId)) {
                 mainDao.insertPostCommentLikeNoti(commentId, userId);
@@ -76,6 +76,20 @@ public class ComLikeCommentService {
     public void insertComment(String postId, String userId, String commentText, String parentCommentId) {
         comDao.insertComments(postId, userId, commentText, parentCommentId);
         // 알림 기능 등 추가 구현 가능
+        // [ 메인 알람 기능: 알람의 댓글 기능이 켜져 있고 자신의 게시물이 아니라면 알람 테이블 추가 ]
+        if (parentCommentId == null) {
+        	Integer commentNoti = mainDao.selectCommentsNotiPostId(postId);
+            String postUserId = mainDao.selectPostUserId(postId);
+            if (commentNoti == 1 && !postUserId.equals(userId)) {
+            	mainDao.insertPostCommentsNoti("게시글", postId, userId, commentText);
+            }
+    	} else {
+    		Integer commentNoti = mainDao.selectCommentsNotiPostCommentId(parentCommentId);
+            String postUserId = mainDao.selectPostCommentUserId(parentCommentId);
+            if (commentNoti == 1 && !postUserId.equals(userId)) {
+            	mainDao.insertPostCommentsNoti("게시글 댓글", postId, userId, commentText);
+            }
+    	}
     }
     
     

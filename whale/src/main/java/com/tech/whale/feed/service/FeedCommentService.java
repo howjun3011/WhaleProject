@@ -29,7 +29,7 @@ public class FeedCommentService {
         Integer commentNoti = mainDao.selectCommentsNotiFeedId(feedId);
         String feedUserId = mainDao.selectFeedUserId(feedId);
         if (commentNoti == 1 && !feedUserId.equals(now_id)) {
-            mainDao.insertFeedCommentsNoti(feedId, now_id, comments);
+            mainDao.insertFeedCommentsNoti("피드", feedId, now_id, comments);
         }
     }
     
@@ -52,7 +52,7 @@ public class FeedCommentService {
             // 좋아요 추가
             feedCommentDao.insertCommentLike(commentId, userId);
             // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 피드 댓글이 아니라면 알람 테이블 추가 ]
-            Integer likeNoti = mainDao.selectCommentsNotiFeedId(commentId);
+            Integer likeNoti = mainDao.selectCommentsNotiFeedCommentId(commentId);
             String feedCommentUserId = mainDao.selectFeedCommentUserId(commentId);
             if (likeNoti == 1 && !feedCommentUserId.equals(userId)) {
                 mainDao.insertFeedCommentLikeNoti(commentId, userId);
@@ -71,6 +71,12 @@ public class FeedCommentService {
         // 현재 날짜 설정 등 필요한 추가 설정
 
         feedCommentDao.insertReply(reply);
+        // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 게시물이 아니라면 알람 테이블 추가 ]
+        Integer commentNoti = mainDao.selectCommentsNotiFeedCommentId(parentCommentId);
+        String feedUserId = mainDao.selectFeedCommentUserId(parentCommentId);
+        if (commentNoti == 1 && !feedUserId.equals(userId)) {
+            mainDao.insertFeedCommentsNoti("피드 댓글", feedId+"", userId, replyText);
+        }
     }
     
     public List<FeedCommentDto> getRepliesForComment(int commentId) {

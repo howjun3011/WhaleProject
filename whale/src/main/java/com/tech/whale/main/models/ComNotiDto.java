@@ -15,6 +15,7 @@ public class ComNotiDto {
 	private int comments_noti_id;
 	private int comments_noti_check;
 	private Date comments_noti_date;
+	private String comments_noti_type;
 	private String target_user_id;
 	private int post_id;
 	private int community_id;

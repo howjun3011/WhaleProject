@@ -51,7 +51,6 @@ public class AdminReportController {
 	public void reportSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminReportListView", "신고");
-	    subMenu.put("", "문의 생겨?");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -122,11 +121,8 @@ public class AdminReportController {
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
 		reportSubBar(model);
 		
-		System.out.println("삭제 컨트롤1");
 		adminReportResultService.execute(model);
-		System.out.println("삭제 컨트롤2");
 		adminReportResultService.userBan(model);
-		System.out.println("삭제 컨트롤3");
 		adminReportResultService.writingDel(model);
 		
 		return "redirect:adminReportContentView?"

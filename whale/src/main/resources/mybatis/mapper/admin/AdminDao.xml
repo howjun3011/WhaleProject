@@ -973,4 +973,6 @@
 		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
 	</update>
 	
+	
+	
 </mapper>

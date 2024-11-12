@@ -1,6 +1,7 @@
 package com.tech.whale.admin.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,14 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
+import com.tech.whale.admin.dao.AdminStatisticIDao;
 import com.tech.whale.admin.dto.AdminMainCntDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
+import com.tech.whale.admin.dto.AdminLVDataDto;
 
 @Service
 public class AdminMainPageService implements AdminServiceInter{
 
 	@Autowired
 	private AdminIDao adminIDao;
+	@Autowired
+	private AdminStatisticIDao adminStatisticIDao;
 	
 	
 	@Override
@@ -27,8 +32,17 @@ public class AdminMainPageService implements AdminServiceInter{
 		int report_result_today = adminIDao.reportResultCnt();
 		int writing_today = adminIDao.writingCnt();
 		ArrayList<AdminMainCntDto> mainNotice = adminIDao.mainNotice();
+		List<AdminLVDataDto> mainStatistic = adminStatisticIDao.reportStatistic2();
 		
+		List<String> labels = new ArrayList<>();
+		List<Integer> values = new ArrayList<>();
+		for(AdminLVDataDto var : mainStatistic) {
+			labels.add(var.getLabel());
+			values.add(var.getValue());
+		}
 		
+		model.addAttribute("labels", labels);
+		model.addAttribute("values", values);
 		model.addAttribute("mainNotice", mainNotice);
 		model.addAttribute("writing_today", writing_today);
 		model.addAttribute("report_null", report_null);

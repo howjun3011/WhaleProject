@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.dto.AdminUserDataDto;
+import com.tech.whale.admin.dto.AdminLVDataDto;
 import com.tech.whale.admin.statistic.service.AdminStatisticService;
 
 
@@ -67,7 +67,9 @@ public class AdminStatisticController {
 	    		null);
 	    statisticSubBar(model);
 	    
-	    adminStatisticService.execute(model);
+	    adminStatisticService.reportStatistic1(model);
+	    adminStatisticService.reportStatistic2(model);
+	    
         
         
 		

@@ -12,32 +12,56 @@
 	        <canvas id="reportChart"></canvas>
 	    </div>
 	    <div class="btnBox">
-		    <button id="btnChart1">통계1</button>
-		    <button id="btnChart2">통계2</button>
-		    <button id="btnChart3">통계3</button>
-		    <button id="btnChart4">통계4</button>
+		    <button id="btnChart1">유형별</button>
+		    <button id="btnChart2">일자별 추이</button>
+		    <button id="btnChart3">결과 비율</button>
+		    <button id="btnChart4">처리 속도</button>
 	    </div>
 	</div>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     	
-    	var labels = [];
-    	<c:forEach var="label" items="${labels}">
-    	    labels.push('${label}');
+    	var reportLabels1 = [];
+    	<c:forEach var="label" items="${reportLabels1}">
+    	reportLabels1.push('${label}');
     	</c:forEach>
     	
-    	var values = [];
-    	<c:forEach var="value" items="${values}">
-    	    values.push(${value});
+    	var reportValues1 = [];
+    	<c:forEach var="value" items="${reportValues1}">
+    	reportValues1.push(${value});
+    	</c:forEach>
+    	var reportLabels2 = [];
+    	<c:forEach var="label" items="${reportLabels2}">
+    	reportLabels2.push('${label}');
     	</c:forEach>
     	
+    	var reportValues2 = [];
+    	<c:forEach var="value" items="${reportValues2}">
+    	reportValues2.push(${value});
+    	</c:forEach>
+    	
+    	var targetTypes = [];
+        var actionCounts = [];
+        var resultActions = [];
+        <c:forEach var="value" items="${action_count}">
+        targetTypes.push(${value});
+    	</c:forEach>
+        <c:forEach var="value" items="${actionCounts}">
+        actionCounts.push(${value});
+    	</c:forEach>
+        <c:forEach var="value" items="${resultActions}">
+        resultActions.push(${value});
+    	</c:forEach>
+        
+        
+        
         const ctx = document.getElementById('reportChart').getContext('2d');
         let chartData = {
-                labels: ['월', '화', '수', '목', '금', '토', '일'],
+                labels: reportLabels1,
                 datasets: [{
-                    label: '방문자 수',
-                    data: [120, 190, 30, 50, 20, 30, 70],
+                    label: '신고건',
+                    data: reportValues1,
                     backgroundColor: 'rgba(54, 162, 235, 0.5)'
                 }]
             };
@@ -48,25 +72,37 @@
                 data: chartData,
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+    		            x: {
+    		                grid: {
+    		                    display: false
+    		                }
+    		            },
+    		            y: {
+    		                grid: {
+    		                    display: true
+    		                }
+    		            }
+    		        }
                 }
             });
 
             // 버튼 클릭 이벤트 핸들러
             document.getElementById('btnChart1').addEventListener('click', function () {
-                updateChart('bar', ['월', '화', '수', '목', '금', '토', '일'], [120, 190, 30, 50, 20, 30, 70], '방문자 수');
+                updateChart('bar', reportLabels1, reportValues1, '신고건');
             });
 
             document.getElementById('btnChart2').addEventListener('click', function () {
-                updateChart('line', ['1분기', '2분기', '3분기', '4분기'], [200, 300, 400, 500], '매출액');
+                updateChart('line', reportLabels2, reportValues2, '신고건');
             });
 
             document.getElementById('btnChart3').addEventListener('click', function () {
-                updateChart('pie', ['Chrome', 'Safari', 'Firefox', 'IE'], [55, 25, 15, 5], '브라우저 점유율');
+                updateChart('pie', ['Chrome', 'Safari', 'Firefox', 'IE'], [55, 25, 15, 5], '신고건');
             });
 
             document.getElementById('btnChart4').addEventListener('click', function () {
-                updateChart('radar', ['속도', '신뢰성', '디자인', '사용성'], [80, 90, 70, 85], '제품 평가');
+                updateChart('radar', ['속도', '신뢰성', '디자인', '사용성'], [80, 90, 70, 85], '신고건');
             });
 
             // 차트를 업데이트하는 함수
@@ -79,44 +115,59 @@
                         datasets: [{
                             label: label,
                             data: data,
-                            backgroundColor: getBackgroundColors(data.length),
-                            borderColor: getBorderColors(data.length),
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            /* borderColor: getBorderColors(data.length), */
                             borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                        scales: {
+        		            x: {
+        		                grid: {
+        		                    display: false
+        		                }
+        		            },
+        		            y: {
+        		                grid: {
+        		                    display: true
+        		                }
+        		            }
+        		        }
                     }
                 });
             }
-
-            // 배경색 생성 함수
-            function getBackgroundColors(length) {
-                const colors = [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    'rgba(201, 203, 207, 0.5)'
-                ];
-                return colors.slice(0, length);
-            }
-
-            // 테두리색 생성 함수
-            function getBorderColors(length) {
-                const colors = [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(201, 203, 207, 1)'
-                ];
-                return colors.slice(0, length);
+            function updateChart2(type, labels, data, label) {
+                myChart.destroy(); // 기존 차트 삭제
+                myChart = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+        		            x: {
+        		                grid: {
+        		                    display: false
+        		                }
+        		            },
+        		            y: {
+        		                grid: {
+        		                    display: true
+        		                }
+        		            }
+        		        }
+                    }
+                });
             }
         });
 </script>

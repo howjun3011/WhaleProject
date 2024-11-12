@@ -136,6 +136,9 @@
 	        <when test="endDate == 1">
 	        	sysdate+1
 	        </when>
+	        <when test="endDate == 2">
+	        	sysdate+9999
+	        </when>
 	        <otherwise>
 	        </otherwise>
 	    </choose>

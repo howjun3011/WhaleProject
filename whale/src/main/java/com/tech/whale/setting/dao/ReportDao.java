@@ -26,4 +26,18 @@ public interface ReportDao {
 
 	public String getFeedCommentsUser(String feed_comments_id);
 
+	public String getPostCommentsUser(String post_comments_id);
+
+	public String getMessageUser(String message_id);
+
+	public ReportDto getReportPostComments(String report_type_id);
+
+	public ReportDto getReportMessage(String report_type_id);
+
+	public void reportPostComments(String report_type_id, String now_id, String report_why, String report_tag,
+			String reportText, String userId);
+
+	public void reportMessage(String report_type_id, String now_id, String report_why, String report_tag,
+			String reportText, String userId);
+
 }

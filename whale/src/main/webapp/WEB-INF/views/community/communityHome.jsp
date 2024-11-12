@@ -6,8 +6,10 @@
 <meta charset="UTF-8">
 <title>Community</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+	<script src="static/js/setting/darkMode.js"></script>
 	<style>
 		/* 기본 설정 값 */
+		.container[data-darkmode="0"]{padding: 50px;}
 		.container[data-darkmode="0"] * {margin: 0; padding: 0; box-sizing: border-box;}
 		.container[data-darkmode="0"] body {min-height: 100vh; font-family: 'Roboto', sans-serif; background-color: #f5f5f5; color: #333333;}
 		.container[data-darkmode="0"] .frame {display: flex; justify-content: center; align-items: center; width: 100%; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; height: auto;}
@@ -19,7 +21,8 @@
 		.container[data-darkmode="0"] .card-title {font-size: 18px; font-weight: 600; color: #333;}
 		.container[data-darkmode="0"] .card-subtitle {font-size: 14px; color: #777;}
 		.container[data-darkmode="0"] .bookmark-btn {width: 24px; height: 24px; cursor: pointer;}
-	/*	---------------------------------------------------------------------------------------------*/
+		/*	---------------------------------------------------------------------------------------------*/
+		.container[data-darkmode="1"]{padding: 50px;}
 		.container[data-darkmode="1"] * {margin: 0; padding: 0; box-sizing: border-box;}
 		.container[data-darkmode="1"] body {min-height: 100vh; font-family: 'Roboto', sans-serif; background-color: #434343; color: whitesmoke;}
 		.container[data-darkmode="1"] .frame {display: flex; justify-content: center; align-items: center; width: 100%; background-color: #434343; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; height: auto;}
@@ -31,11 +34,8 @@
 		.container[data-darkmode="1"] .card-title {font-size: 18px; font-weight: 600; color: whitesmoke;}
 		.container[data-darkmode="1"] .card-subtitle {font-size: 14px; color: whitesmoke;}
 		.container[data-darkmode="1"] .bookmark-btn {width: 24px; height: 24px; cursor: pointer; filter: invert(1)}
-
-
 	</style>
 	<style id="darkmode-scrollbar-styles"></style>
-	<script src="static/js/setting/darkMode.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>
 /* 	$(document).ready(function() {
@@ -74,29 +74,30 @@
             }
         });
 	}
-	// 스크롤바
-	document.addEventListener("DOMContentLoaded", function () {
-		// localStorage의 darkmodeOn 값 확인
-		const darkmodeOn = localStorage.getItem("darkmodeOn");
+// 스크롤바
+document.addEventListener("DOMContentLoaded", function () {
+	// localStorage의 darkmodeOn 값 확인
+	const darkmodeOn = localStorage.getItem("darkmodeOn");
 
-		// darkmodeOn 값에 따라 스크롤바 스타일을 적용
-		const styleSheet = document.getElementById("darkmode-scrollbar-styles");
-		if (darkmodeOn === "1") {
-			styleSheet.innerHTML = `
-				.scroll-content::-webkit-scrollbar { display: block; width: 8px; }
-				.scroll-content::-webkit-scrollbar-track { background: #2e2e2e; }
-				.scroll-content::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
-				.scroll-content { overflow-y: auto; scroll-behavior: smooth; }
-			`;
-		} else {
-			styleSheet.innerHTML = `
-				.scroll-content::-webkit-scrollbar { display: block; width: 8px; }
-				.scroll-content::-webkit-scrollbar-track { background: #fff; }
-				.scroll-content::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
-				.scroll-content { overflow-y: auto; scroll-behavior: smooth; }
-			`;
-		}
-	});
+	// darkmodeOn 값에 따라 스크롤바 스타일을 적용
+	const styleSheet = document.getElementById("darkmode-scrollbar-styles");
+	if (darkmodeOn === "1") {
+		styleSheet.innerHTML = `
+            html::-webkit-scrollbar { display: block; width: 0px; }
+            html::-webkit-scrollbar-track { background: #2e2e2e; }
+            html::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
+            html { overflow-y: auto; scroll-behavior: smooth; }
+            body{background:#1f1f1f;}
+        `;
+	} else {
+		styleSheet.innerHTML = `
+            html::-webkit-scrollbar { display: block; width: 0px; }
+            html::-webkit-scrollbar-track { background: #fff; }
+            html::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+            html { overflow-y: auto; scroll-behavior: smooth; }
+        `;
+	}
+});
 </script>
 </head>
 <body>

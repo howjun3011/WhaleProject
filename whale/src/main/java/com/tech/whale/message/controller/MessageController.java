@@ -103,6 +103,8 @@ public class MessageController {
 	        newMessage.setMessage_read(1); // 상대방이 채팅방에 없으므로 읽지 않음으로 표시
 	    }
 
+	    int messageId = messageDao.getNextMessageId();
+	    newMessage.setMessage_id(messageId);
 	    messageDao.saveMessage(newMessage);
 
 	    // 메시지 전송을 위해 날짜 포맷팅
@@ -151,11 +153,11 @@ public class MessageController {
 	                          @RequestParam("u") String userId) {
 	    String now_id = (String) session.getAttribute("user_id");
 
-	    List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, now_id);
+	    List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, userId);
 
 	    // 메시지의 읽음 상태를 업데이트합니다.
 	    if (!updatedMessageIds.isEmpty()) {
-	        messageDao.updateMessageReadStatus(roomId, now_id);
+	        messageDao.updateMessageReadStatus(roomId, userId);
 	    }
 	    
 	    List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);

@@ -16,6 +16,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final HomeWebSocketHandler homeWebSocketHandler;
 
     @Autowired
+    ChatWebSocketHandler chatWeHandler;
+    
+    @Autowired
     public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler, HomeWebSocketHandler homeWebSocketHandler) {
         this.chatWebSocketHandler = chatWebSocketHandler;
         this.homeWebSocketHandler = homeWebSocketHandler;

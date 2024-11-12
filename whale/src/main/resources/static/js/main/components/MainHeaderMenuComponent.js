@@ -42,7 +42,7 @@ const MainHeaderMenuComponent = {
 							<div v-if="notificationIndex === 2 && notifications[2].length !== 0" class="header-expanded-content">
 								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[2]" :key="j" @click="redirectIframeNoti(1,2,j,'updateCommentsNoti?cn='+notification.comments_noti_id)">
 									<div class="header-notification-content">
-										<span style="font-weight: 400;">{{ notifications[2][j].target_user_id }}</span>님이 당신의 {{ notifications[2][j].feed_id !== 0 ? '피드' : '게시글' }}에 <span style="font-weight: 400;">댓글</span>을 달았습니다.<br>
+										<span style="font-weight: 400;">{{ notifications[2][j].target_user_id }}</span>님이 당신의 {{ notifications[2][j].comments_noti_type }}에 <span style="font-weight: 400;">댓글</span>을 달았습니다.<br>
 										<div style="width: inherit; font-size: 9px; text-align: right;">
 											<div style="float: left; width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10px;">{{ notification.post_comments_text !== null ? '\"'+notification.post_comments_text+'\"' : '\"'+notification.feed_comments_text+'\"' }}&nbsp</div>
 											{{

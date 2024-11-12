@@ -50,6 +50,12 @@ public class ComLikeCommentService {
         } else {
             // 좋아요 추가
             comDao.insertCommentLike(commentId, userId);
+            // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 게시물 댓글이 아니라면 알람 테이블 추가 ]
+            Integer likeNoti = mainDao.selectCommentsNotiPostId(commentId);
+            String postCommentUserId = mainDao.selectPostCommentUserId(commentId);
+            if (likeNoti == 1 && !postCommentUserId.equals(userId)) {
+                mainDao.insertPostCommentLikeNoti(commentId, userId);
+            }
         }
 
         // 최종적으로 댓글의 최신 좋아요 수를 반환

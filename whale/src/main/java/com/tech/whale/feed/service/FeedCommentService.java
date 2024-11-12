@@ -51,6 +51,12 @@ public class FeedCommentService {
         } else {
             // 좋아요 추가
             feedCommentDao.insertCommentLike(commentId, userId);
+            // [ 메인 알람 기능: 알람의 좋아요 기능이 켜져 있고 자신의 피드 댓글이 아니라면 알람 테이블 추가 ]
+            Integer likeNoti = mainDao.selectCommentsNotiFeedId(commentId);
+            String feedCommentUserId = mainDao.selectFeedCommentUserId(commentId);
+            if (likeNoti == 1 && !feedCommentUserId.equals(userId)) {
+                mainDao.insertFeedCommentLikeNoti(commentId, userId);
+            }
         }
         // 새로운 좋아요 수 반환
         return feedCommentDao.getCommentLikeCount(commentId);

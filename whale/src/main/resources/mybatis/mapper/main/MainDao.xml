@@ -14,11 +14,11 @@
     </select>
     
     <select id="selectCommentsNotiPostId" resultType="Integer">
-        SELECT COMMENT_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM POST WHERE POST_ID = #{postId})
+        SELECT COMMENT_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{commentId})
     </select>
     
     <select id="selectCommentsNotiFeedId" resultType="Integer">
-        SELECT COMMENT_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM FEED WHERE FEED_ID = #{feedId})
+        SELECT COMMENT_NOTIFICATION_ONOFF FROM USER_NOTIFICATION_ONOFF WHERE USER_ID = (SELECT USER_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{commentId})
     </select>
     
     <select id="selectPostUserId" resultType="String">
@@ -27,6 +27,14 @@
     
     <select id="selectFeedUserId" resultType="String">
         SELECT USER_ID FROM FEED WHERE FEED_ID = #{feedId}
+    </select>
+    
+    <select id="selectPostCommentUserId" resultType="String">
+        SELECT USER_ID FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{commentId}
+    </select>
+    
+    <select id="selectFeedCommentUserId" resultType="String">
+        SELECT USER_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{commentId}
     </select>
     
     <select id="selectFollowNotiId" resultType="Integer">
@@ -108,6 +116,24 @@
 			   '피드',
 			   (SELECT USER_ID FROM FEED WHERE FEED_ID = #{feedId}),
 			   (SELECT FEED_LIKE_ID FROM FEED_LIKE WHERE FEED_ID = #{feedId} AND USER_ID = #{userId})
+		)
+	</insert>
+	
+	<insert id="insertPostCommentLikeNoti">
+		INSERT INTO LIKE_NOTI (LIKE_NOTI_ID,LIKE_NOTI_TYPE,USER_ID,POST_COMMENTS_LIKE_ID)
+		VALUES (LIKE_NOTI_SEQ.NEXTVAL,
+			   '게시글 댓글',
+			   (SELECT USER_ID FROM POST_COMMENTS WHERE POST_COMMENTS_ID = #{commentId}),
+			   (SELECT POST_COMMENTS_LIKE_ID FROM POST_COMMENTS_LIKE WHERE POST_COMMENTS_ID = #{commentId} AND USER_ID = #{userId})
+		)
+	</insert>
+	
+	<insert id="insertFeedCommentLikeNoti">
+		INSERT INTO LIKE_NOTI (LIKE_NOTI_ID,LIKE_NOTI_TYPE,USER_ID,FEED_COMMENTS_LIKE_ID)
+		VALUES (LIKE_NOTI_SEQ.NEXTVAL,
+			   '피드 댓글',
+			   (SELECT USER_ID FROM FEED_COMMENTS WHERE FEED_COMMENTS_ID = #{commentId}),
+			   (SELECT FEED_COMMENTS_LIKE_ID FROM FEED_COMMENTS_LIKE WHERE FEED_COMMENTS_ID = #{commentId} AND USER_ID = #{userId})
 		)
 	</insert>
 	

@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Getter
 public class AllChatListDto {
     private String user_id;
+    private int message_room_id;
     private String user_nickname;
     private String user_image_url;
     private int unread_message_count;

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -129,5 +131,26 @@ public class MessageController2 {
 		model.addAttribute("followList", followList);
 
 		return "/message/newChat";
+	}
+
+	@RequestMapping("/message/deleteChatList")
+	@ResponseBody
+	public HashMap<String, Object> deleteChatList(HttpServletRequest request, HttpSession session, Model model, @RequestParam("currentMessageRoomId") String currentMessageRoomId) {
+		HashMap<String, Object> response = new HashMap<>();
+		System.out.println("newChat() ctr");
+		String nowId = (String) session.getAttribute("user_id");
+
+		System.out.println(currentMessageRoomId);
+
+		String userType = messageDao.getUserType(nowId, currentMessageRoomId);
+		System.out.println(userType);
+		if (userType.equals("A")) {
+			messageDao.updateUserTypeA(currentMessageRoomId);
+		} else {
+			messageDao.updateUserTypeB(currentMessageRoomId);
+		}
+		response.put("success", true);
+
+		return response;
 	}
 }

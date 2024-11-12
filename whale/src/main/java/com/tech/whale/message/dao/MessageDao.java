@@ -54,5 +54,11 @@ public interface MessageDao {
 	void deleteMessage(int messageId);
 
 	int getNextMessageId();
+
+	String getUserType(String now_id, String currentMessageRoomId);
+
+	void updateUserTypeA(String message_room_id);
+
+	void updateUserTypeB(String message_room_id);
 }
 

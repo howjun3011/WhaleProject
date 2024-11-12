@@ -28,6 +28,23 @@ public class RegisterController {
         String email = (String) map.get("email");
         String nickname = (String) map.get("nickname");
 
+        // 중복 검사
+        if (userService.isUsernameTaken(username)) {
+            response.put("success", false);
+            response.put("message", "이미 사용 중인 아이디입니다.");
+            return response;
+        }
+        if (userService.isNicknameTaken(nickname)) {
+            response.put("success", false);
+            response.put("message", "이미 사용 중인 닉네임입니다.");
+            return response;
+        }
+//        if (userService.isEmailTaken(email)) {
+//            response.put("success", false);
+//            response.put("message", "이미 사용 중인 이메일입니다.");
+//            return response;
+//        }
+
         // User 객체를 통해 DB에 저장 사용자 등록 처리
         boolean isRegistered = userService.registerUser(username, password, email, nickname, (String) session.getAttribute("spotifyId"));
 

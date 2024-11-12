@@ -56,10 +56,21 @@
         INSERT INTO USER_INFO (USER_ID, USER_PASSWORD, USER_EMAIL) VALUES (#{user_id}, #{password}, #{email})
     </insert>
 
-    <!-- 이메일 존재 여부 확인 -->
-    <select id="existsByEmail" resultType="Integer">
-        SELECT COUNT(*) FROM USER_INFO WHERE USER_EMAIL = #{email}
+    <!-- USER_ID 중복 확인 -->
+    <select id="existsByUsername" resultType="Integer">
+        SELECT COUNT(*) FROM USER_INFO WHERE USER_ID = #{user_id}
     </select>
+
+    <!-- USER_NICKNAME 중복 확인 -->
+    <select id="existsByNickname" resultType="Integer">
+        SELECT COUNT(*) FROM USER_INFO WHERE USER_NICKNAME = #{user_nickname}
+    </select>
+
+    <!-- USER_EMAIL 중복 확인 -->
+    <select id="existsByEmail" resultType="Integer">
+        SELECT COUNT(*) FROM USER_INFO WHERE USER_EMAIL = #{user_email}
+    </select>
+
 
     <!-- 비밀번호 재설정 토큰 저장 -->
     <insert id="saveResetToken">
@@ -83,4 +94,9 @@
         SELECT USER_ID FROM USER_INFO WHERE USER_EMAIL = #{email}
     </select>
 
+    <select id="getUsersByEmail" parameterType="String" resultType="com.tech.whale.login.dto.UserDto">
+        SELECT user_id, user_email, user_nickname, user_spotify_id
+        FROM USER_INFO
+        WHERE user_email = #{email}
+    </select>
 </mapper>

@@ -22,8 +22,8 @@
 	</select>
 	
 	<insert id="addUserMessageRoom">
-	    INSERT INTO message_room_user (message_room_id, user_id)
-	    VALUES (#{roomId}, #{userId})
+	    INSERT INTO message_room_user (message_room_id, user_id, user_type)
+	    VALUES (#{roomId}, #{userId}, #{string})
 	</insert>
 	    
 	<select id="getUnreadMessageIds" parameterType="map" resultType="int">

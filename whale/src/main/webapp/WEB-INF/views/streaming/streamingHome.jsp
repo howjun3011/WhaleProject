@@ -13,6 +13,7 @@
     <title>Whale Streaming</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/streaming/mainFunction.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/setting/darkMode.js"></script>
     <!-- 조건에 따라 JavaScript 파일을 포함 -->
     <c:if test="${page == 'detail' || page == 'playlistDetail' || page == 'artistDetail' || page == 'albumDetail'}">
         <script src="${pageContext.request.contextPath}/static/js/streaming/mainContentBackground.js" defer></script>
@@ -21,7 +22,7 @@
         window.contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
     </script>
 </head>
-<body>
+<body class="streamingBody">
 <div class="header">
     <div class="headerItems">
         <button class="homeBtn">

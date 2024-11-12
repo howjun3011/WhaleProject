@@ -172,7 +172,7 @@ body {min-height: 100vh;}
 
 #main.light .main {position: relative; display: flex; width: 100%; background-color: #fcfcfc;}
 #main.light .mainItems {width: 50%;}
-#main.light .frame {position: relative; width: 94%; height: 94%; border: none; border-radius: 30px;}
+#main.light .frame {position: relative; width: 94%; height: 94%; border: none; border-radius: 30px; border: 2px solid #f0f0f0; box-sizing: border-box;}
 
 #main.light .menu-style {background-image: linear-gradient(to bottom, #ffffff, #fcfcfc);}
 #main.light .menuBtn {position: absolute; bottom: 22.5px; left: 50%; transform: translate(-50%,0%); width: 55px; height: 55px; border-radius: 50%; opacity: 0.8;}

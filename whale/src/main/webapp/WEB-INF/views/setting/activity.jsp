@@ -37,16 +37,24 @@ a:visited, a:hover, a:focus, a:active {
 		<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
 		활동
 		</div>
-		<a href="likeList">
-			<div class="setting-item">
-				좋아요
-			</div>
-		</a>
-		<a href="commentList">
-			<div class="setting-item">
-				댓글
-			</div>
-		</a>
+		<div class="setting-grid">
+			<a href="likeList">
+				<div class="setting-item">
+					<div class="setting-item-text">
+					<p>좋아요</p>
+					<p class="sub-text">like</p>
+					</div>
+				</div>
+			</a>
+			<a href="commentList">
+				<div class="setting-item">
+					<div class="setting-item-text">
+					<p>댓글</p>
+					<p class="sub-text">comment</p>
+					</div>
+				</div>
+			</a>
+		</div>
 	</div>
 </div>
 </body>

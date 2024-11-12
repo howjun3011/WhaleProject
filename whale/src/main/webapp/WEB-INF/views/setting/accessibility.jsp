@@ -37,7 +37,7 @@
         }
 
         .toggle-slide:checked + label {
-            background-color: black;
+            background-color: #335580;
         }
 
         .toggle-slide:checked + label::after {
@@ -83,20 +83,33 @@
             <a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
             접근성
         </div>
-        <a href="startpageSetting">
+        <div class="setting-grid">
+            <a href="startpageSetting">
+                <div class="setting-item">
+                    <div class="setting-item-text">
+                        <p>시작페이지 설정</p>
+                        <p class="sub-text">startpage setting</p>
+                    </div>
+                </div>
+            </a>
+            <a href="pageAccessSetting">
+                <div class="setting-item">
+                    <div class="setting-item-text">
+                        <p>페이지 접근 변경</p>
+                        <p class="sub-text">page access edit</p>
+                    </div>
+                </div>
+            </a>
             <div class="setting-item">
-                시작페이지 설정
+                <div class="darkmode-txt">
+                    <div class="setting-item-text">
+                        <p>다크모드</p>
+                        <p class="sub-text">darkmode</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="toggle-slide" class="toggle-slide"/>
+                <label for="toggle-slide"></label>
             </div>
-        </a>
-        <a href="pageAccessSetting">
-            <div class="setting-item">
-                페이지 접근 변경
-            </div>
-        </a>
-        <div class="setting-item">
-            다크모드
-            <input type="checkbox" id="toggle-slide" class="toggle-slide"/>
-            <label for="toggle-slide"></label>
         </div>
     </div>
 </div>

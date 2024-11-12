@@ -11,9 +11,19 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-.setting-item{
+.setting-body[data-darkmode="0"] .setting-item{
 	display: block;
 	justify-content: space-between;
+	border: none;
+	border-radius: 0px;
+	border-bottom: 1px solid #EAEAEA;
+}
+.setting-body[data-darkmode="1"] .setting-item{
+	display: block;
+	justify-content: space-between;
+	border: none;
+	border-radius: 0px;
+	border-bottom: 1px solid #335580;
 }
 .section-top{
 	font-weight: bold;
@@ -46,9 +56,9 @@ input[type='radio'] {
 	cursor: pointer; 
 }
 input[type='radio']:checked {
-	background-color: black; /* 체크 시 내부 원으로 표시될 색상 */
+	background-color: #335580; /* 체크 시 내부 원으로 표시될 색상 */
 	border: 3px solid #ccc; /* 테두리와 원 사이의 색상 */
-	box-shadow: 0 0 0 1.6px black; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
+	box-shadow: 0 0 0 1.6px #335580; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
 }
 #back {
     position: absolute; 

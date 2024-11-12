@@ -20,7 +20,7 @@
     .content-wrapper[data-darkmode="0"] tr:hover td {background-color: #f8f9fa;}
     .content-wrapper[data-darkmode="0"] .fixed {color: #f03e3e; font-weight: bold;}
     .content-wrapper[data-darkmode="0"] .notice-icon, .post-stats {color: #adb5bd; font-size: 0.9em;}
-    .content-wrapper[data-darkmode="0"] td a {color: #1a73e8; text-decoration: none;}
+    .content-wrapper[data-darkmode="0"] td a {color: black; text-decoration: none;}
     .content-wrapper[data-darkmode="0"] td a:hover {text-decoration: underline;}
     .content-wrapper[data-darkmode="0"] .pagination {display: flex; justify-content: center; margin-top: 20px;}
     .content-wrapper[data-darkmode="0"] .pagination a, .pagination span {padding: 8px 12px; margin: 0 4px; background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 4px; color: #495057; text-decoration: none; font-weight: 500;}
@@ -50,11 +50,11 @@
     .content-wrapper[data-darkmode="1"] tr:hover td {background-color: #1f1f1f;}
     .content-wrapper[data-darkmode="1"] .fixed {color: #f03e3e; font-weight: bold;}
     .content-wrapper[data-darkmode="1"] .notice-icon, .post-stats {color: #adb5bd; font-size: 0.9em;}
-    .content-wrapper[data-darkmode="1"] td a {color: #7aa4d9; text-decoration: none;}
+    .content-wrapper[data-darkmode="1"] td a {color: whitesmoke; text-decoration: none;}
     .content-wrapper[data-darkmode="1"] td a:hover {text-decoration: underline;}
     .content-wrapper[data-darkmode="1"] .pagination {display: flex; justify-content: center; margin-top: 20px;}
     .content-wrapper[data-darkmode="1"] .pagination a, .pagination span {padding: 8px 12px; margin: 0 4px; background-color: #1f1f1f; border: 1px solid #dee2e6; border-radius: 4px; color: whitesmoke; text-decoration: none; font-weight: 500;}
-    .content-wrapper[data-darkmode="1"] .pagination a:hover {background-color: #e9ecef;}
+    .content-wrapper[data-darkmode="1"] .pagination a:hover {background-color: lightgray;}
     .content-wrapper[data-darkmode="1"] .pagination .disabled {color: #adb5bd; pointer-events: none;}
     .content-wrapper[data-darkmode="1"] .footer {text-align: center; margin-top: 20px; font-size: 12px; color: whitesmoke;}
     #userModal[data-darkmode="1"]{display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}

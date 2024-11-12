@@ -3,16 +3,19 @@ package com.tech.whale.Image.controller;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class LinkPreviewUtils {
-	@Value("${image.address}")
-    private static String address;
-	
-    public static Map<String, String> fetchOpenGraphData(String url) {
+
+    @Value("${image.address}")
+    private String address;  // static 제거
+
+    public Map<String, String> fetchOpenGraphData(String url) {
         Map<String, String> metaData = new HashMap<>();
         
         try {
@@ -38,14 +41,14 @@ public class LinkPreviewUtils {
         return metaData;
     }
         
-    private static boolean isInternalWhaleLink(String url) {
+    private boolean isInternalWhaleLink(String url) {
         // Whale 애플리케이션의 도메인으로 변경하세요
         String whaleDomain = address;
 
-        return url.startsWith(whaleDomain);
+        return url != null && url.startsWith(whaleDomain);
     }
     
-    public static String fetchYouTubeEmbedHtml(String url) {
+    public String fetchYouTubeEmbedHtml(String url) {
         String oEmbedUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json";
         try {
             Document doc = Jsoup.connect(oEmbedUrl).ignoreContentType(true).get();

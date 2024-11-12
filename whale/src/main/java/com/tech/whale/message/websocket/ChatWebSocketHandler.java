@@ -31,6 +31,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, List<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
     private final MessageDao messageDao;
+    private final LinkPreviewUtils linkPreviewUtils;
 
     @Autowired
     private HomeWebSocketHandler homeWebSocketHandler;
@@ -38,8 +39,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public ChatWebSocketHandler(MessageDao messageDao) {
+    public ChatWebSocketHandler(MessageDao messageDao, LinkPreviewUtils linkPreviewUtils) {
         this.messageDao = messageDao;
+        this.linkPreviewUtils = linkPreviewUtils;
         
     }
 
@@ -66,24 +68,21 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 			
 			List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, otherUserId);
 			
-			 if (!updatedMessageIds.isEmpty()) {
+			 if (!updatedMessageIds.isEmpty() || updatedMessageIds != null) {
 		            // 메시지의 읽음 상태 업데이트
 		        messageDao.updateMessageReadStatus(roomId, otherUserId);
-	            List<WebSocketSession> senderSessions = userSessions.get(otherUserId);
-	            System.out.println(senderSessions);
-	            if (senderSessions != null) {
+
 	                String messageIdsStr = updatedMessageIds.stream()
 	                        .map(String::valueOf)
 	                        .collect(Collectors.joining(","));
+	                System.out.println(messageIdsStr);
 	                String readNotification = String.format("READ:%s:%s", roomId, messageIdsStr);
 	                TextMessage readMessage = new TextMessage(readNotification);
-	                for (WebSocketSession senderSession : senderSessions) {
-	                    if (senderSession.isOpen()) {
-	                        senderSession.sendMessage(readMessage);
-	                    }
+	                System.out.println(readMessage);
+
+	                sendToUser(otherUserId, readMessage);
+	                sendToUser(userId, readMessage);
 	                }
-	            }
-	        }
         } else {
             System.out.println("Room ID 없음으로 세션 거부: " + session.getId());
             session.close(CloseStatus.BAD_DATA);
@@ -130,7 +129,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     messageDto.setMessage_text(embedHtml);
                     System.out.println("YouTube embed HTML created: " + embedHtml);
                 } else {
-                    Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(url);
+                    Map<String, String> previewData = linkPreviewUtils.fetchOpenGraphData(url);
 
                     // 미리보기 데이터 확인
                     if (previewData != null && !previewData.isEmpty()) {
@@ -292,5 +291,16 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private String calculateTimeDifference() {
         // 실제 시간 차이 계산 로직 구현
         return "방금 전"; // 예시
+    }
+    
+    private void sendToUser(String userId, TextMessage message) throws IOException {
+        List<WebSocketSession> sessions = userSessions.get(userId);
+        if (sessions != null) {
+            for (WebSocketSession session : sessions) {
+                if (session.isOpen()) {
+                    session.sendMessage(message);
+                }
+            }
+        }
     }
 }

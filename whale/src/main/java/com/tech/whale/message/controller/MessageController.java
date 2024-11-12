@@ -34,6 +34,9 @@ public class MessageController {
 	
     @Autowired
     private ChatWebSocketHandler chatWebSocketHandler;
+    
+    @Autowired
+    private LinkPreviewUtils linkPreviewUtils;
 
 	@RequestMapping("/messageGo")
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
@@ -45,8 +48,8 @@ public class MessageController {
 		if (messageDto == null || messageDto.getMessage_room_id() == null) {
 			roomId = messageDao.getNextRoomId();
 			messageDao.createMessageRoom(roomId);
-			messageDao.addUserMessageRoom(roomId, userId);
-			messageDao.addUserMessageRoom(roomId, now_id);
+			messageDao.addUserMessageRoom(roomId, userId, "A");
+			messageDao.addUserMessageRoom(roomId, now_id, "B");
 			messageDto = messageDao.getAllRoom(now_id, userId);
 		} else {
 			roomId = messageDto.getMessage_room_id();
@@ -86,7 +89,7 @@ public class MessageController {
 	    newMessage.setMessage_type("LINK");
 
 	    // 링크에서 미리보기 데이터 생성
-	    Map<String, String> previewData = LinkPreviewUtils.fetchOpenGraphData(link_id);
+	    Map<String, String> previewData = linkPreviewUtils.fetchOpenGraphData(link_id);
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    String messageText = link_id;
 
@@ -153,12 +156,13 @@ public class MessageController {
 	                          @RequestParam("u") String userId) {
 	    String now_id = (String) session.getAttribute("user_id");
 
-	    List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, userId);
-
-	    // 메시지의 읽음 상태를 업데이트합니다.
-	    if (!updatedMessageIds.isEmpty()) {
-	        messageDao.updateMessageReadStatus(roomId, userId);
-	    }
+		/*
+		 * List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId,
+		 * userId);
+		 * 
+		 * // 메시지의 읽음 상태를 업데이트합니다. if (!updatedMessageIds.isEmpty()) {
+		 * messageDao.updateMessageReadStatus(roomId, userId); }
+		 */
 	    
 	    List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);
 

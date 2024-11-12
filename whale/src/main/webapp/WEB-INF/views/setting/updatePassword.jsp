@@ -28,6 +28,7 @@
 			font-size: 20px;
 			position: absolute;
 			top: 15px;
+			color: black;
 			right: 7px;
 			background-color: transparent; /* 버튼의 배경색을 투명으로 설정 */
 			border: none;
@@ -38,14 +39,25 @@
 		.complete-btn:hover {
 			color: #5A5A5A;
 		}
-		button{
+		.setting-body[data-darkmode="0"] button{
 			background-color: transparent;
 			border: none;
 			cursor: pointer;
 			margin-left: 5px;
+			color: #335580;
 		}
-		button:hover{
-			color: #9f9f9f;
+		.setting-body[data-darkmode="0"] button:hover{
+			color: black;
+		}
+		.setting-body[data-darkmode="1"] button{
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+			margin-left: 5px;
+			color: whitesmoke;
+		}
+		.setting-body[data-darkmode="1"] button:hover{
+			color: lightgray;
 		}
 		#password-fields{
 			display: block;
@@ -69,15 +81,31 @@
 			font-size: 10px;
 			margin-left: 3px;
 		}
-		input[type="password"] {
+		#pass-check{
+			font-size: 10px;
+			margin-top: 3px;
+			margin-left: 5px;
+		}
+		.setting-body[data-darkmode="0"] input[type="password"] {
 			padding: 5px;
 			background-color: #FCFCFC;
 			border: none; /* 테두리 없애기 */
 			border-bottom: 2px solid #ccc; /* 밑줄 추가 */
 			outline: none; /* 포커스 시 파란 테두리 없애기 */
 		}
-		input[type="password"]:focus {
+		.setting-body[data-darkmode="0"] input[type="password"]:focus {
 			border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
+		}
+		.setting-body[data-darkmode="1"] input[type="password"] {
+			padding: 5px;
+			color: whitesmoke;
+			background-color: rgb(46, 46, 46);
+			border: none; /* 테두리 없애기 */
+			border-bottom: 2px solid #ccc; /* 밑줄 추가 */
+			outline: none; /* 포커스 시 파란 테두리 없애기 */
+		}
+		.setting-body[data-darkmode="1"] input[type="password"]:focus {
+			border-bottom: 2px solid #f1f1f1; /* 포커스 시 밑줄 색 변경 */
 		}
 		.checkmark-icon {
 			width: 17px; /* 아이콘 크기 조정 */
@@ -117,7 +145,7 @@
 						$("#update_password, #check_password").on("input", validatePassword);
 					} else {
 						alert("현재 비밀번호가 일치하지 않습니다.");
-						$("#pass-check").text("현재 비밀번호 불일치").css("color", "red");
+						$("#pass-check").text("현재 비밀번호 불일치").css("color", "#FF6C6C");
 					}
 				},
 				error: function(xhr, status, error) {
@@ -144,10 +172,10 @@
 				passwordHint.html("");
 				password_checkmark_1.html("");
 			} else if(currentPassword === newPassword) {
-				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "red");
+				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
 				password_checkmark_1.html("");
 			} else if (!passwordRegex.test(newPassword)) {
-				passwordHint.text("4자리 이상 입력").css("color", "red");
+				passwordHint.text("4자리 이상 입력").css("color", "#FF6C6C");
 				password_checkmark_1.html("");
 			} else {
 				// 비밀번호가 유효한 경우
@@ -160,7 +188,7 @@
 				password_match_hint.html("");
 				password_checkmark_2.html("");
 			} else if((currentPassword === newPassword) && (newPassword === checkPassword)) {
-				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "red");
+				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
 				password_checkmark_2.html("");
 			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치
 				password_match_hint.html("");
@@ -168,7 +196,7 @@
 				password_checkmark_2.html('<img src="static/images/setting/passcheck.png" alt="일치">');
 			} else {
 				password_checkmark_2.html("");
-				password_match_hint.text("불일치").css("color", "red");
+				password_match_hint.text("불일치").css("color", "#FF6C6C");
 			}
 		}
 

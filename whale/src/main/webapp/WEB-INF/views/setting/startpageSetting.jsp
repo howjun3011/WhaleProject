@@ -11,17 +11,38 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-.setting-item{
-    padding: 5px 10px;
-    border-bottom: none;
-    justify-content: space-between;
+.setting-body[data-darkmode="0"] .setting-item{
+   padding: 5px 10px;
+   border-bottom: none;
+   justify-content: space-between;
+   border: none;
+   border-radius: 0px;
 }
-.option{
+.setting-body[data-darkmode="1"] .setting-item{
+   padding: 5px 10px;
+   border-bottom: none;
+   justify-content: space-between;
+   border: none;
+   border-radius: 0px;
+}
+.setting-body[data-darkmode="0"] .option{
    text-align: left;
    flex: 1; /* 두 option을 동일한 크기도 만듦 */
    margin: 20px;
 }
-.option img{
+.setting-body[data-darkmode="1"] .option{
+   text-align: left;
+   flex: 1; /* 두 option을 동일한 크기도 만듦 */
+   margin: 20px;
+}
+.setting-body[data-darkmode="0"] .option img{
+   width: 300px;
+   height: 300px;
+   max-width: 100%;
+   max-height: 300px;
+   object-fit: contain;
+}
+.setting-body[data-darkmode="1"] .option img{
    width: 300px;
    height: 300px;
    max-width: 100%;
@@ -53,9 +74,9 @@ input[type='radio'] {
    margin-right: 7px;
 }
 input[type='radio']:checked {
-   background-color: black; /* 체크 시 내부 원으로 표시될 색상 */
+   background-color: #335580; /* 체크 시 내부 원으로 표시될 색상 */
    border: 3px solid #ccc; /* 테두리와 원 사이의 색상 */
-   box-shadow: 0 0 0 1.6px black; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
+   box-shadow: 0 0 0 1.6px #335580; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
 }
 #back {
     position: absolute; 

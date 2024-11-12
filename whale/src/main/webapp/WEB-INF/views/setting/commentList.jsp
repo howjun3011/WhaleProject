@@ -21,16 +21,24 @@
 			flex: 1;
 			overflow-y: auto;
 		}
-		.setting-item {
+		.setting-body[data-darkmode="0"] .setting-item{
 			display: inline-block;
 			border-bottom: none;
 			margin: 0px;
+			border: none;
+		}
+
+		.setting-body[data-darkmode="1"] .setting-item{
+			display: inline-block;
+			border-bottom: none;
+			margin: 0px;
+			border: none;
 		}
 		.dropdown {
 			position: relative;
 			display: inline-block;
 		}
-		.dropbtn {
+		.setting-body[data-darkmode="0"] .dropbtn {
 			display: block;
 			border: 2px solid #ccc;
 			border-radius: 4px;
@@ -47,7 +55,25 @@
 			position: relative;
 			margin-right: 3px;
 		}
-		.dropdown-content {
+		.setting-body[data-darkmode="1"] .dropbtn {
+			display: block;
+			border: 2px solid #335580;
+			border-radius: 4px;
+			background-color: rgb(46, 46, 46);
+			font-weight: 400;
+			color: whitesmoke;
+			padding: 12px;
+			width: 100px;
+			height: 45px;
+			text-align: left;
+			cursor: pointer;
+			font-size: 12px;
+			z-index: 1;
+			position: relative;
+			margin-right: 3px;
+		}
+
+		.setting-body[data-darkmode="0"] .dropdown-content {
 			position: absolute;
 			display: none;
 			font-weight: 400;
@@ -56,18 +82,46 @@
 			border-radius: 8px;
 			height: 50px;
 			box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
+			z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
 		}
-		.dropdown-content div {
+		.setting-body[data-darkmode="1"] .dropdown-content {
+			position: absolute;
+			display: none;
+			font-weight: 400;
+			background-color: rgb(46, 46, 46);
+			min-width: 100px;
+			border-radius: 8px;
+			height: 50px;
+			box-shadow: 0px 0px 10px 3px #335580;
+			z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
+		}
+
+		.setting-body[data-darkmode="0"] .dropdown-content div {
 			display: block;
 			text-decoration: none;
 			color: rgb(37, 37, 37);
 			font-size: 12px;
 			padding: 12px 20px;
 		}
-		.dropdown-content div:hover {
+		.setting-body[data-darkmode="1"] .dropdown-content div {
+			display: block;
+			text-decoration: none;
+			color: whitesmoke;
+			font-size: 12px;
+			padding: 12px 20px;
+		}
+
+		.setting-body[data-darkmode="0"] .dropdown-content div:hover {
 			background-color: rgb(226, 226, 226);
 		}
-		.dropdown-content.show {
+		.setting-body[data-darkmode="1"] .dropdown-content div:hover {
+			background-color: rgb(46, 46, 46);
+		}
+
+		.setting-body[data-darkmode="0"] .dropdown-content.show {
+			display: block;
+		}
+		.setting-body[data-darkmode="1"] .dropdown-content.show {
 			display: block;
 		}
 		.post-list {
@@ -104,7 +158,7 @@
 			margin-right: 20px;
 		}
 
-		.feed-item {
+		.setting-body[data-darkmode="0"] .feed-item {
 			display: flex;
 			align-items: center;
 			margin-bottom: 10px;
@@ -113,14 +167,34 @@
 			border: 1px solid #ddd;
 			border-radius: 8px;
 		}
+		.setting-body[data-darkmode="1"] .feed-item {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+			justify-content: space-between;
+			padding: 10px;
+			color: whitesmoke;
+			border: 1px solid #335580;
+			border-radius: 8px;
+		}
 
-		.post-item {
+		.setting-body[data-darkmode="0"] .post-item {
 			display: flex;
 			flex-direction: column;
 			margin-bottom: 10px;
 			justify-content: space-between;
 			padding: 15px 10px;
 			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
+		.setting-body[data-darkmode="1"] .post-item {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 10px;
+			justify-content: space-between;
+			padding: 15px 10px;
+			color: whitesmoke;
+			border: 1px solid #335580;
 			border-radius: 8px;
 		}
 
@@ -155,8 +229,14 @@
 			margin-right: 10px;
 		}
 
-		.comment-text, .reply-text {
+		.setting-body[data-darkmode="0"] .comment-text, .reply-text {
 			background-color: #f1f1f1;
+			padding: 8px 12px;
+			border-radius: 20px;
+		}
+		.setting-body[data-darkmode="1"] .comment-text, .reply-text {
+			background-color: #335580;
+			color: whitesmoke;
 			padding: 8px 12px;
 			border-radius: 20px;
 		}

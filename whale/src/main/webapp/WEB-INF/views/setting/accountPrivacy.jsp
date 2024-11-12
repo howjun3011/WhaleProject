@@ -14,6 +14,10 @@
             justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
         }
 
+        .setting-grid{
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         #privite-toggle-slide {
             display: none;
         }
@@ -42,7 +46,7 @@
         }
 
         #privite-toggle-slide:checked + label {
-            background-color: black; /* 토글 선택 시 배경색 변경 */
+            background-color: #335580; /* 토글 ON 상태일 때 배경색 */
         }
 
         #privite-toggle-slide:checked + label::after {
@@ -66,7 +70,12 @@
         </div>
         <div class="setting-grid">
             <div class="setting-item">
-                비공개 계정
+                <div class="privacy-txt">
+                    <div class="setting-item-text">
+                        <p>비공개 계정</p>
+                        <p class="sub-text">private account</p>
+                    </div>
+                </div>
                 <input type="checkbox" id="privite-toggle-slide"/>
                 <label for="privite-toggle-slide">on/off</label>
             </div>

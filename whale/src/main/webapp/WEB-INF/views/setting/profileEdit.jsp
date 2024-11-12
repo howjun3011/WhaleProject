@@ -13,16 +13,16 @@
 <script src="static/js/setting/darkMode.js"></script>
 
 <style>
-a{
+.setting-body[data-darkmode="0"] a{
 	text-decoration: none;
-	color: blue;
+	color: #335580;
 }
-a:visited, a:focus, a:active {
-	color: blue;
+.setting-body[data-darkmode="0"] a:visited, .setting-body[data-darkmode="0"] a:focus, .setting-body[data-darkmode="0"] a:active {
+	color: #335580;
 	text-decoration: none;
 }
-a:hover{
-	color: #ccc;
+.setting-body[data-darkmode="0"] a:hover{
+	color: black;
 }
 .setting-body[data-darkmode="1"] a{
 	text-decoration: none;
@@ -46,26 +46,38 @@ a:hover{
 	border-radius: 4px;
 	cursor: pointer;
 }
-
-.complete-btn:hover {
+.setting-body[data-darkmode="0"] .complete-btn:hover {
 	color: #5A5A5A;
 }
-.setting-item {
+.setting-body[data-darkmode="1"] .complete-btn:hover {
+	color: #EAEAEA;
+}
+.setting-body[data-darkmode="0"] .setting-item {
     flex-direction: column; /* 세로 방향으로 정렬 */
     padding: 10px;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #EAEAEA;
+}
+.setting-body[data-darkmode="1"] .setting-item {
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    padding: 10px;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #335580;
 }
 .setting-body[data-darkmode="0"] .setting-item img {
     width: 130px;
     height: 130px;
     border-radius: 100px;
-    margin-top: 10px;
+    margin-top: 30px;
     margin-left: 20px;
 }
 .setting-body[data-darkmode="1"] .setting-item img {
     width: 130px;
     height: 130px;
     border-radius: 100px;
-    margin-top: 10px;
+    margin-top: 30px;
     margin-left: 20px;
 }
 .setting-body[data-darkmode="0"] .setting-item button {
@@ -74,8 +86,10 @@ a:hover{
 	border-style: none;
     border: none;
     background: none;
-    color: blue;
+    color: #335580;
     cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 .setting-body[data-darkmode="1"] .setting-item button {
 	border-color: rgb(46, 46, 46);
@@ -83,19 +97,21 @@ a:hover{
 	border-style: none;
     border: none;
     background: none;
-    color: lightgray;
+    color: whitesmoke;
     cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 #editPhotoBtn {
 	font-weight: bold;	
 }
 .setting-body[data-darkmode="1"] #editPhotoBtn {
-	color: lightgray;
+	color: whitesmoke;
 }
 
 .setting-body[data-darkmode="1"] #editPhotoBtn:active,
 .setting-body[data-darkmode="1"] #editPhotoBtn:focus {
-	color: lightgray;
+	color: whitesmoke;
 }
 
 table{
@@ -252,13 +268,16 @@ table tr td {
             $(this).css('color', 'gray');
         });
 
-        // 버튼 뗐을 경우
+        // 버튼 뗐을 경우, 다크모드 여부에 따라 색상 설정
         $('#editPhotoBtn').on('mouseup', function() {
             console.log('버튼 클릭');
-            $(this).css('color', 'blue');
+            if ($('.setting-body').attr('data-darkmode') === '1') {
+                $(this).css('color', 'whitesmoke');
+            } else {
+                $(this).css('color', '#335580');
+            }
         });
     });
     </script>
-
 </body>
 </html>

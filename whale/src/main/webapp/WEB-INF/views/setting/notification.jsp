@@ -10,8 +10,17 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-.setting-item{
+.setting-body[data-darkmode="0"] .setting-item{
     justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
+	border: none;
+	border-bottom: 1px solid #eaeaea;
+	border-radius: 0px;
+}
+.setting-body[data-darkmode="1"] .setting-item{
+    justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
+	border: none;
+	border-bottom: 1px solid #335580;
+	border-radius: 0px;
 }
 .toggle-slide {
     display: none; /* 체크박스를 숨김 */
@@ -37,8 +46,9 @@ label::after {
     left: 4px;
     transition: 0.5s;
 }
+
 .toggle-slide:checked + label {
-    background-color: black; /* 토글 ON 상태일 때 배경색 */
+    background-color: #335580; /* 토글 ON 상태일 때 배경색 */
 }
 .toggle-slide:checked + label::after {
     left: 29px; /* 토글 ON 상태일 때 슬라이더 이동 */

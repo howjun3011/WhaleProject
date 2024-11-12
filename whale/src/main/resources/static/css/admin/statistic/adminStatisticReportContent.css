@@ -23,11 +23,12 @@
 .container{
 	height: 600px;
 	margin-right: 200px;
+	margin-left: 100px;
 }
 
 canvas {
-	max-width: 800px;
-	height: 400px;
+	max-width: 1000px;
+	height: 500px;
 }
 
 button{

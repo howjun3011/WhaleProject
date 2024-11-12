@@ -45,19 +45,69 @@
 		FROM DATE_RANGE DR
 		ORDER BY DR.TARGET_DATE DESC
 	</select>
-	<select id="reportStatistic3" resultType="com.tech.whale.admin.dto.AdminRRDataDto">
+	<select id="reportStatistic3" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT RANGES.LABEL, NVL(COUNTS.VALUE, 0) AS VALUE
+		FROM (
+		    SELECT '1일이내' AS LABEL FROM DUAL
+		    UNION ALL
+		    SELECT '2-3일' FROM DUAL
+		    UNION ALL
+		    SELECT '3일초과' FROM DUAL
+		) RANGES
+		LEFT JOIN (
+		    SELECT 
+		        CASE 
+		            WHEN (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &lt;= 24 THEN '1일이내'
+		            WHEN (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &gt; 24 
+		                 AND (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &lt;= 72 THEN '2-3일'
+		            ELSE '3일초과'
+		        END AS LABEL,
+		        COUNT(*) AS VALUE
+		    FROM 
+		        REPORT_RESULT
+		    JOIN 
+		        REPORT ON REPORT_RESULT.REPORT_ID = REPORT.REPORT_ID
+		    WHERE 
+		        REPORT_RESULT.REPORT_RESULT_DATE IS NOT NULL 
+		        AND REPORT.REPORT_DATE IS NOT NULL
+		    GROUP BY 
+		        CASE 
+		            WHEN (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &lt;= 24 THEN '1일이내'
+		            WHEN (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &gt; 24 
+		                 AND (REPORT_RESULT.REPORT_RESULT_DATE - REPORT.REPORT_DATE) * 24 &lt;= 72 THEN '2-3일'
+		            ELSE '3일초과'
+		        END
+		) COUNTS ON RANGES.LABEL = COUNTS.LABEL
+		ORDER BY RANGES.LABEL
+	</select>
+	<select id="userStatistic1" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		WITH DATE_RANGE AS (
+		    SELECT TO_CHAR(SYSDATE - LEVEL + 1, 'YYYY-MM-DD') AS LABEL
+		    FROM DUAL
+		    CONNECT BY LEVEL &lt;= 14
+		),
+		DAILY_USER_COUNT AS (
+		    SELECT 
+		        TO_CHAR(USER_DATE, 'YYYY-MM-DD') AS LABEL,
+		        COUNT(*) AS DAILY_COUNT
+		    FROM USER_INFO
+		    WHERE USER_DATE &gt;= TRUNC(SYSDATE) - 13
+		    GROUP BY TO_CHAR(USER_DATE, 'YYYY-MM-DD')
+		),
+		TOTAL_USER_COUNT AS (
+		    SELECT COUNT(*) AS TOTAL_COUNT
+		    FROM USER_INFO
+		)
 		SELECT 
-		    TARGET_TYPE,
-		    REPORT_RESULT_ACTION,
-		    COUNT(*) AS ACTION_COUNT
+		    DR.LABEL,
+		    (SELECT TOTAL_COUNT FROM TOTAL_USER_COUNT) - 
+		    NVL(SUM(DUC.DAILY_COUNT) OVER (ORDER BY DR.LABEL DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW), 0) AS VALUE
 		FROM 
-		    REPORT_RESULT
-		GROUP BY 
-		    TARGET_TYPE,
-		    REPORT_RESULT_ACTION
+		    DATE_RANGE DR
+		LEFT JOIN 
+		    DAILY_USER_COUNT DUC ON DR.LABEL = DUC.LABEL
 		ORDER BY 
-		    TARGET_TYPE,
-		    REPORT_RESULT_ACTION
+		    DR.LABEL
 	</select>
 	
 </mapper>

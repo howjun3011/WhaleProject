@@ -20,12 +20,12 @@
         .feed-container[data-darkmode="1"] .top-bar img {width: 80px; cursor: pointer; filter: invert(.7);}
         /* 글 작성 영역 */
         .feed-container[data-darkmode="1"] .write-area-container {max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 0 10px;}
-        .feed-container[data-darkmode="1"] .write-area-container.open {max-height: 2000px;}
-        .feed-container[data-darkmode="1"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px;}
+        .feed-container[data-darkmode="1"] .write-area-container.open {max-height: 2000px; background: #1f1f1f;}
+        .feed-container[data-darkmode="1"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px; background: #434343; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #434343; border-radius: 5px; margin-bottom: 10px;}
         .feed-container[data-darkmode="1"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */ color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
-        .feed-container[data-darkmode="1"] .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
+        .feed-container[data-darkmode="1"] .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #2e2e2e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
         /* 피드 레이아웃 */
         .feed-container[data-darkmode="1"] .feed {margin-top: 20px; display: flex; flex-direction: column; align-items: center;}
         .feed-container[data-darkmode="1"] .post {background-color: #2e2e2e; width: 90%; max-width: 600px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: relative; cursor: pointer;}
@@ -47,9 +47,9 @@
         .feed-container[data-darkmode="1"] .post-time {font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="1"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .feed-container[data-darkmode="1"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
+        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #1f1f1f; font-size: 16px; cursor: pointer; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}
@@ -502,29 +502,94 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // localStorage의 darkmodeOn 값 확인
-        const darkmodeOn = localStorage.getItem("darkmodeOn");
+        const settingElement = document.querySelector('.setting-body');
+        const feedElement = document.querySelector('.feed-container');
+        const toggleSlide = document.getElementById('toggle-slide');
+        let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
-        // darkmodeOn 값이 "1"일 때만 CSS를 추가
-        if (darkmodeOn === "1") {
+        const updateScrollbarStyle = () => {
             const styleSheet = document.getElementById("darkmode-scrollbar-styles");
-            styleSheet.innerHTML = `
-            html::-webkit-scrollbar {display: block; width: 8px;}
-            html::-webkit-scrollbar-track {background: #2e2e2e;}
-            html::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
-            html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
-        `;
-        } else {
-            const styleSheet = document.getElementById("darkmode-scrollbar-styles");
-            styleSheet.innerHTML = `
-            html::-webkit-scrollbar {display: block; width: 8px;}
-            html::-webkit-scrollbar-track {background: #fff;}
-            html::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
-            html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
-        `;
+            if (darkmodeOn === "1") {
+                styleSheet.innerHTML = `
+                html::-webkit-scrollbar {display: block; width: 8px;}
+                html::-webkit-scrollbar-track {background: #2e2e2e;}
+                html::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
+                html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+            `;
+            } else {
+                styleSheet.innerHTML = `
+                html::-webkit-scrollbar {display: block; width: 8px;}
+                html::-webkit-scrollbar-track {background: #fff;}
+                html::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
+                html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+            `;
+            }
+        };
+
+        if (settingElement) {
+            settingElement.setAttribute("data-darkmode", darkmodeOn);
+            const isDarkMode = darkmodeOn === "1";
+            toggleSlide.checked = isDarkMode;
+            settingElement.classList.toggle("dark", isDarkMode);
+            settingElement.classList.toggle("light", !isDarkMode);
+
+            toggleSlide.addEventListener('change', function () {
+                darkmodeOn = this.checked ? "1" : "0";
+                localStorage.setItem('darkmodeOn', darkmodeOn);
+                settingElement.setAttribute("data-darkmode", darkmodeOn);
+                settingElement.classList.toggle("dark", darkmodeOn === "1");
+                settingElement.classList.toggle("light", darkmodeOn !== "1");
+                window.parent.postMessage({ darkmodeOn: darkmodeOn }, "*");
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/whale/updateDarkmode', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('darkmode_setting_onoff=' + darkmodeOn);
+            });
         }
-    });
 
+        if (feedElement) {
+            feedElement.setAttribute("data-darkmode", darkmodeOn);
+            const isDarkMode = darkmodeOn === "1";
+            feedElement.classList.toggle("dark", isDarkMode);
+            feedElement.classList.toggle("light", !isDarkMode);
+
+            window.addEventListener('message', function (event) {
+                if (event.data && event.data.darkmodeOn !== undefined) {
+                    darkmodeOn = event.data.darkmodeOn;
+                    feedElement.setAttribute("data-darkmode", darkmodeOn);
+                    const isDarkMode = darkmodeOn === "1";
+                    feedElement.classList.toggle("dark", isDarkMode);
+                    feedElement.classList.toggle("light", !isDarkMode);
+
+                    updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+                }
+            });
+        }
+
+        window.addEventListener('storage', function (event) {
+            if (event.key === 'darkmodeOn') {
+                darkmodeOn = event.newValue || "0";
+                if (settingElement) {
+                    settingElement.setAttribute("data-darkmode", darkmodeOn);
+                    const isDark = darkmodeOn === "1";
+                    settingElement.classList.toggle("dark", isDark);
+                    settingElement.classList.toggle("light", !isDark);
+                    toggleSlide.checked = isDark;
+                }
+                if (feedElement) {
+                    feedElement.setAttribute("data-darkmode", darkmodeOn);
+                    const isDark = darkmodeOn === "1";
+                    feedElement.classList.toggle("dark", isDark);
+                    feedElement.classList.toggle("light", !isDark);
+                }
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+
+        // 초기 페이지 로드 시 스크롤바 스타일 적용
+        updateScrollbarStyle();
+    });
 </script>
 
 </body>

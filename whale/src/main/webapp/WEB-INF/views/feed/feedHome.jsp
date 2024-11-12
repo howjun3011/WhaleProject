@@ -57,51 +57,98 @@
         .feed-container[data-darkmode="1"] .music-info .music-title {font-weight: bold; font-size: 1em; color: #e2e2e2; /* 기본 검정색 */}
         .feed-container[data-darkmode="1"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #e7e7e7; /* 회색 */}
     /*    ---------------------------------------------------------------------------------------------------*/
-        .feed-container[data-darkmode="0"]{background-color: #434343;}
+        .feed-container[data-darkmode="0"]{background-color: #f0f0f0;}
         /* 상단 바 스타일 */
-        .feed-container[data-darkmode="0"] .top-bar {background-color: #1f1f1f; display: flex; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; height: 20px;}
-        .top-bar img {width: 80px; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .top-bar {background-color: #fff; display: flex; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; height: 20px;}
+        .feed-container[data-darkmode="0"] .top-bar img {width: 80px; cursor: pointer;}
         /* 글 작성 영역 */
-        .write-area-container {max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 0 10px;}
-        .write-area-container.open {max-height: 2000px;}
-        .write-area textarea {width: 90%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px;}
-        .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px;}
-        .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */}
-        .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
-        .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .write-area-container {max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 0 10px;}
+        .feed-container[data-darkmode="0"] .write-area-container.open {max-height: 2000px;}
+        .feed-container[data-darkmode="0"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px;}
+        .feed-container[data-darkmode="0"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px;}
+        .feed-container[data-darkmode="0"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */}
+        .feed-container[data-darkmode="0"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
+        .feed-container[data-darkmode="0"] .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
         /* 피드 레이아웃 */
-        .feed {margin-top: 20px; display: flex; flex-direction: column; align-items: center;}
-        .post {background-color: white; width: 90%; max-width: 600px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: relative; cursor: pointer;}
-        .user-info {display: flex; align-items: center;}
-        .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
-        .username {font-weight: bold; font-size: 1.2em;}
-        .other-btn {position: absolute; top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
-        .other-btn img {width: 30px; height: 30px;}
-        .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
-        .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
-        .post-actions .like-btn,
-        .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
-        .post-actions .like-btn {background: none; border: none; cursor: pointer;}
-        .post-actions .likebtn,
-        .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
-        .like-count,
-        .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
-        .post-text {margin-top: 10px;}
-        .post-time {font-size: 0.8em; color: gray;}
-        .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
+        .feed-container[data-darkmode="0"] .feed {margin-top: 20px; display: flex; flex-direction: column; align-items: center;}
+        .feed-container[data-darkmode="0"] .post {background-color: white; width: 90%; max-width: 600px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: relative; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .user-info {display: flex; align-items: center;}
+        .feed-container[data-darkmode="0"] .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
+        .feed-container[data-darkmode="0"] .username {font-weight: bold; font-size: 1.2em;}
+        .feed-container[data-darkmode="0"] .other-btn {position: absolute; top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .other-btn img {width: 30px; height: 30px;}
+        .feed-container[data-darkmode="0"] .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
+        .feed-container[data-darkmode="0"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .post-actions .like-btn,
+        .feed-container[data-darkmode="0"] .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .post-actions .like-btn {background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .post-actions .likebtn,
+        .feed-container[data-darkmode="0"] .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
+        .feed-container[data-darkmode="0"] .like-count,
+        .feed-container[data-darkmode="0"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
+        .feed-container[data-darkmode="0"] .post-text {margin-top: 10px;}
+        .feed-container[data-darkmode="0"] .post-time {font-size: 0.8em; color: gray;}
+        .feed-container[data-darkmode="0"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
-        .modal-item.red {color: red;}
-        .modal-item.gray {color: gray;}
-        .modal-item:last-child {border-bottom: none;}
-        .modal-item:hover {background-color: #f9f9f9;}
-        .music-info .music-title {font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
-        .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
+        .feed-container[data-darkmode="0"] .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .modal-item.red {color: red;}
+        .feed-container[data-darkmode="0"] .modal-item.gray {color: gray;}
+        .feed-container[data-darkmode="0"] .modal-item:last-child {border-bottom: none;}
+        .feed-container[data-darkmode="0"] .modal-item:hover {background-color: #f9f9f9;}
+        .feed-container[data-darkmode="0"] .music-info .music-title {font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
+        .feed-container[data-darkmode="0"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
 
     </style>
-    <script src="static/js/feed/feedDarkMode.js"></script>
+    <style id="darkmode-scrollbar-styles"></style>
+    <script src="static/js/setting/darkMode.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const feedElement = document.querySelector('.feed-container');
+            const toggleSlide = document.getElementById('toggle-slide');
+
+            // localStorage에서 다크 모드 상태 확인 및 초기화
+            let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
+            console.log("Initial darkmodeOn from localStorage:", darkmodeOn);
+
+            feedElement.setAttribute("data-darkmode", darkmodeOn);
+            console.log("Initial data-darkmode attribute set to:", darkmodeOn);
+
+            toggleSlide.checked = darkmodeOn === "1";
+            console.log("Initial toggleSlide checked status:", toggleSlide.checked);
+
+            // 토글 변경 시 localStorage 업데이트
+            toggleSlide.addEventListener('change', function () {
+                darkmodeOn = this.checked ? "1" : "0";
+                console.log("Toggle changed, new darkmodeOn:", darkmodeOn);
+
+                // localStorage 업데이트
+                localStorage.setItem('darkmodeOn', darkmodeOn);
+                console.log("Updated localStorage darkmodeOn to:", darkmodeOn);
+
+                // data-darkmode 속성 업데이트
+                feedElement.setAttribute("data-darkmode", darkmodeOn);
+                console.log("Updated data-darkmode attribute to:", darkmodeOn);
+            });
+
+            // 다른 iframe 또는 탭에서 localStorage가 업데이트될 때 적용
+            window.addEventListener('storage', function (event) {
+                if (event.key === 'darkmodeOn') {
+                    darkmodeOn = event.newValue || "0";
+                    console.log("storage event detected, new darkmodeOn from localStorage:", darkmodeOn);
+
+                    // data-darkmode 속성 업데이트
+                    feedElement.setAttribute("data-darkmode", darkmodeOn);
+                    console.log("Updated data-darkmode attribute due to storage event to:", darkmodeOn);
+
+                    // 토글 버튼 상태 업데이트
+                    toggleSlide.checked = darkmodeOn === "1";
+                    console.log("Updated toggleSlide checked status due to storage event:", toggleSlide.checked);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="feed-container" data-darkmode="${darkMode.scndAttrName}">
@@ -453,6 +500,30 @@
             pauseBtn.style.display = 'none';
         });
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // localStorage의 darkmodeOn 값 확인
+        const darkmodeOn = localStorage.getItem("darkmodeOn");
+
+        // darkmodeOn 값이 "1"일 때만 CSS를 추가
+        if (darkmodeOn === "1") {
+            const styleSheet = document.getElementById("darkmode-scrollbar-styles");
+            styleSheet.innerHTML = `
+            html::-webkit-scrollbar {display: block; width: 8px;}
+            html::-webkit-scrollbar-track {background: #2e2e2e;}
+            html::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
+            html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+        `;
+        } else {
+            const styleSheet = document.getElementById("darkmode-scrollbar-styles");
+            styleSheet.innerHTML = `
+            html::-webkit-scrollbar {display: block; width: 8px;}
+            html::-webkit-scrollbar-track {background: #fff;}
+            html::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
+            html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+        `;
+        }
+    });
 
 </script>
 

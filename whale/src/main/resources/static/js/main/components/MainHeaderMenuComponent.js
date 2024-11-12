@@ -108,6 +108,23 @@ const MainHeaderMenuComponent = {
 											{{ notification.follow_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
 										</div>
 									</div>
+									<div class="header-notification-content" v-if="notification.follow_noti === 3" style="margin-bottom: 1.5px;">
+										<span style="font-weight: 400;">{{ notifications[3][j].target_user_id }}</span>님을 맞팔로우하시겠습니까? 
+										<div style="display: inline-block; width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.follow_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+										</div>
+									</div>
+									<div class="hearder-follow-noti" v-if="notification.follow_noti === 3">
+										<div></div>
+										<div class="header-follow-select" @click.stop="fetchNoti('followBackNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">수락</div>
+										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">거절</div>
+										<div></div>
+									</div>
 									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 2" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)"><div>x</div></div>
 								</div>
 							</div>

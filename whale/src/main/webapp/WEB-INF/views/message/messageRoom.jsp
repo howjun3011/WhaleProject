@@ -551,7 +551,7 @@
 	
 	function reportMessage() {
 	    // 신고 페이지로 이동
-	    window.location.href = '/whale/reportMessage?messageId=' + selectedMessageId;
+	    window.location.href = '/whale/report?m=' + selectedMessageId;
 	    closeMessageMenu();
 	}
 	

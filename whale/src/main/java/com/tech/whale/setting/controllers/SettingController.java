@@ -549,7 +549,9 @@ public class SettingController {
     public String report(HttpServletRequest request, HttpSession session, Model model,
                          @RequestParam(value = "p", required = false) String post_id,
                          @RequestParam(value = "f", required = false) String feed_id,
-                         @RequestParam(value = "fc", required = false) String feed_comments_id) {
+                         @RequestParam(value = "fc", required = false) String feed_comments_id,
+                         @RequestParam(value = "pc", required = false) String post_comments_id,
+                         @RequestParam(value = "m", required = false) String message_id) {
         String now_id = (String) session.getAttribute("user_id");
         String report_tag = "";
         String userId = "";
@@ -566,7 +568,15 @@ public class SettingController {
         	userId = reportDao.getFeedCommentsUser(feed_comments_id);
             report_tag = "피드 댓글 신고";
             model.addAttribute("report_type_id", feed_comments_id);
-        }
+        } else if (post_comments_id != null) {
+			userId = reportDao.getPostCommentsUser(post_comments_id);
+			report_tag = "게시글 댓글 신고";
+			model.addAttribute("report_type_id", post_comments_id);
+		} else if (message_id != null) {
+			userId = reportDao.getMessageUser(message_id);
+			report_tag = "메시지 신고";
+			model.addAttribute("report_type_id", message_id);
+		}
 
         model.addAttribute("userId", userId);
         model.addAttribute("report_tag", report_tag);
@@ -599,7 +609,16 @@ public class SettingController {
             ReportDto reportDto = reportDao.getReportFeedComments(report_type_id);
             reportText = reportDto.getReport_text();
             reportDao.reportFeedComments(report_type_id, now_id, report_why, report_tag, reportText, userId);
-        }
+        } else if (report_tag.equals("게시글 댓글 신고")) {
+        	ReportDto reportDto = reportDao.getReportPostComments(report_type_id);
+			reportText = reportDto.getReport_text();
+			reportDao.reportPostComments(report_type_id, now_id, report_why, report_tag, reportText, userId);
+		} else if (report_tag.equals("메시지 신고")) {
+			ReportDto reportDto = reportDao.getReportMessage(report_type_id);
+			reportText = reportDto.getReport_text();
+			reportDao.reportMessage(report_type_id, now_id, report_why, report_tag, reportText, userId);
+			
+		}
 
         return "redirect:/profileHome?u="+(String) session.getAttribute("user_id");
     }

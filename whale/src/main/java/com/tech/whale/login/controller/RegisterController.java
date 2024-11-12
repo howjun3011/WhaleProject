@@ -39,11 +39,11 @@ public class RegisterController {
             response.put("message", "이미 사용 중인 닉네임입니다.");
             return response;
         }
-        if (userService.isEmailTaken(email)) {
-            response.put("success", false);
-            response.put("message", "이미 사용 중인 이메일입니다.");
-            return response;
-        }
+//        if (userService.isEmailTaken(email)) {
+//            response.put("success", false);
+//            response.put("message", "이미 사용 중인 이메일입니다.");
+//            return response;
+//        }
 
         // User 객체를 통해 DB에 저장 사용자 등록 처리
         boolean isRegistered = userService.registerUser(username, password, email, nickname, (String) session.getAttribute("spotifyId"));

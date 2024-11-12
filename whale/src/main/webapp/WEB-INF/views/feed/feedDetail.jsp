@@ -34,9 +34,9 @@
         .feed-container[data-darkmode="1"] .other-btn img {width: 30px; height: 30px;}
         .feed-container[data-darkmode="1"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         .feed-container[data-darkmode="1"] /* 모달 내용 */
-        .feed-container[data-darkmode="1"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
+        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #1f1f1f; font-size: 16px; cursor: pointer;}
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}

@@ -202,13 +202,13 @@
     .modal-item:hover {
         background-color: #f9f9f9;
     }
-    
+
     .modal-button-group {
         display: flex;
         justify-content: center; /* 버튼을 가운데 정렬 */
         margin-top: 20px;
     }
-    
+
     .modal-btn {
         background-color: #03c75a; /* 네이버 그린 컬러 */
         color: #ffffff;
@@ -219,11 +219,11 @@
         border-radius: 4px;
         transition: background-color 0.3s;
     }
-    
+
     .modal-btn:hover {
         background-color: #02b354;
     }
-    
+
     #remove-music-btn {
 	    margin-left: auto;
 	    background-color: transparent;
@@ -232,11 +232,11 @@
 	    cursor: pointer;
 	    color: #888888;
 	}
-	
+
 	#remove-music-btn:hover {
 	    color: #ff0000;
 	}
-    
+
 </style>
 </head>
 <body>

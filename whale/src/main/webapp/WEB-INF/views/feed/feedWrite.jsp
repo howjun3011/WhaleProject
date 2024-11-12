@@ -181,120 +181,36 @@
 </script>
 
 <style>
-
-	.music-info {
-	    display: flex;
-	    align-items: center;
-	    gap: 10px;
-	    padding: 10px;
-	    background-color: #f9f9f9;
-	    border-radius: 5px;
-	    margin-bottom: 10px;
-	}
-	
-	.modal {
-	    display: none; /* 기본적으로 숨김 상태 */
-	    position: fixed;
-	    z-index: 1000;
-	    left: 0;
-	    top: 0;
-	    width: 100%;
-	    height: 100%;
-	    background-color: rgba(0, 0, 0, 0.6);
-	    justify-content: center;
-	    align-items: center;
-	}
-	
-	.modal .modal-content {
-		width: 50%;
-		height: 65%;
-	}
-
-    .write-area {
-        text-align: center;
-    }
-    
-    .form-content {
-        width: 80%;
-        max-width: 1200px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    textarea {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    
-    input[type="file"] {
-        display: none; /* 기본 파일 입력 요소를 숨깁니다 */
-    }
-    
-    .file-upload-btn {
-    	width: 80%;
-    	max-width: 1200px;
-        background-color: #f0f0f0; /* 연한 그레이톤 배경 */
-        color: #333; /* 다크 그레이 글자색 */
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 5px; /* 모서리 둥글게 */
-        transition: background-color 0.3s;
-        display: inline-block; /* 버튼처럼 보이도록 설정 */
-        margin-bottom: 10px;
-    }
-    
-    .file-upload-btn:hover {
-        background-color: #e0e0e0; /* 호버 시 조금 더 진한 그레이톤 */
-    }
-    
-    .music-upload-btn {
-    	width: 80%;
-    	max-width: 1200px;
-        background-color: #f0f0f0; /* 연한 그레이톤 배경 */
-        color: #333; /* 다크 그레이 글자색 */
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 5px; /* 모서리 둥글게 */
-        transition: background-color 0.3s;
-        display: inline-block; /* 버튼처럼 보이도록 설정 */
-        margin-bottom: 10px;
-    }
-    
-    .music-upload-btn:hover {
-        background-color: #e0e0e0; /* 호버 시 조금 더 진한 그레이톤 */
-    }
-    
-    img#preview {
-        max-width: 60%;
-        height: auto;
-        display: block;
-        margin: 10px auto;
-    }
-    
-    .write-btn {
-		width: 40px;
-		height: 40px;
-	}
-	
-    .submit-btn {
-        background-color: #f0f0f0;
-        color: #333;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-    
-    .submit-btn:hover {
-        background-color: #e0e0e0;
-    }
+	.feed-container[data-darkmode="1"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #434343; border-radius: 5px; margin-bottom: 10px; }
+	.feed-container[data-darkmode="1"] .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
+	.feed-container[data-darkmode="1"] .modal .modal-content { width: 50%; height: 65%; }
+	.feed-container[data-darkmode="1"] .write-area { text-align: center; }
+	.feed-container[data-darkmode="1"] .form-content { width: 80%; max-width: 1200px; margin: 0 auto; text-align: center; }
+	.feed-container[data-darkmode="1"] textarea { width: 100%; max-width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 10px; }
+	.feed-container[data-darkmode="1"] input[type="file"] { display: none; }
+	.feed-container[data-darkmode="1"] .file-upload-btn { width: 80%; max-width: 1200px; background-color: #2e2e2e; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; display: inline-block; margin-bottom: 10px; }
+	.feed-container[data-darkmode="1"] .file-upload-btn:hover { background-color: #252525; }
+	.feed-container[data-darkmode="1"] .music-upload-btn { width: 80%; max-width: 1200px; background-color: #2e2e2e; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; display: inline-block; margin-bottom: 10px; }
+	.feed-container[data-darkmode="1"] .music-upload-btn:hover { background-color: #252525; }
+	.feed-container[data-darkmode="1"] img#preview { max-width: 60%; height: auto; display: block; margin: 10px auto; }
+	.feed-container[data-darkmode="1"] .write-btn { width: 40px; height: 40px; }
+	.feed-container[data-darkmode="1"] .submit-btn { background-color: #2e2e2e; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; }
+	.feed-container[data-darkmode="1"] .submit-btn:hover { background-color: #335580; }
+	.feed-container[data-darkmode="1"] .submit-btn:hover img{filter: brightness(100);}
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+	.feed-container[data-darkmode="0"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+	.feed-container[data-darkmode="0"] .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
+	.feed-container[data-darkmode="0"] .modal .modal-content { width: 50%; height: 65%; }
+	.feed-container[data-darkmode="0"] .write-area { text-align: center; }
+	.feed-container[data-darkmode="0"] .form-content { width: 80%; max-width: 1200px; margin: 0 auto; text-align: center; }
+	.feed-container[data-darkmode="0"] textarea { width: 100%; max-width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 10px; }
+	.feed-container[data-darkmode="0"] input[type="file"] { display: none; }
+	.feed-container[data-darkmode="0"] .file-upload-btn { width: 80%; max-width: 1200px; background-color: #f0f0f0; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; display: inline-block; margin-bottom: 10px; }
+	.feed-container[data-darkmode="0"] .file-upload-btn:hover { background-color: #e0e0e0; }
+	.feed-container[data-darkmode="0"] .music-upload-btn { width: 80%; max-width: 1200px; background-color: #f0f0f0; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; display: inline-block; margin-bottom: 10px; }
+	.feed-container[data-darkmode="0"] .music-upload-btn:hover { background-color: #e0e0e0; }
+	.feed-container[data-darkmode="0"] img#preview { max-width: 60%; height: auto; display: block; margin: 10px auto; }
+	.feed-container[data-darkmode="0"] .write-btn { width: 40px; height: 40px; }
+	.feed-container[data-darkmode="0"] .submit-btn { background-color: #f0f0f0; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; }
+	.feed-container[data-darkmode="0"] .submit-btn:hover { background-color: #e0e0e0; }
 </style>

@@ -1,7 +1,10 @@
 package com.tech.whale.login.dao;
 
 import com.tech.whale.login.dto.UserDto;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface UserDao {
@@ -24,5 +27,6 @@ public interface UserDao {
     public Integer isValidToken(String token);
     public void updatePasswordByToken(String hashedPassword, String token);
     public String getUserIdByEmail(String email);
+    List<UserDto> getUsersByEmail(String email);
 
 }

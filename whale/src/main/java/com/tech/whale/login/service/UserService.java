@@ -5,10 +5,12 @@ import com.tech.whale.login.dao.UserDao;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,27 +92,55 @@ public class UserService {
     }
 
     // 비밀번호 재설정 이메일 전송
-    public void sendResetPasswordEmail(String email) {
-        String token = generateRandomToken();
-        String user_id = userDao.getUserIdByEmail(email);  // 이메일로 유저 아이디 가져오기
-        String resetLink = "http://localhost:9002/whale/reset-password?token=" + token;
-        userDao.saveResetToken(user_id,token);
-        // 이메일 전송 로직
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Whale 계정 비밀번호 재설정");
-        message.setText("안녕하세요, " + user_id + "님,\n\n"
-                + "비밀번호를 재설정하려면 아래 링크를 클릭하세요:\n" + resetLink
-                + "\n\n만약 이 요청을 본인이 한 것이 아니라면, 이 메일을 무시해 주세요."
-                + "\n\n감사합니다.\nWhale 팀");
-        message.setFrom("Music Whale Support <" + System.getenv("EMAIL_USER") + ">");  // 보내는 사람 설정
+//    public void sendResetPasswordEmail(String email) {
+//        String token = generateRandomToken();
+//        String user_id = userDao.getUserIdByEmail(email);  // 이메일로 유저 아이디 가져오기
+//        String resetLink = "http://localhost:9002/whale/reset-password?token=" + token;
+//        userDao.saveResetToken(user_id,token);
+//        // 이메일 전송 로직
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo(email);
+//        message.setSubject("Whale 계정 비밀번호 재설정");
+//        message.setText("안녕하세요, " + user_id + "님,\n\n"
+//                + "비밀번호를 재설정하려면 아래 링크를 클릭하세요:\n" + resetLink
+//                + "\n\n만약 이 요청을 본인이 한 것이 아니라면, 이 메일을 무시해 주세요."
+//                + "\n\n감사합니다.\nWhale 팀");
+//        message.setFrom("Music Whale Support <" + System.getenv("EMAIL_USER") + ">");  // 보내는 사람 설정
+//
+//        try {
+//            mailSender.send(message);  // 이메일 전송
+//            System.out.println("비밀번호 재설정 이메일이 성공적으로 전송되었습니다.");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("이메일 전송에 실패했습니다.");
+//        }
+//    }
 
-        try {
-            mailSender.send(message);  // 이메일 전송
-            System.out.println("비밀번호 재설정 이메일이 성공적으로 전송되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("이메일 전송에 실패했습니다.");
+    // 비밀번호 재설정 이메일 list
+    public void sendResetPasswordEmail(String email) {
+        List<UserDto> users = userDao.getUsersByEmail(email); // 이메일로 유저 목록 가져오기
+
+        for (UserDto user : users) {
+            String token = generateRandomToken();
+            String resetLink = "http://localhost:9002/whale/reset-password?token=" + token;
+            userDao.saveResetToken(user.getUser_id(), token); // 토큰 저장
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(user.getUser_email());
+            message.setSubject("Whale 계정 비밀번호 재설정");
+            message.setText("안녕하세요, " + user.getUser_id() + "님,\n\n"
+                    + "비밀번호를 재설정하려면 아래 링크를 클릭하세요:\n" + resetLink
+                    + "\n\n만약 이 요청을 본인이 한 것이 아니라면, 이 메일을 무시해 주세요."
+                    + "\n\n감사합니다.\nWhale 팀");
+            message.setFrom("Music Whale Support <" + System.getenv("EMAIL_USER") + ">");
+
+            try {
+                mailSender.send(message);
+                System.out.println("비밀번호 재설정 이메일이 성공적으로 전송되었습니다.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("이메일 전송에 실패했습니다.");
+            }
         }
     }
 

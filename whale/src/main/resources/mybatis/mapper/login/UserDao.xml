@@ -94,4 +94,9 @@
         SELECT USER_ID FROM USER_INFO WHERE USER_EMAIL = #{email}
     </select>
 
+    <select id="getUsersByEmail" parameterType="String" resultType="com.tech.whale.login.dto.UserDto">
+        SELECT user_id, user_email, user_nickname, user_spotify_id
+        FROM USER_INFO
+        WHERE user_email = #{email}
+    </select>
 </mapper>

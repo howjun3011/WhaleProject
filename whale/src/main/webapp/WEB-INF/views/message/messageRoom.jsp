@@ -381,87 +381,99 @@
 	socket.onmessage = function(event) {
 	    console.log("Received message:", event.data);
 
-	    const chatMessages = document.getElementById('chatMessages');
-
-	    // 메시지 파싱
-	    const data = event.data.split('#');
-	    const msgRoomId = data[0];
-	    const msgUserId = data[1];
-	    const msgType = data[2];
-	    const msgId = data[3];
-	    
-	    let msgContent, msgRead, msgDate;
-	    
-	    if (msgType === 'TEXT') {
-	        msgContent = data[4];
-	        msgRead = data[5];
-	        msgDate = data[6];
+	    if (event.data.startsWith("READ:")) {
+	        // 읽음 상태 변경 알림 처리
+	        const parts = event.data.split(':');
+	        const msgRoomId = parts[1];
+	        const messageIdsStr = parts[2];
+	        if (msgRoomId === roomId) {
+	            const messageIds = messageIdsStr.split(',');
+	            updateMessagesAsRead(messageIds);
+	        }
 	    } else {
-	        msgContent = data.slice(4, data.length - 2).join('#');
-	        msgRead = data[data.length - 2];
-	        msgDate = data[data.length - 1];
-	    }
-
-	    if (msgRoomId === roomId) {
-	        const msgDiv = document.createElement('div');
-	        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
-	        msgDiv.id = 'message-' + msgId;
-
-	        console.log("1: " + msgId);
-	        console.log("2: " + msgUserId);
-	        
-	        let contentHTML = '';
-	        contentHTML += '<div class="message-bubble">';
-	        contentHTML += '<div class="menu-button" onclick="openMessageMenu(' + msgId + ', \'' + msgUserId + '\')">•</div>';
-	        
-	        if (msgType === 'TEXT') {
-	            contentHTML += '<div>' + msgContent + '</div>';
-	        } else if (msgType === 'IMAGE') {
-	            contentHTML += '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
-	        } else if (msgType === 'LINK') {
-	            console.log("LINK message content:", msgContent);
-
-	            // Use regex to find #preview= and JSON data after it
-	            const previewMatch = msgContent.match(/#preview=(\{.*\})/);
-	            if (!previewMatch) {
-	                console.log("Preview data not found in message content");
-	                contentHTML += '<div>' + msgContent + '</div>';
-	            } else {
-	                const textContent = msgContent.substring(0, previewMatch.index); // Text before #preview=
-	                const previewJsonString = previewMatch[1]; // JSON part only
-
-	                try {
-	                    const previewData = JSON.parse(previewJsonString);
-	                    contentHTML += 
-	                        '<div>' + textContent + '</div>' +
-	                        '<div class="preview">' +
-	                            '<a href="' + previewData.url + '" target="_blank" style="text-decoration: none; color: inherit;">' +
-	                                '<img src="' + previewData.image + '" alt="' + previewData.title + '" style="width: 60px; height: 60px; border-radius: 5px; margin-right: 10px;">' +
-	                                '<div style="display: inline-block; vertical-align: top;">' +
-	                                    '<div><strong>' + previewData.title + '</strong></div>' +
-	                                    '<div>' + previewData.description + '</div>' +
-	                                '</div>' +
-	                            '</a>' +
-	                        '</div>';
-	                } catch (e) {
-	                    console.error("Failed to parse preview data:", e);
-	                    contentHTML += '<div>' + msgContent + '</div>';
-	                }
-	            }
-	        }
-
-	        contentHTML += '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>';
-
-	        // 읽지 않은 메시지 표시
-	        if (msgRead === '1') {
-	            contentHTML += '<span class="unread-badge">1</span>';
-	        }
-
-	        contentHTML += '</div>'; // message-bubble 닫기
-
-	        msgDiv.innerHTML = contentHTML;
-	        chatMessages.appendChild(msgDiv);
-	        chatMessages.scrollTop = chatMessages.scrollHeight;
+	    
+		    const chatMessages = document.getElementById('chatMessages');
+	
+		    // 메시지 파싱
+		    const data = event.data.split('#');
+		    const msgRoomId = data[0];
+		    const msgUserId = data[1];
+		    const msgType = data[2];
+		    const msgId = data[3];
+		    
+		    let msgContent, msgRead, msgDate;
+		    
+		    if (msgType === 'TEXT') {
+		        msgContent = data[4];
+		        msgRead = data[5];
+		        msgDate = data[6];
+		    } else {
+		        msgContent = data.slice(4, data.length - 2).join('#');
+		        msgRead = data[data.length - 2];
+		        msgDate = data[data.length - 1];
+		    }
+	
+		    if (msgRoomId === roomId) {
+		        const msgDiv = document.createElement('div');
+		        msgDiv.className = 'chat-message ' + (msgUserId === now_id ? 'right' : 'left');
+		        msgDiv.id = 'message-' + msgId;
+	
+		        console.log("1: " + msgId);
+		        console.log("2: " + msgUserId);
+		        
+		        let contentHTML = '';
+		        contentHTML += '<div class="message-bubble">';
+		        contentHTML += '<div class="menu-button" onclick="openMessageMenu(' + msgId + ', \'' + msgUserId + '\')">•</div>';
+		        
+		        if (msgType === 'TEXT') {
+		            contentHTML += '<div>' + msgContent + '</div>';
+		        } else if (msgType === 'IMAGE') {
+		            contentHTML += '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';
+		        } else if (msgType === 'LINK') {
+		            console.log("LINK message content:", msgContent);
+	
+		            // Use regex to find #preview= and JSON data after it
+		            const previewMatch = msgContent.match(/#preview=(\{.*\})/);
+		            if (!previewMatch) {
+		                console.log("Preview data not found in message content");
+		                contentHTML += '<div>' + msgContent + '</div>';
+		            } else {
+		                const textContent = msgContent.substring(0, previewMatch.index); // Text before #preview=
+		                const previewJsonString = previewMatch[1]; // JSON part only
+	
+		                try {
+		                    const previewData = JSON.parse(previewJsonString);
+		                    contentHTML += 
+		                        '<div>' + textContent + '</div>' +
+		                        '<div class="preview">' +
+		                            '<a href="' + previewData.url + '" target="_blank" style="text-decoration: none; color: inherit;">' +
+		                                '<img src="' + previewData.image + '" alt="' + previewData.title + '" style="width: 60px; height: 60px; border-radius: 5px; margin-right: 10px;">' +
+		                                '<div style="display: inline-block; vertical-align: top;">' +
+		                                    '<div><strong>' + previewData.title + '</strong></div>' +
+		                                    '<div>' + previewData.description + '</div>' +
+		                                '</div>' +
+		                            '</a>' +
+		                        '</div>';
+		                } catch (e) {
+		                    console.error("Failed to parse preview data:", e);
+		                    contentHTML += '<div>' + msgContent + '</div>';
+		                }
+		            }
+		        }
+	
+		        contentHTML += '<div class="message-info">' + msgUserId + ' • ' + msgDate + '</div>';
+	
+		        // 읽지 않은 메시지 표시
+		        if (msgRead === '1') {
+		            contentHTML += '<span class="unread-badge">1</span>';
+		        }
+	
+		        contentHTML += '</div>'; // message-bubble 닫기
+	
+		        msgDiv.innerHTML = contentHTML;
+		        chatMessages.appendChild(msgDiv);
+		        chatMessages.scrollTop = chatMessages.scrollHeight;
+		    }
 	    }
 	};
 
@@ -470,6 +482,20 @@
         const chatMessages = document.getElementById('chatMessages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
+    
+    function updateMessagesAsRead(messageIds) {
+        messageIds.forEach(function(messageId) {
+            const messageElement = document.getElementById('message-' + messageId);
+            if (messageElement) {
+                const unreadBadge = messageElement.querySelector('.unread-badge');
+                if (unreadBadge) {
+                    unreadBadge.parentNode.removeChild(unreadBadge);
+                }
+                // 필요에 따라 추가적인 스타일 또는 클래스 변경
+                messageElement.classList.add('message-read');
+            }
+        });
+    }
 </script>
 
 <div id="messageMenuModal" class="modal">

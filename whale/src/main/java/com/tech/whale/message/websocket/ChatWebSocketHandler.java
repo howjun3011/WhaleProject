@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     // roomId별로 WebSocketSession 목록을 관리
     private final Map<String, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
+    private final Map<String, List<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
     private final MessageDao messageDao;
 
     @Autowired
@@ -51,12 +53,33 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
             // roomId에 해당하는 세션 목록에 추가
             roomSessions.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<>()).add(session);
+            userSessions.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>()).add(session);
             System.out.println("WebSocket 연결 성공: " + userId + " | Room ID: " + roomId);
             System.out.println(roomId);
 
 			String otherUserId = messageDao.getOtherUserInRoom(roomId, userId);
-			messageDao.readMessage(roomId, otherUserId);
-
+			
+			
+			
+			List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId, otherUserId);
+			
+			 if (!updatedMessageIds.isEmpty()) {
+		            // 메시지의 읽음 상태 업데이트
+		        messageDao.updateMessageReadStatus(roomId, otherUserId);
+	            List<WebSocketSession> senderSessions = userSessions.get(otherUserId);
+	            if (senderSessions != null) {
+	                String messageIdsStr = updatedMessageIds.stream()
+	                        .map(String::valueOf)
+	                        .collect(Collectors.joining(","));
+	                String readNotification = String.format("READ:%s:%s", roomId, messageIdsStr);
+	                TextMessage readMessage = new TextMessage(readNotification);
+	                for (WebSocketSession senderSession : senderSessions) {
+	                    if (senderSession.isOpen()) {
+	                        senderSession.sendMessage(readMessage);
+	                    }
+	                }
+	            }
+	        }
         } else {
             System.out.println("Room ID 없음으로 세션 거부: " + session.getId());
             session.close(CloseStatus.BAD_DATA);

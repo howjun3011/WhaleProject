@@ -26,10 +26,20 @@
 	    VALUES (#{roomId}, #{userId})
 	</insert>
 	    
-	<update id="readMessage">
-		UPDATE MESSAGE
-		SET MESSAGE_READ = 0
-		WHERE MESSAGE_ROOM_ID = #{roomId} AND USER_ID = #{userId}
+	<select id="getUnreadMessageIds" parameterType="map" resultType="int">
+	    SELECT MESSAGE_ID
+	    FROM MESSAGE
+	    WHERE MESSAGE_ROOM_ID = #{roomId}
+	      AND USER_ID = #{userId}
+	      AND MESSAGE_READ = 1
+	</select>
+	
+	<update id="updateMessageReadStatus" parameterType="map">
+	    UPDATE MESSAGE
+	    SET MESSAGE_READ = 0
+	    WHERE MESSAGE_ROOM_ID = #{roomId}
+	      AND USER_ID = #{userId}
+	      AND MESSAGE_READ = 1
 	</update>
 	
 	<select id="getNextMessageId" resultType="int">

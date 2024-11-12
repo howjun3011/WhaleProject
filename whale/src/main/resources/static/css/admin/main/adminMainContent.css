@@ -28,13 +28,15 @@ body{
 }
 #memo textarea{
 	border: none;
-	resize: none;
+	/* resize: none; */
 	width:450px;
-	height:80vh;
+	height:75vh;
 	border-radius: 10px;
 	padding:5px;
 	outline: none;
 	font-size:20px;
+	overflow-y: auto;
+	resize: none;
 }
 .blockContainer{
 	display: flex;
@@ -42,11 +44,13 @@ body{
 	flex-grow: 1;
 	margin: 10px 5px 0 0;
 	align-items: flex-start;
+	width: 1180px;
 }
 .divStep{
 	display: flex;
 	flex-direction: row;
 	flex-grow: 1;
+	width: 1180px;
 }
 .block{
 	display: flex;
@@ -57,39 +61,54 @@ body{
 	margin:5px;
 	padding: 5px 10px;
 	background-color: white;
+	flex-direction: column;
 	
+}
+.block div{
+	margin:auto;
 }
 #block1{
 	width:290px;
-	height: 170px;
+	height: 190px;
 }
+
 #block2{
 	width:190px;
-	height: 170px;
+	height: 190px;
 }
 #block3{
 	width:190px;
-	height: 170px;
+	height: 190px;
 }
 #block4{
 	width:190px;
-	height: 170px;
+	height: 190px;
 }
 #block5{
 	width:350px;
-	height: 170px;
+	height: 190px;
+}
+#block5 a{
+	text-decoration: none;
+}
+#noticce{
+	font-size: 0.7em;
 }
 #block6{
 	width:270px;
-	height: 170px;
+	height: 190px;
 }
 #block7{
 	width:270px;
-	height: 170px;
+	height: 190px;
 }
 #block8{
 	width:950px;
-	height: 350px;
+	height: 360px;
+}
+#block8 canvas{
+	width:900px;
+	height: 250px;
 }
 
 

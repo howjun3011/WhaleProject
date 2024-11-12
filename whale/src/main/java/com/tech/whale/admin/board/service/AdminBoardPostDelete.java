@@ -54,11 +54,14 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		int post_comments_id = Integer.parseInt(request.getParameter("commentId"));
 		String user_id = (String)model.getAttribute("user_id");
 		String comments_del_reason = "글작성 규칙 위반";
+		String comments_del_parent_reason = "부모글 삭제";
 		System.out.println("서비스 댓글번호 : " +post_comments_id);
 		adminIDao.postCommentsOneDelLog(post_comments_id,post_id,user_id,comments_del_reason);
+		adminIDao.postCommentsParentDelLog(post_comments_id,post_id,user_id,comments_del_parent_reason);
 		adminIDao.postCommentsLikeOneDel(post_comments_id);
+		adminIDao.postCommentsLikeParentDel(post_comments_id);
 		adminIDao.postCommentsOneDel(post_comments_id);
-		
+		adminIDao.postCommentsParentDel(post_comments_id);
 	}
 	
 	@Transactional

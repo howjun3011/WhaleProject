@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tech.whale.admin.dao.AdminStatisticIDao">
+	
+	<select id="reportStatistic1" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		WITH LABEL AS (
+		    SELECT 'FEED' AS LABEL FROM DUAL UNION ALL
+		    SELECT 'FEED_COMMENT' FROM DUAL UNION ALL
+		    SELECT 'POST' FROM DUAL UNION ALL
+		    SELECT 'POST_COMMENT' FROM DUAL UNION ALL
+		    SELECT 'MESSAGE' FROM DUAL
+		)
+		SELECT 
+		    RT.LABEL,
+		    COUNT(CASE 
+		        WHEN RT.LABEL = 'FEED' AND R.FEED_ID IS NOT NULL THEN 1
+		        WHEN RT.LABEL = 'FEED_COMMENT' AND R.FEED_COMMENT_ID IS NOT NULL THEN 1
+		        WHEN RT.LABEL = 'POST' AND R.POST_ID IS NOT NULL THEN 1
+		        WHEN RT.LABEL = 'POST_COMMENT' AND R.POST_COMMENT_ID IS NOT NULL THEN 1
+		        WHEN RT.LABEL = 'MESSAGE' AND R.MESSAGE_ID IS NOT NULL THEN 1
+		        ELSE NULL
+		    END) AS VALUE
+		FROM LABEL RT
+		LEFT JOIN REPORT R ON 1=1
+		GROUP BY RT.LABEL
+		ORDER BY RT.LABEL
+	</select>
+	<select id="reportStatistic2" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		WITH DATE_RANGE AS (
+		    SELECT TRUNC(SYSDATE) - LEVEL + 1 AS TARGET_DATE
+		    FROM DUAL
+		    CONNECT BY LEVEL &lt;= 14
+		)
+		SELECT 
+		    TO_CHAR(DR.TARGET_DATE, 'MM.DD') AS LABEL,
+		    (
+		        NVL((SELECT COUNT(*) FROM POST WHERE TRUNC(POST_DATE) = DR.TARGET_DATE), 0) +
+		        NVL((SELECT COUNT(*) FROM FEED WHERE TRUNC(FEED_DATE) = DR.TARGET_DATE), 0) +
+		        NVL((SELECT COUNT(*) FROM POST_COMMENTS WHERE TRUNC(POST_COMMENTS_DATE) = DR.TARGET_DATE), 0) +
+		        NVL((SELECT COUNT(*) FROM FEED_COMMENTS WHERE TRUNC(FEED_COMMENTS_DATE) = DR.TARGET_DATE), 0)
+		    ) AS VALUE
+		FROM DATE_RANGE DR
+		ORDER BY DR.TARGET_DATE DESC
+	</select>
+	<select id="reportStatistic3" resultType="com.tech.whale.admin.dto.AdminRRDataDto">
+		SELECT 
+		    TARGET_TYPE,
+		    REPORT_RESULT_ACTION,
+		    COUNT(*) AS ACTION_COUNT
+		FROM 
+		    REPORT_RESULT
+		GROUP BY 
+		    TARGET_TYPE,
+		    REPORT_RESULT_ACTION
+		ORDER BY 
+		    TARGET_TYPE,
+		    REPORT_RESULT_ACTION
+	</select>
+	
+</mapper>

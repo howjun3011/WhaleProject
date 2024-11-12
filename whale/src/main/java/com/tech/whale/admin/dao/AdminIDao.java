@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminCommunityDto;
+import com.tech.whale.admin.dto.AdminMainCntDto;
+import com.tech.whale.admin.dto.AdminMemoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
@@ -138,6 +140,14 @@ public interface AdminIDao {
 	public AdminCommunityDto comIdName(String postId);
 	public PostDto getAdminPost(String postId);
 	
-	
+	//////////////
+	public int reportCnt();
+	public int reportResultCnt();
+	public int writingCnt();
+	public ArrayList<AdminMainCntDto> mainNotice();
+	public AdminMemoDto adminMemo(String myId);
+	public int memoCheck(String myId);
+	public void memoCreate(String myId);
+	public void memoUpdate(String memoUpdateStr, String myId);
 	
 }

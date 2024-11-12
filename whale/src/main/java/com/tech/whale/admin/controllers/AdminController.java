@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.service.AdminAccountUserListService;
 import com.tech.whale.admin.service.AdminAccountUserModifyService;
+import com.tech.whale.admin.service.AdminMainPageService;
 import com.tech.whale.admin.service.AdminUserImgDeleteService;
 import com.tech.whale.admin.service.AdminUserInfoCommentService;
 import com.tech.whale.admin.service.AdminUserInfoFeedService;
@@ -46,6 +48,8 @@ public class AdminController {
 	private AdminUserNicknameModifyService adminUserNicknameModifyService;
 	@Autowired
 	private AdminUserImgDeleteService adminUserImgDeleteService;
+	@Autowired
+	private AdminMainPageService adminMainPageService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -55,8 +59,8 @@ public class AdminController {
         return (String) session.getAttribute("user_id");
     }
 	@ModelAttribute("myImgUrl")
-	public String myImgUrl(Model model) {
-		String myId = (String)model.getAttribute("myId");
+	public String myImgUrl(Model model,HttpSession session) {
+		String myId = (String) session.getAttribute("user_id");
 		String myImgSty = adminIDao.myImg(myId);
 		return myImgSty;
 	}
@@ -90,8 +94,23 @@ public class AdminController {
 	    		null);
 	    accountSubBar(model);
 	    
+	    adminMainPageService.execute(model);
+	    adminMainPageService.adminMemo(model);
+	    
+	    
 		return "/admin/view/adminMainView";
 	}
+	
+	@RequestMapping("/adminMemoSave")
+	@Transactional
+	public String adminMemoSave(HttpServletRequest request,
+			Model model) {
+		System.out.println("메모 세이브 컨트롤러");
+		model.addAttribute("request", request);
+		adminMainPageService.memoUpdate(model);
+		return "redirect:adminMainView";
+	}
+	
 	
 	@RequestMapping("/adminAccountOfficialListView")
 	public String adminAccountOfficialListView(

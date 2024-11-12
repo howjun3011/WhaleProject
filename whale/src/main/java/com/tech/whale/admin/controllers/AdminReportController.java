@@ -48,10 +48,9 @@ public class AdminReportController {
 		return myImgSty;
 	}
 	
-	public void boardSubBar(Model model) {
+	public void reportSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminReportListView", "신고");
-	    subMenu.put("", "문의 생겨?");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -69,7 +68,7 @@ public class AdminReportController {
 				"../report/adminReportListContent.jsp");
 	    model.addAttribute("contentBlockCss",
 	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
-	    boardSubBar(model);
+	    reportSubBar(model);
 	    
 	    adminReportListService.execute(model);
 	    
@@ -92,7 +91,7 @@ public class AdminReportController {
 				"../report/adminReportContent.jsp");
 		model.addAttribute("contentBlockCss",
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
-		boardSubBar(model);
+		reportSubBar(model);
 		model.addAttribute("page", page);
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("sk", sk);
@@ -120,13 +119,10 @@ public class AdminReportController {
 				"../report/adminReportContent.jsp");
 		model.addAttribute("contentBlockCss",
 				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
-		boardSubBar(model);
+		reportSubBar(model);
 		
-		System.out.println("삭제 컨트롤1");
 		adminReportResultService.execute(model);
-		System.out.println("삭제 컨트롤2");
 		adminReportResultService.userBan(model);
-		System.out.println("삭제 컨트롤3");
 		adminReportResultService.writingDel(model);
 		
 		return "redirect:adminReportContentView?"

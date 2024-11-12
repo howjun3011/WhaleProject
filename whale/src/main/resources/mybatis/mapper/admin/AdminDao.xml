@@ -910,5 +910,69 @@
 	    WHERE P.POST_ID = #{param1}
 	</select>
 	
+	<select id="reportCnt" resultType="int">
+		SELECT COUNT(CASE WHEN REPORT_ADMIN_CHECK IS NULL THEN 1 END)
+		FROM REPORT
+	</select>
+	<select id="reportResultCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM REPORT_RESULT
+		WHERE TRUNC(REPORT_RESULT_DATE) = TRUNC(SYSDATE)
+	</select>
+	<select id="writingCnt" resultType="int">
+		SELECT (
+		    (SELECT COUNT(*)
+		     FROM POST
+		     WHERE TRUNC(POST_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM FEED
+		     WHERE TRUNC(FEED_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM POST_COMMENTS
+		     WHERE TRUNC(POST_COMMENTS_DATE) = TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*)
+		     FROM FEED_COMMENTS
+		     WHERE TRUNC(FEED_COMMENTS_DATE) = TRUNC(SYSDATE))
+		) AS TOTAL_COUNT
+		FROM DUAL
+	</select>
+	
+	<select id="mainNotice" resultType="com.tech.whale.admin.dto.AdminMainCntDto">
+		SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
+		FROM (
+		    SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
+		    FROM POST
+		    WHERE POST_TAG_ID = 5
+		    ORDER BY POST_ID DESC
+		)
+		WHERE ROWNUM &lt;= 3
+
+	</select>
+	
+	<select id="adminMemo" resultType="com.tech.whale.admin.dto.AdminMemoDto">
+		SELECT MEMO_WRITING,MEMO_UPDATE_DATE FROM ADMIN_MEMO 
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</select>
+	<select id="memoCheck" resultType="int">
+		SELECT COUNT(*) FROM ADMIN_MEMO 
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</select>
+	<insert id="memoCreate">
+		INSERT INTO ADMIN_MEMO VALUES(
+			ADMIN_MEMO_SEQ.NEXTVAL,
+			(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId}),
+			NULL, 
+			SYSDATE
+		)
+	</insert>
+	<update id="memoUpdate">
+		UPDATE ADMIN_MEMO SET MEMO_WRITING = #{memoUpdateStr}, MEMO_UPDATE_DATE = SYSDATE
+		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+	</update>
+	
+	
 	
 </mapper>

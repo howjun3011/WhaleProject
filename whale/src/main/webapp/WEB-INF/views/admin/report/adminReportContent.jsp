@@ -116,7 +116,7 @@
         <tr style="border-bottom: none;">
         	<td colspan="4">
         		<input id="submitButton" type="button" value="처리하기" onclick="showReportForm()" />
-        		<input type="button" value="목록" onclick="adminReportListView?page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }" />
+        		<input type="button" value="목록" onclick='location.href = "adminReportListView?page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }"' />
         	</td>
         </tr>
     </table>

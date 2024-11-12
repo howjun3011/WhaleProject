@@ -54,6 +54,8 @@ public class AdminReportResultService implements AdminServiceInter{
 					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,1);
 		}else if(userStatus.equals("2")) {
 			userStatus="영구 정지";
+			adminReportIDao.reportResult(
+					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,2);
 		}
 		
 		adminReportIDao.reportAdminCh(report_id);

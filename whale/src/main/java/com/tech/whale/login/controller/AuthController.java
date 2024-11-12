@@ -45,7 +45,7 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> initiateFind(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	String email = map.get("email").toString();
         Map<String, Object> response = new HashMap<>();
-        if (!userService.isEmailRegistered(email)) {
+        if (!userService.isEmailTaken(email)) {
             response.put("success", false);
             response.put("message", "등록된 이메일이 아닙니다.");
             return ResponseEntity.ok(response);

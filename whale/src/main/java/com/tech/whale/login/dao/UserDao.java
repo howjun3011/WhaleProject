@@ -17,9 +17,12 @@ public interface UserDao {
     public Integer checkAccessId(String user_id);
     public String getPasswordByUsername(String user_id);
     public void saveUser(String user_id, String password, String email);
-    public Integer existsByEmail(String email);
+    Integer existsByUsername(String user_id);
+    Integer existsByNickname(String user_nickname);
+    Integer existsByEmail(String user_email);
     public void saveResetToken(String user_id, String token);
     public Integer isValidToken(String token);
     public void updatePasswordByToken(String hashedPassword, String token);
     public String getUserIdByEmail(String email);
+
 }

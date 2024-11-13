@@ -108,7 +108,7 @@
 
 		// 차트 생성
 		let myChart = new Chart(ctx, {
-		    type: 'line',
+		    type: 'bar',
 		    data: chartData,
 		    options: {
 		        responsive: true,

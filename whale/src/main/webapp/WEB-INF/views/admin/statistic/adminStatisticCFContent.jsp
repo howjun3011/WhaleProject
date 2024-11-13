@@ -102,6 +102,109 @@
     	</c:forEach>  
     	
     	
+    	var cfLabels4 = [];
+    	<c:forEach var="label" items="${cfLabels4}">
+    	cfLabels4.push('${label}');
+    	</c:forEach>
+    	var cfValues4 = [];
+    	<c:forEach var="value" items="${cfValues4}">
+    	cfValues4.push(${value});
+    	</c:forEach>  
+    	
+    	
+    	var cfLabels5 = [];
+    	<c:forEach var="label" items="${cfLabels5}">
+    	cfLabels5.push('${label}');
+    	</c:forEach>
+    	var cfValues5 = [];
+    	<c:forEach var="value" items="${cfValues5}">
+    	cfValues5.push(${value});
+    	</c:forEach>  
+    	
+    	
+    	var cfLabels6 = [];
+    	<c:forEach var="label" items="${cfLabels6}">
+    	cfLabels6.push('${label}');
+    	</c:forEach>
+    	var cfValues6 = [];
+    	<c:forEach var="value" items="${cfValues6}">
+    	cfValues6.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels7 = [];
+    	<c:forEach var="label" items="${cfLabels7}">
+    	cfLabels7.push('${label}');
+    	</c:forEach>
+    	var cfValues7 = [];
+    	<c:forEach var="value" items="${cfValues7}">
+    	cfValues7.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels8 = [];
+    	<c:forEach var="label" items="${cfLabels8}">
+    	cfLabels8.push('${label}');
+    	</c:forEach>
+    	var cfValues8 = [];
+    	<c:forEach var="value" items="${cfValues8}">
+    	cfValues8.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels9 = [];
+    	<c:forEach var="label" items="${cfLabels9}">
+    	cfLabels9.push('${label}');
+    	</c:forEach>
+    	var cfValues9 = [];
+    	<c:forEach var="value" items="${cfValues9}">
+    	cfValues9.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels10 = [];
+    	<c:forEach var="label" items="${cfLabels10}">
+    	cfLabels10.push('${label}');
+    	</c:forEach>
+    	var cfValues10 = [];
+    	<c:forEach var="value" items="${cfValues10}">
+    	cfValues10.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels11 = [];
+    	<c:forEach var="label" items="${cfLabels11}">
+    	cfLabels11.push('${label}');
+    	</c:forEach>
+    	var cfValues11 = [];
+    	<c:forEach var="value" items="${cfValues11}">
+    	cfValues11.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels12 = [];
+    	<c:forEach var="label" items="${cfLabels12}">
+    	cfLabels12.push('${label}');
+    	</c:forEach>
+    	var cfValues12 = [];
+    	<c:forEach var="value" items="${cfValues12}">
+    	cfValues12.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var cfLabels13 = [];
+    	<c:forEach var="label" items="${cfLabels13}">
+    	cfLabels13.push('${label}');
+    	</c:forEach>
+    	var cfValues13 = [];
+    	<c:forEach var="value" items="${cfValues13}">
+    	cfValues13.push(${value});
+    	</c:forEach>
+    	
+    	
+        
+    	
+    	
     	var backColors1 = [];
     	<c:forEach var="color" items="${backColors1}">
     	    backColors1.push('${color}');
@@ -119,8 +222,17 @@
     	    const chartConfigurations = [
     	        { btnId: 'btnChart1', type: 'bar', labels: cfLabels1, values: cfValues1, label: '커뮤작성글', chartFunc: updateChart1, title: "커뮤니티 작성글 통계" },
     	        { btnId: 'btnChart2', type: 'line', labels: cfLabels2, values: cfValues2, label: '커뮤작성글', chartFunc: updateChart1, title: "커뮤니티 작성글 통계" },
-    	        { btnId: 'btnChart3', type: 'pie', labels: cfLabels3, values: cfValues3, label: '커뮤구분', chartFunc: updateChart2, backColors: backColors1, title: "커뮤니티 구분 통계" }
-    	       
+    	        { btnId: 'btnChart3', type: 'pie', labels: cfLabels3, values: cfValues3, label: '커뮤구분', chartFunc: updateChart2, backColors: backColors1, title: "커뮤니티 구분 통계" },
+    	        { btnId: 'btnChart4', type: 'bar', labels: cfLabels4, values: cfValues4, label: '커뮤댓글', chartFunc: updateChart1, title: "커뮤니티 댓글 통계" },
+    	        { btnId: 'btnChart5', type: 'line', labels: cfLabels5, values: cfValues5, label: '커뮤댓글', chartFunc: updateChart1, title: "커뮤니티 댓글 통계" },
+    	        { btnId: 'btnChart6', type: 'pie', labels: cfLabels6, values: cfValues6, label: '커뮤작성글', chartFunc: updateChart2, backColors: backColors2, title: "커뮤니티 활동 구간 통계" },
+    	        { btnId: 'btnChart7', type: 'bar', labels: cfLabels7, values: cfValues7, label: '피드', chartFunc: updateChart1, title: "커뮤니티 통계" },
+    	        { btnId: 'btnChart8', type: 'line', labels: cfLabels8, values: cfValues8, label: '피드', chartFunc: updateChart1, title: "커뮤니티 통계" },
+    	        { btnId: 'btnChart9', type: 'bar', labels: cfLabels9, values: cfValues9, label: '피드댓글', chartFunc: updateChart1, title: "피드 댓글 통계" },
+    	        { btnId: 'btnChart10', type: 'line', labels: cfLabels10, values: cfValues10, label: '피드댓글', chartFunc: updateChart1, title: "피드 댓글 통계" },
+    	        { btnId: 'btnChart11', type: 'pie', labels: cfLabels11, values: cfValues11, label: '피드', chartFunc: updateChart2, backColors: backColors3, title: "피드 활동 구간 통계" },
+    	        { btnId: 'btnChart12', type: 'bar', labels: cfLabels12, values: cfValues12, label: '커뮤&피드', chartFunc: updateChart1, title: "커뮤니티&피드 통계" },
+    	        { btnId: 'btnChart13', type: 'line', labels: cfLabels13, values: cfValues13, label: '커뮤&피드', chartFunc: updateChart1, title: "커뮤니티&피드 통계" }
     	    ];
 
     	    chartConfigurations.forEach(config => {
@@ -139,7 +251,7 @@
         let chartData = {
                 labels: cfLabels1,
                 datasets: [{
-                    label: '',
+                    label: '커뮤작성글',
                     data: cfValues1,
                     backgroundColor: 'rgba(162, 162, 235, 0.5)'
                 }]

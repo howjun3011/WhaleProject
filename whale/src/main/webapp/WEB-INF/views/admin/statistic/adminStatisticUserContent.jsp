@@ -7,14 +7,13 @@
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"> -->
 <div class="content" name="content" id="content">
 	<div class="container">
-		<h1 id="statistic-name">추세</h1>
+		<h1 id="statistic-name">유저추세</h1>
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
 	    </div>
 	    <div class="btnBox">
-		    <!-- <button id="btnChart1">추세</button>
-		    <button id="btnChart2">일별 추이</button>
-		    <button id="btnChart3">신고처리속도</button> -->
+		    <button id="btnChart1">30일</button>
+		    <button id="btnChart2">전체기간</button>
 	    </div>
 	</div>
 </div>
@@ -41,30 +40,6 @@
     	</c:forEach>
     	
     	
-    	var userLabels3 = [];
-    	<c:forEach var="label" items="${userLabels3}">
-    	userLabels3.push('${label}');
-    	</c:forEach>
-    	var userValues3 = [];
-    	<c:forEach var="value" items="${userValues3}">
-    	userValues3.push(${value});
-    	</c:forEach>
-    	
-    	var targetTypes = [];
-        var actionCounts = [];
-        var resultActions = [];
-        <c:forEach var="value" items="${action_count}">
-        targetTypes.push(${value});
-    	</c:forEach>
-        <c:forEach var="value" items="${actionCounts}">
-        actionCounts.push(${value});
-    	</c:forEach>
-        <c:forEach var="value" items="${resultActions}">
-        resultActions.push(${value});
-    	</c:forEach>
-        
-        
-        
         const ctx = document.getElementById('reportChart').getContext('2d');
         let chartData = {
                 labels: userLabels1,
@@ -77,7 +52,7 @@
 
             // 차트 생성
             let myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: chartData,
                 options: {
                     responsive: true,
@@ -99,23 +74,13 @@
 
             // 버튼 클릭 이벤트 핸들러
             document.getElementById('btnChart1').addEventListener('click', function () {
-                updateChart1('line', userLabels1, userValues1, '유저수');
-                document.getElementById('statistic-name').innerText ="추세";
+                updateChart1('bar', userLabels1, userValues1, '유저수');
             });
 
             document.getElementById('btnChart2').addEventListener('click', function () {
-                updateChart1('line', userLabels2, userValues2, '신고건');
-                document.getElementById('statistic-name').innerText ="일별 추이";
+                updateChart1('line', userLabels2, userValues2, '유저수');
             });
-
-            document.getElementById('btnChart3').addEventListener('click', function () {
-                updateChart2('pie', userLabels3, userValues3, '완료건');
-                document.getElementById('statistic-name').innerText ="신고처리속도";
-            });
-
-            document.getElementById('btnChart4').addEventListener('click', function () {
-                updateChart2('radar', ['속도', '신뢰성', '디자인', '사용성'], [80, 90, 70, 85], '신고건');
-            });
+            
 
             // 차트를 업데이트하는 함수
             function updateChart1(type, labels, data, label) {
@@ -129,40 +94,6 @@
                             data: data,
                             backgroundColor: 'rgba(162, 162, 235, 0.5)',
                             /* borderColor: getBorderColors(data.length), */
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-        		            x: {
-        		                grid: {
-        		                    display: false
-        		                }
-        		            },
-        		            y: {
-        		                grid: {
-        		                    display: true
-        		                }
-        		            }
-        		        }
-                    }
-                });
-            }
-            function updateChart2(type, labels, data, label) {
-                myChart.destroy(); // 기존 차트 삭제
-                myChart = new Chart(ctx, {
-                    type: type,
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: label,
-                            data: data,
-                            backgroundColor: [
-                            	'rgba(162, 162, 235, 0.5)',
-                            	'rgba(120, 120, 235, 0.5)',
-                            	'rgba(80, 80, 235, 0.5)'],
                             borderWidth: 1
                         }]
                     },

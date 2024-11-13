@@ -1,8 +1,6 @@
 package com.tech.whale.admin.controllers;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.dto.AdminLVDataDto;
 import com.tech.whale.admin.statistic.service.AdminStatisticService;
 
 
@@ -43,7 +40,7 @@ public class AdminStatisticController {
 	
 	public void statisticSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
-	    subMenu.put("adminStatisticWritingView", "커뮤&피드 아직");
+	    subMenu.put("adminStatisticCFView", "커뮤&피드");
 	    subMenu.put("adminStatisticTrackView", "음악 아직");
 	    subMenu.put("adminStatisticReportView", "신고");
 	    subMenu.put("adminStatisticUserView", "유저");
@@ -71,9 +68,6 @@ public class AdminStatisticController {
 	    adminStatisticService.reportStatistic2(model);
 	    adminStatisticService.reportStatistic3(model);
 	    
-        
-        
-		
 		return "/admin/view/adminOutlineForm";
 	}
 	
@@ -94,9 +88,49 @@ public class AdminStatisticController {
 		statisticSubBar(model);
 		
 		adminStatisticService.userStatistic1(model);
+		adminStatisticService.userStatistic2(model);
 		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminStatisticCFView")
+	public String adminStatisticCFView(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "신고통계");
+		model.addAttribute("contentBlockJsp",
+				"../statistic/adminStatisticCFContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/statistic/adminStatisticReportContent.css");
+		model.addAttribute("subBarBlockJsp",
+				null);
+		model.addAttribute("subBarBlockCss",
+				null);
+		statisticSubBar(model);
 		
+		adminStatisticService.cfStatisticList(model);
 		
+		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminStatisticTrackView")
+	public String adminStatisticTrackView(
+			HttpServletRequest request,
+			Model model) {
+		model.addAttribute("request", request);
+		model.addAttribute("pname", "신고통계");
+		model.addAttribute("contentBlockJsp",
+				"../statistic/adminStatisticTrackContent.jsp");
+		model.addAttribute("contentBlockCss",
+				"/whale/static/css/admin/statistic/adminStatisticReportContent.css");
+		model.addAttribute("subBarBlockJsp",
+				null);
+		model.addAttribute("subBarBlockCss",
+				null);
+		statisticSubBar(model);
+		
+		adminStatisticService.cfStatisticList(model);
 		
 		return "/admin/view/adminOutlineForm";
 	}

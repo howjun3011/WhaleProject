@@ -677,6 +677,11 @@ public class SettingController {
         System.out.println("비밀번호 일치함");
 
         try {
+            // 탈퇴 전, 팔로잉 관계 해제
+            List<String> followingUsers = userDao.selectFollowingUsers(sessionUserId); // 탈퇴한 사용자를 팔로우 중인 사용자 목록 조회
+            for (String userId : followingUsers) {
+                userDao.doUnfollowing(userId, sessionUserId); // 각각의 팔로워에 대해 언팔로우 처리
+            }
             // 사용자 계정 삭제
             System.out.println("삭제할 사용자 ID: " + sessionUserId);
             userDao.deleteUserById(sessionUserId);

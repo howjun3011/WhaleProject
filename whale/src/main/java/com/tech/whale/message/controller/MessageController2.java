@@ -143,12 +143,17 @@ public class MessageController2 {
 		System.out.println(currentMessageRoomId);
 
 		String userType = messageDao.getUserType(nowId, currentMessageRoomId);
-		System.out.println(userType);
+		
+		int userTypeInt = 0;
+		
 		if (userType.equals("A")) {
-			messageDao.updateUserTypeA(currentMessageRoomId);
+			userTypeInt = 0;
 		} else {
-			messageDao.updateUserTypeB(currentMessageRoomId);
+			userTypeInt = 1;
 		}
+		
+		messageDao.updateUserType(currentMessageRoomId, userTypeInt);
+
 		response.put("success", true);
 
 		return response;

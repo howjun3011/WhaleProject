@@ -156,14 +156,16 @@
 	<div class="scroll-content" id="chatList">
 		<c:forEach var="list" items="${allChatList}">
 			<a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}">
-				<div class="room-list" id="chat-${list.user_id}" data-read-id="${list.unread_message_count}">
+				<div class="room-list" id="chat-${list.user_id}" data-unread-count="${list.unread_message_count}">
 					<img src="${list.user_image_url}" alt="user-img">
 					<div class="chat">
 						<div class="user-nickname">
 							<span>${list.user_nickname}</span>
 						</div>
 						<div class="chatout">
-							<a href="javascript:void(0);" onclick="openModal('${list.message_room_id}')"><img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout"></a>
+						    <a href="javascript:void(0);" onclick="openModal('${list.message_room_id}')">
+						        <img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
+						    </a>
 						</div>
 						<c:choose>
 							<c:when test="${list.last_message_sender_id == now_id}">
@@ -233,6 +235,8 @@
 		let messageText = homeMessage.messageText;
 		const timeDifference = homeMessage.timeDifference;
 		const userImageUrl = homeMessage.userImageUrl;
+		const messageRoomId = homeMessage.messageRoomId;
+		const senderNickname = homeMessage.senderNickname;
 
 		const chatElement = document.getElementById('chat-' + senderId);
 		console.log(messageType);
@@ -262,42 +266,56 @@
 			if (totalUnreadCount > 0) {
 				newMessageHTML = `
                     <div class="new-message">
-                        <span>새 메시지 ${totalUnreadCount}개</span>&nbsp;&nbsp;
-                        <div class="diff">${timeDifference}</div>
+                        <span>새 메시지 \${totalUnreadCount}개</span>&nbsp;&nbsp;
+                        <div class="diff">\${timeDifference}</div>
                     </div>
                 `;
 			} else {
 				newMessageHTML = `
                     <div class="before-message">
-                        <span>${messageText}</span>&nbsp;&nbsp;
-                        <div class="diff">${timeDifference}</div>
+                        <span>\${messageText}</span>&nbsp;&nbsp;
+                        <div class="diff">\${timeDifference}</div>
                     </div>
                 `;
 			}
 
-			const chatDiv = chatElement.querySelector('.chat');
-			chatDiv.innerHTML = `
-                <div class="user-nickname">
-                    <span>${chatDiv.querySelector('.user-nickname span').textContent}</span>
-                </div>
-                ${newMessageHTML}
-            `;
+            const chatDivElement = chatElement.querySelector('.chat');
+
+            // 기존 메시지 컨테이너 찾기 (.new-message 또는 .before-message)
+            const existingMessage = chatDivElement.querySelector('.new-message') || chatDivElement.querySelector('.before-message');
+
+            if (existingMessage) {
+                // 메시지 컨테이너만 업데이트
+                existingMessage.outerHTML = newMessageHTML;
+            } else {
+                // 메시지 컨테이너가 없으면 새로 추가
+                chatDivElement.insertAdjacentHTML('beforeend', newMessageHTML);
+            }
 
 			const chatList = document.getElementById('chatList');
-			chatList.insertBefore(chatElement.parentElement, chatList.firstChild);
+			const parentA = chatElement.parentElement;
+			if (chatList.contains(parentA)) {
+			    chatList.removeChild(parentA);
+			    chatList.prepend(parentA);
+			}
 		} else {
 			const chatList = document.getElementById('chatList');
 			const newChatHTML = `
-                <a href="${pageContext.request.contextPath}/messageGo?u=${senderId}">
-                    <div class="room-list" id="chat-${senderId}" data-unread-count="1">
-                        <img src="${pageContext.request.contextPath}/static/images/setting/${userImageUrl}" alt="user-img">
+                <a href="${pageContext.request.contextPath}/messageGo?u=\${senderId}">
+                    <div class="room-list" id="chat-\${senderId}" data-unread-count="1">
+                        <img src="\${userImageUrl}" alt="user-img">
                         <div class="chat">
                             <div class="user-nickname">
-                                <span>${senderId}</span>
+                                <span>\${senderNickname}</span>
                             </div>
+                            <div class="chatout">
+	                            <a href="javascript:void(0);" onclick="openModal('\${messageRoomId}')">
+	                                <img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
+	                            </a>
+	                        </div>
                             <div class="new-message">
                                 <span>새 메시지 1개</span>&nbsp;&nbsp;
-                                <div class="diff">${timeDifference}</div>
+                                <div class="diff">\${timeDifference}</div>
                             </div>
                         </div>
                     </div>
@@ -334,17 +352,28 @@
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 			})
-					.then(response => response.json())
-					.then(result => {
-						if (result.success === true) { // Controller가 "success" 반환 시
-							console.log("채팅방 나가기 성공");
-							closeModal();
-						} else {
-							console.error("채팅방 나가기 실패");
-						}
-					})
-					.catch(error => console.error("Error:", error));
-		}
+	            .then(response => response.json())
+	            .then(result => {
+	                if (result.success === true) { // Controller가 "success" 반환 시
+	                    console.log("채팅방 나가기 성공");
+	                    closeModal();
+	                    location.reload();
+	                    
+	                    // 채팅방 DOM 요소 찾기 및 제거
+	                    const chatElementToRemove = document.querySelector(`div.room-list[data-message-room-id="\${currentMessageRoomId}"]`);
+	                    if (chatElementToRemove) {
+	                        const parentA = chatElementToRemove.closest('a');
+	                        if (parentA) {
+	                            parentA.remove();
+	                            console.log(`채팅방 \${currentMessageRoomId}이(가) 목록에서 제거되었습니다.`);
+	                        }
+	                    }
+	                } else {
+	                    console.error("채팅방 나가기 실패");
+	                }
+	            })
+	            .catch(error => console.error("Error:", error));
+	    }
 	}
 
 </script>

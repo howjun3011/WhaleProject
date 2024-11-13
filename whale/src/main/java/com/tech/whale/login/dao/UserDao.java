@@ -33,4 +33,6 @@ public interface UserDao {
     public void deleteUserById(@Param("user_id") String userId);
     public Integer getUserStatus(String userId);
     public Date getUserEndDate(String userId);
+    List<String> selectFollowingUsers(@Param("user_id") String userId);
+    public void doUnfollowing(@Param("user_id") String userId, @Param("unfollow_user_id") String unfollowUserId);
 }

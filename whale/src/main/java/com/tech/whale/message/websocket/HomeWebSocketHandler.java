@@ -26,11 +26,6 @@ public class HomeWebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // 홈 페이지는 메시지를 보내지 않으므로 필요 시 구현
-    }
-
-    @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String userId = getUserIdFromSession(session);
         if (userId != null) {

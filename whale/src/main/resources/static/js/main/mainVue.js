@@ -13,8 +13,8 @@ const app = createApp({
 			userInfo: [],
 			startPage: [ null, null ],
 			pageAccess: [],
-			notifications: [[],[],[],[]],
-			notiCounts: [0,0,0,0],
+			notifications: [[],[],[],[],[]],
+			notiCounts: [0,0,0,0,0],
 			trackInfo: [],
 		}
 	},
@@ -121,6 +121,13 @@ const app = createApp({
 				.then(data => {
 					this.notifications[3] = data;
 					this.notiCounts[3] = this.notifications[3].filter(notification => notification.follow_noti_check === 0).length;
+			});
+			// 웨일
+			fetch('main/whaleNoti')
+				.then(response => response.json())
+				.then(data => {
+					this.notifications[4] = data;
+					this.notiCounts[4] = this.notifications[4].filter(notification => notification.whale_noti_check === 0).length;
 			});
 		},
 		resetMain() {

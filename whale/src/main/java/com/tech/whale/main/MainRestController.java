@@ -17,6 +17,7 @@ import com.tech.whale.main.models.ComNotiDto;
 import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.models.MessageNotiDto;
+import com.tech.whale.main.models.WhaleNotiDto;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.PageAccessDto;
 
@@ -67,6 +68,13 @@ public class MainRestController {
 	}
 	
 	// [ 메세지 알림 값 ]
+	@GetMapping(value = "/whaleNoti", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<WhaleNotiDto> getWhaleNotiMain(HttpSession session) {
+		List<WhaleNotiDto> whaleNotis = mainService.getWhaleNotiMainService(session);
+		return whaleNotis;
+	}
+	
+	// [ 메세지 알림 값 ]
 	@GetMapping(value = "/messageNoti", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<MessageNotiDto> getMessageNotiMain(HttpSession session) {
 		List<MessageNotiDto> messageNotis = mainService.getMessageNotiMainService(session);
@@ -94,6 +102,12 @@ public class MainRestController {
 		return followNotis;
 	}
 	
+	// [ 웨일 알림 읽음 처리 ]
+	@GetMapping("/updateWhaleNoti")
+	public void updateWhaleNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.updateWhaleNotiMainService((String) map.get("wn"));
+	}
+	
 	// [ 좋아요 알림 읽음 처리 ]
 	@GetMapping("/updateLikeNoti")
 	public void updateLikeNotiMain(@RequestParam HashMap<String, Object> map) {
@@ -110,6 +124,12 @@ public class MainRestController {
 	@GetMapping("/updateFollowNoti")
 	public void updateFollowNotiMain(@RequestParam HashMap<String, Object> map) {
 		mainService.updateFollowNotiMainService((String) map.get("fn"));
+	}
+	
+	// [ 좋아요 알림 삭제 처리 ]
+	@GetMapping("/deleteWhaleNoti")
+	public void deleteWhaleNotiMain(@RequestParam HashMap<String, Object> map) {
+		mainService.deleteWhaleNotiMainService((String) map.get("wn"));
 	}
 	
 	// [ 좋아요 알림 삭제 처리 ]

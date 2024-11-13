@@ -4,6 +4,30 @@ const MainHeaderMenuComponent = {
 			<div class="headerMenu-wrap" v-if="headerMenuCheck[0]" @click="closeMenu()">
 				<div class="headerMenu-containers" @click.stop="">
 					<div class="headerMenu-container" id="headerMenu-alarm" v-if="headerMenuCheck[1]">
+						<div class="header-contents flexCenter" @click="toggleExpand(4)" :style="{backgroundColor: notificationIndex === 4 && notifications[4].length !== 0 ? '#efefef' : '#FCFCFC'}">
+							<p class="header-alarm-content">WHALE</p>
+							<div class="header-noti-menu-counts" v-if="notiCounts[4] !== 0">{{ notiCounts[4] }}</div>
+						</div>
+						<Transition name="menuTransition">
+							<div v-if="notificationIndex === 4 && notifications[4].length !== 0" class="header-expanded-content">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[4]" :key="j" @click="fetchNoti('updateWhaleNoti?wn='+notification.whale_noti_id)">
+									<div class="header-notification-content" v-if="notification.whale_noti_type === 0">
+										<span style="font-weight: 400;">신고 처리가 완료되었습니다.</span><br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.whale_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="fetchNoti('deleteWhaleNoti?wn='+notification.whale_noti_id)"><div>x</div></div>
+								</div>
+							</div>
+						</Transition>
+						
 						<div class="header-contents flexCenter" @click="toggleExpand(0)" :style="{backgroundColor: notificationIndex === 0 && notifications[0].length !== 0 ? '#efefef' : '#FCFCFC'}">
 							<p class="header-alarm-content">메시지</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[0] !== 0">{{ notiCounts[0] }}</div>

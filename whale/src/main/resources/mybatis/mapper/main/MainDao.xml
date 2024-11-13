@@ -57,6 +57,23 @@
         SELECT COUNT(*) FROM FOLLOW WHERE USER_ID = #{userId} AND FOLLOW_USER_ID LIKE '%'||#{targetId}||'%'
     </select>
     
+    <select id="selectReportId" resultType="String">
+        SELECT USER_ID FROM REPORT WHERE REPORT_ID = #{reportId}
+    </select>
+    
+    <select id="getWhaleNoti" resultType="com.tech.whale.main.models.WhaleNotiDto">
+		SELECT
+	        WHALE_NOTI_ID,
+	        WHALE_NOTI_CHECK,
+	        WHALE_NOTI_DATE,
+	        WHALE_NOTI_TYPE
+	    FROM
+	        WHALE_NOTI
+	    WHERE
+	        USER_ID = #{userId}
+	    ORDER BY WHALE_NOTI_ID DESC
+	</select>
+    
     <select id="getMessageNoti" resultType="com.tech.whale.main.models.MessageNotiDto">
 		SELECT
 	        M.MESSAGE_ID AS MESSAGE_ID,
@@ -198,6 +215,14 @@
 		)
 	</insert>
 	
+	<insert id="insertWhaleNoti">
+		INSERT INTO WHALE_NOTI (WHALE_NOTI_ID,WHALE_NOTI_TYPE,USER_ID)
+		VALUES (WHALE_NOTI_SEQ.NEXTVAL,
+			   #{whaleNotiType},
+			   #{userId}
+		)
+	</insert>
+	
 	<update id="updateLikeNoti">
 		UPDATE LIKE_NOTI SET LIKE_NOTI_CHECK = 1 WHERE LIKE_NOTI_ID = #{like_noti_id}
 	</update>
@@ -208,6 +233,10 @@
 	
 	<update id="updateFollowNoti">
 		UPDATE FOLLOW_NOTI SET FOLLOW_NOTI_CHECK = 1 WHERE FOLLOW_NOTI_ID = #{followNotiId}
+	</update>
+	
+	<update id="updateWhaleNoti">
+		UPDATE WHALE_NOTI SET WHALE_NOTI_CHECK = 1 WHERE WHALE_NOTI_ID = #{whaleNotiId}
 	</update>
 	
 	<delete id="deleteLikeNoti">
@@ -224,6 +253,10 @@
 	
 	<delete id="deleteFollowNotiSetting">
 		DELETE FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI = 1
+	</delete>
+	
+	<delete id="deleteWhaleNoti">
+		DELETE FROM WHALE_NOTI WHERE WHALE_NOTI_ID = #{whaleNotiId}
 	</delete>
 	
 </mapper>

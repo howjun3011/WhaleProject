@@ -11,6 +11,7 @@ import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.models.MainDao;
 import com.tech.whale.main.models.MessageNotiDto;
+import com.tech.whale.main.models.WhaleNotiDto;
 import com.tech.whale.profile.dao.ProDao;
 import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.setting.dto.PageAccessDto;
@@ -54,7 +55,13 @@ public class MainService {
 		return pageAccessDto;
 	}
 	
-	// [ 좋아요 알림 서비스 ]
+	// [ 메세지 알림 서비스 ]
+	public List<WhaleNotiDto> getWhaleNotiMainService(HttpSession session) {
+		List<WhaleNotiDto> whaleNotis = mainDao.getWhaleNoti((String) session.getAttribute("user_id"));
+		return whaleNotis;
+	}
+	
+	// [ 메세지 알림 서비스 ]
 	public List<MessageNotiDto> getMessageNotiMainService(HttpSession session) {
 		List<MessageNotiDto> messageNotis = mainDao.getMessageNoti((String) session.getAttribute("user_id"));
 		return messageNotis;
@@ -78,6 +85,11 @@ public class MainService {
 	}
 	
 	// [ 좋아요 알림 읽음 처리 ]
+	public void updateWhaleNotiMainService(String whaleNotiId) {
+		mainDao.updateWhaleNoti(whaleNotiId);
+	}
+	
+	// [ 좋아요 알림 읽음 처리 ]
 	public void updateLikeNotiMainService(String likeNotiId) {
 		mainDao.updateLikeNoti(likeNotiId);
 	}
@@ -90,6 +102,11 @@ public class MainService {
 	// [ 팔로우 알림 읽음 처리 ]
 	public void updateFollowNotiMainService(String followNotiId) {
 		mainDao.updateFollowNoti(followNotiId);
+	}
+	
+	// [ 웨일 알림 삭제 처리 ]
+	public void deleteWhaleNotiMainService(String whaleNotiId) {
+		mainDao.deleteWhaleNoti(whaleNotiId);
 	}
 	
 	// [ 좋아요 알림 삭제 처리 ]

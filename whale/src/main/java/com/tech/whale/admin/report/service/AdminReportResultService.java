@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dao.AdminReportIDao;
 import com.tech.whale.admin.service.AdminServiceInter;
+import com.tech.whale.main.models.MainDao;
 
 @Service
 public class AdminReportResultService implements AdminServiceInter{
@@ -20,6 +21,10 @@ public class AdminReportResultService implements AdminServiceInter{
 	private AdminReportIDao adminReportIDao;
 	@Autowired
 	private AdminIDao adminIDao;
+	
+	// [ 메인 알람 기능]
+    @Autowired
+    private MainDao mainDao;
 	
 	@Override
 	@Transactional
@@ -57,6 +62,10 @@ public class AdminReportResultService implements AdminServiceInter{
 			adminReportIDao.reportResult(
 					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,2);
 		}
+		
+		// [ 메인 알람 기능: 해당 유저의 알람 테이블 추가 ]
+		String targetId = mainDao.selectReportId(report_id);
+		mainDao.insertWhaleNoti(0, targetId);
 		
 		adminReportIDao.reportAdminCh(report_id);
 	}

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -164,5 +165,17 @@ public class UserService {
     // 랜덤 토큰 생성
     private String generateRandomToken() {
         return UUID.randomUUID().toString();  // 토큰 생성 로직
+    }
+    
+    // 유저 스테이터스 출력
+    public Integer getUserStatusService(String userId) {
+    	Integer status = userDao.getUserStatus(userId);
+        return status;
+    }
+    
+    // 유저 정지 기간 출력
+    public Date getUserEndDateService(String userId) {
+    	Date status = userDao.getUserEndDate(userId);
+        return status;
     }
 }

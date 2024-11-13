@@ -56,11 +56,21 @@ public class LoginController {
         boolean isAuthenticated = userService.authenticate(username, password);
 
         if (isAuthenticated) {
-            session.setAttribute("logged_in", true);  // 새로운 세션 생성
-            session.setAttribute("user_id", username);
-            userService.checkAccessIdLogin(username, session);
-            // 여기서 리디렉션 경로 수정
-            return "redirect:/spotify/login";
+        	Integer status = userService.getUserStatusService(username);
+        	
+        	if (status == 1) {
+        		session.invalidate();
+        		model.addAttribute("message","suspension");
+        		model.addAttribute("date",userService.getUserEndDateService(username).toString());
+                return "login/login";
+        	}
+        	else {
+        		session.setAttribute("logged_in", true);  // 새로운 세션 생성
+                session.setAttribute("user_id", username);
+                userService.checkAccessIdLogin(username, session);
+                // 여기서 리디렉션 경로 수정
+                return "redirect:/spotify/login";
+        	}
         } else {
             model.addAttribute("message",false);
             return "login/login";

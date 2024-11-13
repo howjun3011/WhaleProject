@@ -120,6 +120,7 @@
                 	<c:forEach items="${communityList}" var="cl">
                 		<option value="${cl.community_id }" selected>${cl.community_name }</option>
                 	</c:forEach>
+                	<option value="99999" selected>전체</option>
                 </select>
             </div>
 

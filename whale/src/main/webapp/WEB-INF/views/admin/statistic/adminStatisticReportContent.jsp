@@ -7,15 +7,14 @@
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"> -->
 <div class="content" name="content" id="content">
 	<div class="container">
-		<h1>신고</h1>
+		<h1 id="statistic-name">유형별</h1>
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
 	    </div>
 	    <div class="btnBox">
 		    <button id="btnChart1">유형별</button>
-		    <button id="btnChart2">일자별 추이</button>
-		    <button id="btnChart3">결과 비율</button>
-		    <button id="btnChart4">처리 속도</button>
+		    <button id="btnChart2">30일</button>
+		    <button id="btnChart3">신고처리속도</button>
 	    </div>
 	</div>
 </div>
@@ -26,19 +25,29 @@
     	<c:forEach var="label" items="${reportLabels1}">
     	reportLabels1.push('${label}');
     	</c:forEach>
-    	
     	var reportValues1 = [];
     	<c:forEach var="value" items="${reportValues1}">
     	reportValues1.push(${value});
     	</c:forEach>
+    	
+    	
     	var reportLabels2 = [];
     	<c:forEach var="label" items="${reportLabels2}">
     	reportLabels2.push('${label}');
     	</c:forEach>
-    	
     	var reportValues2 = [];
     	<c:forEach var="value" items="${reportValues2}">
     	reportValues2.push(${value});
+    	</c:forEach>
+    	
+    	
+    	var reportLabels3 = [];
+    	<c:forEach var="label" items="${reportLabels3}">
+    	reportLabels3.push('${label}');
+    	</c:forEach>
+    	var reportValues3 = [];
+    	<c:forEach var="value" items="${reportValues3}">
+    	reportValues3.push(${value});
     	</c:forEach>
     	
     	var targetTypes = [];
@@ -62,7 +71,7 @@
                 datasets: [{
                     label: '신고건',
                     data: reportValues1,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    backgroundColor: 'rgba(162, 162, 235, 0.5)'
                 }]
             };
 
@@ -90,23 +99,22 @@
 
             // 버튼 클릭 이벤트 핸들러
             document.getElementById('btnChart1').addEventListener('click', function () {
-                updateChart('bar', reportLabels1, reportValues1, '신고건');
+                updateChart1('bar', reportLabels1, reportValues1, '신고건');
+                document.getElementById('statistic-name').innerText ="유형별";
             });
 
             document.getElementById('btnChart2').addEventListener('click', function () {
-                updateChart('line', reportLabels2, reportValues2, '신고건');
+                updateChart1('bar', reportLabels2, reportValues2, '신고건');
+                document.getElementById('statistic-name').innerText ="일별 추이";
             });
 
             document.getElementById('btnChart3').addEventListener('click', function () {
-                updateChart('pie', ['Chrome', 'Safari', 'Firefox', 'IE'], [55, 25, 15, 5], '신고건');
-            });
-
-            document.getElementById('btnChart4').addEventListener('click', function () {
-                updateChart('radar', ['속도', '신뢰성', '디자인', '사용성'], [80, 90, 70, 85], '신고건');
+                updateChart2('pie', reportLabels3, reportValues3, '완료건');
+                document.getElementById('statistic-name').innerText ="신고처리속도";
             });
 
             // 차트를 업데이트하는 함수
-            function updateChart(type, labels, data, label) {
+            function updateChart1(type, labels, data, label) {
                 myChart.destroy(); // 기존 차트 삭제
                 myChart = new Chart(ctx, {
                     type: type,
@@ -115,7 +123,7 @@
                         datasets: [{
                             label: label,
                             data: data,
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            backgroundColor: 'rgba(162, 162, 235, 0.5)',
                             /* borderColor: getBorderColors(data.length), */
                             borderWidth: 1
                         }]
@@ -147,7 +155,10 @@
                         datasets: [{
                             label: label,
                             data: data,
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+                            backgroundColor: [
+                            	'rgba(162, 162, 235, 0.5)',
+                            	'rgba(120, 120, 235, 0.5)',
+                            	'rgba(80, 80, 235, 0.5)'],
                             borderWidth: 1
                         }]
                     },

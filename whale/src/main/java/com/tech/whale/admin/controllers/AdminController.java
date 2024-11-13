@@ -68,8 +68,8 @@ public class AdminController {
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminAccountUserListView", "유저관리");
-	    subMenu.put("adminAccountOfficialListView", "오피셜관리");
-	    subMenu.put("adminAccountClientListView", "광고주관리 오류남");
+//	    subMenu.put("adminAccountOfficialListView", "오피셜관리");
+//	    subMenu.put("adminAccountClientListView", "광고주관리 오류남");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}

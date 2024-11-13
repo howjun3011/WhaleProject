@@ -1,5 +1,6 @@
 package com.tech.whale.admin.board.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,12 +15,16 @@ import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
+import com.tech.whale.community.dao.ComDao;
+import com.tech.whale.community.dto.PostDto;
 
 @Service
 public class AdminNoticeListService implements AdminServiceInter{
 	
 	@Autowired
 	private AdminIDao adminIDao;
+	@Autowired
+    private ComDao comDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -99,5 +104,39 @@ public class AdminNoticeListService implements AdminServiceInter{
 		ArrayList<AdminCommunityDto> communityList = adminIDao.communitySelect();
 		model.addAttribute("communityList", communityList);
 	}
+	
+	public void registerNotice(PostDto postDto, Model model) throws IOException {
+       
+		// 1. 게시물 등록
+		if(postDto.getCommunity_id()==99999) {
+			this.communitySelect(model);
+			Map<String, Object> map = model.asMap();
+			ArrayList<AdminCommunityDto> communityList =
+					(ArrayList<AdminCommunityDto>) map.get("communityList");
+			for(AdminCommunityDto var : communityList) {
+				postDto.setCommunity_id(var.getCommunity_id());
+				int postId = comDao.getNextPostId();
+		    	postDto.setPost_id(postId);
+		    	comDao.insertPost(postDto);
+		    	if (postDto.getTrack_id() != null) {
+					int postMusicId = comDao.getNextPostMusicId();
+					postDto.setPost_music_id(postMusicId);
+					comDao.insertPostMusic(postDto);
+				}
+			}
+		} else {
+			int postId = comDao.getNextPostId();
+	    	postDto.setPost_id(postId);
+	    	comDao.insertPost(postDto);
+	    	if (postDto.getTrack_id() != null) {
+				int postMusicId = comDao.getNextPostMusicId();
+				postDto.setPost_music_id(postMusicId);
+				comDao.insertPostMusic(postDto);
+			}
+		}
+    	
+
+
+    }
 	
 }

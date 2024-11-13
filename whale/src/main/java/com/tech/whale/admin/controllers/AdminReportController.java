@@ -42,8 +42,8 @@ public class AdminReportController {
         return (String) session.getAttribute("user_id");
     }
 	@ModelAttribute("myImgUrl")
-	public String myImgUrl(Model model) {
-		String myId = (String)model.getAttribute("myId");
+	public String myImgUrl(Model model,HttpSession session) {
+		String myId = (String) session.getAttribute("user_id");
 		String myImgSty = adminIDao.myImg(myId);
 		return myImgSty;
 	}

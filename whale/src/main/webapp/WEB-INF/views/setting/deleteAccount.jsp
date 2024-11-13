@@ -13,107 +13,21 @@
 <script src="static/js/setting/darkMode.js"></script>
 
 <style>
-.setting-body[data-darkmode="0"] a{
-	text-decoration: none;
-	color: #335580;
-}
-.setting-body[data-darkmode="0"] a:visited, .setting-body[data-darkmode="0"] a:focus, .setting-body[data-darkmode="0"] a:active {
-	color: #335580;
-	text-decoration: none;
-}
-.setting-body[data-darkmode="0"] a:hover{
-	color: black;
-}
-.setting-body[data-darkmode="1"] a{
-	text-decoration: none;
-	color: lightgray;
-}
-.setting-body[data-darkmode="1"] a:visited, .setting-body[data-darkmode="1"] a:focus, .setting-body[data-darkmode="1"] a:active {
-	color: lightgray;
-	text-decoration: none;
-}
-.setting-body[data-darkmode="1"] a:hover{
-	color: whitesmoke;
-}
 .complete-btn {
 	font-size: 20px;
 	position: absolute;
 	top: 15px;
 	right: 7px;
+    color: #335580;
 	background-color: transparent; /* 버튼의 배경색을 투명으로 설정 */
 	border: none;
 	padding: 5px 10px;
 	border-radius: 4px;
 	cursor: pointer;
 }
-.setting-body[data-darkmode="0"] .complete-btn:hover {
+.complete-btn:hover {
 	color: #5A5A5A;
 }
-.setting-body[data-darkmode="1"] .complete-btn:hover {
-	color: #EAEAEA;
-}
-.setting-body[data-darkmode="0"] .setting-item {
-    flex-direction: column; /* 세로 방향으로 정렬 */
-    padding: 10px;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 1px solid #EAEAEA;
-}
-.setting-body[data-darkmode="1"] .setting-item {
-    flex-direction: column; /* 세로 방향으로 정렬 */
-    padding: 10px;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 1px solid #335580;
-}
-.setting-body[data-darkmode="0"] .setting-item img {
-    width: 130px;
-    height: 130px;
-    border-radius: 100px;
-    margin-top: 30px;
-    margin-left: 20px;
-}
-.setting-body[data-darkmode="1"] .setting-item img {
-    width: 130px;
-    height: 130px;
-    border-radius: 100px;
-    margin-top: 30px;
-    margin-left: 20px;
-}
-.setting-body[data-darkmode="0"] .setting-item button {
-	border-color: white;
-	background-color: white;
-	border-style: none;
-    border: none;
-    background: none;
-    color: #335580;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-.setting-body[data-darkmode="1"] .setting-item button {
-	border-color: rgb(46, 46, 46);
-	background-color: rgb(46, 46, 46);
-	border-style: none;
-    border: none;
-    background: none;
-    color: whitesmoke;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-#editPhotoBtn {
-	font-weight: bold;	
-}
-.setting-body[data-darkmode="1"] #editPhotoBtn {
-	color: whitesmoke;
-}
-
-.setting-body[data-darkmode="1"] #editPhotoBtn:active,
-.setting-body[data-darkmode="1"] #editPhotoBtn:focus {
-	color: whitesmoke;
-}
-
 #profileForm{
     display: flex;
     flex-direction: column;
@@ -121,8 +35,7 @@
     justify-content: center;
     align-items: center;
 }
-
-.setting-body[data-darkmode="0"] input[type="text"], .setting-body[data-darkmode="0"] input[type="password"], .setting-body[data-darkmode="0"] input[type="email"] {
+input[type="password"] {
 	width: 100%;
 	padding: 5px;
 	background-color: #FCFCFC;
@@ -130,30 +43,14 @@
 	border-bottom: 2px solid #ccc; /* 밑줄 추가 */
 	outline: none; /* 포커스 시 파란 테두리 없애기 */
 }
-.setting-body[data-darkmode="1"] input[type="text"], .setting-body[data-darkmode="1"] input[type="password"], .setting-body[data-darkmode="1"] input[type="email"] {
-	width: 100%;
-	padding: 5px;
-	color: whitesmoke;
-	background-color: rgb(46, 46, 46);
-	border: none; /* 테두리 없애기 */
-	border-bottom: 2px solid #ccc; /* 밑줄 추가 */
-	outline: none; /* 포커스 시 파란 테두리 없애기 */
-}
-.setting-body[data-darkmode="0"] input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+input[type="password"]:focus {
 	border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
-}
-.setting-body[data-darkmode="1"] input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
-	border-bottom: 2px solid #f1f1f1; /* 포커스 시 밑줄 색 변경 */
 }
 #back {
     position: absolute; 
     left: 15px; 
     top: 55%; 
     transform: translateY(-50%);
-}
-.setting-body[data-darkmode="0"] input{
-    display: flex;
-    align-items: center;
 }
 </style>
 </head>

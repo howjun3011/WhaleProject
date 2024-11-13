@@ -316,7 +316,7 @@ public class SettingController {
             System.out.println("Feed_id: " + commentListDto.getFeed_id());
             System.out.println("Feed_text: " + commentListDto.getFeed_text());
             System.out.println("Feed_comments_text: " + commentListDto.getFeed_comments_text());
-            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_name());
+            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_url());
             System.out.println("Feed_comments_id: " + commentListDto.getFeed_comments_id());
             System.out.println("Parent_comments_id: " + commentListDto.getParent_comments_id());
             System.out.println("----------------------------------------------------");

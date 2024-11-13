@@ -81,10 +81,10 @@ public class UserService {
     }
 
     // USER_NICKNAME 중복 검사
-    public boolean isNicknameTaken(String user_nickname) {
-        Integer count = userDao.existsByNickname(user_nickname);
-        return count != null && count > 0;
-    }
+//    public boolean isNicknameTaken(String user_nickname) {
+//        Integer count = userDao.existsByNickname(user_nickname);
+//        return count != null && count > 0;
+//    }
 
     // USER_EMAIL 중복 검사
     public boolean isEmailTaken(String user_email) {

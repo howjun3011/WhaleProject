@@ -20,7 +20,7 @@ $(document).ready(function() {
     const passwordCheck = $('#passwordCheck').val().trim();
     const email = $('#email').val();
     const nickname = $('#user_nickname').val().trim();
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    // const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     const koreanPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
     // 클라이언트 측 유효성 검사
@@ -41,10 +41,10 @@ $(document).ready(function() {
       return;
     }
 
-    if (!passwordPattern.test(password)) {
-      $('#messageSub').text('비밀번호는 8자리 이상이며, 특수문자, 대문자, 소문자, 숫자를 각각 최소 1개 이상 포함해야 합니다.');
-      return;
-    }
+    // if (!passwordPattern.test(password)) {
+    //   $('#messageSub').text('비밀번호는 8자리 이상이며, 특수문자, 대문자, 소문자, 숫자를 각각 최소 1개 이상 포함해야 합니다.');
+    //   return;
+    // }
 
     $.ajax({
       url: '/whale/register/complete',

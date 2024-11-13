@@ -114,12 +114,14 @@
 	color: whitesmoke;
 }
 
-table{
-	margin-top: 10px;
+#profileForm{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
 }
-table tr td {
-	padding: 10px 75px 10px 50px;
-}
+
 .setting-body[data-darkmode="0"] input[type="text"], .setting-body[data-darkmode="0"] input[type="password"], .setting-body[data-darkmode="0"] input[type="email"] {
 	width: 100%;
 	padding: 5px;
@@ -149,6 +151,10 @@ table tr td {
     top: 55%; 
     transform: translateY(-50%);
 }
+.setting-body[data-darkmode="0"] input{
+    display: flex;
+    align-items: center;
+}
 </style>
 </head>
 <body>
@@ -163,13 +169,11 @@ table tr td {
             <form id="profileForm" action="/whale/deleteAccountMethod" method="post">
                 <table>
                     <tr>
-                        <td>비밀번호 확인</td>
-                        <td><input type="password" name="password"/></td>
+                        <td><input type="password" name="password" placeholder="비밀번호 확인"/></td>
                         <td>
                             <button type="submit" style="display: none;" id="hiddenSubmitBtn">탈퇴하기</button>
                         </td>
                     </tr>
-
                 </table>
             </form>
         </div>

@@ -10,6 +10,7 @@ import com.tech.whale.main.models.ComNotiDto;
 import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
 import com.tech.whale.main.models.MainDao;
+import com.tech.whale.main.models.MessageNotiDto;
 import com.tech.whale.profile.dao.ProDao;
 import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.setting.dto.PageAccessDto;
@@ -51,6 +52,12 @@ public class MainService {
 	public PageAccessDto checkPageAccessMain(HttpSession session) {
 		PageAccessDto pageAccessDto = settingDao.getPageAccessSetting((String) session.getAttribute("user_id"));
 		return pageAccessDto;
+	}
+	
+	// [ 좋아요 알림 서비스 ]
+	public List<MessageNotiDto> getMessageNotiMainService(HttpSession session) {
+		List<MessageNotiDto> messageNotis = mainDao.getMessageNoti((String) session.getAttribute("user_id"));
+		return messageNotis;
 	}
 	
 	// [ 좋아요 알림 서비스 ]

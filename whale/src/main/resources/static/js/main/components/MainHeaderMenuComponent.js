@@ -8,7 +8,45 @@ const MainHeaderMenuComponent = {
 							<p class="header-alarm-content">메시지</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[0] !== 0">{{ notiCounts[0] }}</div>
 						</div>
-						<Transition name="menuTransition"><div v-if="notificationIndex === 0 && notifications[0].length !== 0" class="header-expanded-content"></div></Transition>
+						<Transition name="menuTransition">
+							<div v-if="notificationIndex === 0 && notifications[0].length !== 0" class="header-expanded-content">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[0]" :key="j" @click="redirectIframeNoti(1,0,j,'')">
+									<div class="header-notification-content" v-if="notification.message_type === 'TEXT'">
+										<span style="font-weight: 400;">{{ notifications[0][j].target_user_id }}</span>님이 당신에게 글을 보냈습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+										</div>
+									</div>
+									<div class="header-notification-content" v-if="notification.message_type === 'LINK'">
+										<span style="font-weight: 400;">{{ notifications[0][j].target_user_id }}</span>님이 당신에게 링크를 보냈습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+										</div>
+									</div>
+									<div class="header-notification-content"  v-if="notification.message_type === 'IMAGE'">
+										<span style="font-weight: 400;">{{ notifications[0][j].target_user_id }}</span>님이 당신에게 이미지를 보냈습니다.<br>
+										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.message_create_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.message_create_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</Transition>
 						
 						<div class="header-contents flexCenter" @click="toggleExpand(1)" :style="{backgroundColor: notificationIndex === 1 && notifications[1].length !== 0 ? '#efefef' : '#FCFCFC'}">
 							<p class="header-alarm-content">좋아요</p>
@@ -164,9 +202,11 @@ const MainHeaderMenuComponent = {
 			if (this.notifications[j][k].post_id > 0) {x = 7; y = `?c=${this.notifications[j][k].community_id}&p=${this.notifications[j][k].post_id}`;}
 			else if (this.notifications[j][k].feed_id > 0) {x = 8; y = `?f=${this.notifications[j][k].feed_id}`;}
 			else if (this.notifications[j][k].follow_noti_id > 0) {x = 9; y = `?u=${this.notifications[j][k].target_user_id}`;}
+			else if (this.notifications[j][k].message_id > 0) {x = 10; y = `?u=${this.notifications[j][k].target_user_id}`;}
 			this.$emit('menu-redirect-iframe',i,x,y);
 			this.notificationIndex = null;
 			fetch('main/'+l);
+			setTimeout(() => {this.getNotification();}, 500);
 		},
 		logoutWhale() {
 			// 스프링 클라이언트 정보 초기화

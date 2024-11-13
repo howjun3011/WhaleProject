@@ -6,6 +6,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.tech.whale.login.dao.UserDao;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.tech.whale.setting.dao.ReportDao;
 import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.streaming.service.StreamingService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SettingController {
@@ -623,4 +626,69 @@ public class SettingController {
         return "redirect:/profileHome?u="+(String) session.getAttribute("user_id");
     }
 
+    @RequestMapping("/deleteAccount")
+    public String deleteAccount(HttpServletRequest request, HttpSession session, Model model) {
+        System.out.println("deleteAccount 페이지 열림");
+
+        // 세션에서 user_id 가져오기 (필요 시 사용)
+        String sessionUserId = (String) session.getAttribute("user_id");
+        if (sessionUserId == null) {
+            // 세션에 user_id가 없으면 로그인 페이지로 리다이렉트
+            return "redirect:/";
+        }
+
+        return "setting/deleteAccount";
+    }
+
+    @Autowired
+    private UserDao userDao;
+
+    @Transactional
+    public void deleteUser(String userId) {
+        userDao.deleteUserById(userId);
+    }
+
+    @PostMapping("/deleteAccountMethod")
+    public String deleteAccountMethod(HttpSession session,
+                                      @RequestParam("password") String password,
+                                      RedirectAttributes redirectAttributes) {
+        System.out.println("deleteAccountMethod 실행");
+
+        // 세션에서 user_id 가져오기
+        String sessionUserId = (String) session.getAttribute("user_id");
+        System.out.println(sessionUserId);
+        if (sessionUserId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+
+        // 비밀번호 검증 로직
+        String storedPassword = userDao.getPasswordByUsername(sessionUserId);
+        System.out.println("DB에서 가져온 암호화된 비밀번호: " + storedPassword);
+        System.out.println("입력한 비밀번호: " + password);
+
+        // 입력한 비밀번호와 DB의 암호화 비밀번호를 비교
+        if (!passwordEncoder.matches(password, storedPassword)) {
+            System.out.println("비밀번호 일치하지 않음");
+            redirectAttributes.addFlashAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return "redirect:/deleteAccount";
+        }
+
+        System.out.println("비밀번호 일치함");
+
+        try {
+            // 사용자 계정 삭제
+            System.out.println("삭제할 사용자 ID: " + sessionUserId);
+            userDao.deleteUserById(sessionUserId);
+            System.out.println("사용자 삭제 완료");
+            session.invalidate();  // 세션 무효화
+
+            redirectAttributes.addFlashAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
+            return "redirect:/";  // 메인 페이지로 이동
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
+            return "redirect:/deleteAccount";
+        }
+    }
 }

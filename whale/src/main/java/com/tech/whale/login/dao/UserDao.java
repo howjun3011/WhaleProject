@@ -35,4 +35,37 @@ public interface UserDao {
     public Date getUserEndDate(String userId);
     List<String> selectFollowingUsers(@Param("user_id") String userId);
     public void doUnfollowing(@Param("user_id") String userId, @Param("unfollow_user_id") String unfollowUserId);
+    public void deleteFeedsByUserId(@Param("user_id") String userId);
+
+    // 데이터 무결성 제약 회피용 임시삭제 메서드들
+    void changeUserInfoByUserId(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
+    void updateUserNicknameToDeleted(@Param("user_id") String userId);
+
+    // USER_NOTIFICATION_ONOFF 테이블 관련 메서드
+    void deleteUserNotiOnoffByUserId(@Param("user_id") String userId);
+    void insertUserNotiOnoffWithNewUserId(@Param("user_id") String newUserId);
+
+    // PAGE_ACCESS_SETTING 테이블 관련 메서드
+    void deleteUserPageAccessSettingByUserId(@Param("user_id") String userId);
+    void insertUserPageAccessSettingWithNewUserId(@Param("user_id") String newUserId);
+
+    // STARTPAGE_SETTING 테이블 관련 메서드
+    void deleteUserStartpageSettingByUserId(@Param("user_id") String userId);
+    void insertUserStartpageSettingWithNewUserId(@Param("user_id") String newUserId);
+
+    // USER_SETTING 테이블 관련 메서드
+    void deleteUserSettingByUserId(@Param("user_id") String userId);
+    void insertUserSettingByUserId(@Param("user_id") String newUserId);
+
+    // BLOCK 테이블 관련 메서드
+    void deleteUserFromBlockByUserId(@Param("user_id") String userId);
+    void insertUserIntoBlockWithNewUserId(@Param("user_id") String newUserId);
+
+    // PROFILE 테이블 관련 메서드
+    void deleteUserProfileByUserId(@Param("user_id") String userId);
+    void insertUserProfileWithNewUserId(@Param("user_id") String newUserId);
+
+    //  FOLLOW 테이블 관련 메서드
+    void deleteUserFollowByUserId(@Param("user_id") String userId);
+    void insertUserFollowWithNewUserId(@Param("user_id") String newUserId);
 }

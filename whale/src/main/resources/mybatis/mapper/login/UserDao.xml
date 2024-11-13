@@ -135,4 +135,97 @@
             OR follow_user_id = #{unfollow_user_id})
     </update>
 
+    <delete id="deleteFeedsByUserId" parameterType="String">
+        DELETE FROM feed WHERE user_id = #{user_id}
+    </delete>
+
+    <!-- user_info 테이블의 user_id 업데이트 -->
+    <update id="changeUserInfoByUserId">
+        UPDATE user_info
+        SET user_id = #{new_user_id}
+        WHERE user_id = #{user_id}
+    </update>
+
+    <update id="updateUserNicknameToDeleted">
+        UPDATE user_info
+        SET user_nickname = '탈퇴한 사용자'
+        WHERE user_id = #{user_id}
+    </update>
+
+    <!-- USER_NOTIFICATION_ONOFF 테이블 관련 메서드 -->
+    <delete id="deleteUserNotiOnoffByUserId">
+        DELETE FROM USER_NOTIFICATION_ONOFF
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserNotiOnoffWithNewUserId">
+        INSERT INTO USER_NOTIFICATION_ONOFF (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- PAGE_ACCESS_SETTING 테이블 관련 메서드 -->
+    <delete id="deleteUserPageAccessSettingByUserId">
+        DELETE FROM PAGE_ACCESS_SETTING
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserPageAccessSettingWithNewUserId">
+        INSERT INTO PAGE_ACCESS_SETTING (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- STARTPAGE_SETTING 테이블 관련 메서드 -->
+    <delete id="deleteUserStartpageSettingByUserId">
+        DELETE FROM STARTPAGE_SETTING
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserStartpageSettingWithNewUserId">
+        INSERT INTO STARTPAGE_SETTING (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- USER_SETTING 테이블 관련 메서드 -->
+    <delete id="deleteUserSettingByUserId">
+        DELETE FROM USER_SETTING
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserSettingByUserId">
+        INSERT INTO USER_SETTING (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- BLOCK 테이블 관련 메서드 -->
+    <delete id="deleteUserFromBlockByUserId">
+        DELETE FROM BLOCK
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserIntoBlockWithNewUserId">
+        INSERT INTO BLOCK (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- PROFILE 테이블 관련 메서드 -->
+    <delete id="deleteUserProfileByUserId">
+        DELETE FROM PROFILE
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserProfileWithNewUserId">
+        INSERT INTO PROFILE (user_id)
+        VALUES (#{user_id})
+    </insert>
+
+    <!-- FOLLOW 테이블 관련 메서드 -->
+    <delete id="deleteUserFollowByUserId">
+        DELETE FROM FOLLOW
+        WHERE user_id = #{user_id}
+    </delete>
+
+    <insert id="insertUserFollowWithNewUserId">
+        INSERT INTO FOLLOW (user_id)
+        VALUES (#{user_id})
+    </insert>
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -640,12 +641,8 @@ public class SettingController {
     @Autowired
     private UserDao userDao;
 
-    @Transactional
-    public void deleteUser(String userId) {
-        userDao.deleteUserById(userId);
-    }
-
     @PostMapping("/deleteAccountMethod")
+    @Transactional
     public String deleteAccountMethod(HttpSession session,
                                       @RequestParam("password") String password,
                                       RedirectAttributes redirectAttributes) {
@@ -679,9 +676,8 @@ public class SettingController {
             for (String userId : followingUsers) {
                 userDao.doUnfollowing(userId, sessionUserId); // 각각의 팔로워에 대해 언팔로우 처리
             }
-            // 사용자 계정 삭제
-            System.out.println("삭제할 사용자 ID: " + sessionUserId);
-            userDao.deleteUserById(sessionUserId);
+            // 모든 관련 테이블에서 user_id 변경 처리
+            deleteUserAndUpdateReferences(sessionUserId); // 새로운 메서드로 ID 업데이트와 관련 데이터 정리 수행
 
             System.out.println("사용자 삭제 완료");
             session.invalidate();  // 세션 무효화
@@ -700,4 +696,87 @@ public class SettingController {
         System.out.println("deleteAccountResult 페이지 열림");
         return "setting/deleteAccountResult";
     }
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Transactional
+    public void deleteUserAndUpdateReferences(String userId) {
+        String newUserId = "delete" + (int) (Math.random() * 100000);
+
+        try {
+            // 1. PAGE_ACCESS_SETTING와 같은 참조 테이블 데이터 임시 삭제
+            System.out.println("PAGE_ACCESS_SETTING 데이터 임시 삭제 시작");
+            userDao.deleteUserPageAccessSettingByUserId(userId);
+            System.out.println("PAGE_ACCESS_SETTING 데이터 임시 삭제 완료");
+
+            System.out.println("USER_NOTIFICATION_ONOFF 데이터 임시 삭제 시작");
+            userDao.deleteUserNotiOnoffByUserId(userId);
+            System.out.println("USER_NOTIFICATION_ONOFF 데이터 임시 삭제 완료");
+
+            System.out.println("STARTPAGE_SETTING 데이터 임시 삭제 시작");
+            userDao.deleteUserStartpageSettingByUserId(userId);
+            System.out.println("STARTPAGE_SETTING 데이터 임시 삭제 완료");
+
+            System.out.println("USER_SETTING 데이터 임시 삭제 시작");
+            userDao.deleteUserSettingByUserId(userId);
+            System.out.println("USER_SETTING 데이터 임시 삭제 완료");
+
+            System.out.println("BLOCK 데이터 임시 삭제 시작");
+            userDao.deleteUserFromBlockByUserId(userId);
+            System.out.println("BLOCK 데이터 임시 삭제 완료");
+
+            System.out.println("PROFILE 데이터 임시 삭제 시작");
+            userDao.deleteUserProfileByUserId(userId);
+            System.out.println("PROFILE 데이터 임시 삭제 완료");
+
+            System.out.println("FOLLOW 데이터 임시 삭제 시작");
+            userDao.deleteUserFollowByUserId(userId);
+            System.out.println("FOLLOW 데이터 임시 삭제 완료");
+
+            // 2. user_info 테이블의 user_id 업데이트
+            // JDBC를 이용한 강제 SQL 실행
+            String sql = "UPDATE user_info SET user_nickname = '탈퇴한 사용자' WHERE user_id = ?";
+            jdbcTemplate.update(sql, userId);
+            System.out.println("user_nickname이 '탈퇴한 사용자'로 변경되었습니다.");
+
+
+
+            System.out.println("user_info 테이블의 user_id 업데이트 시작");
+            userDao.changeUserInfoByUserId(userId, newUserId);
+            System.out.println("user_info 테이블에서 user_id 업데이트 완료");
+
+            // 3. 참조 테이블에 새로운 user_id로 데이터 삽입
+            System.out.println("USER_NOTIFICATION_ONOFF에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserNotiOnoffWithNewUserId(newUserId);
+            System.out.println("USER_NOTIFICATION_ONOFF에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("PAGE_ACCESS_SETTING에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserPageAccessSettingWithNewUserId(newUserId);
+            System.out.println("PAGE_ACCESS_SETTING에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("STARTPAGE_SETTING에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserStartpageSettingWithNewUserId(newUserId);
+            System.out.println("STARTPAGE_SETTING에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("USER_SETTING에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserSettingByUserId(newUserId);
+            System.out.println("USER_SETTING에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("BLOCK에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserIntoBlockWithNewUserId(newUserId);
+            System.out.println("BLOCK에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("PROFILE에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserProfileWithNewUserId(newUserId);
+            System.out.println("PROFILE에 새로운 user_id로 데이터 삽입 완료");
+
+            System.out.println("FOLLOW에 새로운 user_id로 데이터 삽입 시작");
+            userDao.insertUserFollowWithNewUserId(newUserId);
+            System.out.println("FOLLOW에 새로운 user_id로 데이터 삽입 완료");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

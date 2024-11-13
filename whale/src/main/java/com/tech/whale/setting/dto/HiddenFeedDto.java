@@ -13,5 +13,5 @@ public class HiddenFeedDto {
 
 	private int feed_id;
 	private String feed_text;
-	private String feed_img_name;
+	private String feed_img_url;
 }

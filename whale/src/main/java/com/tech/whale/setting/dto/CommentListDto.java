@@ -14,7 +14,7 @@ public class CommentListDto {
 	private int community_id;
 	private String post_tag_text;
 	private String post_title;
-	private String post_img_name;
+	private String post_img_url;
 	private String post_text;
 	private String post_owner_image;
 	private String post_owner_id;
@@ -32,7 +32,7 @@ public class CommentListDto {
 	private String re_post_comments_text;
 
 	private int feed_id;
-	private String feed_img_name;
+	private String feed_img_url;
 	private String feed_text;
 	private String feed_owner_image;
 	private String feed_owner_id;

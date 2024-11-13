@@ -139,7 +139,7 @@
 	<select id="getFilteredPostLikeList" parameterType="map" resultType="com.tech.whale.setting.dto.LikeListDto">
 		<choose>
 			<when test="postType == '게시글'">
-				SELECT P.POST_ID, P.COMMUNITY_ID, P.POST_TITLE, P.POST_TEXT, PT.POST_TAG_TEXT, P.USER_ID
+				SELECT P.POST_ID, P.COMMUNITY_ID, P.POST_TITLE, P.POST_TEXT, PT.POST_TAG_TEXT, P.USER_ID, P.POST_DATE, P.POST_CNT
 				FROM POST P JOIN POST_LIKE PL
 				ON P.POST_ID = PL.POST_ID
 				JOIN POST_TAG PT
@@ -148,7 +148,7 @@
 				ORDER BY PL.POST_LIKE_ID ${orderBy }
 			</when>
 			<otherwise>
-				SELECT FL.FEED_ID, FI.FEED_IMG_NAME
+				SELECT FL.FEED_ID, FI.FEED_IMG_URL
 				FROM FEED_LIKE FL
 				JOIN FEED_IMG FI
 				ON FL.FEED_ID = FI.FEED_ID
@@ -165,7 +165,7 @@
 				PT.POST_TAG_TEXT,
 				P.COMMUNITY_ID,
 				P.POST_TITLE,
-				PI.POST_IMG_NAME,
+				PI.POST_IMG_URL,
 				P.POST_TEXT,
 				UI.USER_IMAGE_URL AS POST_OWNER_IMAGE,
 				UI.USER_ID AS POST_OWNER_ID,
@@ -186,7 +186,7 @@
 			<otherwise>
 				SELECT
 				FI.FEED_ID,
-				FI.FEED_IMG_NAME,
+				FI.FEED_IMG_URL,
 				F.FEED_TEXT,
 				UI.USER_IMAGE_URL AS FEED_OWNER_IMAGE,
 				UI.USER_ID AS FEED_OWNER_ID,
@@ -238,7 +238,7 @@
 		</choose>
 	</select>
 	<select id="getHiddenFeedList" parameterType="map" resultType="com.tech.whale.setting.dto.HiddenFeedDto">
-		SELECT F.FEED_ID, F.FEED_TEXT, FI.FEED_IMG_NAME
+		SELECT F.FEED_ID, F.FEED_TEXT, FI.FEED_IMG_URL
 		FROM FEED F JOIN FEED_IMG FI
 						 ON F.FEED_ID = FI.FEED_ID
 		WHERE USER_ID = #{session_user_id} AND FEED_OPEN = 1

@@ -88,7 +88,7 @@
 						<c:forEach var="hidden" items="${hiddenFeedList}">
 							<div class="image-item">
 								<a href="/whale/feedDetail?f=${hidden.feed_id}">
-									<img src="static/images/feed/${hidden.feed_img_name}" alt="feed_img">
+									<img src="${hidden.feed_img_url}" alt="feed_img">
 								</a>
 							</div>
 						</c:forEach>

@@ -96,7 +96,7 @@
                 <div class="setting-item">
                     <div class="setting-item-text">
                         <p>페이지 접근 변경</p>
-                        <p class="sub-text">page access edit</p>
+                        <p class="sub-text">change page access</p>
                     </div>
                 </div>
             </a>

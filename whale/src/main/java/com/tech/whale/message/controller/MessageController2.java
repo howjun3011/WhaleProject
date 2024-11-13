@@ -140,6 +140,8 @@ public class MessageController2 {
 		System.out.println("newChat() ctr");
 		String nowId = (String) session.getAttribute("user_id");
 
+		String otherId = messageDao.getOtherUserInRoom2(currentMessageRoomId, nowId);
+		
 		System.out.println(currentMessageRoomId);
 
 		String userType = messageDao.getUserType(nowId, currentMessageRoomId);
@@ -153,6 +155,7 @@ public class MessageController2 {
 		}
 		
 		messageDao.updateUserType(currentMessageRoomId, userTypeInt);
+		messageDao.readMessage(currentMessageRoomId, otherId);
 
 		response.put("success", true);
 

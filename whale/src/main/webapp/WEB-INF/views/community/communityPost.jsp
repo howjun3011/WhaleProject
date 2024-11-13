@@ -67,6 +67,57 @@
     #userModal[data-darkmode="1"] .user-id {font-weight: bold; cursor: pointer;}
     #userModal[data-darkmode="1"] .user-id:hover {color: #335580;}
     #userModal[data-darkmode="1"] .pagination .current {font-weight: bold; color: #335580;}
+
+	.content-wrapper[data-darkmode="1"] .announcement {
+	    background-color: #474747; /* 연한 회색 배경 */
+	    font-weight: bold; /* 글씨를 굵게 */
+	}
+	
+	
+	.content-wrapper[data-darkmode="0"] .announcement {
+	    background-color: #f2f2f2; /* 연한 회색 배경 */
+	    font-weight: bold; /* 글씨를 굵게 */
+	}
+
+    .search-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #2e2e2e;
+        margin: 20px 0;
+        padding: 10px 40px;
+        border-radius: 10px;
+        margin-top: 15px;
+    }
+
+    .search-bar input[type="text"] {
+        width: 30%;
+        padding: 10px;
+        border: 1px solid #D0D0D0;
+        border-radius: 8px;
+        background-color: #FFFFFF;
+        color: #000000;
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 400;
+    }
+
+    .search-bar input[type="submit"] {
+        padding: 10px 20px;
+        background-color: #000000;
+        border: none;
+        color: #FFFFFF;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 600;
+    }
+
+    .search-bar input[type="submit"]:hover {
+        background-color: #333333;
+    }
+
+
 </style>
 </head>
 <body>
@@ -86,10 +137,18 @@
                 <th>좋아요</th>
             </tr>
             <c:forEach items="${list}" var="p">
-                <tr>
+                <tr 
+	                <c:if test="${p.post_tag_text == '[공지]'}">
+	                    class="announcement"
+	                </c:if>
+            	>
                     <td>${p.post_num}</td>
                     <td>${p.post_tag_text}</td>
-                    <td><a href="communityDetail?c=${param.c}&p=${p.post_id}">${p.post_title}</a></td>
+                    <td><a href="communityDetail?c=${param.c}&p=${p.post_id}">${p.post_title} 
+                    	<c:if test="${p.commentsCount != 0}">
+                    	(${p.commentsCount})
+                    	</c:if>
+                    	</a></td>
                     <td>
 					    <span class="user-id" 
 					          data-user-id="${p.user_id}" 
@@ -162,7 +221,35 @@
     </div>
 </div>
 
-
+<form action="communityPost" class="search-bar">
+    <input type="hidden" name="c" value="${param.c}" />
+    
+        <c:choose>
+            <c:when test="${title}">
+                <input type="checkbox" name="searchType" value="title" checked /> 제목
+            </c:when>
+            <c:otherwise>
+                <input type="checkbox" name="searchType" value="title" /> 제목
+            </c:otherwise>
+        </c:choose>
+        <c:choose>
+            <c:when test="${content}">
+                <input type="checkbox" name="searchType" value="content" checked /> 내용
+            </c:when>
+            <c:otherwise>
+                <input type="checkbox" name="searchType" value="content" /> 내용
+            </c:otherwise>
+        </c:choose>
+        <select name="tagId">
+            <option value="">모든 태그</option>
+            <c:forEach items="${tlist}" var="t">
+                <option value="${t.post_tag_id}" ${param.tagId == t.post_tag_id ? "selected" : "" }>${t.post_tag_text}</option>
+            </c:forEach>
+        </select>
+        <input type="text" name="sk" value="${searchKeyword}" placeholder="검색어를 입력하세요" />
+        <input type="submit" value="검색" />
+    
+</form>
 
 <script>
     // 모달 열기

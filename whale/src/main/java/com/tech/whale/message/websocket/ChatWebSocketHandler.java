@@ -36,6 +36,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private HomeWebSocketHandler homeWebSocketHandler;
 
+
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
@@ -185,7 +186,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
             String homeMessageJson = objectMapper.writeValueAsString(homeMessage);
             homeWebSocketHandler.sendMessageToUser(homeMessage.getReceiverId(), homeMessageJson);
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             session.sendMessage(new TextMessage("Error: " + e.getMessage()));

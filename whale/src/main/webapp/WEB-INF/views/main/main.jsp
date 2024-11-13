@@ -17,6 +17,51 @@
     sessionStorage.access_id = `${ access_id }`;
     sessionStorage.user_id = `${ user_id }`;</script>
     <script type="module" src="static/js/main/mainVue.js" defer></script>
+    <style>
+	    #notification-container {
+	        position: fixed;
+	        top: 10px;
+	        left: 150px; /* 왼쪽 위치를 40px로 조정하여 오른쪽으로 이동 */
+	        z-index: 1000;
+	    }
+	
+	    .notification {
+	        background-color: white; /* 배경을 흰색으로 변경 */
+	        color: #333; /* 텍스트 색상을 어두운 회색으로 변경 */
+	        padding: 15px 20px;
+	        margin-bottom: 10px;
+	        border-radius: 5px;
+	        border: 1px solid #ccc; /* 테두리 추가 */
+	        cursor: pointer;
+	        opacity: 0.9;
+	        transition: opacity 0.5s ease, transform 0.5s ease;
+	        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	        display: flex; /* Flexbox 레이아웃 사용 */
+	        align-items: center; /* 수직 가운데 정렬 */
+	    }
+	
+	    .notification:hover {
+	        opacity: 1;
+	        transform: translateY(-2px);
+	    }
+	
+	    /* 다크 모드용 알림 스타일 */
+	    .dark .notification {
+	        background-color: #335580;
+	        color: white;
+	    }
+	
+	    /* 이미지와 텍스트 간 간격 조정 */
+	    .notification img {
+	        margin-right: 10px;
+	    }
+	
+	    /* 텍스트 내용의 레이아웃 조정 */
+	    .notification .text-content {
+	        display: flex;
+	        flex-direction: column;
+	    }
+    </style>
 </head>
 <body>
 <div id="main">
@@ -33,6 +78,7 @@
     </div>
     <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage"
                            :track-info="trackInfo" @footer-music-toggle="changeRedirectIndex"></main-footer-component>
+<div id="notification-container"></div>
 </div>
 </body>
 <script>
@@ -62,6 +108,68 @@
             }
         });
     });
+    
+    const now_id = `${ user_id }`;
+
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const socketUrl = protocol + "25.5.112.217:9002/whale/home?userId=" + now_id;
+    const socket = new WebSocket(socketUrl);
+
+    console.log(socketUrl);
+    socket.onopen = function() {
+        console.log("Home WebSocket 연결 성공");
+    };
+
+    socket.onmessage = function(event) {
+        console.log("새 메시지 수신:", event.data);
+        const homeMessage = JSON.parse(event.data);
+        updateChatList(homeMessage);
+        
+        // 알림 표시 함수 호출
+        showNotification(homeMessage.userImageUrl, homeMessage.senderNickname, homeMessage.messageText);
+    };
+
+    socket.onclose = function(event) {
+        console.log("Home WebSocket 연결 종료:", event);
+    };
+
+    socket.onerror = function(error) {
+        console.error("Home WebSocket 오류:", error);
+    };
+
+    function updateChatList(homeMessage) {
+        // 기존 채팅 목록 업데이트 로직 ...
+    }
+
+    // 알림 생성 함수 추가
+    function showNotification(userImageUrl, userNickname, messageText) {
+        const container = document.getElementById('notification-container');
+
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+
+        // 알림 내용 설정 (유저 이미지와 메시지 텍스트)
+        notification.innerHTML = `
+            <img src="\${userImageUrl}" alt="User Image" style="width:40px; height:40px; border-radius:50%;">
+            <div class="text-content">
+                <div><strong>\${userNickname}</strong></div>
+                <div>\${messageText}</div>
+            </div>
+        `;
+
+        container.appendChild(notification);
+
+        // 2초 후에 알림 제거
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode === container) {
+                    container.removeChild(notification);
+                }
+            }, 500); // CSS 트랜지션 시간과 일치시킴
+        }, 2000);
+    }
 </script>
 
 </html>

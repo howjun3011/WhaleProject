@@ -37,8 +37,6 @@ public interface MessageDao {
 	List<Integer> getUnreadMessageIds(String roomId, String userId);
 	
 	void updateMessageReadStatus(String roomId, String userId);
-	
-	String getOtherUserInRoom(String roomId, String userId);
 
 	String getOtherUserInRoom2(String roomId, String userId);
 
@@ -66,5 +64,7 @@ public interface MessageDao {
 	void addUserMessageRoom(String roomId, String userId, String string);
 
 	String getUserNickname(String userId);
+
+	void readMessage(String message_room_id, String otherId);
 }
 

@@ -1,6 +1,7 @@
 package com.tech.whale.message.config;
 
 import com.tech.whale.message.websocket.HomeWebSocketHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -14,12 +15,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final ChatWebSocketHandler chatWebSocketHandler;
     private final HomeWebSocketHandler homeWebSocketHandler;
-
-    @Autowired
-    ChatWebSocketHandler chatWeHandler;
     
     @Autowired
-    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler, HomeWebSocketHandler homeWebSocketHandler) {
+    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler,
+    		HomeWebSocketHandler homeWebSocketHandler
+    		) {
         this.chatWebSocketHandler = chatWebSocketHandler;
         this.homeWebSocketHandler = homeWebSocketHandler;
     }

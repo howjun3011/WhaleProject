@@ -354,10 +354,24 @@
 	    opacity: 0; /* 투명하게 */
 	    transition: opacity 0.3s ease; /* 나타나는 효과 */
 	}
+	
+    .deleteAccount {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: 'Noto Sans', sans-serif;
+		font-weight: 600; /* 두껍게 표시할 경우 */
+		height: 100vh; /* 화면 세로 중앙 정렬 */
+		text-align: center;
+    }
 </style>
 </head>
 <body>
-
+<c:choose>
+	<c:when test="${profile.account_privacy == 2}">
+		<div class="deleteAccount">탈퇴한 사용자입니다.</div>
+	</c:when>
+	<c:otherwise>
 <div class="container">
     <%-- 팔로워 상태 체크 --%>
     <c:set var="isFollower" value="false" />
@@ -370,6 +384,7 @@
     <%-- 프로필 정보 영역 --%>
     <div class="profile-header">
         <div class="profile-info">
+
             <div>
                 <img class="profile-image" src="${profile.user_image_url}" alt="User Profile Image">
                 <div class="user-id">@${userId}</div>
@@ -453,6 +468,7 @@
 					</c:if>
 				</div>
             </div>
+
         </div>
     </div>
 
@@ -515,7 +531,8 @@
         </c:choose>
     </div>
 </div>
-
+</c:otherwise>
+</c:choose>
 
 <script>
 

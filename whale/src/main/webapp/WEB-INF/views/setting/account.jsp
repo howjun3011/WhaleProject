@@ -53,6 +53,14 @@ a:visited, a:hover, a:focus, a:active {
 					</div>
 				</div>
 			</a>
+			<a href="deleteAccount">
+				<div class="setting-item">
+					<div class="setting-item-text">
+						<p>계정 탈퇴하기</p>
+						<p class="sub-text">delete account</p>
+					</div>
+				</div>
+			</a>
 		</div>
 	</div>
 </div>

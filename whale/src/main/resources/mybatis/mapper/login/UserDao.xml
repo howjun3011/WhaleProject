@@ -99,4 +99,8 @@
         FROM USER_INFO
         WHERE user_email = #{email}
     </select>
+
+    <delete id="deleteUserById" parameterType="String">
+        DELETE FROM user_info WHERE user_id = #{user_id}
+    </delete>
 </mapper>

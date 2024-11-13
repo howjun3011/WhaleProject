@@ -190,7 +190,6 @@
         }
 
         .no-like-message {
-            margin-left: 20px;
             color: #ccc;
         }
 
@@ -209,6 +208,10 @@
             left: 15px;
             top: 55%;
             transform: translateY(-50%);
+        }
+        .date {
+            margin-left: auto;
+            text-align: right;
         }
     </style>
     <style id="darkmode-scrollbar-styles"></style>
@@ -266,7 +269,8 @@
                                                 <div>${post.post_tag_text}&nbsp;${post.post_title}</div>
                                                 <div>${post.user_id}</div>
                                             </div>
-                                            <div>${post.post_text}</div>
+                                            <div class="date">${post.post_date}</div>
+                                            <div class="cnt">${post.post_cnt}</div>
                                         </div>
                                     </a>
                                 </c:forEach>
@@ -275,9 +279,7 @@
                                 <div class="image-grid">
                                     <c:forEach var="feed" items="${postLikeList }">
                                         <div class="image-item">
-                                            <a href="/whale/feedDetail?f=${feed.feed_id}"><img id="feed-img"
-                                                                                               src="static/images/feed/${feed.feed_img_name}"
-                                                                                               alt="feed_img"></a>
+                                            <a href="/whale/feedDetail?f=${feed.feed_id}"><img id="feed-img" src="${feed.feed_img_url}" alt="feed_img"></a>
                                         </div>
                                     </c:forEach>
                                 </div>

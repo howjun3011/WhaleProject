@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,7 +19,9 @@ public class LikeListDto {
 	private String post_title;
 	private String post_text;
 	private String post_tag_text;
-	
+	private String post_date;
+	private int post_cnt;
+
 	private int feed_id;
-	private String feed_img_name;
+	private String feed_img_url;
 }

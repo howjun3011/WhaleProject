@@ -133,6 +133,7 @@
 			border: 1px solid #ccc;
 			border-radius: 8px;
 		}
+
 		.no-comment-message {
 			margin-left: 20px;
 			color: #ccc;
@@ -308,7 +309,7 @@
 												<c:forEach var="comment" items="${postFeedCommentList}">
 													<c:if test="${post.post_id == comment.re_post_id}">
 														<div class="${comment.re_post_parent_comments_id != null ? 'reply' : 'comment'}">
-															<img src="static/images/setting/${comment.re_post_commenter_image}" alt="commenter_img" class="comment-img">
+															<img src="${comment.re_post_commenter_image}" alt="commenter_img" class="comment-img">
 															<div class="comment-text">
 																<span>${comment.re_post_commenter_id}</span>: ${comment.re_post_comments_text}
 															</div>
@@ -325,16 +326,16 @@
 									<a href="/whale/feedDetail?f=${feed.feed_id}">
 										<div id="feed-list">
 											<div class="feed-item">
-												<img src="static/images/setting/${feed.feed_owner_image}" alt="owner_image" class="owner-image">
+												<img src="${feed.feed_owner_image}" alt="owner_image" class="owner-image">
 												${feed.feed_owner_id} ${feed.feed_text}
-												<img src="static/images/feed/${feed.feed_img_name}" alt="feed_img" id="feed-img">
+												<img src="${feed.feed_img_url}" alt="feed_img" id="feed-img">
 											</div>
 
 											<div class="comments-section">
 												<c:forEach var="comment" items="${postFeedCommentList}">
 													<c:if test="${feed.feed_id == comment.re_feed_id}">
 														<div class="${comment.re_parent_comments_id != null ? 'reply' : 'comment'}">
-															<img src="static/images/setting/${comment.re_commenter_image}" alt="commenter_img" class="comment-img">
+															<img src="${comment.re_commenter_image}" alt="commenter_img" class="comment-img">
 															<div class="comment-text">
 																<span>${comment.re_commenter_id}</span>: ${comment.re_feed_comments_text}
 															</div>

@@ -87,7 +87,7 @@
 	        MESSAGE M
 			    LEFT JOIN MESSAGE_ROOM_USER MRU ON MRU.MESSAGE_ROOM_ID = M.MESSAGE_ROOM_ID
 	    WHERE
-	        MRU.USER_ID = #{userId} AND M.MESSAGE_READ = 1
+	        MRU.USER_ID = #{userId} AND M.USER_ID != #{userId} AND M.MESSAGE_READ = 1
 	    ORDER BY M.MESSAGE_TEXT DESC
 	</select>
     

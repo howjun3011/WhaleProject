@@ -372,7 +372,7 @@ public class AdminBoardController {
 		
         try {
             // 게시글 및 이미지 저장
-            comRegService.registerPost(postDto);
+        	adminNoticeListService.registerNotice(postDto, model);
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", "이미지 업로드 중 오류가 발생했습니다.");

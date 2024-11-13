@@ -34,11 +34,11 @@ public class RegisterController {
             response.put("message", "이미 사용 중인 아이디입니다.");
             return response;
         }
-        if (userService.isNicknameTaken(nickname)) {
-            response.put("success", false);
-            response.put("message", "이미 사용 중인 닉네임입니다.");
-            return response;
-        }
+//        if (userService.isNicknameTaken(nickname)) {
+//            response.put("success", false);
+//            response.put("message", "이미 사용 중인 닉네임입니다.");
+//            return response;
+//        }
 //        if (userService.isEmailTaken(email)) {
 //            response.put("success", false);
 //            response.put("message", "이미 사용 중인 이메일입니다.");

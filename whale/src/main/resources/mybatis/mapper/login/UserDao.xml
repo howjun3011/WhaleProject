@@ -103,4 +103,36 @@
     <delete id="deleteUserById" parameterType="String">
         DELETE FROM user_info WHERE user_id = #{user_id}
     </delete>
+    
+    <select id="getUserStatus" resultType="Integer">
+        SELECT USER_STATUS
+        FROM USER_INFO
+        WHERE USER_ID = #{userId}
+    </select>
+    
+    <select id="getUserEndDate" parameterType="String" resultType="Date">
+        SELECT MAX(USER_END_ACTION)
+        FROM REPORT_RESULT
+        WHERE TARGET_USER_ID = #{userId}
+    </select>
+
+    <select id="selectFollowingUsers" resultType="String">
+        SELECT user_id
+        FROM follow
+        WHERE follow_user_id LIKE '%,' || #{user_id} || ',%'
+           OR follow_user_id LIKE #{user_id} || ',%'
+           OR follow_user_id LIKE '%,' || #{user_id}
+           OR follow_user_id = #{user_id}
+    </select>
+
+    <update id="doUnfollowing">
+        UPDATE follow
+        SET follow_user_id = TRIM(',' FROM REPLACE(',' || follow_user_id || ',', ',' || #{unfollow_user_id} || ',', ','))
+        WHERE user_id = #{user_id}
+          AND (follow_user_id LIKE '%,' || #{unfollow_user_id} || ',%'
+            OR follow_user_id LIKE #{unfollow_user_id} || ',%'
+            OR follow_user_id LIKE '%,' || #{unfollow_user_id}
+            OR follow_user_id = #{unfollow_user_id})
+    </update>
+
 </mapper>

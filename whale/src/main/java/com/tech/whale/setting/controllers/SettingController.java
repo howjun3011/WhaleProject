@@ -1,6 +1,5 @@
 package com.tech.whale.setting.controllers;
 
-import java.io.File;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.tech.whale.setting.dao.ReportDao;
 import com.tech.whale.setting.dao.SettingDao;
@@ -319,7 +316,7 @@ public class SettingController {
             System.out.println("Feed_id: " + commentListDto.getFeed_id());
             System.out.println("Feed_text: " + commentListDto.getFeed_text());
             System.out.println("Feed_comments_text: " + commentListDto.getFeed_comments_text());
-            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_name());
+            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_url());
             System.out.println("Feed_comments_id: " + commentListDto.getFeed_comments_id());
             System.out.println("Parent_comments_id: " + commentListDto.getParent_comments_id());
             System.out.println("----------------------------------------------------");
@@ -677,18 +674,30 @@ public class SettingController {
         System.out.println("비밀번호 일치함");
 
         try {
+            // 탈퇴 전 팔로잉 관계 해제
+            List<String> followingUsers = userDao.selectFollowingUsers(sessionUserId); // 탈퇴한 사용자를 팔로우 중인 사용자 목록 조회
+            for (String userId : followingUsers) {
+                userDao.doUnfollowing(userId, sessionUserId); // 각각의 팔로워에 대해 언팔로우 처리
+            }
             // 사용자 계정 삭제
             System.out.println("삭제할 사용자 ID: " + sessionUserId);
             userDao.deleteUserById(sessionUserId);
+
             System.out.println("사용자 삭제 완료");
             session.invalidate();  // 세션 무효화
 
             redirectAttributes.addFlashAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
-            return "redirect:/";  // 메인 페이지로 이동
+            return "redirect:/deleteAccountResult";
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
             return "redirect:/deleteAccount";
         }
+    }
+
+    @RequestMapping("/deleteAccountResult")
+    public String deleteAccountResult() {
+        System.out.println("deleteAccountResult 페이지 열림");
+        return "setting/deleteAccountResult";
     }
 }

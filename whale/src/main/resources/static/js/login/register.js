@@ -20,7 +20,8 @@ $(document).ready(function() {
     const passwordCheck = $('#passwordCheck').val().trim();
     const email = $('#email').val();
     const nickname = $('#user_nickname').val().trim();
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    // const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const koreanPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
     // 클라이언트 측 유효성 검사
     if (!username || !nickname || !password || !email) {
@@ -28,15 +29,22 @@ $(document).ready(function() {
       return;
     }
 
+    // 아이디에 한글 포함 여부 확인
+    if (koreanPattern.test(username)) {
+      $('#messageSub').text('아이디에는 한글을 사용할 수 없습니다.');
+      return;
+    }
+
+
     if (password !== passwordCheck) {
       $('#messageSub').text('비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    if (!passwordPattern.test(password)) {
-      $('#messageSub').text('비밀번호는 8자리 이상이며, 특수문자, 대문자, 소문자, 숫자를 각각 최소 1개 이상 포함해야 합니다.');
-      return;
-    }
+    // if (!passwordPattern.test(password)) {
+    //   $('#messageSub').text('비밀번호는 8자리 이상이며, 특수문자, 대문자, 소문자, 숫자를 각각 최소 1개 이상 포함해야 합니다.');
+    //   return;
+    // }
 
     $.ajax({
       url: '/whale/register/complete',

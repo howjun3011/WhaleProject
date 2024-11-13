@@ -10,22 +10,33 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
 <style>
     body {
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
         font-family: 'Noto Sans', sans-serif;
         margin: 0;
         padding: 0;
         background-color: #fafafa;
         color: #333;
     }
+    
+    ::-webkit-scrollbar {display: none;}
 
 	.tab-container {
         display: flex;
         justify-content: space-around;
-        margin-top: 20px;
+        align-items: center;
         border-bottom: 1px solid #dbdbdb;
+        height: 80px;
     }
 
     .tab {
-        padding: 10px 0;
+    	display: flex;
+        justify-content: space-around;
+        align-items: center;
+    	width: 40px;
+    	height: 50%;
+    	padding-bottom: 10px;
         cursor: pointer;
         font-weight: bold;
         color: #777;
@@ -49,7 +60,7 @@
     .container {
         width: 100%;
         max-width: 650px;
-        margin: 0 auto;
+        min-height: 715px;
         padding: 20px;
         background-color: #fff;
         border: 1px solid #dbdbdb;
@@ -60,11 +71,12 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 20px;
+        padding-bottom: 30px;
         border-bottom: 1px solid #dbdbdb;
     }
 
     .profile-info {
+    	position: relative;
         display: flex;
         align-items: center;
         width: 100%;
@@ -74,20 +86,24 @@
         border-radius: 50%;
         width: 100px;
         height: 100px;
-        margin-right: 20px;
+        margin: 20px 20px 0 20px;
         background-color: #eee;
     }
 
     .details {
+    	position: absolute;
+    	top: 26px;
+    	left: 150px;
         display: flex;
         flex-direction: column;
+        width: 60%;
     }
 
     /* Username and lock button container */
     .username-container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: left;
         width: 100%;
     }
 
@@ -128,13 +144,16 @@
 
     /* 프로필 버튼 */
     .profile-actions {
+    	position: absolute;
         display: flex;
         gap: 10px;
-        margin-left: 20px; /* 닉네임과 버튼 사이 여백 */
+        top: 1px;
+        left: 220px;
     }
 
     .profile-actions button {
         padding: 6px 12px;
+        height: 100%;
         background-color: #0095f6;
         color: white;
         border: none;
@@ -263,14 +282,15 @@
         flex-direction: column;
         align-items: flex-start;
         border-top: 1px solid #dbdbdb;
-        padding-top: 10px;
-        margin-top: 20px;
+        padding-top: 15px;
+        padding-left: 10px;
+        margin-top: 15px;
         width: 100%;
     }
 
     .stats {
         display: flex;
-        gap: 20px;
+        gap: 30px;
         font-size: 16px;
         color: #777;
     }
@@ -283,7 +303,8 @@
     .featured-music {
         display: flex;
         align-items: center;
-        margin-top: 10px;
+        margin-top: 20px;
+        margin-left: -10px;
         width: 100%;
     }
 
@@ -297,7 +318,7 @@
     /* 마퀴 효과를 위한 스타일 */
     .featured-marquee-container {
         overflow: hidden;
-        width: calc(70% - 38px); /* 아이콘 공간을 제외한 너비 */
+        width: calc(80% - 38px); /* 아이콘 공간을 제외한 너비 */
         position: relative;
     }
 
@@ -390,7 +411,7 @@
                 <div class="user-id">@${userId}</div>
             </div>
             <div class="details">
-                <div class="username-container" style="justify-content: <c:choose><c:when test="${now_id == userId}">left</c:when><c:otherwise>space-between</c:otherwise></c:choose>;">
+                <div class="username-container">
                     <c:if test="${profile.account_privacy == 1}">
                         <img class="lockbtn" src="static/images/btn/lock_btn.png" alt="secret" />
                     </c:if>
@@ -425,24 +446,24 @@
                 </div>
 				<div class="stats-and-featured-music">
 				    <div class="stats">
-				        <div>게시물 <span>${fdCount}</span></div>
+				        <div>게시물&nbsp;&nbsp;<span>${fdCount}</span></div>
 				        <div>
 				            <c:choose>
 				                <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
-				                    <a href="followers?u=${userId}">팔로워 <span>${frCount}</span></a>
+				                    <a href="followers?u=${userId}">팔로워&nbsp;&nbsp;<span>${frCount}</span></a>
 				                </c:when>
 				                <c:otherwise>
-				                    <span>팔로워 <span>${frCount}</span></span>
+				                    <span>팔로워&nbsp;&nbsp;<span>${frCount}</span></span>
 				                </c:otherwise>
 				            </c:choose>
 				        </div>
 				        <div>
 				            <c:choose>
 				                <c:when test="${now_id == userId || isFollower || profile.account_privacy != 1}">
-				                    <a href="following?u=${userId}">팔로잉 <span>${fnCount}</span></a>
+				                    <a href="following?u=${userId}">팔로잉&nbsp;&nbsp;<span>${fnCount}</span></a>
 				                </c:when>
 				                <c:otherwise>
-				                    <span>팔로잉 <span>${fnCount}</span></span>
+				                    <span>팔로잉&nbsp;&nbsp;<span>${fnCount}</span></span>
 				                </c:otherwise>
 				            </c:choose>
 				        </div>
@@ -475,7 +496,7 @@
     <%-- 피드 표시 영역 --%>
     <div class="tab-container">
         <div class="tab active" onclick="showTabContent('feed')"><img src="static/images/btn/write_btn.png" alt="피드" style="width: 40px; height: 40px;" /></div>
-        <div class="tab" onclick="showTabContent('music')"><img src="static/images/btn/promusic_btn.png" alt="음악" style=" margin-top:9px; width: 24px; height: 24px;" /></div>
+        <div class="tab" onclick="showTabContent('music')"><img src="static/images/btn/promusic_btn.png" alt="음악" style="width: 24px; height: 24px;" /></div>
     </div>
 
     <!-- 피드 탭 콘텐츠 -->
@@ -483,7 +504,7 @@
         <%-- 기존 피드 표시 코드 --%>
         <c:choose>
             <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
-                <div>비공개 계정입니다.</div>
+                <div style="padding: 10px 0 0 10px">비공개 계정입니다.</div>
             </c:when>
             <c:when test="${empty feedList}">
                 <div class="no-feed-message">작성한 피드가 없습니다</div>
@@ -505,7 +526,7 @@
         <!-- 추후 추가할 음악 이미지나 콘텐츠를 여기에 표시 -->
          <c:choose>
             <c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
-                <div>비공개 계정입니다.</div>
+                <div style="padding: 10px 0 0 10px">비공개 계정입니다.</div>
             </c:when>
             <c:when test="${empty feedList}">
                 <div class="no-feed-message">작성한 피드가 없습니다</div>

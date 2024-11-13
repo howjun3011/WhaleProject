@@ -36,6 +36,7 @@
         <thead>
             <tr>
                 <th>번호</th>
+                <th>분류</th>
                 <th>제목</th>
                 <th>작성자</th>
                 <th>등록일</th>
@@ -54,6 +55,7 @@
 				<tr>
 					<c:if test="${not empty dto.post_id && dto.post_id != 0}">
 					<td>${dto.post_id }</td>
+					<td>${dto.community_name }</td>
 					<td>${dto.post_title }</td>
 					<td>${dto.user_id }</td>
 					<td><fmt:formatDate value="${dto.post_date}" pattern="yyyy.MM.dd" /></td>

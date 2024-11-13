@@ -16,8 +16,8 @@
     </button>
 
     <!-- 이미지가 존재할 때만 출력 -->
-    <c:if test="${not empty feedDetail.feed_img_name}">
-        <img src="/whale/static/images/feed/${feedDetail.feed_img_name}" alt="Post Image" class="post-image">
+    <c:if test="${not empty feedDetail.feed_img_url}">
+        <img src="${feedDetail.feed_img_url}" alt="Post Image" class="post-image">
     </c:if>
 
     <div class="post-text">

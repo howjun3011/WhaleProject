@@ -5,6 +5,7 @@ import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -30,4 +31,8 @@ public interface UserDao {
     public String getUserIdByEmail(String email);
     List<UserDto> getUsersByEmail(String email);
     public void deleteUserById(@Param("user_id") String userId);
+    public Integer getUserStatus(String userId);
+    public Date getUserEndDate(String userId);
+    List<String> selectFollowingUsers(@Param("user_id") String userId);
+    public void doUnfollowing(@Param("user_id") String userId, @Param("unfollow_user_id") String unfollowUserId);
 }

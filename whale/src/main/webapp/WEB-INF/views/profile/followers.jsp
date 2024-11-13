@@ -9,22 +9,31 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
 <style>
     body {
+        display: flex;
+    	justify-content: center;
+    	align-items: center;
         font-family: 'Noto Sans', sans-serif;
         margin: 0;
-        padding: 20px;
-        background-color: #000;
-        color: #fff;
+        padding: 0;
+        background-color: #fafafa;
+        color: #333;
     }
+    
+    ::-webkit-scrollbar {display: none;}
 
     .container {
-        max-width: 600px;
-        margin: 0 auto;
+        width: 100%;
+        max-width: 650px;
+        min-height: 715px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
     }
 
     .follower-list {
         list-style: none;
+        margin-top: -10px;
         padding: 0;
-        margin: 20px 0;
     }
 
     .follower-list li {
@@ -32,7 +41,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid #dbdbdb;
     }
 
     .follower-list img {
@@ -50,6 +59,7 @@
     .follower-info .nickname {
         font-weight: bold;
         font-size: 16px;
+        margin-left: 5px;
     }
 
     .follower-info .name {
@@ -65,6 +75,7 @@
         border-radius: 4px;
         cursor: pointer;
         font-size: 14px;
+        margin-right: 5px;
     }
 
     .delete-button:hover {
@@ -75,10 +86,10 @@
 <body>
 
 <div class="container">
-    <h2>팔로워</h2>
+    <h2 style="padding: 20px; border-bottom: 1px solid #dbdbdb;">팔로워</h2>
 
     <c:if test="${empty followerList}">
-        <p>팔로워가 없습니다.</p>
+        <p style="padding: 5px 0 0 15px;">팔로워가 없습니다.</p>
     </c:if>
 
     <c:if test="${!empty followerList}">

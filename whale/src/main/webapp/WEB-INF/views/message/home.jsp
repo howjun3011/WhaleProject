@@ -98,9 +98,10 @@
 		}
 
 		.chatout {
-			position: absolute;
-			right: 0;
-			top: 15px;
+			width: 70px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.chatout img {
@@ -125,20 +126,21 @@
 
 		.modal-content {
 			background-color: #fff;
-			padding: 20px;
 			border-radius: 8px;
 			text-align: center;
 			width: 80%;
-			max-width: 300px;
+			max-width: 200px;
+			max-height: 20px;
 		}
 
 		.modal-content button {
-			padding: 10px 20px;
-			background-color: #ff4d4f;
-			color: white;
+			background-color: white;
+			color: #FF4848;
+			font-size: 16px;
 			border: none;
 			border-radius: 5px;
 			cursor: pointer;
+			margin: 0px;
 		}
 	</style>
 </head>
@@ -155,17 +157,12 @@
 
 	<div class="scroll-content" id="chatList">
 		<c:forEach var="list" items="${allChatList}">
-			<a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}">
-				<div class="room-list" id="chat-${list.user_id}" data-unread-count="${list.unread_message_count}">
+			<div class="room-list" id="chat-${list.user_id}" data-unread-count="${list.unread_message_count}">
+				<a href="${pageContext.request.contextPath}/messageGo?u=${list.user_id}" style="width: 100%; display: flex;">
 					<img src="${list.user_image_url}" alt="user-img">
 					<div class="chat">
 						<div class="user-nickname">
 							<span>${list.user_nickname}</span>
-						</div>
-						<div class="chatout">
-						    <a href="javascript:void(0);" onclick="openModal('${list.message_room_id}')">
-						        <img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
-						    </a>
 						</div>
 						<c:choose>
 							<c:when test="${list.last_message_sender_id == now_id}">
@@ -190,8 +187,13 @@
 							</c:otherwise>
 						</c:choose>
 					</div>
+				</a>
+				<div class="chatout">
+					<div href="javascript:void(0);" onclick="openModal('${list.message_room_id}')">
+						<img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
+					</div>
 				</div>
-			</a>
+			</div>
 		</c:forEach>
 	</div>
 	<!-- 모달 -->

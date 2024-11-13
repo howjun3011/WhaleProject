@@ -133,6 +133,7 @@
 			border: 1px solid #ccc;
 			border-radius: 8px;
 		}
+
 		.no-comment-message {
 			margin-left: 20px;
 			color: #ccc;

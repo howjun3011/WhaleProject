@@ -160,23 +160,30 @@
 			let currentPassword = $("#current_password").val();
 			let newPassword = $("#update_password").val();
 			let checkPassword = $("#check_password").val();
-			let passwordRegex = /^.{4,}$/;
+			let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
 			let password_checkmark_1 = $("#password_checkmark_1");
 			let password_checkmark_2 = $("#password_checkmark_2");
 			let passwordHint = $("#password_hint");
 			let password_match_hint = $("#password_match_hint");
 
+			function resize() {
+				var inputWidth = $('#update_password').width();
+				console.log(inputWidth);
+				$('#password_hint').css({'width': (inputWidth-10)+'px'});
+			};
+
 			// 새로운 비밀번호 유효성 검사
 			if (newPassword.length === 0) {
 				passwordHint.html("");
 				password_checkmark_1.html("");
-			} else if(currentPassword === newPassword) {
+			} else if (currentPassword === newPassword) {
 				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
 				password_checkmark_1.html("");
 			} else if (!passwordRegex.test(newPassword)) {
-				passwordHint.text("4자리 이상 입력").css("color", "#FF6C6C");
+				passwordHint.text("특수문자, 대소문자, 숫자를 포함한 8자리 이상 입력하세요.").css("color", "#FF6C6C");
 				password_checkmark_1.html("");
+				$(document).ready(() => {resize();});
 			} else {
 				// 비밀번호가 유효한 경우
 				passwordHint.html("");
@@ -184,10 +191,10 @@
 			}
 
 			// 두 비밀번호가 일치하는지 검사
-			if(newPassword.length === 0 || checkPassword.length === 0) { // 필드가 비어있으면
+			if (newPassword.length === 0 || checkPassword.length === 0) { // 필드가 비어있으면
 				password_match_hint.html("");
 				password_checkmark_2.html("");
-			} else if((currentPassword === newPassword) && (newPassword === checkPassword)) {
+			} else if ((currentPassword === newPassword) && (newPassword === checkPassword)) {
 				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
 				password_checkmark_2.html("");
 			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치

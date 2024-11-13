@@ -156,7 +156,7 @@ table tr td {
         <div class="setting-container">
             <div class="setting-header">
                 <a href="account" id="back"><img src="static/images/setting/back.png" alt="back"></a>
-                계정 탈퇴
+                회원 탈퇴
                 <button type="button" id="completeBtn" class="complete-btn">완료</button>
             </div>
             <!-- 프로필 정보 수정 폼 -->

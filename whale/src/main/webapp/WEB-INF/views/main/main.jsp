@@ -62,6 +62,16 @@
             }
         });
     });
+
+    window.addEventListener("message", function(event) {
+        // 메시지 내용 확인
+        var message = event.data;
+        if (message && message.type === "success") {
+            // 성공 메시지가 있을 경우, alert로 표시하고 메인 페이지로 이동
+            alert(message.text); // 탈퇴 성공 메시지 표시
+            window.location.href = "/whale"; // 메인 페이지로 이동
+        }
+    });
 </script>
 
 </html>

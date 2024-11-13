@@ -65,7 +65,7 @@ public class StreamingRestController {
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
     	
     	// 트랙 아이디 반환 및 트랙 좋아요 테이블 삽입
-    	streamingService.insertTrackCntService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
+    	streamingService.updateTrackCntService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 	
 	@PostMapping(value = "/streaming/deleteTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)

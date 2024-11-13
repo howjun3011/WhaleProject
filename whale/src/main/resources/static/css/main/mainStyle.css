@@ -24,7 +24,7 @@ body {min-height: 100vh;}
 #main.dark #headerMargin {width: 15%;}
 #main.dark #profile {width: 60px; height: 60px; border: 2px solid #7f7f7f; border-radius: 50%;}
 #main.dark #profile:hover {cursor: grab;}
-#main.dark #adminRedirect {width: 45px; height: 45px; margin-right: 60px; opacity: 0.8;}
+#main.dark #adminRedirect {width: 45px; height: 45px; margin-right: 60px; opacity: 0.8; filter: invert(1);}
 #main.dark #adminRedirect:hover {opacity: 0.6; cursor: grab;}
 #main.dark #adminRedirect:active {opacity: 0.4; cursor: grab;}
 
@@ -174,13 +174,13 @@ body {min-height: 100vh;}
 #main.light .mainItems {width: 50%;}
 #main.light .frame {position: relative; width: 94%; height: 94%; border: none; border-radius: 30px; border: 2px solid #f0f0f0; box-sizing: border-box;}
 
-#main.light .menu-style {background-image: linear-gradient(to bottom, #ffffff, #fcfcfc);}
-#main.light .menuBtn {position: absolute; bottom: 22.5px; left: 50%; transform: translate(-50%,0%); width: 55px; height: 55px; border-radius: 50%; opacity: 0.8;}
+#main.light .menu-style {background-image: linear-gradient(to bottom, #1f1f1f, #2e2e2e);}
+#main.light .menuBtn {position: absolute; bottom: 30px; left: 50%; transform: translate(-50%,0%); width: 45px; height: 45px; border-radius: 50%; opacity: 0.8;}
 #main.light .menuBtn:hover {opacity: 0.7; cursor: grab;}
 #main.light .menuBtn:active {opacity: 0.6; cursor: grab;}
 #main.light .menuBtn-square {width: 12px; height: 12px; border: 1px solid #cdcdcd; border-radius: 20%;}
 #main.light .menuDock {position: absolute; bottom: 19px; left: 50%; transform: translate(-50%,0%); width: 350px; height: 62px; border-radius: 20px; opacity: 0.7;}
-#main.light .menuDock-icon {opacity: 0.5; margin: 0 11px;}
+#main.light .menuDock-icon {opacity: 0.5; margin: 0 11px; filter: invert(1);}
 #main.light .menuDock-icon:hover {opacity: 0.4; cursor: grab;}
 #main.light .menuDock-icon:active {opacity: 0.3; cursor: grab;}
 

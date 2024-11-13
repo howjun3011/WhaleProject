@@ -96,6 +96,7 @@ const MainFooterComponent = {
 			playlists: null,
 			resPlaylists: [],
 			isShow: [],
+			tempTrack: null,
 		};
 	},
 	mounted() {
@@ -174,6 +175,10 @@ const MainFooterComponent = {
 			        this.trackInfo[2] = state.track_window.current_track.artists[0].name;
 			        this.trackInfo[3] = state.track_window.current_track.album.name;
 			        this.trackInfo[4] = state.track_window.current_track.id;
+			        
+			        if (this.tempTrack !== null && this.tempTrack !== this.trackInfo[4]) {this.insertTrackCnt();}
+			        
+			        this.tempTrack = this.trackInfo[4];
 			        
 			        (async () => {
 						try {
@@ -330,7 +335,6 @@ const MainFooterComponent = {
 				this.playBtnSrcIndex = 0;
 			} else {
 				this.playBtnSrcIndex = 1;
-				this.insertTrackCnt();
 			}
 			this.player.togglePlay();
 		},
@@ -341,13 +345,12 @@ const MainFooterComponent = {
 						try {const data = await this.fetchWebApi(`v1/recommendations?limit=1&seed_tracks=${state.track_window.current_track.id}`,'GET'); await this.fetchWebApi(`v1/me/player/play?device_id=${sessionStorage.device_id}`,'PUT',{ "uris": [`${data.tracks[0].uri}`] }); this.insertTrackCnt();} catch(error) {}
 					} else {
 						this.player.nextTrack();
-						this.insertTrackCnt();
 						console.log("next");
 					}
 				}
 			);
 		},
-		prevPlay() {this.player.previousTrack(); this.insertTrackCnt();},
+		prevPlay() {this.player.previousTrack();},
 		async repeatPlayFunction(state) {try {await this.fetchWebApi(`v1/me/player/repeat?state=${state}&device_id=${sessionStorage.device_id}`,'PUT');} catch(error) {}},
 		async repeatPlay() {
 			if (this.repeatBtnSrcIndex === 1 && this.isRepeated) {await this.repeatPlayFunction('off');}

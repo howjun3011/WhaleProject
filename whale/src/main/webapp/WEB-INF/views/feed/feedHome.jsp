@@ -446,6 +446,8 @@
     document.getElementById('writeButton').addEventListener('click', function () {
         const writeAreaContainer = document.getElementById('writeAreaContainer');
         writeAreaContainer.classList.toggle('open'); // 클릭 시 open 클래스를 토글
+        
+        writeAreaContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
 

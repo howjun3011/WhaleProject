@@ -250,4 +250,11 @@
 		WHERE MESSAGE_ROOM_ID = #{message_room_id}
 	</update>
 	
+	<update id="readMessage">
+		UPDATE MESSAGE SET 
+		MESSAGE_READ = 0
+		WHERE MESSAGE_ROOM_ID = #{message_room_id}
+		AND USER_ID = #{otherId}
+	</update>
+	
 </mapper>

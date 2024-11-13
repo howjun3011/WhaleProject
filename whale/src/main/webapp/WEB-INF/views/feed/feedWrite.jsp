@@ -169,7 +169,7 @@
 	}
     
     function validateForm(event) {
-        var feedImage = document.getElementsByName("feedImage")[0].value.trim();
+        var feedImage = document.getElementsByName("feedImageUrl")[0].value.trim();
         var feedText = document.getElementsByName("feedText")[0].value.trim();
         if (feedImage === "" || feedText === "") {
             alert("사진과 글을 모두 작성해주세요.");

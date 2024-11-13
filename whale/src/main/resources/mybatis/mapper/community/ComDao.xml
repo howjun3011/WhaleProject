@@ -21,7 +21,7 @@
     </select>
     
     <select id="chooseTag" resultType="com.tech.whale.community.dto.PostDto">
-        SELECT POST_TAG_ID, POST_TAG_TEXT FROM POST_TAG
+        SELECT POST_TAG_ID, POST_TAG_TEXT FROM POST_TAG WHERE POST_TAG_ID != 5
     </select>
     
 	<sql id="includeCount">
@@ -53,17 +53,42 @@
 	</sql>
 	
 	<select id="getPostAll" resultType="com.tech.whale.community.dto.PostDto">
-	    SELECT p.POST_ID, p.COMMUNITY_ID, p.USER_ID, p.POST_TITLE, p.POST_TEXT, 
-	           TO_CHAR(p.POST_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS POST_DATE, 
-	           p.POST_URL, p.POST_CNT, p.POST_NUM, p.POST_TAG_ID, p.POST_TAG_TEXT,
-	           p.USER_NICKNAME, p.USER_IMAGE_URL, 
-	           NVL(like_count.likeCount, 0) AS likeCount -- 좋아요 수 추가
+	    SELECT 
+	        p.POST_ID, 
+	        p.COMMUNITY_ID, 
+	        p.USER_ID, 
+	        p.POST_TITLE, 
+	        p.POST_TEXT, 
+	        TO_CHAR(p.POST_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS POST_DATE, 
+	        p.POST_URL, 
+	        p.POST_CNT, 
+	        p.POST_NUM, 
+	        p.POST_TAG_ID, 
+	        p.POST_TAG_TEXT,
+	        p.USER_NICKNAME, 
+	        p.USER_IMAGE_URL, 
+	        NVL(like_count.likeCount, 0) AS likeCount, -- 좋아요 수 추가
+	        NVL(comments_count.commentsCount, 0) AS commentsCount -- 댓글 수 추가
 	    FROM (
-	        SELECT p.POST_ID, p.COMMUNITY_ID, p.USER_ID, p.POST_TITLE, p.POST_TEXT, 
-	               p.POST_DATE,  -- 원래의 날짜 타입 사용
-	               p.POST_URL, p.POST_CNT, p.POST_NUM, p.POST_TAG_ID, t.POST_TAG_TEXT,
-	               u.USER_NICKNAME, u.USER_IMAGE_URL,  -- 유저 정보 추가
-	               ROW_NUMBER() OVER(ORDER BY p.POST_ID DESC) AS POST_SEQ
+	        SELECT 
+	            p.POST_ID, 
+	            p.COMMUNITY_ID, 
+	            p.USER_ID, 
+	            p.POST_TITLE, 
+	            p.POST_TEXT, 
+	            p.POST_DATE,  -- 원래의 날짜 타입 사용
+	            p.POST_URL, 
+	            p.POST_CNT, 
+	            p.POST_NUM, 
+	            p.POST_TAG_ID, 
+	            t.POST_TAG_TEXT,
+	            u.USER_NICKNAME, 
+	            u.USER_IMAGE_URL,  -- 유저 정보 추가
+	            ROW_NUMBER() OVER(
+	                ORDER BY 
+	                    CASE WHEN t.POST_TAG_TEXT = '[공지]' THEN 0 ELSE 1 END, 
+	                    p.POST_ID DESC
+	            ) AS POST_SEQ
 	        FROM POST p
 	        JOIN POST_TAG t ON p.POST_TAG_ID = t.POST_TAG_ID
 	        JOIN USER_INFO u ON p.USER_ID = u.USER_ID  -- 유저 정보와 조인
@@ -78,7 +103,12 @@
 	        FROM POST_LIKE
 	        GROUP BY POST_ID
 	    ) like_count ON p.POST_ID = like_count.POST_ID -- 좋아요 수 조인
-	    WHERE POST_SEQ BETWEEN #{param1} AND #{param2}
+	    LEFT JOIN (
+	        SELECT POST_ID, COUNT(*) AS commentsCount
+	        FROM POST_COMMENTS
+	        GROUP BY POST_ID
+	    ) comments_count ON p.POST_ID = comments_count.POST_ID -- 댓글 수 조인
+	    WHERE p.POST_SEQ BETWEEN #{param1} AND #{param2}
 	</select>
     
     <select id="selectBoardCount" resultType="Integer">

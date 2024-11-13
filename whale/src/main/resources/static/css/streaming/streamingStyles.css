@@ -348,13 +348,13 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .main {display: flex; width: 100%; background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .mainContentFrame {display: flex; justify-content: center; align-items: center; height: 100%; min-width: 200px;}
 .streamingBody[data-darkmode="0"] .mainContent {width: 100%; height: 96%; background-color: #fff; border-radius: 16px; overflow: scroll; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);}
-.streamingBody[data-darkmode="0"] .mainContentMargin {margin: 0 10px 0 10px; width: 96%; height: 100%; color: white;}
+.streamingBody[data-darkmode="0"] .mainContentMargin {margin: 0 10px 0 10px; width: 96%; height: 100%; color: #111;}
 .streamingBody[data-darkmode="0"] .recommendationsHeader {width: 100%; height: 30px;}
 .streamingBody[data-darkmode="0"] .recommendations {width: 100%; height: 240px;}
 .streamingBody[data-darkmode="0"] .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; margin-bottom: 5px; padding-left: 10px; color: #111; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
 .streamingBody[data-darkmode="0"] .recommendationContents {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
 .streamingBody[data-darkmode="0"] .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease;}
-.streamingBody[data-darkmode="0"] .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .recommendationContent:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .recommendationLike{position: absolute; width: 30px; height: 30px; top: 110px; left: 10px; background: transparent;}
 .streamingBody[data-darkmode="0"] .recommendationLike:hover{opacity: 0.7;}
 .streamingBody[data-darkmode="0"] .recommendationLike:active{opacity: 0.6;}
@@ -378,7 +378,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .footer {width: 100%; height: 10px; background-color: #eeeeee;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame {display: flex; justify-content: center; align-items: center; width: 100px; min-width: 100px; height: 100%; background-color: #f0f0f0; transition: width 0.5s ease;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame.expanded {width: 300px; max-width: 300px;}
-.streamingBody[data-darkmode="0"] .mainLibrary {position: relative; display: flex; justify-content: center; width: 72%; height: 96%; background-color: #2e2e2e; border-radius: 12px; transition: width 0.5s ease; overflow: hidden;}
+.streamingBody[data-darkmode="0"] .mainLibrary {position: relative; display: flex; justify-content: center; width: 72%; height: 96%; background-color: #fff; border-radius: 12px; transition: width 0.5s ease; overflow: hidden;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame.expanded .mainLibrary {width: 88%;}
 .streamingBody[data-darkmode="0"] .libraryBtn {position: absolute; top: 20px; left: 25px; height: 22px; fill: #9f9f9f;}
 .streamingBody[data-darkmode="0"] .libraryBtn:hover {opacity: 0.8; cursor: grab;}
@@ -387,7 +387,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame.expanded .mainLibraryName {display: block;}
 .streamingBody[data-darkmode="0"] .userPlaylists{display: flex; flex-direction: column; justify-content: flex-start; padding-top: 64px; overflow: auto; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .playlist-content {position: relative; display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; margin-bottom: 5px; border-radius: 8px;}
-.streamingBody[data-darkmode="0"] .playlist-content:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .playlist-content:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame.expanded .playlist-content {width: 200px;}
 .streamingBody[data-darkmode="0"] .playlistCover {width: 45px; height: 45px;}
 .streamingBody[data-darkmode="0"] .playlistCover:hover {cursor: grab;}
@@ -417,7 +417,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .searchResults::-webkit-scrollbar-thumb {background-color: #555; /* 핸들 색상 설정 */ border-radius: 4px; /* 핸들 모서리 둥글게 설정 */}
 .streamingBody[data-darkmode="0"] .searchResults {width: 100%; height: 190px; overflow-y: auto; /* 스크롤바 활성화 */ scroll-behavior: smooth; display: flex; flex-direction: column;}
 .streamingBody[data-darkmode="0"] .searchResult {display: flex; border-radius: 4px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; padding: 8px 10px;}
-.streamingBody[data-darkmode="0"] .searchResult:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .searchResult:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .resultContainer{position: relative;}
 .streamingBody[data-darkmode="0"] .resultContainerTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding: 0 0 8px 15px; color: #111; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8; box-sizing: border-box;}
 .streamingBody[data-darkmode="0"] .searchSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%); top: 50%;}
@@ -473,10 +473,10 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .playlistOpt{margin-top: 5px; font-size: 14px; font-weight: 400; letter-spacing: .2px; opacity: .8;}
 .streamingBody[data-darkmode="0"] .playlistDesc{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8;}
 .streamingBody[data-darkmode="0"] .playlistTracks .trackItem{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 100%; margin: 10px 0;}
-.streamingBody[data-darkmode="0"] .playlist-tracks{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 95%; border-bottom: 1px solid white; opacity: .8; margin-left: 20px; padding-bottom: 5px;}
-.streamingBody[data-darkmode="0"] .playlist-tracks .playlist-tracks-top{display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 13px;}
+.streamingBody[data-darkmode="0"] .playlist-tracks{display: grid; grid-template-columns: 6% 48% 35% 11%; width: 95%; border-bottom: 1px solid #111; opacity: .8; margin-left: 20px; padding-bottom: 5px;}
+.streamingBody[data-darkmode="0"] .playlist-tracks .playlist-tracks-top{display: flex; align-items: center; color: #111; font-weight: 300; letter-spacing: .2px; opacity: .8; font-size: 13px;}
 .streamingBody[data-darkmode="0"] .trackImageAndTitle{display: flex; gap: 10px; cursor: pointer;}
-.streamingBody[data-darkmode="0"] .trackItem > *:not(img){display: flex; align-items: center; color: #fff; font-weight: 300; letter-spacing: .2px; font-size: 14px; opacity: .9;}
+.streamingBody[data-darkmode="0"] .trackItem > *:not(img){display: flex; align-items: center; color: #111; font-weight: 300; letter-spacing: .2px; font-size: 14px; opacity: .9;}
 .streamingBody[data-darkmode="0"] .playAllButton{border: 0; background-color: transparent; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #1ed660; border-radius: 50%; cursor: pointer;}
 .streamingBody[data-darkmode="0"] .playlistFunction {display: flex; width: 100%; margin: 20px 0 20px 0; padding-left: 25px;}
 .streamingBody[data-darkmode="0"] .playlistAddContainer {display: flex; justify-content: center; align-items: center; width: 50px; height: 50px; margin-left: 15px; background: transparent;}
@@ -508,7 +508,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 65px; margin-bottom: 5px; padding-left: 10px; color: #111; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTracks {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTrack {flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; position: relative;}
-.streamingBody[data-darkmode="0"] .recentlyPlayedTrack:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .recentlyPlayedTrack:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTrack .trackCover{display: flex; align-items: center; justify-content: center; height: 155px;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTrackLike{position: absolute; width: 30px; height: 30px; top: 110px; left: 10px; background: transparent;}
 .streamingBody[data-darkmode="0"] .recentlyPlayedTrackLike:hover{opacity: 0.7;}
@@ -533,7 +533,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .featuredPlaylistsTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 65px; margin-bottom: 5px; padding-left: 10px; color: #111; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
 .streamingBody[data-darkmode="0"] .featuredPlaylistsContent {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
 .streamingBody[data-darkmode="0"] .featuredPlaylist {flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; position: relative;}
-.streamingBody[data-darkmode="0"] .featuredPlaylist:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .featuredPlaylist:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .featuredPlaylistCover{display: flex; align-items: center; justify-content: center; height: 155px;}
 .streamingBody[data-darkmode="0"] .featuredPlaylistsWrap {display: flex; justify-content: center; align-items: center; width: 100%; position: relative;}
 .streamingBody[data-darkmode="0"] .slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
@@ -555,7 +555,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .recommendedArtistsTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 65px; margin-bottom: 5px; padding-left: 10px; color: #111; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
 .streamingBody[data-darkmode="0"] .recommendedArtistsContainer {display: flex; width: 100%; height: 190px; -ms-overflow-style: none; overflow: hidden; overflow-x: scroll; scroll-behavior: smooth;}
 .streamingBody[data-darkmode="0"] .recommendedArtistsContainer .artistItem {flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; position: relative;}
-.streamingBody[data-darkmode="0"] .recommendedArtistsContainer .artistItem:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .recommendedArtistsContainer .artistItem:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .artistItemCover{display: flex; align-items: center; justify-content: center; height: 155px;}
 .streamingBody[data-darkmode="0"] .recommendedArtistsWrap {display: flex; justify-content: center; align-items: center; width: 100%; position: relative;}
 .streamingBody[data-darkmode="0"] .slideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
@@ -567,7 +567,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .searchFirstContainer > :first-child {flex: 0 0 40%;}
 .streamingBody[data-darkmode="0"] .searchFirstContainer > :last-child {flex: 0 0 60%;}
 .streamingBody[data-darkmode="0"] .relatedArtists {height: 190px; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease;}
-.streamingBody[data-darkmode="0"] .relatedArtists:hover {background-color: rgba(60,60,60,0.8);}
+.streamingBody[data-darkmode="0"] .relatedArtists:hover {background-color: #f0f0f0;}
 .streamingBody[data-darkmode="0"] .artistResultCover{height: 120px; display: flex; align-items: center;}
 .streamingBody[data-darkmode="0"] .artistResult{margin-left: 15px;}
 .streamingBody[data-darkmode="0"] .searchArtistName{font-size: 2rem; font-weight: bold;}

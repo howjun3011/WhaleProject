@@ -30,4 +30,6 @@ public interface UserDao {
     public String getUserIdByEmail(String email);
     List<UserDto> getUsersByEmail(String email);
     public void deleteUserById(@Param("user_id") String userId);
+    List<String> selectFollowingUsers(@Param("user_id") String userId);
+    public void doUnfollowing(@Param("user_id") String userId, @Param("unfollow_user_id") String unfollowUserId);
 }

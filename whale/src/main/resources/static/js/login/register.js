@@ -21,12 +21,20 @@ $(document).ready(function() {
     const email = $('#email').val();
     const nickname = $('#user_nickname').val().trim();
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const koreanPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
     // 클라이언트 측 유효성 검사
     if (!username || !nickname || !password || !email) {
       $('#messageSub').text('모든 필드를 입력해주세요.');
       return;
     }
+
+    // 아이디에 한글 포함 여부 확인
+    if (koreanPattern.test(username)) {
+      $('#messageSub').text('아이디에는 한글을 사용할 수 없습니다.');
+      return;
+    }
+
 
     if (password !== passwordCheck) {
       $('#messageSub').text('비밀번호가 일치하지 않습니다.');

@@ -20,6 +20,8 @@
     </c:if>
     <script>
         window.contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
+        const page = "${page}";
+        console.log(page);
     </script>
 </head>
 <body class="streamingBody">
@@ -914,5 +916,4 @@
 </div>
 <div class="footer"></div>
 </body>
-<script id="scriptTest"></script>
 </html>

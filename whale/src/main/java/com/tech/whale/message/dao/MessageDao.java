@@ -7,6 +7,7 @@ import com.tech.whale.message.dto.FollowListDto;
 import com.tech.whale.message.dto.LinkMessageDto;
 import com.tech.whale.message.dto.ReadChatDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tech.whale.message.dto.MessageDto;
@@ -25,7 +26,7 @@ public interface MessageDao {
 
 	void saveMessage(MessageDto messageDto);
 
-	List<MessageDto> getMessagesByRoomId(String roomId);
+	List<MessageDto> getMessagesByRoomId(String roomId, int userTypeInt);
 
 	List<FollowListDto> getFollowList(String now_id);
 
@@ -57,10 +58,13 @@ public interface MessageDao {
 
 	String getUserType(String now_id, String currentMessageRoomId);
 
-	void updateUserTypeA(String message_room_id);
-
-	void updateUserTypeB(String message_room_id);
+    void updateUserType(
+            @Param("message_room_id") String messageRoomId, 
+            @Param("userTypeInt") int userTypeInt
+        );
 
 	void addUserMessageRoom(String roomId, String userId, String string);
+
+	String getUserNickname(String userId);
 }
 

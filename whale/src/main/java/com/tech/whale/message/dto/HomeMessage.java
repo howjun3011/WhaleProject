@@ -16,5 +16,7 @@ public class HomeMessage {
     private String messageText;
     private String timeDifference;
     private String userImageUrl;
+    private String messageRoomId;
+    private String senderNickname;
 
 }

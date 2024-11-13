@@ -168,6 +168,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             
             String userImgUrl = messageDao.getUserImage(userId);
            
+            String senderNickname = messageDao.getUserNickname(userId);
+            
             // Home 페이지에 메시지 알림 전송
             HomeMessage homeMessage = new HomeMessage();
             homeMessage.setReceiverId(otherUserId); // receiver_id는 추가로 설정 필요
@@ -176,6 +178,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             homeMessage.setMessageText(messageDto.getMessage_text());
             homeMessage.setTimeDifference(calculateTimeDifference());
             homeMessage.setUserImageUrl(userImgUrl);
+            homeMessage.setMessageRoomId(roomId);
+            homeMessage.setSenderNickname(senderNickname);
             
             System.out.println(homeMessage.getReceiverId());
 

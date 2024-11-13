@@ -39,7 +39,6 @@ public interface UserDao {
 
     // 데이터 무결성 제약 회피용 임시삭제 메서드들
     void changeUserInfoByUserId(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
-    void updateUserNicknameToDeleted(@Param("user_id") String userId);
 
     // USER_NOTIFICATION_ONOFF 테이블 관련 메서드
     void deleteUserNotiOnoffByUserId(@Param("user_id") String userId);
@@ -68,4 +67,8 @@ public interface UserDao {
     //  FOLLOW 테이블 관련 메서드
     void deleteUserFollowByUserId(@Param("user_id") String userId);
     void insertUserFollowWithNewUserId(@Param("user_id") String newUserId);
+
+    // MASSAGE 테이블 관련 메서드
+    void changeUserIdInMessage(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
+    void changeUserIdInMessageRoomUser(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
 }

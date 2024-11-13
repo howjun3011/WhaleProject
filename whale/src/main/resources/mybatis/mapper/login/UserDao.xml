@@ -146,12 +146,6 @@
         WHERE user_id = #{user_id}
     </update>
 
-    <update id="updateUserNicknameToDeleted">
-        UPDATE user_info
-        SET user_nickname = '탈퇴한 사용자'
-        WHERE user_id = #{user_id}
-    </update>
-
     <!-- USER_NOTIFICATION_ONOFF 테이블 관련 메서드 -->
     <delete id="deleteUserNotiOnoffByUserId">
         DELETE FROM USER_NOTIFICATION_ONOFF
@@ -228,4 +222,17 @@
         INSERT INTO FOLLOW (user_id)
         VALUES (#{user_id})
     </insert>
+
+    <!-- MASSAGE 테이블 관련 메서드 -->
+    <update id="changeUserIdInMessage">
+        UPDATE MESSAGE
+        SET user_id = #{new_user_id}
+        WHERE user_id = #{user_id}
+    </update>
+
+    <update id="changeUserIdInMessageRoomUser">
+        UPDATE MESSAGE_ROOM_USER
+        SET user_id = #{new_user_id}
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

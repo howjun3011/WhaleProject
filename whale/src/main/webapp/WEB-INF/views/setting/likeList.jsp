@@ -190,7 +190,6 @@
         }
 
         .no-like-message {
-            margin-left: 20px;
             color: #ccc;
         }
 

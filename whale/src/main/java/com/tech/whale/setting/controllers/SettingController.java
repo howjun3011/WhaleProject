@@ -649,9 +649,7 @@ public class SettingController {
     }
 
     @PostMapping("/deleteAccountMethod")
-    public String deleteAccountMethod(HttpSession session,
-                                      @RequestParam("password") String password,
-                                      RedirectAttributes redirectAttributes) {
+    public String deleteAccountMethod(HttpSession session, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
         System.out.println("deleteAccountMethod 실행");
 
         // 세션에서 user_id 가져오기

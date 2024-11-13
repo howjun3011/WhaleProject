@@ -156,7 +156,7 @@ table tr td {
         <div class="setting-container">
             <div class="setting-header">
                 <a href="account" id="back"><img src="static/images/setting/back.png" alt="back"></a>
-                프로필 편집
+                계정 탈퇴
                 <button type="button" id="completeBtn" class="complete-btn">완료</button>
             </div>
             <!-- 프로필 정보 수정 폼 -->
@@ -165,7 +165,9 @@ table tr td {
                     <tr>
                         <td>비밀번호 확인</td>
                         <td><input type="password" name="password"/></td>
-                        <button type="submit">탈퇴하기</button>
+                        <td>
+                            <button type="submit" style="display: none;" id="hiddenSubmitBtn">탈퇴하기</button>
+                        </td>
                     </tr>
 
                 </table>
@@ -175,12 +177,18 @@ table tr td {
 
     <!-- 스크립트를 body 끝부분에 추가 -->
     <script>
-    // DOM이 로드된 후 실행되는 함수
-    $(document).ready(function() {
-        // 완료 버튼 클릭 시 폼 제출
-        $('#completeBtn').on('click', function() {
-            $('#profileForm').submit();
-        });
+    // 완료 버튼 클릭 시 폼 제출
+    $('#completeBtn').on('click', function (e) {
+        e.preventDefault(); // 기본 동작(페이지 리로드) 방지
+        const passwordInput = $('input[name="password"]').val();
+
+        if (passwordInput.trim() === '') {
+            alert('비밀번호를 입력해주세요.');
+            return;
+        }
+
+        // 숨겨진 "탈퇴하기" 버튼 클릭 이벤트 트리거
+        $('#hiddenSubmitBtn').click();
 
         // 버튼이 눌렸을 경우
         $('#editPhotoBtn').on('mousedown', function() {

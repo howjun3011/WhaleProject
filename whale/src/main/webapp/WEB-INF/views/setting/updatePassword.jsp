@@ -170,7 +170,7 @@
 			function resize() {
 				var inputWidth = $('#update_password').width();
 				console.log(inputWidth);
-				$('#password_hint').css({'width': (inputWidth-10)+'px'});
+				$('#password_hint').css({'width': (inputWidth-5)+'px'});
 			};
 
 			// 새로운 비밀번호 유효성 검사

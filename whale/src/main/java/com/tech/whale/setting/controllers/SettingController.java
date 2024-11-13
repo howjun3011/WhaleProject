@@ -681,7 +681,7 @@ public class SettingController {
             }
             // 사용자 계정 삭제
             System.out.println("삭제할 사용자 ID: " + sessionUserId);
-//            userDao.deleteUserById(sessionUserId);
+            userDao.deleteUserById(sessionUserId);
 
             System.out.println("사용자 삭제 완료");
             session.invalidate();  // 세션 무효화

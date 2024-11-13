@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tech.whale.main.models.ComNotiDto;
 import com.tech.whale.main.models.FollowNotiDto;
 import com.tech.whale.main.models.LikeNotiDto;
+import com.tech.whale.main.models.MessageNotiDto;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.PageAccessDto;
 
@@ -63,6 +64,13 @@ public class MainRestController {
 	public PageAccessDto checkPageAccess(HttpSession session) {
 		PageAccessDto pageAccesses = mainService.checkPageAccessMain(session);
 		return pageAccesses;
+	}
+	
+	// [ 메세지 알림 값 ]
+	@GetMapping(value = "/messageNoti", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<MessageNotiDto> getMessageNotiMain(HttpSession session) {
+		List<MessageNotiDto> messageNotis = mainService.getMessageNotiMainService(session);
+		return messageNotis;
 	}
 	
 	// [ 좋아요 알림 값 ]

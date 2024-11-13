@@ -57,6 +57,23 @@
         SELECT COUNT(*) FROM FOLLOW WHERE USER_ID = #{userId} AND FOLLOW_USER_ID LIKE '%'||#{targetId}||'%'
     </select>
     
+    <select id="getMessageNoti" resultType="com.tech.whale.main.models.MessageNotiDto">
+		SELECT
+	        M.MESSAGE_ID AS MESSAGE_ID,
+	        M.MESSAGE_CREATE_DATE AS MESSAGE_CREATE_DATE,
+	        M.MESSAGE_TEXT AS MESSAGE_TEXT,
+	        M.USER_ID AS TARGET_USER_ID,
+	        M.MESSAGE_ROOM_ID AS MESSAGE_ROOM_ID,
+	        M.MESSAGE_READ AS MESSAGE_READ,
+	        M.MESSAGE_TYPE AS MESSAGE_TYPE
+	    FROM
+	        MESSAGE M
+			    LEFT JOIN MESSAGE_ROOM_USER MRU ON MRU.MESSAGE_ROOM_ID = M.MESSAGE_ROOM_ID
+	    WHERE
+	        MRU.USER_ID = #{userId} AND M.MESSAGE_READ = 1
+	    ORDER BY M.MESSAGE_TEXT DESC
+	</select>
+    
     <select id="getLikeNoti" resultType="com.tech.whale.main.models.LikeNotiDto">
 		SELECT
 	        LN.LIKE_NOTI_ID AS LIKE_NOTI_ID,

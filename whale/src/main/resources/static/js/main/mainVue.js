@@ -9,7 +9,7 @@ const app = createApp({
 		return {
 			headerMenuCheck: [false, false, false],
 			frameNames: ['leftIframe','rightIframe'],
-			whaleAddress: ['streaming','message/home','communityHome','feedHome','searchHome','profile','settingHome','communityDetail','feedDetail','profileHome'],
+			whaleAddress: ['streaming','message/home','communityHome','feedHome','searchHome','profile','settingHome','communityDetail','feedDetail','profileHome','messageGo'],
 			userInfo: [],
 			startPage: [ null, null ],
 			pageAccess: [],
@@ -94,8 +94,13 @@ const app = createApp({
 		// [ Notification ]
 		getNotification() {
 			// 메세지
-			this.notifications[0] = [];
-			this.notiCounts[0] = this.notifications[0].length;
+			fetch('main/messageNoti')
+				.then(response => response.json())
+				.then(data => {
+					this.notifications[0] = data;
+					this.notiCounts[0] = this.notifications[0].length;
+					console.log(this.notifications[0]);
+			});
 			// 좋아요
 			fetch('main/likeNoti')
 				.then(response => response.json())

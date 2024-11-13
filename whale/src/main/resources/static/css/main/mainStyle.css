@@ -226,7 +226,7 @@ body {min-height: 100vh;}
 #main.light .playlist-contents:active {background-color: #E2E2E2;}
 #main.light .playlist-font {font-size: 15px; font-weight: 300; letter-spacing: 0.4px; opacity: 0.7;}
 
-#main.light .menuTransition-enter-active, .menuTransition-leave-active {transition: opacity 0.5s ease;}
+#main.light .menuTransition-enter-active, .menuTransition-leave-active {transition: opacity 0.2s ease;}
 #main.light .menuTransition-enter-from, .menuTransition-leave-to {opacity: 0;}
 
 #main.light .playerTrackName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;}

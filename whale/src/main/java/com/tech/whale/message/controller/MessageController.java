@@ -38,22 +38,28 @@ public class MessageController {
     @Autowired
     private LinkPreviewUtils linkPreviewUtils;
 
+    private MessageDto getOrCreateRoom(String nowId, String userId) {
+        MessageDto messageDto = messageDao.getAllRoom(nowId, userId);
+        String roomId = "";
+        if (messageDto == null || messageDto.getMessage_room_id() == null) {
+            roomId = messageDao.getNextRoomId();
+            messageDao.createMessageRoom(roomId);
+            messageDao.addUserMessageRoom(roomId, userId, "A");
+            messageDao.addUserMessageRoom(roomId, nowId, "B");
+            messageDto = messageDao.getAllRoom(nowId, userId);
+        } else {
+            roomId = messageDto.getMessage_room_id();
+        }
+        return messageDto;
+    }
+    
 	@RequestMapping("/messageGo")
 	public String messageGo(HttpServletRequest request, HttpSession session, Model model,
 			@RequestParam("u") String userId) {
 		String now_id = (String) session.getAttribute("user_id");
 		System.out.println(userId);
-		MessageDto messageDto = messageDao.getAllRoom(now_id, userId);
-		String roomId = "";
-		if (messageDto == null || messageDto.getMessage_room_id() == null) {
-			roomId = messageDao.getNextRoomId();
-			messageDao.createMessageRoom(roomId);
-			messageDao.addUserMessageRoom(roomId, userId, "A");
-			messageDao.addUserMessageRoom(roomId, now_id, "B");
-			messageDto = messageDao.getAllRoom(now_id, userId);
-		} else {
-			roomId = messageDto.getMessage_room_id();
-		}
+		MessageDto messageDto = getOrCreateRoom(now_id, userId);
+		String roomId = messageDto.getMessage_room_id();
 		
 		model.addAttribute("roomId", roomId);
 		return "redirect:/messageRoom?r=" + roomId + "&u=" + userId;			
@@ -65,18 +71,8 @@ public class MessageController {
 	                            @RequestParam("u") String userId,
 	                            @RequestParam("l") String link_id) throws IOException {
 	    String now_id = (String) session.getAttribute("user_id");
-	    MessageDto messageDto = messageDao.getAllRoom(now_id, userId);
-	    String roomId = "";
-
-	    if (messageDto == null || messageDto.getMessage_room_id() == null) {
-	        roomId = messageDao.getNextRoomId();
-	        messageDao.createMessageRoom(roomId);
-	        messageDao.addUserMessageRoom(roomId, userId);
-	        messageDao.addUserMessageRoom(roomId, now_id);
-	        messageDto = messageDao.getAllRoom(now_id, userId);
-	    } else {
-	        roomId = messageDto.getMessage_room_id();
-	    }
+	    MessageDto messageDto = getOrCreateRoom(now_id, userId);
+	    String roomId = messageDto.getMessage_room_id();
 
 	    // 상대방이 해당 채팅방에 접속해 있는지 확인
 	    boolean isRecipientInRoom = chatWebSocketHandler.isUserInRoom(roomId, userId);
@@ -155,16 +151,18 @@ public class MessageController {
 	                          @RequestParam("r") String roomId,
 	                          @RequestParam("u") String userId) {
 	    String now_id = (String) session.getAttribute("user_id");
-
-		/*
-		 * List<Integer> updatedMessageIds = messageDao.getUnreadMessageIds(roomId,
-		 * userId);
-		 * 
-		 * // 메시지의 읽음 상태를 업데이트합니다. if (!updatedMessageIds.isEmpty()) {
-		 * messageDao.updateMessageReadStatus(roomId, userId); }
-		 */
 	    
-	    List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId);
+	    String userType = messageDao.getUserType(now_id, roomId);
+	    
+	    int userTypeInt = 0;
+	    
+	    if (userType.equals("A")) {
+			userTypeInt = 0;
+		} else {
+			userTypeInt = 1;
+		}
+	    
+	    List<MessageDto> messages = messageDao.getMessagesByRoomId(roomId, userTypeInt);
 
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    for (MessageDto msg : messages) {
@@ -205,6 +203,7 @@ public class MessageController {
 
 	    // 메시지 소유자 확인
 	    MessageDto message = messageDao.getMessageById(messageId);
+	    
 	    if (message != null && message.getUser_id().equals(now_id)) {
 	        // 메시지 삭제
 	        messageDao.deleteMessage(messageId);

@@ -3,6 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<script>
+	function formSubmit(){
+		if(confirm("공지알람을 보내시겠습니까?")){
+			document.getElementById("whale-form").submit();
+		}
+	}
+</script>
+
 <div class="content" name="content" id="content">
 
     <div class="accountSearch">
@@ -15,42 +23,37 @@
 	        <input type="submit" value="검색" />
 		</form>
     </div>
-	<div class="addWriting">
-		<a href="adminNoticeRegView">글쓰기</a>
-	</div>
+    
+    <div class="div-form">
+    	<form id="whale-form" action="adminWhaleNotiDo" method="post">
+    		<textarea name="whale_text" id="whale_text" cols="50" rows="2" placeholder="공지알람 입력란 :"></textarea>
+    	</form>
+    	<button id="whale-btn" onclick="formSubmit()" ></button>
+    </div>
+    
     <table>
         <thead>
             <tr>
                 <th>번호</th>
-                <th>분류</th>
-                <th>제목</th>
+                <th>내용</th>
                 <th>작성자</th>
                 <th>등록일</th>
-                <th>조회수</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
 			<c:if test="${empty list}">
 			    <tr>
-			        <td colspan="6" align="center">결과가 없습니다.</td>
+			        <td colspan="4" align="center">결과가 없습니다.</td>
 			    </tr>
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
 				<tr>
 					<c:if test="${not empty dto.post_id && dto.post_id != 0}">
-					<td>${dto.post_id }</td>
-					<td>${dto.community_name }</td>
-					<td>${dto.post_title }</td>
+					<td>${dto.notice_id }</td>
+					<td>${dto.notice_text }</td>
 					<td>${dto.user_id }</td>
-					<td><fmt:formatDate value="${dto.post_date}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.post_cnt }</td>
-					<td>
-						<button onclick = "location.href = 'adminNoticeContentView?postId=${dto.post_id }&communityName=${dto.community_name }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }'">
-							조회
-						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-					</td>
+					<td><fmt:formatDate value="${dto.notice_date}" pattern="yyyy.MM.dd" /></td>
 					</c:if>
 				</tr>
 			</c:forEach>
@@ -58,7 +61,7 @@
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="6">
+			    <td colspan="4">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

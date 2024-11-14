@@ -7,11 +7,11 @@
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"> -->
 <div class="content" name="content" id="content">
 	<div class="container">
-		<h1 id="statistic-name">유저추세</h1>
+		<h1 id="statistic-name">30일 신규 유저</h1>
 		<br />
 	    <div class="btnBox">
-		    <button id="btnChart1">30일</button>
-		    <button id="btnChart2">전체기간</button>
+		    <button id="btnChart1">30일신규유저</button>
+		    <button id="btnChart2">전체유저</button>
 	    </div>
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
@@ -79,10 +79,12 @@
             // 버튼 클릭 이벤트 핸들러
             document.getElementById('btnChart1').addEventListener('click', function () {
                 updateChart1('bar', userLabels1, userValues1, '유저수');
+                document.getElementById('statistic-name').innerText ="30일신규유저";
             });
 
             document.getElementById('btnChart2').addEventListener('click', function () {
                 updateChart1('line', userLabels2, userValues2, '유저수');
+                document.getElementById('statistic-name').innerText ="전체 유저";
             });
             
 

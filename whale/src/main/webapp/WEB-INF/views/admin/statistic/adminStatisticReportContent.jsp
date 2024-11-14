@@ -11,7 +11,7 @@
 		<br />
 	    <div class="btnBox">
 		    <button id="btnChart1">유형별</button>
-		    <button id="btnChart2">30일</button>
+		    <button id="btnChart2">일별 신고</button>
 		    <button id="btnChart3">신고처리속도</button>
 	    </div>
 	    <div class="chartBox">
@@ -107,7 +107,7 @@
 
             document.getElementById('btnChart2').addEventListener('click', function () {
                 updateChart1('bar', reportLabels2, reportValues2, '신고건');
-                document.getElementById('statistic-name').innerText ="일별 추이";
+                document.getElementById('statistic-name').innerText ="일별 신고";
             });
 
             document.getElementById('btnChart3').addEventListener('click', function () {

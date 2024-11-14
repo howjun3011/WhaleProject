@@ -1,6 +1,7 @@
 package com.tech.whale.admin.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminMainCntDto;
+import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
@@ -149,5 +151,8 @@ public interface AdminIDao {
 	public int memoCheck(String myId);
 	public void memoCreate(String myId);
 	public void memoUpdate(String memoUpdateStr, String myId);
+	public int musigToday();
+	public int tagToday();
+	public List<AdminMainRankDto> rankToday();
 	
 }

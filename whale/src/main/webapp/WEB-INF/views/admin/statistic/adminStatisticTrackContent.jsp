@@ -8,7 +8,7 @@
 
 <div class="content" name="content" id="content">
 	<div class="container">
-		<h1 id="statistic-name">커뮤니티</h1>
+		<h1 id="statistic-name">1일 종합 태그 순위</h1>
 	    <br />
 	    <div id="postBtn" class="btnBox">
 		    <button id="btnChart1">1일태그순위</button>

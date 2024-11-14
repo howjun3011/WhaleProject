@@ -131,25 +131,6 @@ public class AdminController {
 	}
 	
 	
-//	@RequestMapping("/adminAccountClientListView")
-//	public String adminAccountClientListView(
-//			HttpServletRequest request,
-//			AdminSearchVO searchVO,
-//			Model model) {
-//		
-//		model.addAttribute("request", request);
-//		model.addAttribute("searchVO", searchVO);
-//		model.addAttribute("pname", "광고주관리");
-//		model.addAttribute("contentBlockJsp",
-//				"../account/adminAccountClientContent.jsp");
-//		model.addAttribute("contentBlockCss",
-//				"/whale/static/css/admin/account/adminAccountUserListContent.css");
-//		accountSubBar(model);
-//		
-//		adminAccountUserListService.clientList(model);
-//		return "/admin/view/adminOutlineForm";
-//	}
-	
 	@RequestMapping("/adminAccountUserListView")
 	public String adminAccountUserListView(
 			HttpServletRequest request,

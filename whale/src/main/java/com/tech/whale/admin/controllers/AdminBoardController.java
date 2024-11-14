@@ -74,8 +74,8 @@ public class AdminBoardController {
     }
 	
 	@ModelAttribute("myImgUrl")
-	public String myImgUrl(Model model) {
-		String myId = (String)model.getAttribute("myId");
+	public String myImgUrl(Model model,HttpSession session) {
+		String myId = (String) session.getAttribute("user_id");
 		String myImgSty = adminIDao.myImg(myId);
 		return myImgSty;
 	}
@@ -499,6 +499,29 @@ public class AdminBoardController {
         		+ "&page=" + page
         		+ "&searchType=" + searchType
         		+ "&sk=" + sk;
+	}
+	
+	
+	//////////////////////// 공지알람 리스트 자리
+	@RequestMapping("/adminNoticeListView123123123123")
+	public String adminNoticeListView123123123213(
+			HttpServletRequest request,
+			AdminSearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "공지사항");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminNoticeListContent.jsp");
+	    model.addAttribute("contentBlockCss",
+	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
+	    boardSubBar(model);
+	    
+	    adminNoticeListService.execute(model);
+	    
+	    
+		return "/admin/view/adminOutlineForm";
 	}
 	
 }

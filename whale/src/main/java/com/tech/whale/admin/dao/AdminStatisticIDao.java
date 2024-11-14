@@ -28,6 +28,13 @@ public interface AdminStatisticIDao {
 	public List<AdminLVDataDto> cfStatistic12();
 	public List<AdminLVDataDto> cfStatistic13();
 	
-	
-	public List<AdminRRDataDto> reportStatistic99();
+	public List<AdminLVDataDto> mugicStatistic1();
+	public List<AdminLVDataDto> mugicStatistic2();
+	public List<AdminLVDataDto> mugicStatistic3();
+	public List<AdminLVDataDto> mugicStatistic4();
+	public List<AdminLVDataDto> mugicStatistic5();
+	public List<AdminLVDataDto> mugicStatistic6();
+	public List<AdminLVDataDto> mugicStatistic7();
+	public List<AdminLVDataDto> mugicStatistic8();
+	public List<AdminLVDataDto> mugicStatistic9();
 }

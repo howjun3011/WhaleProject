@@ -9,9 +9,6 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">커뮤니티</h1>
-	    <div class="chartBox">
-	        <canvas id="reportChart"></canvas>
-	    </div>
 	    <br />
 	    <div class="btnCheck">
 	    	<label>
@@ -46,6 +43,12 @@
 			    <button id="btnChart13">커뮤&피드 전체기간</button>
 		    </div>
 	    </div>
+	    <div class="chartBox">
+	        <canvas id="reportChart"></canvas>
+	    </div>
+	    <br />
+	    <br />
+	    <br />
 	</div>
 </div>
 <script>

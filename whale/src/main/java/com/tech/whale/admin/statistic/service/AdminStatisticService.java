@@ -215,6 +215,27 @@ public class AdminStatisticService implements AdminServiceInter{
 		
 	}
 	
+	public void musicStatistic(Model model) {
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic1(),
+				"musicLabels1", "musicValues1", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic2(),
+				"musicLabels2", "musicValues2", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic3(),
+				"musicLabels3", "musicValues3", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic4(),
+				"musicLabels4", "musicValues4", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic5(),
+				"musicLabels5", "musicValues5", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic6(),
+				"musicLabels6", "musicValues6", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic7(),
+				"musicLabels7", "musicValues7", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic8(),
+				"musicLabels8", "musicValues8", null, false);
+		fetchStatisticsData(model, adminStatisticIDao.mugicStatistic9(),
+				"musicLabels9", "musicValues9", "backColors1", true);
+	}
+	
 	private void fetchStatisticsData(
 			Model model, 
 			List<AdminLVDataDto> dataList, 

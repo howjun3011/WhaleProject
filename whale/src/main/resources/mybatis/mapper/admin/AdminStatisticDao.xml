@@ -14,7 +14,14 @@
 		    SELECT 'MESSAGE' FROM DUAL
 		)
 		SELECT 
-		    RT.LABEL,
+		    CASE 
+		        WHEN RT.LABEL = 'FEED' THEN '피드'
+		        WHEN RT.LABEL = 'FEED_COMMENT' THEN '피드 댓글'
+		        WHEN RT.LABEL = 'POST' THEN '커뮤'
+		        WHEN RT.LABEL = 'POST_COMMENT' THEN '커뮤 댓글'
+		        WHEN RT.LABEL = 'MESSAGE' THEN '메시지'
+		        ELSE RT.LABEL
+		    END AS LABEL,
 		    COUNT(CASE 
 		        WHEN RT.LABEL = 'FEED' AND R.FEED_ID IS NOT NULL THEN 1
 		        WHEN RT.LABEL = 'FEED_COMMENT' AND R.FEED_COMMENT_ID IS NOT NULL THEN 1
@@ -292,6 +299,161 @@
 		    (SELECT COUNT(*) FROM POST WHERE POST_DATE &lt;= POINT_DATE) AS VALUE
 		FROM INTER
 		ORDER BY POINT_DATE
+	</select>
+	<select id="mugicStatistic1" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT *
+		FROM (
+		    SELECT SUM(VALUE) AS VALUE, LABEL
+		    FROM (
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM FEED_MUSIC FM
+		        LEFT JOIN FEED F ON FM.FEED_ID = F.FEED_ID
+		        LEFT JOIN TRACK T ON FM.TRACK_ID = T.TRACK_ID
+		        WHERE F.FEED_DATE &gt;= SYSDATE - 1 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		
+		        UNION ALL
+		
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM POST_MUSIC PM
+		        LEFT JOIN POST P ON PM.POST_ID = P.POST_ID
+		        LEFT JOIN TRACK T ON PM.TRACK_ID = T.TRACK_ID
+		        WHERE P.POST_DATE &gt;= SYSDATE - 1 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		    ) UNION_DATA
+		    GROUP BY LABEL
+		    ORDER BY VALUE DESC
+		)
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic2" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT *
+		FROM (
+		    SELECT SUM(VALUE) AS VALUE, LABEL
+		    FROM (
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM FEED_MUSIC FM
+		        LEFT JOIN FEED F ON FM.FEED_ID = F.FEED_ID
+		        LEFT JOIN TRACK T ON FM.TRACK_ID = T.TRACK_ID
+		        WHERE F.FEED_DATE &gt;= SYSDATE - 7 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		
+		        UNION ALL
+		
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM POST_MUSIC PM
+		        LEFT JOIN POST P ON PM.POST_ID = P.POST_ID
+		        LEFT JOIN TRACK T ON PM.TRACK_ID = T.TRACK_ID
+		        WHERE P.POST_DATE &gt;= SYSDATE - 7 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		    ) UNION_DATA
+		    GROUP BY LABEL
+		    ORDER BY VALUE DESC
+		)
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic3" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT *
+		FROM (
+		    SELECT SUM(VALUE) AS VALUE, LABEL
+		    FROM (
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM FEED_MUSIC FM
+		        LEFT JOIN FEED F ON FM.FEED_ID = F.FEED_ID
+		        LEFT JOIN TRACK T ON FM.TRACK_ID = T.TRACK_ID
+		        WHERE F.FEED_DATE &gt;= SYSDATE - 30 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		
+		        UNION ALL
+		
+		        SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		        FROM POST_MUSIC PM
+		        LEFT JOIN POST P ON PM.POST_ID = P.POST_ID
+		        LEFT JOIN TRACK T ON PM.TRACK_ID = T.TRACK_ID
+		        WHERE P.POST_DATE &gt;= SYSDATE - 30 AND T.TRACK_NAME IS NOT NULL
+		        GROUP BY T.TRACK_NAME
+		    ) UNION_DATA
+		    GROUP BY LABEL
+		    ORDER BY VALUE DESC
+		)
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic4" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT * 
+		FROM (
+		    SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		    FROM TRACK_CNT TC
+		    LEFT JOIN TRACK T ON TC.TRACK_ID = T.TRACK_ID
+		    WHERE TC.TRACK_CNT_DATE &gt;= SYSDATE-1
+		    GROUP BY TC.TRACK_ID, T.TRACK_NAME
+		    ORDER BY VALUE DESC
+		) A
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic5" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT * 
+		FROM (
+		    SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		    FROM TRACK_CNT TC
+		    LEFT JOIN TRACK T ON TC.TRACK_ID = T.TRACK_ID
+		    WHERE TC.TRACK_CNT_DATE &gt;= SYSDATE-7
+		    GROUP BY TC.TRACK_ID, T.TRACK_NAME
+		    ORDER BY VALUE DESC
+		) A
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic6" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT * 
+		FROM (
+		    SELECT COUNT(*) AS VALUE, T.TRACK_NAME AS LABEL
+		    FROM TRACK_CNT TC
+		    LEFT JOIN TRACK T ON TC.TRACK_ID = T.TRACK_ID
+		    WHERE TC.TRACK_CNT_DATE &gt;= SYSDATE-30
+		    GROUP BY TC.TRACK_ID, T.TRACK_NAME
+		    ORDER BY VALUE DESC
+		) A
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic7" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT *
+		FROM (
+		    SELECT T.TRACK_NAME AS LABEL, COUNT(*) AS VALUE
+		    FROM TRACK_LIKE TL
+		    LEFT JOIN TRACK T ON TL.TRACK_ID = T.TRACK_ID
+		    WHERE TL.TRACK_LIKE_DATE &gt;= SYSDATE - 7
+		    GROUP BY T.TRACK_ID, T.TRACK_NAME
+		    ORDER BY VALUE DESC
+		)
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic8" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		SELECT *
+		FROM (
+		    SELECT T.TRACK_NAME LABEL, COUNT(*) AS VALUE
+		    FROM TRACK_LIKE TL
+		    LEFT JOIN TRACK T ON TL.TRACK_ID = T.TRACK_ID
+		    GROUP BY T.TRACK_ID, T.TRACK_NAME
+		    ORDER BY VALUE DESC
+		)
+		WHERE ROWNUM &lt;= 50
+	</select>
+	<select id="mugicStatistic9" resultType="com.tech.whale.admin.dto.AdminLVDataDto">
+		WITH TIME_RANGE AS(
+		    SELECT LEVEL -1 AS HOUR_START
+		    FROM DUAL
+		    CONNECT BY LEVEL &lt;= 8
+		)
+		SELECT
+		    TO_CHAR(TIME_RANGE.HOUR_START * 3, 'FM00') || ':00-' ||
+		    TO_CHAR((TIME_RANGE.HOUR_START +1) * 3, 'FM00') || ':00' AS LABEL,
+		    NVL(ROUND((
+		        SELECT COUNT(*) / 7
+		        FROM TRACK_CNT
+		        WHERE TO_NUMBER(TO_CHAR(TRACK_CNT_DATE, 'HH24')) &gt;= TIME_RANGE.HOUR_START * 3
+		        AND TO_NUMBER(TO_CHAR(TRACK_CNT_DATE, 'HH24')) &lt; (TIME_RANGE.HOUR_START + 1) *3
+		        ), 0),0) AS VALUE
+		FROM TIME_RANGE
+		ORDER BY TIME_RANGE.HOUR_START
 	</select>
 	
 </mapper>

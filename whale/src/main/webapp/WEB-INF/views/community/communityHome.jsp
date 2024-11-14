@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 	<script src="static/js/setting/darkMode.js"></script>
 	<style>
+		::-webkit-scrollbar {display: none;}
 		/* 기본 설정 값 */
 		.container[data-darkmode="0"]{padding: 50px;}
 		.container[data-darkmode="0"] * {margin: 0; padding: 0; box-sizing: border-box;}

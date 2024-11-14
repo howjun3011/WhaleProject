@@ -8,13 +8,17 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">유저추세</h1>
-	    <div class="chartBox">
-	        <canvas id="reportChart"></canvas>
-	    </div>
+		<br />
 	    <div class="btnBox">
 		    <button id="btnChart1">30일</button>
 		    <button id="btnChart2">전체기간</button>
 	    </div>
+	    <div class="chartBox">
+	        <canvas id="reportChart"></canvas>
+	    </div>
+	    <br />
+	    <br />
+	    <br />
 	</div>
 </div>
 <script>

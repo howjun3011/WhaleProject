@@ -9,96 +9,111 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">커뮤니티</h1>
+	    <br />
+	    <div id="postBtn" class="btnBox">
+		    <button id="btnChart1">1일태그순위</button>
+		    <button id="btnChart2">7일태그순위</button>
+		    <button id="btnChart3">전체태그순위</button>
+		    <button id="btnChart4">1일재생순위</button>
+		    <button id="btnChart5">7일재생순위</button>
+		    <button id="btnChart6">30일재생순위</button>
+		    <button id="btnChart7">7일신규좋아요</button>
+		    <button id="btnChart8">전체좋아요순위</button>
+		    <button id="btnChart9">시간별이용량</button>
+	    </div>
+	    <br />
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
 	    </div>
 	    <br />
-	    <div class="btnCheck">
-	    	<label>
-	        	<input type="radio" name="selectStatistic" value="0" onclick="selectPF()" checked/>
-	        커뮤
-	    	</label>
-	    	<label>
-	        	<input type="radio" name="selectStatistic" value="1" onclick="selectPF()"/>
-	        피드
-	    	</label>
-	    	<label>
-	        	<input type="radio" name="selectStatistic" value="2" onclick="selectPF()"/>
-	        커뮤&피드
-	    	</label>
-		    <div id="postBtn" class="btnBox">
-			    <button id="btnChart1">30일</button>
-			    <button id="btnChart2">전체기간</button>
-			    <button id="btnChart3">커뮤니티구분</button>
-			    <button id="btnChart4">댓글 30일</button>
-			    <button id="btnChart5">댓글 전체기간</button>
-			    <button id="btnChart6">커뮤니티 활동시간</button>
-		    </div>
-		    <div id="feedBtn" class="btnBox" style="display: none;">
-			    <button id="btnChart7">30일</button>
-			    <button id="btnChart8">전체기간</button>
-			    <button id="btnChart9">댓글 30일</button>
-			    <button id="btnChart10">댓글 전체기간</button>
-			    <button id="btnChart11">피드 활동시간</button>
-		    </div>
-		    <div id="allBtn" class="btnBox" style="display: none;">
-			    <button id="btnChart12">커뮤&피드 30일</button>
-			    <button id="btnChart13">커뮤&피드 전체기간</button>
-		    </div>
-	    </div>
+		<br />
+		<br />
 	</div>
+	
 </div>
 <script>
 	
-	function selectPF(){
-		var selectedValue = document.querySelector('input[name="selectStatistic"]:checked').value;
-	    if (selectedValue === '0') {
-	    	postBtn.style.display = 'block';
-	    } else {
-	    	postBtn.style.display = 'none';
-	    }
-	    if (selectedValue === '1') {
-	    	feedBtn.style.display = 'block';
-	    } else {
-	    	feedBtn.style.display = 'none';
-	    }
-	    if (selectedValue === '2') {
-	    	allBtn.style.display = 'block';
-	    } else {
-	    	allBtn.style.display = 'none';
-	    }
-		
-	}
-	
     document.addEventListener("DOMContentLoaded", function () {
     	
-    	var cfLabels1 = [];
-    	<c:forEach var="label" items="${cfLabels1}">
-    	cfLabels1.push('${label}');
+    	var musicLabels1 = [];
+    	<c:forEach var="label" items="${musicLabels1}">
+    	musicLabels1.push('${label}');
     	</c:forEach>
-    	var cfValues1 = [];
-    	<c:forEach var="value" items="${cfValues1}">
-    	cfValues1.push(${value});
-    	</c:forEach>
-    	
-    	
-    	var cfLabels2 = [];
-    	<c:forEach var="label" items="${cfLabels2}">
-    	cfLabels2.push('${label}');
-    	</c:forEach>
-    	var cfValues2 = [];
-    	<c:forEach var="value" items="${cfValues2}">
-    	cfValues2.push(${value});
+    	var musicValues1 = [];
+    	<c:forEach var="value" items="${musicValues1}">
+    	musicValues1.push(${value});
     	</c:forEach>
     	
-    	
-    	var cfLabels3 = [];
-    	<c:forEach var="label" items="${cfLabels3}">
-    	cfLabels3.push('${label}');
+    	var musicLabels2 = [];
+    	<c:forEach var="label" items="${musicLabels2}">
+    	musicLabels2.push('${label}');
     	</c:forEach>
-    	var cfValues3 = [];
-    	<c:forEach var="value" items="${cfValues3}">
-    	cfValues3.push(${value});
+    	var musicValues2 = [];
+    	<c:forEach var="value" items="${musicValues2}">
+    	musicValues2.push(${value});
+    	</c:forEach>
+    	
+    	var musicLabels3 = [];
+    	<c:forEach var="label" items="${musicLabels3}">
+    	musicLabels3.push('${label}');
+    	</c:forEach>
+    	var musicValues3 = [];
+    	<c:forEach var="value" items="${musicValues3}">
+    	musicValues3.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels4 = [];
+    	<c:forEach var="label" items="${musicLabels4}">
+    	musicLabels4.push('${label}');
+    	</c:forEach>
+    	var musicValues4 = [];
+    	<c:forEach var="value" items="${musicValues4}">
+    	musicValues4.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels5 = [];
+    	<c:forEach var="label" items="${musicLabels5}">
+    	musicLabels5.push('${label}');
+    	</c:forEach>
+    	var musicValues5 = [];
+    	<c:forEach var="value" items="${musicValues5}">
+    	musicValues5.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels6 = [];
+    	<c:forEach var="label" items="${musicLabels6}">
+    	musicLabels6.push('${label}');
+    	</c:forEach>
+    	var musicValues6 = [];
+    	<c:forEach var="value" items="${musicValues6}">
+    	musicValues6.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels7 = [];
+    	<c:forEach var="label" items="${musicLabels7}">
+    	musicLabels7.push('${label}');
+    	</c:forEach>
+    	var musicValues7 = [];
+    	<c:forEach var="value" items="${musicValues7}">
+    	musicValues7.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels8 = [];
+    	<c:forEach var="label" items="${musicLabels8}">
+    	musicLabels8.push('${label}');
+    	</c:forEach>
+    	var musicValues8 = [];
+    	<c:forEach var="value" items="${musicValues8}">
+    	musicValues8.push(${value});
+    	</c:forEach>  
+    	
+    	var musicLabels9 = [];
+    	<c:forEach var="label" items="${musicLabels9}">
+    	musicLabels9.push('${label}');
+    	</c:forEach>
+    	var musicValues9 = [];
+    	<c:forEach var="value" items="${musicValues9}">
+    	musicValues9.push(${value});
     	</c:forEach>  
     	
     	
@@ -106,20 +121,57 @@
     	<c:forEach var="color" items="${backColors1}">
     	    backColors1.push('${color}');
     	</c:forEach>;
+    	
     	var backColors2 = [];
     	<c:forEach var="color" items="${backColors2}">
     	    backColors2.push('${color}');
     	</c:forEach>;
+    	
     	var backColors3 = [];
     	<c:forEach var="color" items="${backColors3}">
     	    backColors3.push('${color}');
     	</c:forEach>;
-        
+    	
+    	var backColors4 = [];
+    	<c:forEach var="color" items="${backColors4}">
+    	    backColors4.push('${color}');
+    	</c:forEach>;
+    	
+    	var backColors5 = [];
+    	<c:forEach var="color" items="${backColors5}">
+    	    backColors5.push('${color}');
+    	</c:forEach>;
+    	
+    	var backColors6 = [];
+    	<c:forEach var="color" items="${backColors6}">
+    	    backColors6.push('${color}');
+    	</c:forEach>;
+    	
+    	var backColors7 = [];
+    	<c:forEach var="color" items="${backColors7}">
+    	    backColors7.push('${color}');
+    	</c:forEach>;
+    	
+    	var backColors8 = [];
+    	<c:forEach var="color" items="${backColors8}">
+    	    backColors8.push('${color}');
+    	</c:forEach>;
+    	
+    	var backColors9 = [];
+    	<c:forEach var="color" items="${backColors9}">
+    	    backColors9.push('${color}');
+    	</c:forEach>;
     	
     	    const chartConfigurations = [
-    	        { btnId: 'btnChart1', type: 'bar', labels: cfLabels1, values: cfValues1, label: '커뮤작성글', chartFunc: updateChart1, title: "커뮤니티 작성글 통계" },
-    	        { btnId: 'btnChart2', type: 'line', labels: cfLabels2, values: cfValues2, label: '커뮤작성글', chartFunc: updateChart1, title: "커뮤니티 작성글 통계" },
-    	        { btnId: 'btnChart3', type: 'pie', labels: cfLabels3, values: cfValues3, label: '커뮤구분', chartFunc: updateChart2, backColors: backColors1, title: "커뮤니티 구분 통계" }
+    	        { btnId: 'btnChart1', type: 'bar', labels: musicLabels1, values: musicValues1, label: '개수', chartFunc: updateChart1, title: "1일 종합 태그 순위" },
+    	        { btnId: 'btnChart2', type: 'bar', labels: musicLabels2, values: musicValues2, label: '개수', chartFunc: updateChart1, title: "7일 종합 태그 순위" },
+    	        { btnId: 'btnChart3', type: 'bar', labels: musicLabels3, values: musicValues3, label: '개수', chartFunc: updateChart1, title: "30일 종합 태그 순위" },
+    	        { btnId: 'btnChart4', type: 'bar', labels: musicLabels4, values: musicValues4, label: '횟수', chartFunc: updateChart1, title: "1일 재생" },
+    	        { btnId: 'btnChart5', type: 'bar', labels: musicLabels5, values: musicValues5, label: '횟수', chartFunc: updateChart1, title: "7일 재생" },
+    	        { btnId: 'btnChart6', type: 'bar', labels: musicLabels6, values: musicValues6, label: '횟수', chartFunc: updateChart1, title: "30일 재생" },
+    	        { btnId: 'btnChart7', type: 'bar', labels: musicLabels7, values: musicValues7, label: '개수', chartFunc: updateChart1, title: "7일 신규 좋아요" },
+    	        { btnId: 'btnChart8', type: 'bar', labels: musicLabels8, values: musicValues8, label: '개수', chartFunc: updateChart1, title: "전체 좋아요 순위" },
+    	        { btnId: 'btnChart9', type: 'pie', labels: musicLabels9, values: musicValues9, label: '횟수', chartFunc: updateChart2, backColors: backColors1, title: "시간변 이용량" }
     	       
     	    ];
 
@@ -137,10 +189,10 @@
     	
         const ctx = document.getElementById('reportChart').getContext('2d');
         let chartData = {
-                labels: cfLabels1,
+                labels: musicLabels1,
                 datasets: [{
-                    label: '',
-                    data: cfValues1,
+                    label: '개수',
+                    data: musicValues1,
                     backgroundColor: 'rgba(162, 162, 235, 0.5)'
                 }]
             };
@@ -152,13 +204,23 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    indexAxis: 'y',
                     scales: {
     		            x: {
+    		            	position: 'top',
     		                grid: {
     		                    display: false
-    		                }
+    		                },
+	    		            ticks: {
+	    	                    // 소수점 없이 정수로만 표시
+	    	                    callback: function(value) {
+	    	                        return Math.floor(value); // 소수점을 제거하고 정수로 표시
+	    	                    },
+	    	                    stepSize: 1 // 필요한 경우, 간격을 1로 설정하여 정수 값만 표시
+	    	                }
     		            },
     		            y: {
+    		            	
     		                grid: {
     		                    display: true
     		                }
@@ -184,11 +246,20 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        indexAxis: 'y',
                         scales: {
         		            x: {
+        		            	position: 'top',
         		                grid: {
         		                    display: false
-        		                }
+        		                },
+	        		            ticks: {
+	        	                    // 소수점 없이 정수로만 표시
+	        	                    callback: function(value) {
+	        	                        return Math.floor(value); // 소수점을 제거하고 정수로 표시
+	        	                    },
+	        	                    stepSize: 1 // 필요한 경우, 간격을 1로 설정하여 정수 값만 표시
+	        	                }
         		            },
         		            y: {
         		                grid: {

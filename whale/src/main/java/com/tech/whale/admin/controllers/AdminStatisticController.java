@@ -41,7 +41,7 @@ public class AdminStatisticController {
 	public void statisticSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminStatisticCFView", "커뮤&피드");
-	    subMenu.put("adminStatisticTrackView", "음악 아직");
+	    subMenu.put("adminStatisticTrackView", "음악");
 	    subMenu.put("adminStatisticReportView", "신고");
 	    subMenu.put("adminStatisticUserView", "유저");
 	    
@@ -53,7 +53,7 @@ public class AdminStatisticController {
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
-		model.addAttribute("pname", "신고통계");
+		model.addAttribute("pname", "신고 통계");
 		model.addAttribute("contentBlockJsp",
 				"../statistic/adminStatisticReportContent.jsp");
 	    model.addAttribute("contentBlockCss",
@@ -76,7 +76,7 @@ public class AdminStatisticController {
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
-		model.addAttribute("pname", "신고통계");
+		model.addAttribute("pname", "유저 통계");
 		model.addAttribute("contentBlockJsp",
 				"../statistic/adminStatisticUserContent.jsp");
 		model.addAttribute("contentBlockCss",
@@ -98,7 +98,7 @@ public class AdminStatisticController {
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
-		model.addAttribute("pname", "신고통계");
+		model.addAttribute("pname", "커뮤&피드 통계");
 		model.addAttribute("contentBlockJsp",
 				"../statistic/adminStatisticCFContent.jsp");
 		model.addAttribute("contentBlockCss",
@@ -119,18 +119,18 @@ public class AdminStatisticController {
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
-		model.addAttribute("pname", "신고통계");
+		model.addAttribute("pname", "음악 통계");
 		model.addAttribute("contentBlockJsp",
 				"../statistic/adminStatisticTrackContent.jsp");
 		model.addAttribute("contentBlockCss",
-				"/whale/static/css/admin/statistic/adminStatisticReportContent.css");
+				"/whale/static/css/admin/statistic/adminStatisticTrackContent.css");
 		model.addAttribute("subBarBlockJsp",
 				null);
 		model.addAttribute("subBarBlockCss",
 				null);
 		statisticSubBar(model);
 		
-		adminStatisticService.cfStatisticList(model);
+		adminStatisticService.musicStatistic(model);
 		
 		return "/admin/view/adminOutlineForm";
 	}

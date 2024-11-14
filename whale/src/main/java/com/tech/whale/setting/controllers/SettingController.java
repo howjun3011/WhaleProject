@@ -65,7 +65,7 @@ public class SettingController {
 
         // 세션에서 user_id 가져오기
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println(session_user_id);
+        System.out.println(session_user_id); // debug
 
         userinfoDto = settingDao.getProfile(session_user_id);
 

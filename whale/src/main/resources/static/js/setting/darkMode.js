@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
     const streamingElement = document.querySelector('.streamingBody');
+    const profileHomeElement = document.querySelector('.container');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -145,6 +146,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (profileHomeElement) {
+        profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        profileHomeElement.classList.toggle("dark", isDarkMode);
+        profileHomeElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                profileHomeElement.classList.toggle("dark", isDarkMode);
+                profileHomeElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     if (streamingElement) {
         streamingElement.setAttribute("data-darkmode", darkmodeOn);
         const isDarkMode = darkmodeOn === "1";
@@ -254,6 +274,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDark);
                 communityPostModalElement.classList.toggle("light", !isDark);
+            }
+            if (profileHomeElement) {
+                profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                profileHomeElement.classList.toggle("dark", isDark);
+                profileHomeElement.classList.toggle("light", !isDark);
             }
             if (streamingElement) {
                 streamingElement.setAttribute("data-darkmode", darkmodeOn);

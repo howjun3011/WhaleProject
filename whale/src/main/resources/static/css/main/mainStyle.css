@@ -54,7 +54,7 @@ body {min-height: 100vh;}
 
 #main.dark .main {position: relative; display: flex; width: 100%; background-color: #2e2e2e;}
 #main.dark .mainItems {width: 50%;}
-#main.dark .frame {position: relative; width: 94%; height: 94%; border: none; border-radius: 30px;}
+#main.dark .frame {position: relative; width: 94%; height: 94%; border: none; border-radius: 30px; box-sizing: border-box; background: #1f1f1f;}
 
 #main.dark .menu-style {background-image: linear-gradient(to bottom, #ffffff, #fcfcfc);}
 #main.dark .menuBtn {position: absolute; bottom: 30px; left: 50%; transform: translate(-50%,0%); width: 45px; height: 45px; border-radius: 50%; opacity: 0.8;}

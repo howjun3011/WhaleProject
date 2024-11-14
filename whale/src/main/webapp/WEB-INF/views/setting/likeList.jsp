@@ -209,28 +209,55 @@
             top: 55%;
             transform: translateY(-50%);
         }
-        .cnt-date-container {
+        .setting-body[data-darkmode="0"] .cnt-date-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 5px;
         }
 
-        .cnt-date-container .views, .total-like, .total-comment {
+        .setting-body[data-darkmode="0"] .cnt-date-container .views, .total-like, .total-comment {
             display: flex;
             align-items: center;
             gap: 2px;
+            margin-right: 7px;
         }
 
-        .cnt-date-container .date {
+        .setting-body[data-darkmode="0"] .cnt-date-container .date {
             color: #888;
             margin-left: auto; /* date 우측에 고정 */
         }
 
-        .cnt-date-container img {
+        .setting-body[data-darkmode="0"] .cnt-date-container img {
             margin: 0;
             width: 19px;
             height: 19px;
+        }
+
+        .setting-body[data-darkmode="1"] .cnt-date-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .setting-body[data-darkmode="1"] .cnt-date-container .views, .total-like, .total-comment {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-right: 7px;
+        }
+
+        .setting-body[data-darkmode="1"] .cnt-date-container .date {
+            color: #888;
+            margin-left: auto; /* date 우측에 고정 */
+        }
+
+        .setting-body[data-darkmode="1"] .cnt-date-container img {
+            margin: 0;
+            width: 19px;
+            height: 19px;
+            filter: invert(1);
         }
 
     </style>

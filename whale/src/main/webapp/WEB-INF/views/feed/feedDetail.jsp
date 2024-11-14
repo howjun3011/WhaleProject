@@ -12,130 +12,133 @@
         /* 기존 feedHome 페이지와 동일한 스타일 사용 */
         body {font-family: 'Noto Sans', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;}
         body, .music-info, .username, .post-text {font-family: 'Noto Sans KR', Arial, sans-serif !important;}
+        ::-webkit-scrollbar {display: none;}
         .feed-container[data-darkmode="1"]{background-color: #434343;}
-        .feed-container[data-darkmode="1"] .post {position: relative; background-color: #2e2e2e; width: 90%; max-width: 600px; margin: 20px auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px;}
+        .feed-container[data-darkmode="1"] .post {position: relative; background-color: #2e2e2e; width: 90%; max-width: 600px; margin: 40px auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px;}
         .feed-container[data-darkmode="1"] .user-info {display: flex; align-items: center;}
-        .feed-container[data-darkmode="1"] .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
+        .feed-container[data-darkmode="1"] .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin: 5px 10px 0 4px;}
         .feed-container[data-darkmode="1"] .username {font-weight: bold; font-size: 1.2em; color: #e2e2e2;}
-        .feed-container[data-darkmode="1"] .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
-        .feed-container[data-darkmode="1"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
+        .feed-container[data-darkmode="1"] .post-image {width: 100%; height: auto; margin: 15px 0 0 0; border-radius: 10px;}
+        .feed-container[data-darkmode="1"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 22px; font-size: 1em;}
         .feed-container[data-darkmode="1"] .post-actions .like-btn,
         .feed-container[data-darkmode="1"] .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="1"] .post-actions .likebtn,
         .feed-container[data-darkmode="1"] .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
         .feed-container[data-darkmode="1"] .like-count,
-        .feed-container[data-darkmode="1"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
-        .feed-container[data-darkmode="1"] .post-text {margin-left: 10px; margin-top: 10px; display: flex; align-items: center;}
+        .feed-container[data-darkmode="1"] .comment-count {font-size: 14px; /* 글자 크기 통일 */ color: #e2e2e2; /* 필요 시 색상 지정 */}
+        .feed-container[data-darkmode="1"] .post-text {margin: 15px 0 15px 10px; display: flex; align-items: center;}
         .feed-container[data-darkmode="1"] .post-content {flex: 1;}
         .feed-container[data-darkmode="1"] .post-text p {margin: 0; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .post-time {float: right; font-size: 0.8em; color: gray;}
-        .feed-container[data-darkmode="1"] .other-btn {
-        .feed-container[data-darkmode="1"]     position: absolute;top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="1"] .other-btn {position: absolute; top: 25px; right: 15px; background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="1"] .other-btn img {width: 30px; height: 30px;}
         .feed-container[data-darkmode="1"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
-        .feed-container[data-darkmode="1"] /* 모달 내용 */
+        /* 모달 내용 */
         .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden; color: #e2e2e2;}
-        .feed-container[data-darkmode="1"] /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #1f1f1f; font-size: 16px; cursor: pointer;}
+        /* 모달 항목 스타일 */
+        .feed-container[data-darkmode="1"] .modal-item {padding: 20px; border-bottom: 1px solid #626262; font-size: 16px; cursor: pointer;}
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}
         .feed-container[data-darkmode="1"] .modal-item:hover {background-color: #f9f9f9;}
         /* 댓글 스타일 */
-        .feed-container[data-darkmode="1"] .comment {position: relative; padding: 20px 0; margin-left: 10px; border-bottom: 1px solid #2e2e2e;}
-        .feed-container[data-darkmode="1"] .comment-form {margin-left: 30px;}
-        .feed-container[data-darkmode="1"] .comment-header {display: flex; align-items: center;}
+        .feed-container[data-darkmode="1"] .comment {position: relative; padding: 20px 0; margin: 20px; border-top: 1px solid #828282;}
+        .feed-container[data-darkmode="1"] .comment-form {display: flex; justify-content: center; align-items: center; width: 60%; height: 35px; border: 1.6px solid #828282; border-radius: 10px; margin: 25px auto;}
+        .feed-container[data-darkmode="1"] .comment-input {width: 80%; height: 56%; background: transparent; border: none; outline: none; font-size: 13px; color: rgb(164, 164, 164); text-align: center; cursor: grab;}
+        .feed-container[data-darkmode="1"] .comment-btn {background: transparent; border: 1px solid #828282; border-radius: 4px; font-size: 12px; color: rgb(164, 164, 164); text-align: center; cursor: grab; padding: 5px 10px;}
+        .feed-container[data-darkmode="1"] .comment-header {display: flex; align-items: center; margin-bottom: 5px;}
         .feed-container[data-darkmode="1"] .comment .profile-pic {width: 30px; height: 30px; border-radius: 50%;}
-        .feed-container[data-darkmode="1"] .comment-meta {display: flex; flex-direction: column; margin-left: 10px;}
+        .feed-container[data-darkmode="1"] .comment-meta {display: flex; flex-direction: column; margin-left: 4px;}
         .feed-container[data-darkmode="1"] .comment-meta .username {font-size: 0.9em; font-weight: bold;}
         .feed-container[data-darkmode="1"] .comment-meta .comment-date {font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="1"] .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
         .feed-container[data-darkmode="1"] .comment-other-btn img {width: 20px; height: 20px;}
-        .feed-container[data-darkmode="1"] .comment-text {margin: 5px 0; padding-left: 40px; color: #e2e2e2;}
+        .feed-container[data-darkmode="1"] .comment-text {margin: 6px 0; padding-left: 40px; font-size: 14px; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .comment-actions {display: flex; align-items: center; padding-left: 40px;}
-        .feed-container[data-darkmode="1"] /* 답글 스타일 */
-        .feed-container[data-darkmode="1"] .replies {margin-left: 40px;}
-        .feed-container[data-darkmode="1"] .reply {position: relative; padding: 10px 0; border-bottom: 1px solid #2e2e2e;}
+        /* 답글 스타일 */
+        .feed-container[data-darkmode="1"] .replies {margin-left: 40px; margin-top: 5px;}
+        .feed-container[data-darkmode="1"] .reply {position: relative; padding: 10px 0;}
         .feed-container[data-darkmode="1"] .reply .comment-header {display: flex; align-items: center;}
         .feed-container[data-darkmode="1"] .reply .profile-pic {width: 25px; height: 25px; border-radius: 50%;}
-        .feed-container[data-darkmode="1"] .reply .comment-meta {display: flex; flex-direction: column; margin-left: 10px;}
+        .feed-container[data-darkmode="1"] .reply .comment-meta {display: flex; flex-direction: column; margin-left: 4px;}
         .feed-container[data-darkmode="1"] .reply .username {font-size: 0.85em; font-weight: bold;}
         .feed-container[data-darkmode="1"] .reply .comment-date {font-size: 0.75em; color: gray;}
         .feed-container[data-darkmode="1"] .reply .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
         .feed-container[data-darkmode="1"] .reply .comment-other-btn img {width: 18px; height: 18px;}
-        .feed-container[data-darkmode="1"] .reply .comment-text {margin: 5px 0; padding-left: 35px;}
+        .feed-container[data-darkmode="1"] .reply .comment-text {margin: 6px 0; padding-left: 35px;}
         .feed-container[data-darkmode="1"] .reply .comment-actions {display: flex; align-items: center; padding-left: 35px;}
         .feed-container[data-darkmode="1"] .comment-like-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .comment-like-btn .likebtn {width: 20px; height: 20px; margin-right: 5px;}
         .feed-container[data-darkmode="1"] .reply-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .reply-btn .commentbtn {width: 20px; height: 20px; margin-right: 5px;}
-        .feed-container[data-darkmode="1"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #434343; border-radius: 5px; margin-bottom: 10px;}
+        .feed-container[data-darkmode="1"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #434343; border-radius: 5px; margin-top: 15px;}
         .feed-container[data-darkmode="1"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */ color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
         .feed-container[data-darkmode="1"] .music-info .music-title {margin-left: 10px; font-weight: bold; font-size: 1em; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #e7e7e7; /* 회색 */}
     /*    --------------------------------------------------------------------------------------------------------------------*/
-        .post {position: relative; background-color: white; width: 90%; max-width: 600px; margin: 20px auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px;}
-        .user-info {display: flex; align-items: center;}
-        .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
-        .username {font-weight: bold; font-size: 1.2em;}
-        .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
-        .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
-        .post-actions .like-btn,
-        .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
-        .post-actions .likebtn,
-        .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
-        .like-count,
-        .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
-        .post-text {margin-left: 10px; margin-top: 10px; display: flex; align-items: center;}
-        .post-content {flex: 1;}
-        .post-text p {margin: 0;}
-        .post-time {float: right; font-size: 0.8em; color: gray;}
-        .other-btn {
-            position: absolute;top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
-        .other-btn img {width: 30px; height: 30px;}
-        .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
+        .feed-container[data-darkmode="0"] .post {position: relative; background-color: white; width: 90%; max-width: 600px; margin: 40px auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px;}
+        .feed-container[data-darkmode="0"] .user-info {display: flex; align-items: center;}
+        .feed-container[data-darkmode="0"] .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin: 5px 10px 0 4px;}
+        .feed-container[data-darkmode="0"] .username {font-weight: bold; font-size: 1.2em;}
+        .feed-container[data-darkmode="0"] .post-image {width: 100%; height: auto; margin: 15px 0 0 0; border-radius: 10px;}
+        .feed-container[data-darkmode="0"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 22px; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .post-actions .like-btn,
+        .feed-container[data-darkmode="0"] .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .post-actions .likebtn,
+        .feed-container[data-darkmode="0"] .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
+        .feed-container[data-darkmode="0"] .like-count,
+        .feed-container[data-darkmode="0"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
+        .feed-container[data-darkmode="0"] .post-text {margin: 15px 0 15px 10px; display: flex; align-items: center;}
+        .feed-container[data-darkmode="0"] .post-content {flex: 1;}
+        .feed-container[data-darkmode="0"] .post-text p {margin: 0;}
+        .feed-container[data-darkmode="0"] .post-time {float: right; font-size: 0.8em; color: gray;}
+        .feed-container[data-darkmode="0"] .other-btn {position: absolute; top: 25px; right: 15px; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .other-btn img {width: 30px; height: 30px;}
+        .feed-container[data-darkmode="0"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
-        .modal-item.red {color: red;}
-        .modal-item.gray {color: gray;}
-        .modal-item:last-child {border-bottom: none;}
-        .modal-item:hover {background-color: #f9f9f9;}
+        .feed-container[data-darkmode="0"] .modal-item {padding: 20px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .modal-item.red {color: red;}
+        .feed-container[data-darkmode="0"] .modal-item.gray {color: gray;}
+        .feed-container[data-darkmode="0"] .modal-item:last-child {border-bottom: none;}
+        .feed-container[data-darkmode="0"] .modal-item:hover {background-color: #f9f9f9;}
         /* 댓글 스타일 */
-        .comment {position: relative; padding: 20px 0; margin-left: 10px; border-bottom: 1px solid #e0e0e0;}
-        .comment-form {margin-left: 30px;}
-        .comment-header {display: flex; align-items: center;}
-        .comment .profile-pic {width: 30px; height: 30px; border-radius: 50%;}
-        .comment-meta {display: flex; flex-direction: column; margin-left: 10px;}
-        .comment-meta .username {font-size: 0.9em; font-weight: bold;}
-        .comment-meta .comment-date {font-size: 0.8em; color: gray;}
-        .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
-        .comment-other-btn img {width: 20px; height: 20px;}
-        .comment-text {margin: 5px 0; padding-left: 40px;}
-        .comment-actions {display: flex; align-items: center; padding-left: 40px;}
+        .feed-container[data-darkmode="0"] .comment {position: relative; padding: 20px 0; margin: 20px; border-top: 1px solid #e2e2e2;}
+        .feed-container[data-darkmode="0"] .comment-form {display: flex; justify-content: center; align-items: center; width: 60%; height: 35px; border: 1.6px solid #d2d2d2; border-radius: 10px; margin: 25px auto;}
+        .feed-container[data-darkmode="0"] .comment-input {width: 80%; height: 56%; background: transparent; border: none; outline: none; font-size: 13px; color: rgb(164, 164, 164); text-align: center; cursor: grab;}
+        .feed-container[data-darkmode="0"] .comment-btn {background: transparent; border: 1px solid #d2d2d2; border-radius: 4px; font-size: 12px; color: rgb(164, 164, 164); text-align: center; cursor: grab; padding: 5px 10px;}
+        .feed-container[data-darkmode="0"] .comment-header {display: flex; align-items: center; margin-bottom: 5px;}
+        .feed-container[data-darkmode="0"] .comment .profile-pic {width: 30px; height: 30px; border-radius: 50%;}
+        .feed-container[data-darkmode="0"] .comment-meta {display: flex; flex-direction: column; margin-left: 4px;}
+        .feed-container[data-darkmode="0"] .comment-meta .username {font-size: 0.9em; font-weight: bold;}
+        .feed-container[data-darkmode="0"] .comment-meta .comment-date {font-size: 0.8em; color: gray;}
+        .feed-container[data-darkmode="0"] .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
+        .feed-container[data-darkmode="0"] .comment-other-btn img {width: 20px; height: 20px;}
+        .feed-container[data-darkmode="0"] .comment-text {margin: 6px 0; padding-left: 40px; font-size: 14px;}
+        .feed-container[data-darkmode="0"] .comment-actions {display: flex; align-items: center; padding-left: 40px;}
         /* 답글 스타일 */
-        .replies {margin-left: 40px;}
-        .reply {position: relative; padding: 10px 0; border-bottom: 1px solid #e0e0e0;}
-        .reply .comment-header {display: flex; align-items: center;}
-        .reply .profile-pic {width: 25px; height: 25px; border-radius: 50%;}
-        .reply .comment-meta {display: flex; flex-direction: column; margin-left: 10px;}
-        .reply .username {font-size: 0.85em; font-weight: bold;}
-        .reply .comment-date {font-size: 0.75em; color: gray;}
-        .reply .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
-        .reply .comment-other-btn img {width: 18px; height: 18px;}
-        .reply .comment-text {margin: 5px 0; padding-left: 35px;}
-        .reply .comment-actions {display: flex; align-items: center; padding-left: 35px;}
-        .comment-like-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer;}
-        .comment-like-btn .likebtn {width: 20px; height: 20px; margin-right: 5px;}
-        .reply-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer;}
-        .reply-btn .commentbtn {width: 20px; height: 20px; margin-right: 5px;}
-        .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px;}
-        .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */}
-        .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
-        .music-info .music-title {margin-left: 10px; font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
-        .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
+        .feed-container[data-darkmode="0"] .replies {margin-left: 40px; margin-top: 5px;}
+        .feed-container[data-darkmode="0"] .reply {position: relative; padding: 10px 0;}
+        .feed-container[data-darkmode="0"] .reply .comment-header {display: flex; align-items: center;}
+        .feed-container[data-darkmode="0"] .reply .profile-pic {width: 25px; height: 25px; border-radius: 50%;}
+        .feed-container[data-darkmode="0"] .reply .comment-meta {display: flex; flex-direction: column; margin-left: 4px;}
+        .feed-container[data-darkmode="0"] .reply .username {font-size: 0.85em; font-weight: bold;}
+        .feed-container[data-darkmode="0"] .reply .comment-date {font-size: 0.75em; color: gray;}
+        .feed-container[data-darkmode="0"] .reply .comment-other-btn {background: none; border: none; cursor: pointer; margin-left: auto;}
+        .feed-container[data-darkmode="0"] .reply .comment-other-btn img {width: 18px; height: 18px;}
+        .feed-container[data-darkmode="0"] .reply .comment-text {margin: 6px 0; padding-left: 35px;}
+        .feed-container[data-darkmode="0"] .reply .comment-actions {display: flex; align-items: center; padding-left: 35px;}
+        .feed-container[data-darkmode="0"] .comment-like-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .comment-like-btn .likebtn {width: 20px; height: 20px; margin-right: 5px;}
+        .feed-container[data-darkmode="0"] .reply-btn {display: flex; align-items: center; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .reply-btn .commentbtn {width: 20px; height: 20px; margin-right: 5px;}
+        .feed-container[data-darkmode="0"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-top: 15px;}
+        .feed-container[data-darkmode="0"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */}
+        .feed-container[data-darkmode="0"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
+        .feed-container[data-darkmode="0"] .music-info .music-title {margin-left: 10px; font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
+        .feed-container[data-darkmode="0"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
 
     </style>
     <style id="darkmode-scrollbar-styles"></style>
@@ -206,14 +209,7 @@
         <c:if test="${not empty feedDetail.feed_img_url}">
             <img src="${feedDetail.feed_img_url}" alt="Post Image" class="post-image">
         </c:if>
-        <br/>
-        <br/>
-        <div class="post-text">
-            <div class="post-content">
-                <p>${feedDetail.feed_text}</p>
-            </div>
-        </div>
-        <br/>
+        
         <c:if test="${not empty feedDetail.track_id}">
             <div id="music-info" class="music-info">
                 <img id="album-icon" src="${feedDetail.track_cover}" alt="Album Icon"
@@ -232,115 +228,115 @@
                 </label>
             </div>
         </c:if>
-        <span class="post-time">${feedDetail.feed_date}</span>
-
-        <br/>
-
-
+        <div class="post-text">
+            <div class="post-content">
+                <p>${feedDetail.feed_text}</p>
+                <span class="post-time">${feedDetail.feed_date}</span>
+            </div>
+        </div>
         <div class="post-actions">
             <button type="button" class="like-btn" data-feed-id="${feedDetail.feed_id}" data-now-id="${now_id}">
                 <img class="likebtn" src="static/images/btn/like_btn.png" alt="like"/>
                 <span class="like-count">${feedDetail.likeCount}</span>
             </button>
             <div class="comments">
-                <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="comments"/>
-                <span class="comment-count">${feedDetail.commentsCount}</span>
+                <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="comments" style="width: 28px; height: 28px;"/>
+                <span class="comment-count" style="margin-top: -3px; font-size: 13px;">${feedDetail.commentsCount}</span>
             </div>
         </div>
-    </div>
-
-    <div class="comments-section">
-        <c:forEach var="comment" items="${feedDetail.feedComments}">
-            <div class="comment" data-feed-id="${comment.feed_id}" data-comment-id="${comment.feed_comments_id}"
-                 data-user-id="${comment.user_id}">
-                <!-- 댓글 헤더 -->
-                <div class="comment-header">
-                    <!-- 프로필 사진 -->
-                    <a href="profileHome?u=${comment.user_id}">
-                        <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
-                    </a>
-                    <!-- 아이디와 날짜 -->
-                    <div class="comment-meta">
-                        <span class="username">${comment.user_id}</span>
-                        <span class="comment-date">${comment.feed_comments_date}</span>
-                    </div>
-                    <!-- other_btn -->
-                    <button class="comment-other-btn">
-                        <img src="static/images/btn/other_btn.png" alt="Other Button">
-                    </button>
-                </div>
-                <!-- 댓글 내용 -->
-                <p class="comment-text">${comment.feed_comments_text}</p>
-                <!-- 좋아요 및 답글 아이콘 -->
-                <div class="comment-actions">
-                    <button type="button" class="comment-like-btn" data-comment-id="${comment.feed_comments_id}"
-                            data-now-id="${now_id}">
-                        <img class="likebtn" src="static/images/btn/like_btn.png" alt="like"/>
-                        <span class="comment-like-count">${comment.likeCount}</span>
-                    </button>
-                    <button type="button" class="reply-btn" onclick="toggleReplyForm(${comment.feed_comments_id})">
-                        <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="답글"/>
-                        <span class="comment-reply-count">${comment.replyCount}</span>
-                    </button>
-                </div>
-                <!-- 답글 표시 -->
-                <c:if test="${not empty comment.replies}">
-                    <div class="replies">
-                        <c:forEach var="reply" items="${comment.replies}">
-                            <div class="reply" data-feed-id="${reply.feed_id}"
-                                 data-comment-id="${reply.feed_comments_id}" data-user-id="${reply.user_id}">
-                                <!-- 답글 헤더 -->
-                                <div class="comment-header">
-                                    <!-- 프로필 사진 -->
-                                    <a href="profileHome?u=${reply.user_id}">
-                                        <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
-                                    </a>
-                                    <!-- 아이디와 날짜 -->
-                                    <div class="comment-meta">
-                                        <span class="username">${reply.user_id}</span>
-                                        <span class="comment-date">${reply.feed_comments_date}</span>
-                                    </div>
-                                    <!-- other_btn -->
-                                    <button class="comment-other-btn">
-                                        <img src="static/images/btn/other_btn.png" alt="Other Button">
-                                    </button>
-                                </div>
-                                <!-- 답글 내용 -->
-                                <p class="comment-text">${reply.feed_comments_text}</p>
-                                <!-- 좋아요 아이콘 -->
-                                <div class="comment-actions">
-                                    <button type="button" class="comment-like-btn"
-                                            data-comment-id="${reply.feed_comments_id}" data-now-id="${now_id}">
-                                        <img class="likebtn" src="static/images/btn/like_btn.png" alt="like"/>
-                                        <span class="comment-like-count">${reply.likeCount}</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </c:if>
-                <!-- 답글 입력 폼 -->
-                <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;"
-                     onsubmit="validateReplyForm(event)">
-                    <form action="feedDetail/reply" method="post">
-                        <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
-                        <input type="hidden" name="parentCommentId" value="${comment.feed_comments_id}">
-                        <input type="hidden" name="userId" value="${now_id}">
-                        <input type="text" name="replyText" placeholder="답글을 입력하세요"/>
-                        <button type="submit">답글 달기</button>
-                    </form>
-                </div>
-            </div>
-        </c:forEach>
-        <!-- 댓글 입력 폼 -->
-        <div class="comment-form">
-            <form action="feedDetail/comments" method="post" onsubmit="validateCommentForm(event)">
-                <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
-                <input type="hidden" name="userId" value="${now_id}">
-                <input type="text" name="comments" placeholder="댓글을 입력하세요"/>
-                <button type="submit" class="btn">입력</button>
-            </form>
-        </div>
+        <div class="comments-section">
+	        <c:forEach var="comment" items="${feedDetail.feedComments}">
+	            <div class="comment" data-feed-id="${comment.feed_id}" data-comment-id="${comment.feed_comments_id}"
+	                 data-user-id="${comment.user_id}">
+	                <!-- 댓글 헤더 -->
+	                <div class="comment-header">
+	                    <!-- 프로필 사진 -->
+	                    <a href="profileHome?u=${comment.user_id}">
+	                        <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
+	                    </a>
+	                    <!-- 아이디와 날짜 -->
+	                    <div class="comment-meta">
+	                        <span class="username">${comment.user_id}</span>
+	                        <span class="comment-date">${comment.feed_comments_date}</span>
+	                    </div>
+	                    <!-- other_btn -->
+	                    <button class="comment-other-btn">
+	                        <img src="static/images/btn/other_btn.png" alt="Other Button">
+	                    </button>
+	                </div>
+	                <!-- 댓글 내용 -->
+	                <p class="comment-text">${comment.feed_comments_text}</p>
+	                <!-- 좋아요 및 답글 아이콘 -->
+	                <div class="comment-actions">
+	                    <button type="button" class="comment-like-btn" data-comment-id="${comment.feed_comments_id}"
+	                            data-now-id="${now_id}">
+	                        <img class="likebtn" src="static/images/btn/like_btn.png" alt="like"/>
+	                        <span class="comment-like-count">${comment.likeCount}</span>
+	                    </button>
+	                    <button type="button" class="reply-btn" onclick="toggleReplyForm(${comment.feed_comments_id})">
+	                        <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="답글"/>
+	                        <span class="comment-reply-count">${comment.replyCount}</span>
+	                    </button>
+	                </div>
+	                <!-- 답글 표시 -->
+	                <c:if test="${not empty comment.replies}">
+	                    <div class="replies">
+	                        <c:forEach var="reply" items="${comment.replies}">
+	                            <div class="reply" data-feed-id="${reply.feed_id}"
+	                                 data-comment-id="${reply.feed_comments_id}" data-user-id="${reply.user_id}">
+	                                <!-- 답글 헤더 -->
+	                                <div class="comment-header">
+	                                    <!-- 프로필 사진 -->
+	                                    <a href="profileHome?u=${reply.user_id}">
+	                                        <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
+	                                    </a>
+	                                    <!-- 아이디와 날짜 -->
+	                                    <div class="comment-meta">
+	                                        <span class="username">${reply.user_id}</span>
+	                                        <span class="comment-date">${reply.feed_comments_date}</span>
+	                                    </div>
+	                                    <!-- other_btn -->
+	                                    <button class="comment-other-btn">
+	                                        <img src="static/images/btn/other_btn.png" alt="Other Button">
+	                                    </button>
+	                                </div>
+	                                <!-- 답글 내용 -->
+	                                <p class="comment-text">${reply.feed_comments_text}</p>
+	                                <!-- 좋아요 아이콘 -->
+	                                <div class="comment-actions">
+	                                    <button type="button" class="comment-like-btn"
+	                                            data-comment-id="${reply.feed_comments_id}" data-now-id="${now_id}">
+	                                        <img class="likebtn" src="static/images/btn/like_btn.png" alt="like"/>
+	                                        <span class="comment-like-count">${reply.likeCount}</span>
+	                                    </button>
+	                                </div>
+	                            </div>
+	                        </c:forEach>
+	                    </div>
+	                </c:if>
+	                <!-- 답글 입력 폼 -->
+	                <div class="reply-form" id="reply-form-${comment.feed_comments_id}" style="display: none;"
+	                     onsubmit="validateReplyForm(event)">
+	                    <form action="feedDetail/reply" method="post" class="comment-form" style="margin: 10px auto;">
+	                        <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
+	                        <input type="hidden" name="parentCommentId" value="${comment.feed_comments_id}">
+	                        <input type="hidden" name="userId" value="${now_id}">
+	                        <input type="text" name="replyText" class="comment-input" placeholder="답글을 입력하세요"/>
+	                        <button type="submit" class="comment-btn">답글</button>
+	                    </form>
+	                </div>
+	            </div>
+	        </c:forEach>
+	        <!-- 댓글 입력 폼 -->
+	        <div>
+	            <form action="feedDetail/comments" method="post" onsubmit="validateCommentForm(event)" class="comment-form">
+	                <input type="hidden" name="feedId" value="${feedDetail.feed_id}">
+	                <input type="hidden" name="userId" value="${now_id}">
+	                <input type="text" name="comments" class="comment-input" placeholder="댓글을 입력하세요"/>
+	                <button type="submit" class="comment-btn">입력</button>
+	            </form>
+	        </div>
+	    </div>
     </div>
 
     <div id="otherModal" class="modal">

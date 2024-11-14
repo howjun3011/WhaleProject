@@ -1,5 +1,7 @@
 package com.tech.whale.admin.report.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dao.AdminReportIDao;
+import com.tech.whale.admin.dto.AdminReportOverlapDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.main.models.MainDao;
 
@@ -48,26 +51,28 @@ public class AdminReportResultService implements AdminServiceInter{
 		}else if(writingStatus.equals("1")) {
 			writingStatus="작성글 삭제";
 		}
+		List<AdminReportOverlapDto> total_report = new ArrayList<>();
+		total_report = adminReportIDao.totalReport(writingType,report_id);
 		
-		if(userStatus.equals("0")) {
-			userStatus="-";
-			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,0);
-		}else if(userStatus.equals("1")) {
-			userStatus="1일 정지";
-			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,1);
-		}else if(userStatus.equals("2")) {
-			userStatus="영구 정지";
-			adminReportIDao.reportResult(
-					report_id,writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatus,2);
+		String userStatusStr = null;
+		for(AdminReportOverlapDto var : total_report) {
+			if(userStatus.equals("0")) {
+				userStatusStr="-";
+				adminReportIDao.reportResult(
+						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,0);
+			}else if(userStatus.equals("1")) {
+				userStatusStr="1일 정지";
+				adminReportIDao.reportResult(
+						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,1);
+			}else if(userStatus.equals("2")) {
+				userStatusStr="영구 정지";
+				adminReportIDao.reportResult(
+						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,2);
+			}
+			// [ 메인 알람 기능: 해당 유저의 알람 테이블 추가 ]
+			mainDao.insertWhaleNoti(0, var.getUser_id());
+			adminReportIDao.reportAdminCh(var.getReport_id());
 		}
-		
-		// [ 메인 알람 기능: 해당 유저의 알람 테이블 추가 ]
-		String targetId = mainDao.selectReportId(report_id);
-		mainDao.insertWhaleNoti(0, targetId);
-		
-		adminReportIDao.reportAdminCh(report_id);
 	}
 	
 	@Transactional

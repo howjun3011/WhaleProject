@@ -164,7 +164,12 @@
 		UPDATE REPORT SET REPORT_ADMIN_CHECK = 1 WHERE REPORT_ID = #{report_id}
 	</update>
    
-	
+	<select id="totalReport" resultType="com.tech.whale.admin.dto.AdminReportOverlapDto">
+		SELECT REPORT_ID, USER_ID FROM REPORT
+		WHERE ${writingType}_ID = 
+			(SELECT ${writingType}_ID FROM REPORT WHERE REPORT_ID = #{report_id})
+			AND REPORT_ADMIN_CHECK IS NULL
+	</select>
 	
 	
 </mapper>

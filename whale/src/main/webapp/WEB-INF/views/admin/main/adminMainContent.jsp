@@ -7,30 +7,36 @@
 <div class="mainContent">
     <div class="blockContainer">
 	    <div class="divStep">
-	        <div class="block" id="block1" onclick="window.location.href='adminReportListView'">
-	        	신고현황<br />
+	        <div class="block" id="block1">
+	        	<span class="block5-name"  onclick="window.location.href='adminReportListView'">신고현황</span>
 	        	<div id="reportToday">
 	        		오늘완료- ${report_result_today } 건<br />
 	        		미완료- ${report_null } 건
 	        	</div>
 	        </div>
-	        <div class="block" id="block2" onclick="window.location.href='adminBoardListView'">
-	        	오늘 작성된 글
-	        	<div id="writingToday">
+	        <div class="block" id="block2">
+	        	<span class="block5-name" onclick="window.location.href='adminBoardListView'">오늘 작성된 글</span>
+	        	<div id="writingToday" class="blok-2-4">
 	        		${writing_today} 건
 	        	</div>
 	        </div>
-	        <div class="block" id="block3" onclick="window.location.href=''">
-	        	오늘재생횟수
+	        <div class="block" id="block3">
+	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘재생횟수</span>
+	        	<div id="musigToday" class="blok-2-4">
+	        		${musig_today} 건
+	        	</div>
 	        </div>
-	        <div class="block" id="block4" onclick="window.location.href=''">
-	        	오늘음악태그
+	        <div class="block" id="block4">
+	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘음악태그</span>
+	        	<div id="tagToday" class="blok-2-4">
+	        		${tag_today} 건
+	        	</div>
 	        </div>
 	    </div>
 	    <div class="divStep">
-	        <div class="block" id="block5" onclick="window.location.href='adminNoticeListView'">
-	        	<span class="block5-name">공지사항</span>
-	        	<table id="noticce">
+	        <div class="block" id="block5">
+	        	<span class="block5-name" onclick="window.location.href='adminNoticeListView'">공지사항</span>
+	        	<table id="noticce" class="block5-7">
 	        		<c:forEach items="${mainNotice }" var="mn">
 	        			<tr>
 		        			<td><a href="adminNoticeContentView?postId=${mn.post_id }&page=1&searchType=&sk=&communityName=">${mn.post_title }..</a></td>
@@ -39,12 +45,21 @@
 	        		</c:forEach>
 	        	</table>
 	        </div>
-	        <div class="block" id="block6" onclick="window.location.href=''">광고현황</div>
-	        <div class="block" id="block7" onclick="window.location.href=''">2024-09-12 (월) <br /> 18:18:18</div>
+	        <div class="block" id="block7">
+	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘 음악 순위</span>
+	        	<table class="block5-7">
+	        		<c:forEach items="${rank_today }" var="rt" varStatus="status">
+	        			<tr>
+	        				<td>${status.index+1}.${rt.track_name }</td>
+	        				<td>${rt.track_artist }</td>
+	        			</tr>
+	        		</c:forEach>
+	        	</table>
+	        </div>
 	    </div>
 	    <div class="divStep">
-	        <div class="block" id="block8" onclick="window.location.href=''">
-	        	작성글
+	        <div class="block" id="block8">
+	        	<span class="block5-name" onclick="window.location.href='adminStatisticCFView'">커뮤&피드 작성글</span>
 	        	<div class="chartBox">
 		        	<canvas id="reportChart"></canvas>
 		    	</div>

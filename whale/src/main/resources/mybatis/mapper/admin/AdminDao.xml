@@ -943,7 +943,7 @@
 	<select id="mainNotice" resultType="com.tech.whale.admin.dto.AdminMainCntDto">
 		SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
 		FROM (
-		    SELECT TO_CHAR(POST_ID) AS POST_ID, SUBSTR(NVL(TO_CHAR(POST_TITLE),''),1,15) AS POST_TITLE, POST_DATE
+		    SELECT TO_CHAR(POST_ID) AS POST_ID, SUBSTR(NVL(TO_CHAR(POST_TITLE),''),1,20) AS POST_TITLE, POST_DATE
 		    FROM POST
 		    WHERE POST_TAG_ID = 5
 		    ORDER BY POST_ID DESC
@@ -973,6 +973,32 @@
 		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
 	</update>
 	
-	
+	<select id="musigToday" resultType="int">
+		SELECT COUNT(*) FROM TRACK_CNT
+		WHERE TRACK_CNT_DATE &gt;= SYSDATE - 1
+	</select>
+	<select id="tagToday" resultType="int">
+		SELECT 
+		    (SELECT COUNT(*) FROM POST_MUSIC PM
+		     LEFT JOIN POST P ON PM.POST_ID = P.POST_ID
+		     WHERE P.POST_DATE &gt;= TRUNC(SYSDATE))
+		    +
+		    (SELECT COUNT(*) FROM FEED_MUSIC FM
+		     LEFT JOIN FEED F ON FM.FEED_ID = F.FEED_ID
+		     WHERE F.FEED_DATE &gt;= TRUNC(SYSDATE)) AS VALUE
+		FROM DUAL
+	</select>
+	<select id="rankToday" resultType="com.tech.whale.admin.dto.AdminMainRankDto">
+		SELECT TRACK_NAME, TRACK_ARTIST
+		FROM (
+		    SELECT T.TRACK_NAME, T.TRACK_ARTIST, COUNT(*) AS PLAY_COUNT
+		    FROM TRACK_CNT TC
+		    LEFT JOIN TRACK T ON TC.TRACK_ID = T.TRACK_ID
+		    WHERE TC.TRACK_CNT_DATE &gt;= TRUNC(SYSDATE)
+		    GROUP BY T.TRACK_NAME, T.TRACK_ARTIST
+		    ORDER BY PLAY_COUNT DESC
+		)
+		WHERE ROWNUM &lt;= 3
+	</select>
 	
 </mapper>

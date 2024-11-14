@@ -43,6 +43,14 @@ table {
     border-collapse: collapse;
     
 }
+.table-btn {
+	font-size: 1em;
+	padding:2px 5px 2px 5px;
+	border-radius: 3px;
+	border: 0.5px solid #999;
+	cursor: pointer;
+	background-color: #eee;
+}
 tr {
 	border-bottom: 1px solid #999;
 }
@@ -53,10 +61,10 @@ th, td {
 tfoot{
 	margin-left: auto;
     margin-right: auto;
-    
 }
 tfoot tr, tfoot td {
     border-bottom: none;
-    
-    
+}
+.addWriting a{
+	margin-left: 15px;
 }

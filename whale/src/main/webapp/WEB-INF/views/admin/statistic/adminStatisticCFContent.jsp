@@ -8,7 +8,7 @@
 
 <div class="content" name="content" id="content">
 	<div class="container">
-		<h1 id="statistic-name">커뮤니티</h1>
+		<h1 id="statistic-name">커뮤니티 작성글 통계</h1>
 	    <br />
 	    <div class="btnCheck">
 	    	<label>

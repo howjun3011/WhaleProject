@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dao.AdminStatisticIDao;
 import com.tech.whale.admin.dto.AdminMainCntDto;
+import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
 import com.tech.whale.admin.dto.AdminLVDataDto;
 
@@ -32,8 +33,11 @@ public class AdminMainPageService implements AdminServiceInter{
 		int report_result_today = adminIDao.reportResultCnt();
 		int writing_today = adminIDao.writingCnt();
 		ArrayList<AdminMainCntDto> mainNotice = adminIDao.mainNotice();
-		List<AdminLVDataDto> mainStatistic = adminStatisticIDao.reportStatistic2();
+		List<AdminLVDataDto> mainStatistic = adminStatisticIDao.cfStatistic12();
+		int musig_today = adminIDao.musigToday();
+		int tag_today = adminIDao.tagToday();
 		
+		List<AdminMainRankDto> rank_today = adminIDao.rankToday();
 		List<String> labels = new ArrayList<>();
 		List<Integer> values = new ArrayList<>();
 		for(AdminLVDataDto var : mainStatistic) {
@@ -41,6 +45,9 @@ public class AdminMainPageService implements AdminServiceInter{
 			values.add(var.getValue());
 		}
 		
+		model.addAttribute("rank_today", rank_today);
+		model.addAttribute("musig_today", musig_today);
+		model.addAttribute("tag_today", tag_today);
 		model.addAttribute("labels", labels);
 		model.addAttribute("values", values);
 		model.addAttribute("mainNotice", mainNotice);

@@ -9,6 +9,7 @@ import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminReportListDto;
+import com.tech.whale.admin.dto.AdminReportOverlapDto;
 import com.tech.whale.admin.dto.AdminReportResultDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 
@@ -36,4 +37,7 @@ public interface AdminReportIDao {
 			@Param("endDate") int endDate
 			);
 	public void reportAdminCh(int report_id);
+	public ArrayList<AdminReportOverlapDto> totalReport(
+			@Param("writingType") String writingType,
+			@Param("report_id") int report_id);
 }

@@ -209,10 +209,30 @@
             top: 55%;
             transform: translateY(-50%);
         }
-        .date {
-            margin-left: auto;
-            text-align: right;
+        .cnt-date-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
         }
+
+        .cnt-date-container .views, .total-like, .total-comment {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .cnt-date-container .date {
+            color: #888;
+            margin-left: auto; /* date 우측에 고정 */
+        }
+
+        .cnt-date-container img {
+            margin: 0;
+            width: 19px;
+            height: 19px;
+        }
+
     </style>
     <style id="darkmode-scrollbar-styles"></style>
 </head>
@@ -269,8 +289,12 @@
                                                 <div>${post.post_tag_text}&nbsp;${post.post_title}</div>
                                                 <div>${post.user_id}</div>
                                             </div>
-                                            <div class="date">${post.post_date}</div>
-                                            <div class="cnt">${post.post_cnt}</div>
+                                            <div class="cnt-date-container">
+                                                <div class="views"><img src="static/images/setting/views.png" alt="views-img">${post.post_cnt}</div>
+                                                <div class="total-like"><img src="static/images/btn/like_btn.png" alt="like-btn">${post.total_like_count}</div>
+                                                <div class="total-comment"><img src="static/images/btn/comment_btn.png" alt="comment-btn">${post.total_comment_count}</div>
+                                                <div class="date">${post.post_date}</div>
+                                            </div>
                                         </div>
                                     </a>
                                 </c:forEach>

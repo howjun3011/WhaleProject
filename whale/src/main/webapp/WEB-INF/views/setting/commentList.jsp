@@ -248,6 +248,18 @@
 			align-items: center;
 		}
 
+		.text-date-container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 5px;
+		}
+
+		.text-date-container .date {
+			color: #888;
+			margin-left: auto; /* date 우측에 고정 */
+		}
+
 	</style>
 	<style id="darkmode-scrollbar-styles"></style>
 </head>
@@ -302,7 +314,10 @@
 													<div>${post.post_tag_text}&nbsp;${post.post_title}</div>
 													<div>${post.post_owner_id}</div>
 												</div>
-													<div>${post.post_text}</div>
+												<div class="text-date-container">
+													<div class="post-text">${post.post_text}</div>
+													<div class="date">${post.post_date}</div>
+												</div>
 											</div>
 
 											<div class="comments-section">

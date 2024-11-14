@@ -21,6 +21,8 @@ public class LikeListDto {
 	private String post_tag_text;
 	private String post_date;
 	private int post_cnt;
+	private int total_like_count;
+	private int total_comment_count;
 
 	private int feed_id;
 	private String feed_img_url;

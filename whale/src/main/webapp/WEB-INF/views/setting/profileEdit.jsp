@@ -173,7 +173,7 @@ table tr td {
                 </div>
                 <table>
                     <tr>
-                        <td>아이디</td>
+                        <td>닉네임</td>
                         <td><input type="text" name="user_nickname"
                             value="${profile.user_nickname}" /></td>
                     </tr>

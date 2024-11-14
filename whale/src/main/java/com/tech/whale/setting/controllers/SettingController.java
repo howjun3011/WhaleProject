@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -640,12 +641,8 @@ public class SettingController {
     @Autowired
     private UserDao userDao;
 
-    @Transactional
-    public void deleteUser(String userId) {
-        userDao.deleteUserById(userId);
-    }
-
     @PostMapping("/deleteAccountMethod")
+    @Transactional
     public String deleteAccountMethod(HttpSession session,
                                       @RequestParam("password") String password,
                                       RedirectAttributes redirectAttributes) {
@@ -679,9 +676,8 @@ public class SettingController {
             for (String userId : followingUsers) {
                 userDao.doUnfollowing(userId, sessionUserId); // 각각의 팔로워에 대해 언팔로우 처리
             }
-            // 사용자 계정 삭제
-            System.out.println("삭제할 사용자 ID: " + sessionUserId);
-            userDao.deleteUserById(sessionUserId);
+            // 모든 관련 테이블에서 user_id 변경 처리
+            deleteUserAndUpdateReferences(sessionUserId); // 새로운 메서드로 ID 업데이트와 관련 데이터 정리 수행
 
             System.out.println("사용자 삭제 완료");
             session.invalidate();  // 세션 무효화
@@ -700,4 +696,47 @@ public class SettingController {
         System.out.println("deleteAccountResult 페이지 열림");
         return "setting/deleteAccountResult";
     }
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Transactional
+    public void deleteUserAndUpdateReferences(String userId) {
+        String newUserId = "delete" + (int) (Math.random() * 100000);
+
+        try {
+            // 참조 테이블 데이터 임시 삭제
+            userDao.deleteUserPageAccessSettingByUserId(userId);
+            userDao.deleteUserNotiOnoffByUserId(userId);
+            userDao.deleteUserStartpageSettingByUserId(userId);
+            userDao.deleteUserSettingByUserId(userId);
+            userDao.deleteUserFromBlockByUserId(userId);
+            userDao.deleteUserProfileByUserId(userId);
+            userDao.deleteUserFollowByUserId(userId);
+
+            // user_info 테이블의 user_id 업데이트
+            String updateNicknameSql = "UPDATE user_info SET user_nickname = '탈퇴한 사용자' WHERE user_id = ?"; // JDBC를 이용한 강제 SQL 실행
+            jdbcTemplate.update(updateNicknameSql, userId);
+            String updateStatusSql = "UPDATE user_info SET user_status = 2 WHERE user_id = ?";
+            jdbcTemplate.update(updateStatusSql, userId);
+            String updateEmailSql = "UPDATE user_info SET USER_EMAIL = '' WHERE user_id = ?";
+            jdbcTemplate.update(updateEmailSql, userId);
+
+            userDao.changeUserInfoByUserId(userId, newUserId);
+            userDao.changeUserIdInMessage(userId, newUserId);
+            userDao.changeUserIdInMessageRoomUser(userId, newUserId);
+
+            // 참조 테이블에 새로운 user_id로 데이터 삽입
+            userDao.insertUserNotiOnoffWithNewUserId(newUserId);
+            userDao.insertUserPageAccessSettingWithNewUserId(newUserId);
+            userDao.insertUserStartpageSettingWithNewUserId(newUserId);
+            userDao.insertUserSettingByUserId(newUserId);
+            userDao.insertUserIntoBlockWithNewUserId(newUserId);
+            userDao.insertUserProfileWithNewUserId(newUserId);
+            userDao.insertUserFollowWithNewUserId(newUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

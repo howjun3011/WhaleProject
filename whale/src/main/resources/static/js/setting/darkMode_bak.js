@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const settingElement = document.querySelector('.setting-body');
     const feedElement = document.querySelector('.feed-container');
     const communityElement = document.querySelector('.container');
+    const communityDetailElement = document.querySelector('.container');
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
     const streamingElement = document.querySelector('.streamingBody');
     const profileHomeElement = document.querySelector('.container');
-    const searchHomeElement = document.querySelector('.searchHomeBody');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -89,6 +89,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (communityDetailElement) {
+        communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        communityDetailElement.classList.toggle("dark", isDarkMode);
+        communityDetailElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                communityDetailElement.classList.toggle("dark", isDarkMode);
+                communityDetailElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     if (communityPostElement) {
         communityPostElement.setAttribute("data-darkmode", darkmodeOn);
         const isDarkMode = darkmodeOn === "1";
@@ -121,6 +140,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDarkMode = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDarkMode);
                 communityPostModalElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
+    if (profileHomeElement) {
+        profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        profileHomeElement.classList.toggle("dark", isDarkMode);
+        profileHomeElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                profileHomeElement.classList.toggle("dark", isDarkMode);
+                profileHomeElement.classList.toggle("light", !isDarkMode);
 
                 updateScrollbarStyle(); // 스크롤바 스타일 업데이트
             }
@@ -197,25 +235,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    if (searchHomeElement) {
-        searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
-        const isDarkMode = darkmodeOn === "1";
-        searchHomeElement.classList.toggle("dark", isDarkMode);
-        searchHomeElement.classList.toggle("light", !isDarkMode);
-
-        window.addEventListener('message', function (event) {
-            if (event.data && event.data.darkmodeOn !== undefined) {
-                darkmodeOn = event.data.darkmodeOn;
-                searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
-                const isDarkMode = darkmodeOn === "1";
-                searchHomeElement.classList.toggle("dark", isDarkMode);
-                searchHomeElement.classList.toggle("light", !isDarkMode);
-
-                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
-            }
-        });
-    }
-
     window.addEventListener('storage', function (event) {
         if (event.key === 'darkmodeOn') {
             darkmodeOn = event.newValue || "0";
@@ -238,6 +257,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 communityElement.classList.toggle("dark", isDark);
                 communityElement.classList.toggle("light", !isDark);
             }
+            if (communityDetailElement) {
+                communityDetailElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                communityDetailElement.classList.toggle("dark", isDark);
+                communityDetailElement.classList.toggle("light", !isDark);
+            }
             if (communityPostElement) {
                 communityPostElement.setAttribute("data-darkmode", darkmodeOn);
                 const isDark = darkmodeOn === "1";
@@ -249,6 +274,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDark);
                 communityPostModalElement.classList.toggle("light", !isDark);
+            }
+            if (profileHomeElement) {
+                profileHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                profileHomeElement.classList.toggle("dark", isDark);
+                profileHomeElement.classList.toggle("light", !isDark);
             }
             if (streamingElement) {
                 streamingElement.setAttribute("data-darkmode", darkmodeOn);
@@ -305,12 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
                     updateBackground(); // light 모드일 때 배경 업데이트
                 }
-            }
-            if (searchHomeElement) {
-                searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
-                const isDark = darkmodeOn === "1";
-                searchHomeElement.classList.toggle("dark", isDark);
-                searchHomeElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
         }

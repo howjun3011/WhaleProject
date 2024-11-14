@@ -69,6 +69,13 @@ public interface UserDao {
     void insertUserFollowWithNewUserId(@Param("user_id") String newUserId);
 
     // MASSAGE 테이블 관련 메서드
-    void changeUserIdInMessage(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
-    void changeUserIdInMessageRoomUser(@Param("user_id") String userId, @Param("new_user_id") String newUserId);
+    void deleteUserIdInMessageByUserId(@Param("user_id") String userId);
+    void insertUserIdInMessageWithNewUserId(@Param("user_id") String newUserId);
+    void changeUserIdInMessage(@Param("userId") String userId, @Param("newUserId") String newUserId);
+
+    // MASSAGE_ROOM 테이블 관련 메서드
+    void deleteUserIdInMessageRoomUserByUserId(@Param("user_id") String userId);
+    void insertUserIdInMessageRoomUserWithNewUserId(@Param("user_id") String newUserId);
+    void changeUserIdInMessageRoomUser(@Param("userId") String userId, @Param("newUserId") String newUserId);
+
 }

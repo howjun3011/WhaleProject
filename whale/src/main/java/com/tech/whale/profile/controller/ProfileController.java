@@ -151,8 +151,8 @@ public class ProfileController {
 		String now_id = (String) session.getAttribute("user_id");
 		//비공개계정 팔로우 요청
 		// [ 메인 알람 기능: 기존 테이블에 포함되지 않는다면 팔로우 알람 테이블 추가 ]
-		Integer followNoti = mainDao.selectFollowNotiId(userId, now_id);
-		if (followNoti == null) {
+		Integer followNoti = mainDao.selectFollowed(userId, now_id);
+		if (followNoti == 0) {
 			mainDao.insertFollowNoti(1, userId, now_id);
         }
 		

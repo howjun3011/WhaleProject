@@ -23,6 +23,7 @@ public class CommentListDto {
 	private String post_commenter_image;
 	private String post_commenter_id;
 	private String post_comments_text;
+	private String post_date;
 
 	private int re_post_id;
 	private int re_post_comments_id;

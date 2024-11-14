@@ -131,7 +131,6 @@ public class MainService {
 		mainDao.insertFollowNoti(2, targetId, userId);
 		// 상대방의 팔로우 목록에 내가 있는지 확인
 		Integer followNoti = mainDao.selectFollowed(targetId, userId);
-		System.out.println(followNoti);
 		if (followNoti == 0) {
 			mainDao.insertFollowNoti(3, userId, targetId);
         }

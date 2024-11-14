@@ -429,10 +429,7 @@ public class StreamingService {
     // 트랙 재생횟수 인서트
     public void updateTrackCntService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
     	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
-    	Integer trackCntId = streamingDao.selectTrackCntId((String) session.getAttribute("user_id"), trackId);
-    	
-    	if (trackCntId == null) {streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));}
-    	else {streamingDao.updateTrackCnt(trackCntId);}
+    	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
     }
     
     // 좋아요 표시한 곡의 숫자

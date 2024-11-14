@@ -13,8 +13,9 @@
     <title>Whale Search</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/search/searchFunction.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/setting/darkMode.js"></script>
 </head>
-<body>
+<body class="searchHomeBody">
 <header>
 	<div class="header">
 		<div class="headerSearch">

@@ -100,7 +100,7 @@ function displayUserResults(userList) {
                 <div class="userItem">
                     <img src="${user.user_image_url}" alt="${user.user_nickname}" />
                     <div>
-                        <p style="margin-bottom: 0; color: #fff;">${user.user_nickname}</p>
+                        <p style="margin-bottom: 0;">${user.user_nickname}</p>
                         <p style="margin-top: 0; font-size: .85rem;">@${user.user_id}</p>
                     </div>
                 </div>

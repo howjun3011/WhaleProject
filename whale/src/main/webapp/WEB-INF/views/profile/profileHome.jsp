@@ -148,7 +148,7 @@
         display: flex;
         gap: 10px;
         top: 1px;
-        left: 220px;
+        left: 210px;
     }
 
     .profile-actions button {

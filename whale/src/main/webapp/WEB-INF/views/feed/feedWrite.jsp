@@ -14,9 +14,9 @@
 			<img id="preview" src="#" alt="이미지 미리보기" style="display:none; max-width:100%; height:auto;">
 			<input type="hidden" name="feedImageUrl" id="feedImageUrl">
             <br>
-            <div id="music-info" class="music-info" style="display: none;">
-                <img id="album-icon" src="" alt="Album Icon" style="width: 50px; height: 50px;">
-                <div>
+            <div id="music-info" class="music-info" style="display: none; width: 80%; max-width: 1200px; margin: 15px auto;">
+                <img id="album-icon" src="" alt="Album Icon" style="width: 50px; height: 50px; margin-left: 10px;">
+                <div style="margin-left: -25px;">
                     <span id="music-title"></span> - <span id="artist-name"></span>
                 </div>
             </div>
@@ -30,20 +30,20 @@
 </div>
 
 <div id="musicModal" class="modal">
-    <div class="modal-content">
-	  	<div class="searchContainer">
-			<div class="headerSearch">
+    <div class="modal-content-music">
+	  	<div class="searchContainer" style="margin-top: 20px;">
+			<div class="headerSearch" style="width: 60%;">
 				<button class="searchBtn" id="search-button">
 					<img src="static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
 			    </button>
 			    <input class="headerInput" id="search-input" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
 			</div>
 		</div>
-		<div class="search-result-container">
-			<div id="pagination"></div>
-			<div id="search-results"></div>
+		<div class="search-result-container"">
+			<div id="pagination" style="margin-top: 3px;"></div>
+			<div id="search-results""></div>
 		</div>
-		<div class="modal-item gray" id="completeBtn">완료</div>
+		<div class="modal-item gray" id="completeBtn" style="margin-top: -14px;">완료</div>
         <div class="modal-item gray" onclick="closeMusicModal()">취소</div>
     </div>
 </div>
@@ -183,7 +183,7 @@
 <style>
 	.feed-container[data-darkmode="1"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #434343; border-radius: 5px; margin-bottom: 10px; }
 	.feed-container[data-darkmode="1"] .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
-	.feed-container[data-darkmode="1"] .modal .modal-content { width: 50%; height: 65%; }
+	.feed-container[data-darkmode="1"] .modal .modal-content-music { background-color: #414141; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
 	.feed-container[data-darkmode="1"] .write-area { text-align: center; }
 	.feed-container[data-darkmode="1"] .form-content { width: 80%; max-width: 1200px; margin: 0 auto; text-align: center; }
 	.feed-container[data-darkmode="1"] textarea { width: 100%; max-width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 10px; }
@@ -197,10 +197,11 @@
 	.feed-container[data-darkmode="1"] .submit-btn { background-color: #2e2e2e; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; }
 	.feed-container[data-darkmode="1"] .submit-btn:hover { background-color: #335580; }
 	.feed-container[data-darkmode="1"] .submit-btn:hover img{filter: brightness(100);}
+	.pageBtn { margin-top: 2px; }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 	.feed-container[data-darkmode="0"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
 	.feed-container[data-darkmode="0"] .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
-	.feed-container[data-darkmode="0"] .modal .modal-content { width: 50%; height: 65%; }
+	.feed-container[data-darkmode="0"] .modal .modal-content-music { background-color: white; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
 	.feed-container[data-darkmode="0"] .write-area { text-align: center; }
 	.feed-container[data-darkmode="0"] .form-content { width: 80%; max-width: 1200px; margin: 0 auto; text-align: center; }
 	.feed-container[data-darkmode="0"] textarea { width: 100%; max-width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 10px; }
@@ -213,4 +214,5 @@
 	.feed-container[data-darkmode="0"] .write-btn { width: 40px; height: 40px; }
 	.feed-container[data-darkmode="0"] .submit-btn { background-color: #f0f0f0; color: #333; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; }
 	.feed-container[data-darkmode="0"] .submit-btn:hover { background-color: #e0e0e0; }
+	.pageBtn { margin-top: 2px; }
 </style>

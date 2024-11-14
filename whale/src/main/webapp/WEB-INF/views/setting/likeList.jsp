@@ -260,6 +260,46 @@
             filter: invert(1);
         }
 
+        .setting-body[data-darkmode="0"] .total-like img{
+            filter: drop-shadow(0px 0px 0px #000);
+            scale: 1.6;
+        }
+
+        .setting-body[data-darkmode="0"] .total-like .filter{
+            filter: drop-shadow(0px 0px 0px #000);
+            display: flex;
+        }
+
+        .setting-body[data-darkmode="0"] .total-comment img{
+            filter: drop-shadow(0px 0px 0px #000);
+            scale: 1.4;
+        }
+
+        .setting-body[data-darkmode="0"] .total-comment .filter{
+            filter: drop-shadow(1px 0px 0px #000);
+            display: flex;
+        }
+
+        .setting-body[data-darkmode="1"] .total-like img{
+            filter: drop-shadow(1px 0px 0px #fff);
+            scale: 1.6;
+        }
+
+        .setting-body[data-darkmode="1"] .total-like .filter{
+            filter: drop-shadow(1px 0px 0px #fff);
+            display: flex;
+        }
+
+        .setting-body[data-darkmode="1"] .total-comment img{
+            filter: drop-shadow(1px 0px 0px #fff);
+            scale: 1.4;
+        }
+
+        .setting-body[data-darkmode="1"] .total-comment .filter{
+            filter: drop-shadow(1px 0px 0px #fff);
+            display: flex;
+        }
+
     </style>
     <style id="darkmode-scrollbar-styles"></style>
 </head>
@@ -318,8 +358,8 @@
                                             </div>
                                             <div class="cnt-date-container">
                                                 <div class="views"><img src="static/images/setting/views.png" alt="views-img">${post.post_cnt}</div>
-                                                <div class="total-like"><img src="static/images/btn/like_btn.png" alt="like-btn">${post.total_like_count}</div>
-                                                <div class="total-comment"><img src="static/images/btn/comment_btn.png" alt="comment-btn">${post.total_comment_count}</div>
+                                                <div class="total-like"><div class="filter"><img src="static/images/btn/like_btn.png" alt="like-btn"></div>${post.total_like_count}</div>
+                                                <div class="total-comment"><div class="filter"><img src="static/images/btn/comment_btn.png" alt="comment-btn"></div>${post.total_comment_count}</div>
                                                 <div class="date">${post.post_date}</div>
                                             </div>
                                         </div>

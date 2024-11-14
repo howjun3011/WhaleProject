@@ -63,6 +63,13 @@
 			margin-right: 10px;
 		}
 
+		.room-list a{
+			display: flex;
+			width: 100%;
+			text-decoration: none;
+			color: black;
+		}
+
 		.new-message {
 			display: flex;
 			font-weight: bold;
@@ -303,25 +310,25 @@
 		} else {
 			const chatList = document.getElementById('chatList');
 			const newChatHTML = `
-                <a href="${pageContext.request.contextPath}/messageGo?u=\${senderId}">
-                    <div class="room-list" id="chat-\${senderId}" data-unread-count="1">
+				<div class="room-list" id="chat-\${senderId}" data-unread-count="1">
+                	<a href="${pageContext.request.contextPath}/messageGo?u=\${senderId}">
                         <img src="\${userImageUrl}" alt="user-img">
                         <div class="chat">
                             <div class="user-nickname">
                                 <span>\${senderNickname}</span>
                             </div>
-                            <div class="chatout">
-	                            <a href="javascript:void(0);" onclick="openModal('\${messageRoomId}')">
-	                                <img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
-	                            </a>
-	                        </div>
                             <div class="new-message">
                                 <span>새 메시지 1개</span>&nbsp;&nbsp;
                                 <div class="diff">\${timeDifference}</div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                	</a>
+					<div class="chatout">
+						<div href="javascript:void(0);" onclick="openModal('\${messageRoomId}')">
+							<img src="${pageContext.request.contextPath}/static/images/message/out.png" alt="chatout">
+						</div>
+					</div>
+				</div>
             `;
 			chatList.insertAdjacentHTML('afterbegin', newChatHTML);
 		}

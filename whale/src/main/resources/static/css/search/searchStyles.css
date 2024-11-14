@@ -17,7 +17,7 @@ input:-webkit-autofill:active {-webkit-text-fill-color: #000; -webkit-box-shadow
 .searchHomeBody[data-darkmode="0"] .mainSearchTab p{flex: 0 0 33.3%; background-color: #b8b8b8; text-align: center; margin: 0 0 2px 0; padding: 12px 0; font-size: .85rem; color: #111; cursor: pointer;}
 .searchHomeBody[data-darkmode="0"] .searchProfile{width: 60px; height: 60px; border: 3.5px solid #E2E2E2; border-radius: 50%;}
 .searchHomeBody[data-darkmode="0"] .searchProfile img {width: 100%; height: 100%; object-fit: cover; border-radius: 50%;}
-.searchHomeBody[data-darkmode="0"] .mainSearchTab p.active {font-weight: bold; background: #6a6a6a;}
+.searchHomeBody[data-darkmode="0"] .mainSearchTab p.active {font-weight: bold; background: #a0a0a0;}
 .searchHomeBody[data-darkmode="0"] .mainSearchResult > a{text-decoration: none; color: inherit;}
 .searchHomeBody[data-darkmode="0"] .userItem{display: flex; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ccc; gap: 20px;}
 .searchHomeBody[data-darkmode="0"] .userItem:hover{background: #cecece;}

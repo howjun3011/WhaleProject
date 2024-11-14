@@ -916,4 +916,21 @@
 </div>
 <div class="footer"></div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // 리사이즈
+        $(document).ready(() => {
+            resize();
+        });
+        $(window).resize(() => {
+            resize();
+        });
+
+        function resize() {
+            var windowHeight = $(window).height();
+            var headerHeight = $(".header").height();
+            $('.main').css({'height': (windowHeight - headerHeight - 1) + 'px'});
+        };
+    });
+</script>
 </html>

@@ -45,12 +45,12 @@
         .feed-container[data-darkmode="1"] .like-count,
         .feed-container[data-darkmode="1"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #e2e2e2; /* 필요 시 색상 지정 */}
         .feed-container[data-darkmode="1"] .post-text {margin-top: 10px; color: #e2e2e2;}
-        .feed-container[data-darkmode="1"] .post-time {font-size: 0.8em; color: gray;}
+        .feed-container[data-darkmode="1"] .post-time {text-align: right; font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="1"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; max-height: 260px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; max-height: 325px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="1"] .modal-item {padding: 20px; border-bottom: 1px solid #2e2e2e; font-size: 16px; cursor: pointer; color: #e2e2e2;}
+        .feed-container[data-darkmode="1"] .modal-item {padding: 20px; border-bottom: 1px solid #626262; font-size: 16px; cursor: pointer; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}
@@ -88,10 +88,10 @@
         .feed-container[data-darkmode="0"] .like-count,
         .feed-container[data-darkmode="0"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
         .feed-container[data-darkmode="0"] .post-text {margin-top: 10px;}
-        .feed-container[data-darkmode="0"] .post-time {font-size: 0.8em; color: gray;}
+        .feed-container[data-darkmode="0"] .post-time {text-align: right; font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="0"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; max-height: 260px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; max-height: 325px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
         .feed-container[data-darkmode="0"] .modal-item {padding: 20px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
         .feed-container[data-darkmode="0"] .modal-item.red {color: red;}
@@ -204,7 +204,7 @@
                 </c:if>
                 <div class="post-text">
                     <p style="margin-left: 5px;">${feed.feed_text}</p>
-                    <span class="post-time">${feed.feed_date}</span>
+                    <p class="post-time">${feed.feed_date}</p>
                 </div>
                 <div class="post-actions">
                     <button type="button" class="like-btn" data-feed-id="${feed.feed_id}" data-now-id="${now_id}">
@@ -213,7 +213,7 @@
                     </button>
                     <button type="button" class="comments"
                             onclick="window.location.href='feedDetail?f=${feed.feed_id}'">
-                        <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="comments"/>
+                        <img class="commentbtn" src="static/images/btn/comment_btn.png" alt="comments" style="width: 28px; height: 28px;"/>
                         <span class="comment-count">${feed.commentsCount}</span>
                     </button>
                 </div>

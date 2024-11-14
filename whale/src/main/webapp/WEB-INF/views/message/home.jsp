@@ -43,13 +43,14 @@
 			display: block;
 			width: 30px;
 			height: 30px;
+			margin-right: 25px;
 		}
 
 		.room-list {
 			display: flex;
 			align-items: center;
-			margin: 20px 10px;
-			padding: 0px 35px;
+			margin: 25px 0px;
+			padding: 0px 20px 0 30px;
 		}
 
 		.user-nickname {
@@ -105,7 +106,7 @@
 		}
 
 		.chatout {
-			width: 70px;
+			width: 30px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -154,6 +155,7 @@
 <body>
 <div class="container">
 	<div class="header">
+		<div></div>
 		<div class="left">
 			<div class="nowId">메시지</div>
 		</div>

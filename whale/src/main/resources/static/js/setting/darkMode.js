@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
     const streamingElement = document.querySelector('.streamingBody');
+    const profileHomeElement = document.querySelector('.container');
+    const searchHomeElement = document.querySelector('.searchHomeBody');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -195,6 +197,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    if (searchHomeElement) {
+        searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        searchHomeElement.classList.toggle("dark", isDarkMode);
+        searchHomeElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                searchHomeElement.classList.toggle("dark", isDarkMode);
+                searchHomeElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     window.addEventListener('storage', function (event) {
         if (event.key === 'darkmodeOn') {
             darkmodeOn = event.newValue || "0";
@@ -284,6 +305,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
                     updateBackground(); // light 모드일 때 배경 업데이트
                 }
+            }
+            if (searchHomeElement) {
+                searchHomeElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                searchHomeElement.classList.toggle("dark", isDark);
+                searchHomeElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
         }

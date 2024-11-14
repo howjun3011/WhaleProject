@@ -14,6 +14,7 @@
     <style>
         body {font-family: 'Noto Sans', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;}
         body, .music-info, .username, .post-text {font-family: 'Noto Sans KR', Arial, sans-serif !important;}
+        ::-webkit-scrollbar {display: none;}
         .feed-container[data-darkmode="1"]{background-color: #434343;}
         /* 상단 바 스타일 */
         .feed-container[data-darkmode="1"] .top-bar {background-color: #1f1f1f; display: flex; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; height: 20px;}
@@ -21,41 +22,41 @@
         /* 글 작성 영역 */
         .feed-container[data-darkmode="1"] .write-area-container {max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 0 10px;}
         .feed-container[data-darkmode="1"] .write-area-container.open {max-height: 2000px; background: #1f1f1f;}
-        .feed-container[data-darkmode="1"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px; background: #434343; color: #e2e2e2;}
-        .feed-container[data-darkmode="1"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #434343; border-radius: 5px; margin-bottom: 10px;}
+        .feed-container[data-darkmode="1"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border-radius: 5px; resize: none; font-size: 1em; background: #434343; color: #e2e2e2;}
+        .feed-container[data-darkmode="1"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #434343; border-radius: 5px; margin-top: 15px;}
         .feed-container[data-darkmode="1"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */ color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
-        .feed-container[data-darkmode="1"] .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #2e2e2e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
+        .feed-container[data-darkmode="1"] .submit-btn {display: block; width: 90%; margin: 15px auto 20px auto; padding: 10px; background-color: #2e2e2e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
         /* 피드 레이아웃 */
         .feed-container[data-darkmode="1"] .feed {margin-top: 20px; display: flex; flex-direction: column; align-items: center;}
         .feed-container[data-darkmode="1"] .post {background-color: #2e2e2e; width: 90%; max-width: 600px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: relative; cursor: pointer;}
         .feed-container[data-darkmode="1"] .user-info {display: flex; align-items: center;}
-        .feed-container[data-darkmode="1"] .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
+        .feed-container[data-darkmode="1"] .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin: 5px 10px 0 4px;}
         .feed-container[data-darkmode="1"] .username {font-weight: bold; font-size: 1.2em; color: #e2e2e2;}
-        .feed-container[data-darkmode="1"] .other-btn {position: absolute; top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="1"] .other-btn {position: absolute; top: 25px; right: 15px; background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="1"] .other-btn img {width: 30px; height: 30px;}
-        .feed-container[data-darkmode="1"] .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
-        .feed-container[data-darkmode="1"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
+        .feed-container[data-darkmode="1"] .post-image {width: 100%; height: auto; margin: 15px 0 0 0; border-radius: 10px;}
+        .feed-container[data-darkmode="1"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 22px; font-size: 1em;}
         .feed-container[data-darkmode="1"] .post-actions .like-btn,
         .feed-container[data-darkmode="1"] .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="1"] .post-actions .like-btn {background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="1"] .post-actions .likebtn,
         .feed-container[data-darkmode="1"] .post-actions .commentbtn {width: 30px; /* 아이콘 크기 조정 */ height: 30px; margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */}
         .feed-container[data-darkmode="1"] .like-count,
-        .feed-container[data-darkmode="1"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #333; /* 필요 시 색상 지정 */}
+        .feed-container[data-darkmode="1"] .comment-count {font-size: 1em; /* 글자 크기 통일 */ color: #e2e2e2; /* 필요 시 색상 지정 */}
         .feed-container[data-darkmode="1"] .post-text {margin-top: 10px; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .post-time {font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="1"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="1"] .modal-content {background-color: #414141; border-radius: 12px; width: 80%; max-width: 300px; max-height: 260px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="1"] .modal-item {padding: 15px; border-bottom: 1px solid #1f1f1f; font-size: 16px; cursor: pointer; color: #e2e2e2;}
+        .feed-container[data-darkmode="1"] .modal-item {padding: 20px; border-bottom: 1px solid #2e2e2e; font-size: 16px; cursor: pointer; color: #e2e2e2;}
         .feed-container[data-darkmode="1"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="1"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="1"] .modal-item:last-child {border-bottom: none;}
         .feed-container[data-darkmode="1"] .modal-item:hover {background-color: #2e2e2e;}
-        .feed-container[data-darkmode="1"] .music-info .music-title {font-weight: bold; font-size: 1em; color: #e2e2e2; /* 기본 검정색 */}
-        .feed-container[data-darkmode="1"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #e7e7e7; /* 회색 */}
+        .feed-container[data-darkmode="1"] .music-info #music-title {font-weight: bold; font-size: 1em; color: #e2e2e2; /* 기본 검정색 */}
+        .feed-container[data-darkmode="1"] .music-info #artist-name {font-weight: normal; font-size: 0.9em; color: #e7e7e7; /* 회색 */}
     /*    ---------------------------------------------------------------------------------------------------*/
         .feed-container[data-darkmode="0"]{background-color: #f0f0f0;}
         /* 상단 바 스타일 */
@@ -64,21 +65,21 @@
         /* 글 작성 영역 */
         .feed-container[data-darkmode="0"] .write-area-container {max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background-color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 0 10px;}
         .feed-container[data-darkmode="0"] .write-area-container.open {max-height: 2000px;}
-        .feed-container[data-darkmode="0"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-size: 1em; margin-top: 10px;}
-        .feed-container[data-darkmode="0"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px;}
+        .feed-container[data-darkmode="0"] .write-area textarea {width: 90%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .music-info {display: flex; align-items: center; justify-content: space-between; /* 양 끝에 요소 배치 */ padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-top: 15px;}
         .feed-container[data-darkmode="0"] .music-info > div {flex-grow: 1; /* 제목과 아티스트 영역이 남은 공간 차지 */}
         .feed-container[data-darkmode="0"] .music-info label {margin-left: 10px; /* 버튼 간 간격 조정 */}
-        .feed-container[data-darkmode="0"] .submit-btn {display: block; width: 90%; margin: 10px auto; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .submit-btn {display: block; width: 90%; margin: 15px auto 20px auto; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;}
         /* 피드 레이아웃 */
         .feed-container[data-darkmode="0"] .feed {margin-top: 20px; display: flex; flex-direction: column; align-items: center;}
         .feed-container[data-darkmode="0"] .post {background-color: white; width: 90%; max-width: 600px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; position: relative; cursor: pointer;}
         .feed-container[data-darkmode="0"] .user-info {display: flex; align-items: center;}
-        .feed-container[data-darkmode="0"] .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;}
+        .feed-container[data-darkmode="0"] .user-info .profile-pic {width: 40px; height: 40px; border-radius: 50%; margin: 5px 10px 0 4px;}
         .feed-container[data-darkmode="0"] .username {font-weight: bold; font-size: 1.2em;}
-        .feed-container[data-darkmode="0"] .other-btn {position: absolute; top: 20px; right: 15px; background: none; border: none; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .other-btn {position: absolute; top: 25px; right: 15px; background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="0"] .other-btn img {width: 30px; height: 30px;}
-        .feed-container[data-darkmode="0"] .post-image {width: 100%; height: auto; margin: 10px 0; border-radius: 10px;}
-        .feed-container[data-darkmode="0"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 10px; font-size: 1em;}
+        .feed-container[data-darkmode="0"] .post-image {width: 100%; height: auto; margin: 15px 0 0 0; border-radius: 10px;}
+        .feed-container[data-darkmode="0"] .post-actions {display: flex; justify-content: space-around; align-items: center; /* 아이템들을 수직 가운데 정렬 */ margin-top: 22px; font-size: 1em;}
         .feed-container[data-darkmode="0"] .post-actions .like-btn,
         .feed-container[data-darkmode="0"] .post-actions .comments {display: flex; /* 수평 배치 */ align-items: center; /* 수직 가운데 정렬 */ background: none; border: none; cursor: pointer;}
         .feed-container[data-darkmode="0"] .post-actions .like-btn {background: none; border: none; cursor: pointer;}
@@ -90,15 +91,15 @@
         .feed-container[data-darkmode="0"] .post-time {font-size: 0.8em; color: gray;}
         .feed-container[data-darkmode="0"] .modal {display: none; /* 기본적으로 숨김 상태 */ position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;}
         /* 모달 내용 */
-        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; overflow: hidden;}
+        .feed-container[data-darkmode="0"] .modal-content {background-color: white; border-radius: 12px; width: 80%; max-width: 300px; max-height: 260px; text-align: center; overflow: hidden;}
         /* 모달 항목 스타일 */
-        .feed-container[data-darkmode="0"] .modal-item {padding: 15px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
+        .feed-container[data-darkmode="0"] .modal-item {padding: 20px; border-bottom: 1px solid #eee; font-size: 16px; cursor: pointer;}
         .feed-container[data-darkmode="0"] .modal-item.red {color: red;}
         .feed-container[data-darkmode="0"] .modal-item.gray {color: gray;}
         .feed-container[data-darkmode="0"] .modal-item:last-child {border-bottom: none;}
         .feed-container[data-darkmode="0"] .modal-item:hover {background-color: #f9f9f9;}
-        .feed-container[data-darkmode="0"] .music-info .music-title {font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
-        .feed-container[data-darkmode="0"] .music-info .artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
+        .feed-container[data-darkmode="0"] .music-info #music-title {font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
+        .feed-container[data-darkmode="0"] .music-info #artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
 
     </style>
     <style id="darkmode-scrollbar-styles"></style>
@@ -185,24 +186,24 @@
                 <c:if test="${not empty feed.track_id}">
                     <div id="music-info" class="music-info">
                         <img id="album-icon" src="${feed.track_cover}" alt="Album Icon"
-                             style="width: 50px; height: 50px;">
+                             style="width: 50px; height: 50px; margin-left: 5px; margin-right: 5px;">
                         <div>
                             <span class="music-title" id="music-title">${feed.track_name}</span> -
                             <span class="artist-name" id="artist-name">${feed.track_artist}</span>
                         </div>
                         <label class="play-button" onclick="playMusic(this, '${feed.track_id}')"
                                style="display: inline-block;">
-                            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;"/>
+                            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px; margin-top: 4px; margin-right: 10px;"/>
                         </label>
                         <!-- Pause 버튼 -->
                         <label class="pause-button" onclick="pauseMusic(this, '${feed.track_id}')"
                                style="display: none;">
-                            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;"/>
+                            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px; margin-top: 4px;x` margin-right: 10px;"/>
                         </label>
                     </div>
                 </c:if>
                 <div class="post-text">
-                    <p>${feed.feed_text}</p>
+                    <p style="margin-left: 5px;">${feed.feed_text}</p>
                     <span class="post-time">${feed.feed_date}</span>
                 </div>
                 <div class="post-actions">

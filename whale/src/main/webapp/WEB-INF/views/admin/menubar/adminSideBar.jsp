@@ -4,7 +4,7 @@
 <script type="text/javascript">
         function logoutWhale() {
             // 스프링 클라이언트 정보 초기화
-            localStorage.clear();
+            // localStorage.clear();
             // 스프링 서버 정보 초기화
             location.href = '/whale/main/logout';
         }

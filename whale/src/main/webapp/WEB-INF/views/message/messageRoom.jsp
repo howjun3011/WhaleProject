@@ -11,253 +11,96 @@
 <title>채팅방</title>
 <link rel="stylesheet" href="static/css/streaming/searchView.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
+<script src="static/js/setting/darkMode.js"></script>
 <style>
-    /* 기본 스타일 */
-    
-    
-    body {
-        font-family: 'Noto Sans KR', Arial, sans-serif;
-        background-color: #f8f9fa;
-        margin: 0;
-        padding: 0;
-    }
+	.container[data-darkmode="0"] body { font-family: 'Noto Sans KR', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
+	.container[data-darkmode="0"] { width: 100%; max-width: 900px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px; box-sizing: border-box; }
+	.container[data-darkmode="0"] .chat-header { background: linear-gradient(to right, #e0e0e0, #ffffff); padding: 15px 20px; font-size: 1.0em; font-weight: bold; color: #343a40; margin-bottom: 30px; text-align: center; }
+	.container[data-darkmode="0"] .chat-messages { height: 500px; overflow-y: scroll; padding: 20px; background-color: #f8f9fa; border: 1px solid #e9ecef; box-sizing: border-box; margin-bottom: 30px; }
+	.container[data-darkmode="0"] .chat-message { margin-bottom: 20px; display: flex; align-items: flex-end; }
+	.container[data-darkmode="0"] .chat-message.left { justify-content: flex-start; }
+	.container[data-darkmode="0"] .chat-message.right { justify-content: flex-end; }
+	.container[data-darkmode="0"] .chat-message .message-bubble { max-width: 60%; padding: 15px; border-radius: 15px; position: relative; font-size: 1em; line-height: 1.6; word-wrap: break-word; }
+	.container[data-darkmode="0"] .chat-message.left .message-bubble { background-color: #ffffff; border: 1px solid #e9ecef; }
+	.container[data-darkmode="0"] .chat-message.right .message-bubble { background-color: #d1e7dd; border: 1px solid #c7d9d3; }
+	.container[data-darkmode="0"] .chat-message.left .message-bubble::after { content: ''; position: absolute; top: 10px; left: -10px; border: 10px solid transparent; border-right-color: #ffffff; }
+	.container[data-darkmode="0"] .chat-message.right .message-bubble::after { content: ''; position: absolute; top: 10px; right: -10px; border: 10px solid transparent; border-left-color: #d1e7dd; }
+	.container[data-darkmode="0"] .chat-message .message-info { font-size: 0.9em; color: #868e96; margin-top: 5px; }
+	.container[data-darkmode="0"] .chat-input { display: flex; align-items: center; padding: 10px; background-color: #ffffff; border-top: 1px solid #e9ecef; gap: 10px; }
+	.container[data-darkmode="0"] .chat-input textarea { flex-grow: 1; height: 50px; border: 1px solid #ced4da; border-radius: 5px; padding: 10px; resize: none; font-size: 1em; }
+	.container[data-darkmode="0"] .chat-input button { width: 90px; height: 50px; background-color: #12b886; border: none; color: #ffffff; border-radius: 5px; font-size: 1em; cursor: pointer; transition: background-color 0.3s ease; }
+	.container[data-darkmode="0"] .chat-input button img { width: 40px; height: 40px; filter: invert(0); }
+	.container[data-darkmode="0"] .chat-input button:hover { background-color: #0ca678; }
+	.container[data-darkmode="0"] .unread-badge { font-size: 0.8em; color: red; position: absolute; }
+	.container[data-darkmode="0"] .chat-message.left .unread-badge { bottom: 5px; right: -10px; }
+	.container[data-darkmode="0"] .chat-message.right .unread-badge { bottom: 5px; left: -10px; }
+	.container[data-darkmode="0"] .chat-message .message-bubble iframe { width: 100%; height: 200px; border-radius: 5px; border: none; }
+	.container[data-darkmode="0"] .message-url { font-size: 0.8em; color: #888888; margin-top: 5px; word-break: break-all; }
+	.container[data-darkmode="0"] .profile-pic { width: 40px; height: 40px; border-radius: 50%; margin-right: 0px; }
+	.container[data-darkmode="0"] .menu-button { position: absolute; top: 0px; right: 10px; font-size: 1.2em; color: #f0eded; cursor: pointer; }
+	.container[data-darkmode="0"] .menu-button:hover { color: #555555; }
+	.container[data-darkmode="0"] .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+	.container[data-darkmode="0"] .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+	.container[data-darkmode="0"] #messageMenuOptions { list-style: none; padding: 0; margin: 0; }
+	.container[data-darkmode="0"] #messageMenuOptions li { padding: 10px; cursor: pointer; border-bottom: 1px solid #ddd; }
+	.container[data-darkmode="0"] #messageMenuOptions li:hover { background-color: #f2f2f2; }
+	.container[data-darkmode="0"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+	.modal[data-darkmode="0"] { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center; }
+	.modal[data-darkmode="0"] #completeBtn { margin-top: -14px; }
+	.modal[data-darkmode="0"] .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; position: relative; }
+	.modal[data-darkmode="0"] .modal-content-music { background-color: white; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
+	#messageMenuModal[data-darkmode="0"] {  }
+	/* ---------------------------------------------------------------------------------------------------------------------------------------------- */
+	.container[data-darkmode="1"] body { font-family: 'Noto Sans KR', Arial, sans-serif; background-color: #1f1f1f; margin: 0; padding: 0; }
+	.container[data-darkmode="1"] { width: 100%; max-width: 900px; margin: 0 auto; background-color: #1f1f1f; padding: 40px 20px; box-sizing: border-box; }
+	.container[data-darkmode="1"] .chat-header { background: linear-gradient(to right, #335580, black); padding: 15px 20px; font-size: 1.0em; font-weight: bold; color: whitesmoke; margin-bottom: 30px; text-align: center; }
+	.container[data-darkmode="1"] .chat-messages { height: 500px; overflow-y: scroll; padding: 20px; background-color: #434343; border: 1px solid #434343; box-sizing: border-box; margin-bottom: 30px; }
+	.container[data-darkmode="1"] .chat-message { margin-bottom: 20px; display: flex; align-items: flex-end; }
+	.container[data-darkmode="1"] .chat-message.left { justify-content: flex-start; }
+	.container[data-darkmode="1"] .chat-message.right { justify-content: flex-end; }
+	.container[data-darkmode="1"] .chat-message .message-bubble { max-width: 60%; padding: 15px; border-radius: 15px; position: relative; font-size: 1em; line-height: 1.6; word-wrap: break-word; }
+	.container[data-darkmode="1"] .chat-message.left .message-bubble { background-color: #1f1f1f; border: 1px solid #1f1f1f; color: whitesmoke; }
+	.container[data-darkmode="1"] .chat-message.right .message-bubble { background-color: #335580; border: 1px solid #335580; color: whitesmoke; }
+	.container[data-darkmode="1"] .chat-message.left .message-bubble::after { content: ''; position: absolute; top: 10px; left: -10px; border: 10px solid transparent; border-right-color: #ffffff; display: none; }
+	.container[data-darkmode="1"] .chat-message.right .message-bubble::after { content: ''; position: absolute; top: 10px; right: -10px; border: 10px solid transparent; border-left-color: #d1e7dd; display: none; }
+	.container[data-darkmode="1"] .chat-message .message-info { font-size: 0.9em; color: #868e96; margin-top: 5px; }
+	.container[data-darkmode="1"] .chat-input { display: flex; align-items: center; padding: 10px; background-color: #1f1f1f; border-top: 1px solid #1f1f1f; gap: 10px; }
+	.container[data-darkmode="1"] .chat-input textarea { flex-grow: 1; height: 50px; background-color: #434343; color: whitesmoke; border: 1px solid #434343; border-radius: 5px; padding: 10px; resize: none; font-size: 1em; }
+	.container[data-darkmode="1"] .chat-input button { width: 90px; height: 50px; background-color: #335580; border: none; color: #ffffff; border-radius: 5px; font-size: 1em; cursor: pointer; transition: background-color 0.3s ease; }
+	.container[data-darkmode="1"] .chat-input button img { width: 40px; height: 40px; filter: invert(1); }
+	.container[data-darkmode="1"] .chat-input button:hover { background-color: lightgray; }
+	.container[data-darkmode="1"] .unread-badge { font-size: 0.8em; color: #ffdc00; position: absolute; }
+	.container[data-darkmode="1"] .chat-message.left .unread-badge { bottom: 5px; right: -10px; }
+	.container[data-darkmode="1"] .chat-message.right .unread-badge { bottom: 5px; left: -10px; }
+	.container[data-darkmode="1"] .chat-message .message-bubble iframe { width: 100%; height: 200px; border-radius: 5px; border: none; }
+	.container[data-darkmode="1"] .message-url { font-size: 0.8em; color: #888888; margin-top: 5px; word-break: break-all; }
+	.container[data-darkmode="1"] .profile-pic { width: 40px; height: 40px; border-radius: 50%; margin-right: 0px; }
+	.container[data-darkmode="1"] .menu-button { position: absolute; top: 0px; right: 10px; font-size: 1.2em; color: #253345; cursor: pointer; }
+	.container[data-darkmode="1"] .menu-button:hover { color: #8db6ea; }
+	.container[data-darkmode="1"] .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+	.container[data-darkmode="1"] .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+	.container[data-darkmode="1"] #messageMenuOptions { list-style: none; padding: 0; margin: 0; }
+	.container[data-darkmode="1"] #messageMenuOptions li { padding: 10px; cursor: pointer; border-bottom: 1px solid #ddd; }
+	.container[data-darkmode="1"] #messageMenuOptions li:hover { background-color: #f2f2f2; }
+	.container[data-darkmode="1"] .music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+	.modal[data-darkmode="1"] { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center; }
+	.modal[data-darkmode="1"] #completeBtn { margin-top: -14px; }
+	.modal[data-darkmode="1"] .modal-content { background-color: #1f1f1f; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; position: relative; }
+	.modal[data-darkmode="1"] .modal-content-music { background-color: #414141; color: whitesmoke; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
+	#messageMenuModal[data-darkmode="1"] { color: whitesmoke; }
 
-    .container {
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        padding: 40px 20px;
-        box-sizing: border-box;
-    }
 
-    /* 채팅 헤더 스타일 */
-    .chat-header {
-        background: linear-gradient(to right, #e0e0e0, #ffffff);
-        padding: 15px 20px;
-        font-size: 1.0em;
-        font-weight: bold;
-        color: #343a40;
-        margin-bottom: 30px;
-        text-align: center;
-    }
+	/* 다크 모드 OFF */
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar {width: 8px;}
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-track {background: #fff;}
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
 
-    /* 채팅 메시지 영역 스타일 */
-    .chat-messages {
-        height: 500px;
-        overflow-y: scroll;
-        padding: 20px;
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
-        box-sizing: border-box;
-        margin-bottom: 30px;
-    }
-
-    .chat-message {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: flex-end;
-    }
-
-    .chat-message.left {
-        justify-content: flex-start;
-    }
-
-    .chat-message.right {
-        justify-content: flex-end;
-    }
-
-    .chat-message .message-bubble {
-        max-width: 60%;
-        padding: 15px;
-        border-radius: 15px;
-        position: relative;
-        font-size: 1em;
-        line-height: 1.6;
-        word-wrap: break-word;
-    }
-
-    .chat-message.left .message-bubble {
-        background-color: #ffffff;
-        border: 1px solid #e9ecef;
-    }
-
-    .chat-message.right .message-bubble {
-        background-color: #d1e7dd;
-        border: 1px solid #c7d9d3;
-    }
-
-    .chat-message.left .message-bubble::after {
-        content: '';
-        position: absolute;
-        top: 10px;
-        left: -10px;
-        border: 10px solid transparent;
-        border-right-color: #ffffff;
-    }
-
-    .chat-message.right .message-bubble::after {
-        content: '';
-        position: absolute;
-        top: 10px;
-        right: -10px;
-        border: 10px solid transparent;
-        border-left-color: #d1e7dd;
-    }
-
-    .chat-message .message-info {
-        font-size: 0.9em;
-        color: #868e96;
-        margin-top: 5px;
-    }
-
-    /* 채팅 입력 영역 스타일 */
-    .chat-input {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        background-color: #ffffff;
-        border-top: 1px solid #e9ecef;
-        gap: 10px;
-    }
-
-    .chat-input textarea {
-        flex-grow: 1;
-        height: 50px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        padding: 10px;
-        resize: none;
-        font-size: 1em;
-    }
-
-    .chat-input button {
-        width: 90px;
-        height: 50px;
-        background-color: #12b886;
-        border: none;
-        color: #ffffff;
-        border-radius: 5px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .chat-input button:hover {
-        background-color: #0ca678;
-    }
-
-    .unread-badge {
-        font-size: 0.8em;
-        color: red;
-        position: absolute;
-    }
-
-    .chat-message.left .unread-badge {
-        bottom: 5px;
-        right: -10px;
-    }
-
-    .chat-message.right .unread-badge {
-        bottom: 5px;
-        left: -10px;
-    }
-    
-    .chat-message .message-bubble iframe {
-	    width: 100%; /* 말풍선의 너비에 맞춰 YouTube iframe 크기 조절 */
-	    height: 200px; /* 적당한 높이 지정 */
-	    border-radius: 5px;
-	    border: none;
-	}
-	
-	.message-url {
-	    font-size: 0.8em; /* 작은 폰트 크기 */
-	    color: #888888;   /* 회색 톤으로 색상 지정 */
-	    margin-top: 5px;  /* 위쪽에 약간의 간격 추가 */
-	    word-break: break-all; /* 긴 URL이 잘리도록 설정 */
-	}
-	
-    .profile-pic {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 0px;
-    }
-    
-    .menu-button {
-	    position: absolute;
-	    top: 0px;
-	    right: 10px;
-	    font-size: 1.2em;
-	    color: #f0eded;
-	    cursor: pointer;
-	}
-	
-	.menu-button:hover {
-	    color: #555555;
-	}
-	
-	.modal {
-	    display: none; /* 기본적으로 숨김 */
-	    position: fixed;
-	    z-index: 1000;
-	    left: 0;
-	    top: 0;
-	    width: 100%;
-	    height: 100%;
-	    overflow: auto;
-	    background-color: rgba(0,0,0,0.4); /* 검은색 투명 배경 */
-	}
-	
-	/* 모달 내용 스타일 */
-	.modal-content {
-	    background-color: #fefefe;
-	    margin: 15% auto; /* 화면 가운데에 위치 */
-	    padding: 20px;
-	    border: 1px solid #888;
-	    width: 300px; /* 너비 설정 */
-	    border-radius: 10px;
-	    position: relative;
-	}
-	
-	/* 닫기 버튼 스타일 */
-	.close {
-	    color: #aaa;
-	    float: right;
-	    font-size: 28px;
-	    font-weight: bold;
-	    cursor: pointer;
-	}
-	
-	.close:hover,
-	.close:focus {
-	    color: black;
-	    text-decoration: none;
-	    cursor: pointer;
-	}
-	
-	/* 옵션 목록 스타일 */
-	#messageMenuOptions {
-	    list-style: none;
-	    padding: 0;
-	    margin: 0;
-	}
-	
-	#messageMenuOptions li {
-	    padding: 10px;
-	    cursor: pointer;
-	    border-bottom: 1px solid #ddd;
-	}
-	
-	#messageMenuOptions li:hover {
-	    background-color: #f2f2f2;
-	}
-	
-	.music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
-	.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
-	.modal .modal-content-music { background-color: white; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
-
+	/* 다크 모드 ON */
+	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar {width: 8px;}
+	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar-track {background: #2e2e2e;}
+	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
 </style>
+<style id="darkmode-scrollbar-styles"></style>
 </head>
 <body>
 
@@ -269,7 +112,7 @@
     </div>
 
     <!-- 채팅 메시지 영역 -->
-    <div class="chat-messages" id="chatMessages">
+    <div class="chat-messages scroll-content" id="chatMessages">
         <!-- 채팅 메시지들을 표시할 영역 -->
 		<c:forEach var="msg" items="${messages}">
 		    <div class="chat-message <c:choose>
@@ -343,31 +186,31 @@
 	        <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
 	                  onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
 	        <input type="file" id="imageInput" accept="image/*" onchange="uploadImageAndSendURL()" style="display:none;">
-	        <button type="submit" style="width:60px;"><img src="static/images/btn/write_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
-	        <button type="button" style="width:60px;" onclick="document.getElementById('imageInput').click();"><img src="static/images/btn/picsong_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
+	        <button type="submit" style="width:60px;"><img src="static/images/btn/write_btn.png" alt="" /></button>
+	        <button type="button" style="width:60px;" onclick="document.getElementById('imageInput').click();"><img src="static/images/btn/picsong_btn.png" alt="" /></button>
 	        <button type="button" class="music-upload-btn" style="width:60px;"><img src="static/images/btn/promusic_btn.png" alt="" style="width: 25px; height: 25px;" /></button>
 	    </form>
 	</div>
 </div>
-
 <div id="musicModal" class="modal">
-    <div class="modal-content-music">
-	  	<div class="searchContainer" style="margin-top: 20px;">
+	<div class="modal-content-music">
+		<div class="searchContainer" style="margin-top: 20px;">
 			<div class="headerSearch" style="width: 60%;">
 				<button class="searchBtn" id="search-button">
 					<img src="static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
-			    </button>
-			    <input class="headerInput" id="search-input" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
+				</button>
+				<input class="headerInput" id="search-input" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
 			</div>
 		</div>
 		<div class="search-result-container">
 			<div id="pagination" style="margin-top: 3px;"></div>
 			<div id="search-results"></div>
 		</div>
-		<div class="modal-item gray" id="completeBtn" style="margin-top: -14px;">완료</div>
-        <div class="modal-item gray" onclick="closeMusicModal()">취소</div>
-    </div>
+		<div class="modal-item gray" id="completeBtn" >완료</div>
+		<div class="modal-item gray" onclick="closeMusicModal()">취소</div>
+	</div>
 </div>
+
 
 <script>
     window.addEventListener('click', function(event) {
@@ -779,6 +622,5 @@
 	    }
 	}
 </script>
-
 </body>
 </html>

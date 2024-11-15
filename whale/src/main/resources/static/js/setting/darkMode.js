@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityReg = document.querySelector('.container');
     const streamingElement = document.querySelector('.streamingBody');
     const searchHomeElement = document.querySelector('.searchHomeBody');
+    const messageRoomElement = document.querySelector('#messageMenuModal');
+
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";
 
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             settingElement.setAttribute("data-darkmode", darkmodeOn);
             settingElement.classList.toggle("dark", darkmodeOn === "1");
             settingElement.classList.toggle("light", darkmodeOn !== "1");
-            window.parent.postMessage({ darkmodeOn: darkmodeOn }, "*");
+            window.parent.postMessage({darkmodeOn: darkmodeOn}, "*");
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/whale/updateDarkmode', true);
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    
+
     if (communityReg) {
         communityReg.setAttribute("data-darkmode", darkmodeOn);
         const isDarkMode = darkmodeOn === "1";
@@ -235,6 +237,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (messageRoomElement) {
+        messageRoomElement.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        messageRoomElement.classList.toggle("dark", isDarkMode);
+        messageRoomElement.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                messageRoomElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                messageRoomElement.classList.toggle("dark", isDarkMode);
+                messageRoomElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+
     window.addEventListener('storage', function (event) {
         if (event.key === 'darkmodeOn') {
             darkmodeOn = event.newValue || "0";
@@ -337,6 +358,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 searchHomeElement.classList.toggle("dark", isDark);
                 searchHomeElement.classList.toggle("light", !isDark);
+            }
+            if (messageRoomElement) {
+                messageRoomElement.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                messageRoomElement.classList.toggle("dark", isDark);
+                messageRoomElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
         }

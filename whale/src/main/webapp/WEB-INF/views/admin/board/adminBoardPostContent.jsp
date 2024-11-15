@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
 <script>
-    function postDelete(postId,page,searchType,sk) {
+    function postDelete(postId,community_id,post_num,page,searchType,sk) {
         const deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
         if (deleteConfirm) {
         	window.location.href = 
@@ -12,6 +12,8 @@
         				+"&sk="+sk
         				+"&page="+page
         				+"&searchType="+searchType
+        				+"&post_num="+post_num
+        				+"&community_id="+community_id
         }
     }
     function postCommentsDelete(communityName,commentId,postId,page,searchType,sk) {
@@ -42,7 +44,7 @@
                 <span class="username">${postDetail.user_id}</span>
                 <span class="post-date">${postDetail.post_date}</span>
                 <!-- 기타 버튼 -->
-                <button class="other-btn" onclick="postDelete('${postId }','${page}','${searchType }','${sk }')">
+                <button class="other-btn" onclick="postDelete('${postId }','${postDetail.community_id}','${postDetail.post_num}','${page}','${searchType }','${sk }')">
                     삭제하기
                 </button>
             </div>

@@ -1,5 +1,6 @@
-package com.tech.whale.admin.service;
+package com.tech.whale.admin.board.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -10,14 +11,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.admin.dto.AdminCommunityDto;
+import com.tech.whale.admin.dto.AdminPFCDto;
+import com.tech.whale.admin.dto.AdminWhaleNotiDto;
+import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
+import com.tech.whale.community.dao.ComDao;
+import com.tech.whale.community.dto.PostDto;
 
 @Service
-public class AdminAccountUserListService implements AdminServiceInter{
+public class AdminWhaleNotiService implements AdminServiceInter{
 	
 	@Autowired
 	private AdminIDao adminIDao;
+	@Autowired
+    private ComDao comDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -33,13 +41,9 @@ public class AdminAccountUserListService implements AdminServiceInter{
 		}
 		
 		String user_id = "";
-	    String user_email = "";
+	    String whale_text = "";
 	 	
 		String brdTitle = request.getParameter("searchType");
-		String searchOrderBy = request.getParameter("searchOrderBy");		
-		if(searchOrderBy == null || searchOrderBy.trim().isEmpty()) {
-			searchOrderBy="USER_STATUS";
-		}
 		
 		if (brdTitle == null || brdTitle.trim().isEmpty()) {
 	        user_id = "user_id";
@@ -48,21 +52,21 @@ public class AdminAccountUserListService implements AdminServiceInter{
 			if(brdTitle.equals("user_id")) {
 				model.addAttribute("user_id", "true");
 				user_id="user_id";
-			}else if(brdTitle.equals("user_email")) {
-				model.addAttribute("user_email", "true");
-				user_email="user_email";
+			}else if(brdTitle.equals("whale_text")) {
+				model.addAttribute("whale_text", "true");
+				whale_text="whale_text";
 			}
 		}
 		String searchKeyword = request.getParameter("sk");
-		if(searchKeyword == null || searchKeyword.isEmpty()) {
+		if(searchKeyword == null || searchKeyword.trim().isEmpty()) {
 			searchKeyword = "";
 		}
 
 		int total = 0;
 		if(user_id.equals("user_id")) {
-			total = adminIDao.selectUserCnt(searchKeyword,"1");
-		}else if(user_email.equals("user_email")) {
-			total = adminIDao.selectUserCnt(searchKeyword,"2");
+			total = adminIDao.selectWhaleNotiCnt(searchKeyword,"1");
+		}else if(whale_text.equals("whale_text")) {
+			total = adminIDao.selectWhaleNotiCnt(searchKeyword,"2");
 		}
 		
 		String strPage = request.getParameter("page");
@@ -79,14 +83,15 @@ public class AdminAccountUserListService implements AdminServiceInter{
 		int rowStart = searchVO.getRowStart();
 		int rowEnd = searchVO.getRowEnd();
 		
-		ArrayList<AdminUserInfoDto> list = null;
+		ArrayList<AdminWhaleNotiDto> list = null;
 		if(user_id.equals("user_id")) {
-			list = adminIDao.adminUserList(rowStart,rowEnd, searchKeyword,"1",searchOrderBy);
-		}else if(user_email.equals("user_email")) {
-			list = adminIDao.adminUserList(rowStart,rowEnd,searchKeyword,"2",searchOrderBy);
+			list = adminIDao.adminWhaleNotiList(rowStart,rowEnd, searchKeyword,"1");
+		}
+		else if(whale_text.equals("whale_text")) {
+			list = adminIDao.adminWhaleNotiList(rowStart,rowEnd,searchKeyword,"2");
 		}
 		
-		model.addAttribute("search_order_By", searchOrderBy);
+		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchType", brdTitle);
 		model.addAttribute("list", list);
@@ -95,6 +100,16 @@ public class AdminAccountUserListService implements AdminServiceInter{
 		
 	}
 	
+	public void whaleNotiRegDo(Model model) {
+		Map<String, Object> map = model.asMap();
+		HttpServletRequest request =
+				(HttpServletRequest) map.get("request");
+		
+		String user_id = (String)model.getAttribute("myId");
+		String whale_text = request.getParameter("whale_text");
+		
+		adminIDao.whaleNotiRegDo(user_id,whale_text);
+	}
 	
 	
 }

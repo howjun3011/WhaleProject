@@ -76,7 +76,7 @@
 						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<%-- <button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button> --%>
 					</td>
 					</c:if>
 					
@@ -92,7 +92,7 @@
 						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<%-- <button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button> --%>
 					</td>
 					</c:if>
 					
@@ -106,10 +106,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}"
+			                <a href="adminBoardListView?page=1&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminBoardListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}"
+			                <a href="adminBoardListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -118,28 +118,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminBoardListView?page=${i}&sk=${searchKeyword}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminBoardListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminBoardListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}"
+			                <a href="adminBoardListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminBoardListView?page=${searchVO.totPage}&sk=${searchKeyword}"
+			                <a href="adminBoardListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[처음]</a>
+			                <a href="adminBoardListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[이전]</a>
+			                <a href="adminBoardListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[다음]</a>
+			                <a href="adminBoardListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminBoardListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[마지막]</a>
+			                <a href="adminBoardListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

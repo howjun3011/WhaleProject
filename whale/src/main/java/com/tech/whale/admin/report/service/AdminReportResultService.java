@@ -44,7 +44,6 @@ public class AdminReportResultService implements AdminServiceInter{
 		String myId = (String)model.getAttribute("myId");
 		String statusReason = request.getParameter("statusReason");
 		String userId = request.getParameter("userId");
-		int myAdminId = adminIDao.myAdminId(myId);
 		
 		if(writingStatus.equals("0")) {
 			writingStatus="-";
@@ -59,15 +58,15 @@ public class AdminReportResultService implements AdminServiceInter{
 			if(userStatus.equals("0")) {
 				userStatusStr="-";
 				adminReportIDao.reportResult(
-						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,0);
+						var.getReport_id(),writingType,writingId,myId,writingStatus,statusReason,userId,userStatusStr,0);
 			}else if(userStatus.equals("1")) {
 				userStatusStr="1일 정지";
 				adminReportIDao.reportResult(
-						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,1);
+						var.getReport_id(),writingType,writingId,myId,writingStatus,statusReason,userId,userStatusStr,1);
 			}else if(userStatus.equals("2")) {
 				userStatusStr="영구 정지";
 				adminReportIDao.reportResult(
-						var.getReport_id(),writingType,writingId,myAdminId,writingStatus,statusReason,userId,userStatusStr,2);
+						var.getReport_id(),writingType,writingId,myId,writingStatus,statusReason,userId,userStatusStr,2);
 			}
 			// [ 메인 알람 기능: 해당 유저의 알람 테이블 추가 ]
 			mainDao.insertWhaleNoti(0, var.getUser_id());

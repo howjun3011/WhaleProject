@@ -16,18 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.tech.whale.admin.board.service.AdminBoardPostContentService;
 import com.tech.whale.admin.board.service.AdminBoardFeedDelete;
 import com.tech.whale.admin.board.service.AdminBoardListService;
+import com.tech.whale.admin.board.service.AdminBoardPostContentService;
 import com.tech.whale.admin.board.service.AdminBoardPostDelete;
 import com.tech.whale.admin.board.service.AdminNoticeListService;
+import com.tech.whale.admin.board.service.AdminWhaleNotiService;
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.service.AdminAccountUserInfoService;
 import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.dao.ComDao;
 import com.tech.whale.community.dto.CommentDto;
 import com.tech.whale.community.dto.PostDto;
-import com.tech.whale.community.service.ComDetailService;
 import com.tech.whale.community.service.ComLikeCommentService;
 import com.tech.whale.community.service.ComRegService;
 import com.tech.whale.community.service.PostUpdateService;
@@ -55,9 +54,9 @@ public class AdminBoardController {
 	private FeedCommentService feedCommentsService;
 	@Autowired
 	private AdminNoticeListService adminNoticeListService;
-	
 	@Autowired
-	private ComRegService comRegService;
+	private AdminWhaleNotiService adminWhaleNotiService;
+	
 	@Autowired
 	private PostUpdateService postUpdateService;
 	
@@ -84,7 +83,8 @@ public class AdminBoardController {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminBoardListView", "게시글");
 	    subMenu.put("adminBoardCommentsListView", "댓글");
-	    subMenu.put("adminNoticeListView", "공지사항");
+	    subMenu.put("adminNoticeListView", "커뮤 공지사항");
+	    subMenu.put("adminWhaleNotiListView", "알람 공지사항");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -234,8 +234,6 @@ public class AdminBoardController {
 		model.addAttribute("user_id", user_id);
 		adminBoardFeedDelete.commentsDelete(model);
 		
-		///////  자식 댓글있으면 전부 삭제?
-		
 		return "redirect:adminBoardFeedContentView?page="+page+
 				"&sk="+sk+"&searchType="+searchType+"&f="+f;
 	}
@@ -307,8 +305,6 @@ public class AdminBoardController {
 		}else {
 			System.out.println("글번호 안들어옴 오류");
 		}
-		
-		///////  자식 댓글있으면 전부 삭제?
 		
 		return "redirect:adminBoardCommentsListView?page="+page+
 				"&sk="+sk+"&searchType="+searchType;
@@ -503,8 +499,8 @@ public class AdminBoardController {
 	
 	
 	//////////////////////// 공지알람 리스트 자리
-	@RequestMapping("/adminNoticeListView123123123123")
-	public String adminNoticeListView123123123213(
+	@RequestMapping("/adminWhaleNotiListView")
+	public String adminWhaleNotiListView(
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
@@ -513,15 +509,31 @@ public class AdminBoardController {
 		model.addAttribute("searchVO", searchVO);
 		model.addAttribute("pname", "공지사항");
 		model.addAttribute("contentBlockJsp",
-				"../board/adminNoticeListContent.jsp");
+				"../board/adminWhaleNotiListContent.jsp");
 	    model.addAttribute("contentBlockCss",
 	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
 	    boardSubBar(model);
 	    
-	    adminNoticeListService.execute(model);
-	    
+	    adminWhaleNotiService.execute(model);
 	    
 		return "/admin/view/adminOutlineForm";
+	}
+	
+	@RequestMapping("/adminWhaleNotiRegDo")
+	public String adminWhaleNotiRegDo(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			HttpServletRequest request,
+            Model model) {
+		
+		model.addAttribute("request", request);
+		adminWhaleNotiService.whaleNotiRegDo(model);
+
+        return "redirect:adminWhaleNotiListView?"
+        		+ "page=" + page
+        		+ "&searchType=" + searchType
+        		+ "&sk=" + sk;
 	}
 	
 }

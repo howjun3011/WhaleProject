@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.tech.whale.admin.dto.AdminAdInfoDto;
-import com.tech.whale.admin.dto.AdminOfficialInfoDto;
-import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminReportListDto;
 import com.tech.whale.admin.dto.AdminReportOverlapDto;
 import com.tech.whale.admin.dto.AdminReportResultDto;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
 
 @Mapper
 public interface AdminReportIDao {
@@ -29,7 +25,7 @@ public interface AdminReportIDao {
 			@Param("report_id") int report_id, 
 			@Param("target_type") String target_type, 
 			@Param("target_id") int target_id, 
-			@Param("myAdminId") int myAdminId, 
+			@Param("myId") String myId, 
 			@Param("action") String action,
 			@Param("actionReason") String actionReason,
 			@Param("userId") String userId,

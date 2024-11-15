@@ -14,10 +14,10 @@
 <div class="content" name="content" id="content">
 
     <div class="accountSearch">
-		<form action="adminNoticeListView" method="post" >
+		<form action="adminWhaleNotiListView" method="post" >
 	        <select name="searchType" id="searchType">
 			    <option value="user_id" selected >작성자</option>
-			    <option value="post_title" <c:if test="${searchType == 'post_title'}">selected</c:if>>제목</option>
+			    <option value="whale_text" <c:if test="${searchType == 'whale_text'}">selected</c:if>>제목</option>
 			</select>
 	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
 	        <input type="submit" value="검색" />
@@ -25,10 +25,13 @@
     </div>
     
     <div class="div-form">
-    	<form id="whale-form" action="adminWhaleNotiDo" method="post">
+    	<form id="whale-form" action="adminWhaleNotiRegDo" method="post">
     		<textarea name="whale_text" id="whale_text" cols="50" rows="2" placeholder="공지알람 입력란 :"></textarea>
+    		<input type="hidden" name="searchType" value="${searchType }" />
+    		<input type="hidden" name="sk" value="${searchKeyword }" />
+    		<input type="hidden" name="page" value="${ulsearchVO.page}" />
     	</form>
-    	<button id="whale-btn" onclick="formSubmit()" ></button>
+    	<button id="whale-btn" onclick="formSubmit()" >공지등록</button>
     </div>
     
     <table>
@@ -49,7 +52,7 @@
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
 				<tr>
-					<c:if test="${not empty dto.post_id && dto.post_id != 0}">
+					<c:if test="${not empty dto.notice_id && dto.notice_id != 0}">
 					<td>${dto.notice_id }</td>
 					<td>${dto.notice_text }</td>
 					<td>${dto.user_id }</td>
@@ -65,10 +68,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminNoticeListView?page=1&sk=${searchKeyword}"
+			                <a href="adminWhaleNotiListView?page=1&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminNoticeListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}"
+			                <a href="adminWhaleNotiListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -77,28 +80,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminNoticeListView?page=${i}&sk=${searchKeyword}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminWhaleNotiListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminNoticeListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}"
+			                <a href="adminWhaleNotiListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminNoticeListView?page=${searchVO.totPage}&sk=${searchKeyword}"
+			                <a href="adminWhaleNotiListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminNoticeListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[처음]</a>
+			                <a href="adminWhaleNotiListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminNoticeListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[이전]</a>
+			                <a href="adminWhaleNotiListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminNoticeListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[다음]</a>
+			                <a href="adminWhaleNotiListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminNoticeListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[마지막]</a>
+			                <a href="adminWhaleNotiListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

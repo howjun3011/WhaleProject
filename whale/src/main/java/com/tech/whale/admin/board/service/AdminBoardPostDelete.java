@@ -14,12 +14,15 @@ import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dto.AdminAccessDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.service.AdminServiceInter;
+import com.tech.whale.community.dao.ComDao;
 
 @Service
 public class AdminBoardPostDelete implements AdminServiceInter{
 
 	@Autowired
 	private AdminIDao adminIDao;
+	@Autowired
+	private ComDao comDao;
 	
 	
 	@Override
@@ -31,6 +34,8 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 				(HttpServletRequest) map.get("request");
 		
 		int post_id = Integer.parseInt(request.getParameter("postId"));
+		String post_num = (String)request.getParameter("post_num");
+		int community_id = Integer.parseInt(request.getParameter("community_id"));
 		String user_id = (String)model.getAttribute("user_id");
 		String post_del_reason = "게시판 규칙 위반";
 		String comments_del_reason = "부모글 삭제";
@@ -41,6 +46,7 @@ public class AdminBoardPostDelete implements AdminServiceInter{
 		adminIDao.postCommentsLikeDel(post_id);
 		adminIDao.postCommentsDel(post_id);
 		adminIDao.postDel(post_id);
+		comDao.updatePostNumsAfterDeletion(community_id,post_num);
 	}
 	
 	@Transactional

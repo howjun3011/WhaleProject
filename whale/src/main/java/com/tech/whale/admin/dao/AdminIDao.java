@@ -6,14 +6,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminMainCntDto;
 import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
-import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.admin.dto.AdminWhaleNotiDto;
 import com.tech.whale.community.dto.PostDto;
 
 @Mapper
@@ -23,11 +22,11 @@ public interface AdminIDao {
 	public int selectAdvertiserCnt(String sk, String selNum);
 	public int selectOfficialCnt(String sk, String selNum);
 	public ArrayList<AdminUserInfoDto> adminUserList(
-			int start, int end, String sk, String selNum);
-	public ArrayList<AdminOfficialInfoDto> adminOfficialList(
-			int start, int end, String sk, String selNum);
-	public ArrayList<AdminAdInfoDto> adminAdvertiserList(
-			int start, int end, String sk, String selNum);
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum,
+			@Param("searchOrderBy") String searchOrderBy);
 	public AdminUserInfoDto userAccountInfoSelect(String userId);
 	
 	public ArrayList<AdminPFCDto> userAccountFeedSelect(
@@ -142,6 +141,13 @@ public interface AdminIDao {
 	public AdminCommunityDto comIdName(String postId);
 	public PostDto getAdminPost(String postId);
 	
+	public ArrayList<AdminWhaleNotiDto> adminWhaleNotiList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectWhaleNotiCnt(String sk, String selNum);
+	public void whaleNotiRegDo(String user_id, String whale_text);
 	//////////////
 	public int reportCnt();
 	public int reportResultCnt();

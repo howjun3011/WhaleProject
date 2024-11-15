@@ -51,6 +51,9 @@
 	.modal[data-darkmode="0"] .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; position: relative; }
 	.modal[data-darkmode="0"] .modal-content-music { background-color: white; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
 	#messageMenuModal[data-darkmode="0"] {  }
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar {width: 8px;}
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-track {background: #fff;}
+	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
 	/* ---------------------------------------------------------------------------------------------------------------------------------------------- */
 	.container[data-darkmode="1"] body { font-family: 'Noto Sans KR', Arial, sans-serif; background-color: #1f1f1f; margin: 0; padding: 0; }
 	.container[data-darkmode="1"] { width: 100%; max-width: 900px; margin: 0 auto; background-color: #1f1f1f; padding: 40px 20px; box-sizing: border-box; }
@@ -89,17 +92,15 @@
 	.modal[data-darkmode="1"] .modal-content { background-color: #1f1f1f; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; position: relative; }
 	.modal[data-darkmode="1"] .modal-content-music { background-color: #414141; color: whitesmoke; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
 	#messageMenuModal[data-darkmode="1"] { color: whitesmoke; }
-
-
-	/* 다크 모드 OFF */
-	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar {width: 8px;}
-	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-track {background: #fff;}
-	.container[data-darkmode="0"] .chat-messages::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
-
-	/* 다크 모드 ON */
 	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar {width: 8px;}
 	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar-track {background: #2e2e2e;}
 	.container[data-darkmode="1"] .chat-messages::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
+	.emoji-picker__emojis{overflow-x: hidden;}
+	.emoji-picker__emojis::-webkit-scrollbar {width: 8px; /* 스크롤바의 너비 */}
+	.emoji-picker__emojis::-webkit-scrollbar-track {background: #f1f1f1; /* 스크롤바 트랙의 배경색 */}
+	.emoji-picker__emojis::-webkit-scrollbar-thumb {background: #888; /* 스크롤바 손잡이의 색상 */ border-radius: 4px; /* 스크롤바 손잡이의 모서리 반경 */}
+	.emoji-picker__emojis::-webkit-scrollbar-thumb:hover {background: #555; /* 호버 시 스크롤바 손잡이의 색상 */}
+
 </style>
 <style id="darkmode-scrollbar-styles"></style>
 </head>
@@ -212,21 +213,39 @@
 		<div class="modal-item gray" onclick="closeMusicModal()">취소</div>
 	</div>
 </div>
+
+<!-- 이모지 선택기 초기화 스크립트 -->
 <script>
-	const button = document.querySelector("#emoji_btn");
-	const picker = new EmojiButton({
-	    position: 'bottom-start'
-	});
-	
-	// 이모지 선택창을 토글합니다.
-	button.addEventListener('click', () => {
-	    picker.togglePicker(button);
-	});
-	
-	// 이모지를 선택하면 입력창에 추가합니다.
-	picker.on('emoji', emoji => {
-	    const text_box = document.querySelector('#messageInput'); // 수정된 ID
-	    text_box.value += emoji; // 입력창에 이모지를 추가
+	function initializeEmojiPicker() {
+		const darkmodeOn = localStorage.getItem('darkmodeOn') || '0';
+		const theme = darkmodeOn === '1' ? 'dark' : 'light';
+
+		// 기존의 이모지 선택기가 있으면 제거
+		if (window.picker) {
+			window.picker.destroyPicker();
+		}
+
+		// 이모지 선택기 초기화
+		const picker = new EmojiButton({
+			position: 'bottom-start',
+			theme: theme
+		});
+
+		picker.on('emoji', emoji => {
+			const text_box = document.querySelector('#messageInput');
+			text_box.value += emoji;
+		});
+
+		window.picker = picker;
+		const button = document.querySelector("#emoji_btn");
+		button.addEventListener('click', () => {
+			picker.togglePicker(button);
+		});
+	}
+
+	// 페이지 로드 시 이모지 선택기 초기화
+	document.addEventListener('DOMContentLoaded', function () {
+		initializeEmojiPicker();
 	});
 </script>
 <script>

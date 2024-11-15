@@ -315,7 +315,6 @@
 													<div>${post.post_owner_id}</div>
 												</div>
 												<div class="text-date-container">
-													<div class="post-text">${post.post_text}</div>
 													<div class="date">${post.post_date}</div>
 												</div>
 											</div>

@@ -46,6 +46,11 @@
                 </table>
             </form>
         </div>
+        <c:if test="${not empty errorMessage}">
+            <script>
+                alert("${errorMessage}");
+            </script>
+        </c:if>
     </div>
     <script>
     // 완료 버튼 클릭 시 폼 제출

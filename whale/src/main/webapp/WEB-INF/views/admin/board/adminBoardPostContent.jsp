@@ -39,7 +39,7 @@
             <h1 class="post-title">${postDetail.post_title}</h1>
             <div class="post-meta">
                 <a href="adminAccountUserListView?sk=${postDetail.user_id}">
-                    <img src="/whale/static/images/setting/${postDetail.user_image_url}" alt="User Profile" class="profile-pic">
+                    <img src="${postDetail.user_image_url}" alt="User Profile" class="profile-pic">
                 </a>
                 <span class="username">${postDetail.user_id}</span>
                 <span class="post-date">${postDetail.post_date}</span>
@@ -91,7 +91,7 @@
                 <div class="comment-item" data-comment-id="${comment.post_comments_id}" data-user-id="${comment.user_id}">
                     <div class="comment-header">
                         <a href="adminAccountUserListView?sk=${comment.user_id}">
-                            <img src="/whale/static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+                            <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
                         </a>
                         <span class="username">${comment.user_id}</span>
                         <span class="comment-date">${comment.post_comments_date}</span>
@@ -113,7 +113,7 @@
                             <div class="reply-item" data-comment-id="${reply.post_comments_id}" data-user-id="${reply.user_id}">
                                 <div class="comment-header">
                                     <a href="adminAccountUserListView?sk=${reply.user_id}">
-                                        <img src="/whale/static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+                                        <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
                                     </a>
                                     <span class="username">${reply.user_id}</span>
                                     <span class="comment-date">${reply.post_comments_date}</span>

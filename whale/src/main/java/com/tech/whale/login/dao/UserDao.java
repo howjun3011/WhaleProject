@@ -14,7 +14,6 @@ public interface UserDao {
     public void insertUserNotification(String user_id);
     public void insertPageAccessSetting(String user_id);
     public void insertStartPageSetting(String user_id);
-    public void insertBlock(String user_id);
     public void insertUserSetting(String user_id);
     public void insertFollow(String user_id);
     public Integer selectFollowId(String user_id);

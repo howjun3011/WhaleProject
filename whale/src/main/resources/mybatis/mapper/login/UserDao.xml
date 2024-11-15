@@ -21,11 +21,7 @@
     <insert id="insertStartPageSetting">
         INSERT INTO STARTPAGE_SETTING (USER_ID) VALUES (#{user_id})
     </insert>
-    
-    <insert id="insertBlock">
-        INSERT INTO BLOCK (USER_ID) VALUES (#{user_id})
-    </insert>
-    
+
     <insert id="insertUserSetting">
         INSERT INTO USER_SETTING (USER_ID) VALUES (#{user_id})
     </insert>

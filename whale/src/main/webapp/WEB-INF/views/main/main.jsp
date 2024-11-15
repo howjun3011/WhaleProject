@@ -26,14 +26,14 @@
 	                           :noti-counts-sum="notiCounts.reduce((x,y) => (x+y))" @header-alarm-toggle="menuCheck"
 	                           @header-profile-toggle="menuCheck" @reset-main="resetMain"></main-header-component>
 	    <div class="main">
-	        <main-center-component :frame-names="frameNames" :replace-iframe="replaceIframe" :start-page="startPage"
+	        <main-center-component :frame-names="frameNames" :replace-iframe="replaceIframe" :start-page="startPage" :is-over="isOver"
 	                               :track-info="trackInfo" :whale-address="whaleAddress"></main-center-component>
 	        <main-header-menu-component :header-menu-check="headerMenuCheck" :user-nickname="userInfo[0]"
 	                                    :notifications="notifications" :noti-counts="notiCounts"
 	                                    :get-notification="getNotification" @header-close-menu="closeMenu"
 	                                    @menu-redirect-iframe="changeRedirectIndex"></main-header-menu-component>
 	    </div>
-	    <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage"
+	    <main-footer-component :fetch-iframe="fetchIframe" :fetch-web-api="fetchWebApi" :start-page="startPage" :is-over="isOver"
 	                           :track-info="trackInfo" @footer-music-toggle="changeRedirectIndex"></main-footer-component>
 		<main-notification-component :get-notification="getNotification" @message-go="changeRedirectIndex"></main-notification-component>
 	</div>

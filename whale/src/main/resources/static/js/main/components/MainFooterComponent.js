@@ -39,13 +39,13 @@ const MainFooterComponent = {
 		        		<div class="playerInfo flexCenter" @click="sendStreaming({ type: 'albumDetail', albumId: trackInfo[6] },'?type=albumDetail&albumId='+trackInfo[6])"><img :src="trackInfo[0]" alt="" height="48px" style="border-radius: 5px; opacity: 0.9;"></div>
 		        		<div class="playerRightStyle"><p class="playerTrackName playerInfo" @click="sendStreaming({ type: 'trackDetail', trackId: trackInfo[4] },'?type=trackDetail&trackId='+trackInfo[4])">{{ trackInfo[1] }}</p><p class="playerArtistName playerInfo" style="margin-top: 3px;" @click="sendStreaming({ type: 'artistDetail', artistId: trackInfo[7] },'?type=artistDetail&artistId='+trackInfo[7])">{{ trackInfo[2] }}</p></div>
 		        		<div class="playerRightStyle" @click="insertTrackLike()"><img class="playerImg" :src="isLiked[ trackInfo[5] ? 1 : 0]" alt="Music Whale Like Button" width="23px" height="23px"></div>
-		        	</div>
-		        	<div class="playerComponent flexCenter">
-		        		<div class="playerTime">{{ playTime[0] }}</div>
-		        		<div class="player-bar-container">
-				            <input type="range" class="player-bar" id="seekBar" min="0" max="100" value="0" v-model="sliderValue" @input="updateSliderBackground" @mouseover="isHovered[0] = true" @mouseleave="isHovered[0] = false" :style="sliderStyle">
-				        </div>
-				        <div class="playerTime">{{ playTime[1] }}</div>
+		        		<div class="flexCenter" v-if="isOver === true">
+			        		<div class="playerTime">{{ playTime[0] }}</div>
+			        		<div class="player-bar-container">
+					            <input type="range" class="player-bar" id="seekBar" min="0" max="100" value="0" v-model="sliderValue" @input="updateSliderBackground" @mouseover="isHovered[0] = true" @mouseleave="isHovered[0] = false" :style="sliderStyle">
+					        </div>
+					        <div class="playerTime">{{ playTime[1] }}</div>
+			        	</div>
 		        	</div>
 		            <div class="playerComponent flexCenter">
 		            	<button class="playerBtn flexCenter" @click="shufflePlay()"><img class="playerImg" src="static/images/streaming/player/shuffle.png" alt="Music Whale Shuffle Button" height="32px" :style="{backgroundColor: isShuffled ? '#F5F5F5' : '#FCFCFC'}"></button>
@@ -54,13 +54,12 @@ const MainFooterComponent = {
 		                <button class="playerBtn flexCenter" @click="nextPlay()"><img src="static/images/streaming/player/next.png" alt="Music Whale Next Button" height="42px"></button>
 		                <button class="playerBtn flexCenter" @click="repeatPlay()" style="position: relative;"><img class="playerImg" :src="repeatBtnSrc[repeatBtnSrcIndex]" alt="Music Whale Repeat Button" height="32px" :style="{backgroundColor: isRepeated ? '#F5F5F5' : '#FCFCFC'}"></button>
 		            </div>
-		            <div class="playerComponent"></div>
 		            <div class="playerComponent" id="playerRight">
 		            	<div class="playerRightMargin"><img class="playerPlayListImg playerInfo" src="static/images/streaming/player/playlist.png" alt="Music Whale Playlist Button" width="34px" height="34px" @click="getPlaylist()"></div>
-		            	<div class="volume-bar-container">
+		            	<div class="volume-bar-container" v-if="isOver === true">
 				            <input type="range" class="volume-bar" id="volumeSlider" min="0" max="100" v-model="volumeValue" @mouseover="isHovered[1] = true" @mouseleave="isHovered[1] = false" @input="updateVolumeBackground" :style="volumeStyle">
 				        </div>
-				        <button class="playerBtn flexCenter" style="margin: 0 8px; opacity: 0.6;">
+				        <button class="playerBtn flexCenter" style="margin: 0 8px; opacity: 0.6;" v-if="isOver === true">
 				        	<img src="static/images/streaming/player/soundOn.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue !== 0" @click="muteVolume()">
 				        	<img src="static/images/streaming/player/soundOff.png" alt="Music Whale Volume Button" height="15px" v-if="volumeValue === 0" @click="returnVolume()">
 				        </button>
@@ -75,6 +74,7 @@ const MainFooterComponent = {
 		fetchWebApi: {type: Function, default() {return 'Default function'}},
 		startPage: Array,
 		trackInfo: Array,
+		isOver: Boolean,
 	},
 	data() {
 		return {

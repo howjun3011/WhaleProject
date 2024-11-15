@@ -17,6 +17,7 @@ const app = createApp({
 			notifications: [[],[],[],[],[]],
 			notiCounts: [0,0,0,0,0],
 			trackInfo: [],
+			isOver: false,
 		}
 	},
 	mounted() {
@@ -29,7 +30,23 @@ const app = createApp({
 	methods: {
 		// [ Resize ]
 		executeResize() {$(document).ready(() => {this.resize();}); $(window).resize(() => {this.resize();});},
-		resize() {var windowHeight = $(window).height(); var headerHeight = $(".header").height(); var footerHeight = $(".footer").height()+$(".footerMargin").height(); $('.main').css({'height': (windowHeight-headerHeight-footerHeight-1)+'px'});},
+		resize() {
+			this.isOver = $(window).width() > 960 ? true : false;
+			
+			if (this.isOver === false) {
+				this.pageAccess = [0,0,0,0,0];
+				$(".mainItems").get(0).style = "width: 100%";
+				$(".mainItems").get(1).style = "width: 0%";
+			} else {
+				this.checkPageAccess();
+				$(".mainItems").get(0).style = "width: 50%";
+				$(".mainItems").get(1).style = "width: 50%";
+			}
+			
+			var windowHeight = $(window).height();
+			var headerHeight = $(".header").height();
+			var footerHeight = $(".footer").height()+$(".footerMargin").height(); $('.main').css({'height': (windowHeight-headerHeight-footerHeight-1)+'px'});
+		},
 		
 		// [ iframe 자식 창 데이터 수신 ]
 		getIframeData() {
@@ -83,15 +100,19 @@ const app = createApp({
 		
 		// [ Page Access Setting ]
 		checkPageAccess() {
-			fetch('main/checkPageAccess')
-				.then(response => response.json())
-				.then(data => {
-					this.pageAccess[0] = data.page_access_mypage;
-					this.pageAccess[1] = data.page_access_notification;
-					this.pageAccess[2] = data.page_access_setting;
-					this.pageAccess[3] = data.page_access_music;
-					this.pageAccess[4] = data.page_access_message;
-			});
+			if (this.isOver === false) {
+				fetch('main/checkPageAccess')
+					.then(response => response.json())
+					.then(data => {
+						this.pageAccess[0] = data.page_access_mypage;
+						this.pageAccess[1] = data.page_access_notification;
+						this.pageAccess[2] = data.page_access_setting;
+						this.pageAccess[3] = data.page_access_music;
+						this.pageAccess[4] = data.page_access_message;
+				});
+			} else {
+				this.pageAccess = [0,0,0,0,0];
+			}
 		},
 		
 		// [ Notification ]

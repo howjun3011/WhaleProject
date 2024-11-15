@@ -1,7 +1,7 @@
 const MainCenterComponent = {
 	template: `
 		<div class="mainItems flexCenter" v-for="(menuBtnTrigger, i) in menuBtnTriggers" :key="i">
-			<div class="frame">
+			<div class="frame" v-if="(i === 0) || (i === 1 && isOver === true)">
 				<iframe :id="frameNames[i]" style="width: 100%; height: 100%; border-radius: 30px; border: none;" :src="whaleAddress[startPage[i]]" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 				<Transition name="menuTransition" mode="out-in">
 					<div class="menu-style menuBtn flexCenter" v-if="menuBtnTriggers[i]" :key="keyBtns[i]" @click="menuBtnTriggers[i] = !menuBtnTriggers[i]"><div class="menuBtn-square"></div></div>
@@ -18,6 +18,7 @@ const MainCenterComponent = {
 		startPage: Array,
 		trackInfo: Array,
 		whaleAddress: Array,
+		isOver: Boolean,
 	},
 	data() {
 		return {

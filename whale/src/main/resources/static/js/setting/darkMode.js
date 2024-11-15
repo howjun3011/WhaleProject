@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
     const streamingElement = document.querySelector('.streamingBody');
-    const profileHomeElement = document.querySelector('.container');
     const searchHomeElement = document.querySelector('.searchHomeBody');
     const toggleSlide = document.getElementById('toggle-slide');
     let darkmodeOn = localStorage.getItem('darkmodeOn') || "0";

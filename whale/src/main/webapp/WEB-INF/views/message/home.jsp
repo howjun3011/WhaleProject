@@ -12,144 +12,55 @@
 	<meta charset="UTF-8">
 	<title>messageHome</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/message/messageHome.css" />
+	<script src="${pageContext.request.contextPath}/static/js/setting/darkMode.js"></script>
 	<style>
-		.container {
-			padding: 20px 20px;
-		}
+		.container[data-darkmode="0"] { padding: 20px 20px; }
+		.container[data-darkmode="0"] .scroll-content { flex: 1; overflow-y: auto; }
+		.container[data-darkmode="0"] .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+		.container[data-darkmode="0"] .left { display: flex; align-items: center; }
+		.container[data-darkmode="0"] .nowId { font-size: 25px; line-height: 30px; }
+		.container[data-darkmode="0"] #back img, .container[data-darkmode="0"] #new-chat img { display: block; width: 30px; height: 30px; margin-right: 25px; filter: invert(0); }
+		.container[data-darkmode="0"] .room-list { display: flex; align-items: center; margin: 10px 0px; padding: 10px 30px; }
+		.container[data-darkmode="0"] .room-list:hover { background-color: #f9f9f9; }
+		.container[data-darkmode="0"] .user-nickname { font-weight: bold; }
+		.container[data-darkmode="0"] .room-list img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+		.container[data-darkmode="0"] .room-list .chatout img { margin: 0; transform: translateX(35%); }
+		.container[data-darkmode="0"] .room-list a { display: flex; width: 100%; text-decoration: none; }
+		.container[data-darkmode="0"] .new-message { display: flex; font-weight: bold; line-height: 30px; }
+		.container[data-darkmode="0"] .before-message { display: flex; line-height: 30px; }
+		.container[data-darkmode="0"] .diff { font-weight: normal; display: flex; color: #999999; }
+		.container[data-darkmode="0"] a { text-decoration: none; color: black; }
+		.container[data-darkmode="0"] a:visited, .container[data-darkmode="0"] a:hover, .container[data-darkmode="0"] a:focus, .container[data-darkmode="0"] a:active { color: black; text-decoration: none; }
+		.container[data-darkmode="0"] .chat { display: flex; flex-direction: column; width: 100%; position: relative; }
+		.container[data-darkmode="0"] .chatout { width: 30px; display: flex; align-items: center; justify-content: center; }
+		.container[data-darkmode="0"] .chatout img { width: 20px; height: 20px; cursor: pointer; align-items: center; }
+		.container[data-darkmode="0"] .modal { display: none; color: #FF4848; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; cursor: pointer; }
+		.container[data-darkmode="0"] .modal-content { font-size: 16px; background-color: #fff; border-radius: 8px; text-align: center; width: 80%; max-width: 200px; max-height: 20px; }
+		.container[data-darkmode="0"] .modal-content:hover { font-size: 16px; background-color: #f9f9f9; border-radius: 8px; text-align: center; width: 80%; max-width: 200px; max-height: 20px; }
+		/* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+		.container[data-darkmode="1"] { padding: 20px 20px; background-color: #1f1f1f; color: whitesmoke; }
+		.container[data-darkmode="1"] .scroll-content { flex: 1; overflow-y: auto; }
+		.container[data-darkmode="1"] .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+		.container[data-darkmode="1"] .left { display: flex; align-items: center; }
+		.container[data-darkmode="1"] .nowId { font-size: 25px; line-height: 30px; }
+		.container[data-darkmode="1"] #back img, #new-chat img { display: block; width: 30px; height: 30px; margin-right: 25px; filter: invert(1); }
+		.container[data-darkmode="1"] .room-list { display: flex; align-items: center; margin: 10px 0px; padding: 10px 30px;}
+		.container[data-darkmode="1"] .user-nickname { font-weight: bold; }
+		.container[data-darkmode="1"] .room-list img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+		.container[data-darkmode="1"] .room-list .chatout img { margin: 0; transform: translateX(35%); }
+		.container[data-darkmode="1"] .room-list a { display: flex; width: 100%; text-decoration: none; color: black; }
+		.container[data-darkmode="1"] .new-message { display: flex; font-weight: bold; line-height: 30px; }
+		.container[data-darkmode="1"] .before-message { display: flex; line-height: 30px; }
+		.container[data-darkmode="1"] .diff { font-weight: normal; display: flex; color: #999999; }
+		.container[data-darkmode="1"] a { text-decoration: none; color: black; }
+		.container[data-darkmode="1"] a:visited, .container[data-darkmode="1"] a:hover, .container[data-darkmode="1"] a:focus, .container[data-darkmode="1"] a:active { color: black; text-decoration: none; }
+		.container[data-darkmode="1"] .chat { display: flex; flex-direction: column; width: 100%; position: relative; color: whitesmoke; }
+		.container[data-darkmode="1"] .chatout { width: 30px; display: flex; align-items: center; justify-content: center; }
+		.container[data-darkmode="1"] .chatout img { width: 20px; height: 20px; cursor: pointer; align-items: center; filter: invert(1); }
+		.container[data-darkmode="1"] .modal { display: none; color: #e74c3c; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; cursor: pointer; }
+		.container[data-darkmode="1"] .modal-content { font-size: 16px; background-color: #414141; border-radius: 8px; text-align: center; width: 80%; max-width: 200px; max-height: 20px; }
+		.container[data-darkmode="1"] .modal-content:hover { font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin: 0px; background-color: #2e2e2e; }
 
-		.scroll-content {
-			flex: 1;
-			overflow-y: auto;
-		}
-
-		.header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 30px;
-		}
-
-		.left {
-			display: flex;
-			align-items: center;
-		}
-
-		.nowId {
-			font-size: 25px;
-			line-height: 30px;
-		}
-
-		#back img, #new-chat img {
-			display: block;
-			width: 30px;
-			height: 30px;
-			margin-right: 25px;
-		}
-
-		.room-list {
-			display: flex;
-			align-items: center;
-			margin: 25px 0px;
-			padding: 0px 20px 0 30px;
-		}
-
-		.user-nickname {
-			font-weight: bold;
-		}
-
-		.room-list img {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			margin-right: 10px;
-		}
-
-		.room-list a{
-			display: flex;
-			width: 100%;
-			text-decoration: none;
-			color: black;
-		}
-
-		.new-message {
-			display: flex;
-			font-weight: bold;
-			line-height: 30px;
-		}
-
-		.before-message {
-			display: flex;
-			line-height: 30px;
-		}
-
-		.diff {
-			font-weight: normal;
-			display: flex;
-			color: #999999;
-		}
-
-		a {
-			text-decoration: none;
-			color: black;
-		}
-
-		a:visited, a:hover, a:focus, a:active {
-			color: black;
-			text-decoration: none;
-		}
-
-		.chat {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			position: relative;
-		}
-
-		.chatout {
-			width: 30px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.chatout img {
-			width: 20px;
-			height: 20px;
-			cursor: pointer;
-			align-items: center;
-		}
-		/* 모달 스타일 */
-		.modal {
-			display: none; /* 초기에는 숨김 */
-			position: fixed;
-			z-index: 1000;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.5);
-			justify-content: center;
-			align-items: center;
-		}
-
-		.modal-content {
-			background-color: #fff;
-			border-radius: 8px;
-			text-align: center;
-			width: 80%;
-			max-width: 200px;
-			max-height: 20px;
-		}
-
-		.modal-content button {
-			background-color: white;
-			color: #FF4848;
-			font-size: 16px;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-			margin: 0px;
-		}
 	</style>
 </head>
 <body>
@@ -163,7 +74,6 @@
 			<img src="${pageContext.request.contextPath}/static/images/message/newchatIcon.png" id="newchat" alt="newchatIcon">
 		</a>
 	</div>
-
 	<div class="scroll-content" id="chatList">
 		<c:forEach var="list" items="${allChatList}">
 			<div class="room-list" id="chat-${list.user_id}" data-unread-count="${list.unread_message_count}">
@@ -208,7 +118,9 @@
 	<!-- 모달 -->
 	<div class="modal" id="modal">
 		<div class="modal-content">
-			<button onclick="leaveChat()">채팅방 나가기</button>
+			<div class="leave-chat-button" onclick="leaveChat()">
+				채팅방 나가기
+			</div>
 		</div>
 	</div>
 </div>
@@ -386,7 +298,6 @@
 	            .catch(error => console.error("Error:", error));
 	    }
 	}
-
 </script>
 </body>
 </html>

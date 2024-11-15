@@ -78,4 +78,7 @@ public interface UserDao {
     void insertUserIdInMessageRoomUserWithNewUserId(@Param("user_id") String newUserId);
     void changeUserIdInMessageRoomUser(@Param("userId") String userId, @Param("newUserId") String newUserId);
 
+    // 어드민 계정 팔로우 관련 메서드
+    void followAdmin(String followerId, String followeeId);
+
 }

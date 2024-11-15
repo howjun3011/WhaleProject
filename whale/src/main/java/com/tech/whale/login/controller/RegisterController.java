@@ -49,6 +49,7 @@ public class RegisterController {
         boolean isRegistered = userService.registerUser(username, password, email, nickname, (String) session.getAttribute("spotifyId"));
 
         if (isRegistered) {
+            userService.followAdmin(username, "admintest"); // 관리자 계정 팔로우 추가
             response.put("success", true);
             response.put("message", "회원가입 완료되었습니다.");
             response.put("redirectTo", "/whale");

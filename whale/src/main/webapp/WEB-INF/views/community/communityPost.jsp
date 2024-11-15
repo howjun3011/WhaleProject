@@ -49,7 +49,7 @@
     .content-wrapper[data-darkmode="1"] .table-container {display: flex; justify-content: center; align-items: center; margin-top: 20px;}
     .content-wrapper[data-darkmode="1"] table {width: 92%; border-collapse: collapse; background-color: #4e4e4e}
     .content-wrapper[data-darkmode="1"] th, td {padding: 10px; border-bottom: 1px solid #d2d2d2; text-align: left; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-    .content-wrapper[data-darkmode="1"] th {background-color: #474747; font-weight: 700; color: whitesmoke;}
+    .content-wrapper[data-darkmode="1"] th {background-color: #4e4e4e; font-weight: 700; color: whitesmoke;}
     .content-wrapper[data-darkmode="1"] td {color: whitesmoke;}
     .content-wrapper[data-darkmode="1"] tr:hover td {background-color: #9e9e9e;}
     .content-wrapper[data-darkmode="1"] .fixed {color: #f03e3e; font-weight: bold;}
@@ -61,7 +61,7 @@
     .content-wrapper[data-darkmode="1"] .pagination a:hover {background-color: lightgray;}
     .content-wrapper[data-darkmode="1"] .pagination .disabled {background-color: white; color: #adb5bd; pointer-events: none;}
     .content-wrapper[data-darkmode="1"] .footer {text-align: center; margin: 30px 0; font-size: 12px; color: whitesmoke;}
-    .content-wrapper[data-darkmode="1"] .announcement {background-color: #474747; /* 연한 회색 배경 */ font-weight: bold; /* 글씨를 굵게 */}
+    .content-wrapper[data-darkmode="1"] .announcement {background-color: #3f3f3f; /* 연한 회색 배경 */ font-weight: bold; /* 글씨를 굵게 */}
     .content-wrapper[data-darkmode="1"] .pagination .current {background-color: white; font-weight: bold; color: #adb5bd;}
     #userModal[data-darkmode="1"] {display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}
     #userModal[data-darkmode="1"] .modal-content {background-color: #2e2e2e; margin: 20% auto; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
@@ -119,6 +119,11 @@
         font-size: 14px;
         margin: 0 20px 0 10px;
     }
+    
+    .content-wrapper[data-darkmode="1"] .search-bar {background-color: #4e4e4e; border: none;}
+    .content-wrapper[data-darkmode="1"] input[type="text"] {color: white;}
+    .content-wrapper[data-darkmode="1"] input[type="submit"] {color: white;}
+    .content-wrapper[data-darkmode="1"] span {color: white;}
 </style>
 </head>
 <body>
@@ -198,7 +203,7 @@
 	</form>
 
     <div style="text-align: right; margin: 40px 40px 0 0;">
-        <a href="communityReg?c=${param.c}" style="background: transparent; border: 1px solid #d2d2d2; color: #626262; font-size: 14px; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: bold;">글 작성</a>
+        <a href="communityReg?c=${param.c}" style="background: transparent; border: 1px solid #d2d2d2; color: gray; font-size: 14px; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: bold;">글 작성</a>
     </div>
 
     <div class="pagination">

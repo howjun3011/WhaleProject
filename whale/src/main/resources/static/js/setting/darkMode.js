@@ -257,53 +257,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 streamingElement.classList.toggle("light", !isDark);
 
                 const bodyClass = document.body.classList.contains("dark") ? "dark" : "light";
+                if (page !== 'home') {
+                    if (bodyClass === "dark") {
+                        console.log("Dark theme is active");
 
-                if (bodyClass === "dark") {
-                    console.log("Dark theme is active");
+                        const updateBackground = () => {
+                            const mainContent = document.querySelector('.mainContent');
+                            if (mainContent) {
+                                function getRandomColor() {
+                                    const r = Math.floor(Math.random() * 256);
+                                    const g = Math.floor(Math.random() * 256);
+                                    const b = Math.floor(Math.random() * 256);
+                                    console.log("Generated RGB values:", r, g, b);
+                                    return `rgb(${r}, ${g}, ${b})`;
+                                }
 
-                    const updateBackground = () => {
-                        const mainContent = document.querySelector('.mainContent');
-                        if (mainContent) {
-                            function getRandomColor() {
-                                const r = Math.floor(Math.random() * 256);
-                                const g = Math.floor(Math.random() * 256);
-                                const b = Math.floor(Math.random() * 256);
-                                console.log("Generated RGB values:", r, g, b);
-                                return `rgb(${r}, ${g}, ${b})`;
+                                const randomColor = getRandomColor();
+                                console.log("Random color:", randomColor);
+                                mainContent.style.backgroundImage = `linear-gradient(${randomColor} 0%, rgb(17, 18, 17) 100%)`;
+                                console.log("Background image:", mainContent.style.backgroundImage);
+                            } else {
+                                console.error('mainContent 요소를 찾을 수 없습니다.');
                             }
+                        };
+                        updateBackground(); // dark 모드일 때 배경 업데이트
+                    } else if (bodyClass === "light") {
+                        console.log("Light theme is active");
 
-                            const randomColor = getRandomColor();
-                            console.log("Random color:", randomColor);
-                            mainContent.style.backgroundImage = `linear-gradient(${randomColor} 0%, rgb(17, 18, 17) 100%)`;
-                            console.log("Background image:", mainContent.style.backgroundImage);
-                        } else {
-                            console.error('mainContent 요소를 찾을 수 없습니다.');
-                        }
-                    };
-                    updateBackground(); // dark 모드일 때 배경 업데이트
-                } else if (bodyClass === "light") {
-                    console.log("Light theme is active");
+                        const updateBackground = () => {
+                            const mainContent = document.querySelector('.mainContent');
+                            if (mainContent) {
+                                function getRandomColor() {
+                                    const r = Math.floor(Math.random() * 256);
+                                    const g = Math.floor(Math.random() * 256);
+                                    const b = Math.floor(Math.random() * 256);
+                                    console.log("Generated RGB values:", r, g, b);
+                                    return `rgb(${r}, ${g}, ${b})`;
+                                }
 
-                    const updateBackground = () => {
-                        const mainContent = document.querySelector('.mainContent');
-                        if (mainContent) {
-                            function getRandomColor() {
-                                const r = Math.floor(Math.random() * 256);
-                                const g = Math.floor(Math.random() * 256);
-                                const b = Math.floor(Math.random() * 256);
-                                console.log("Generated RGB values:", r, g, b);
-                                return `rgb(${r}, ${g}, ${b})`;
+                                const randomColor = getRandomColor();
+                                console.log("Random color:", randomColor);
+                                mainContent.style.backgroundImage = `linear-gradient(${randomColor} 0%, rgb(249, 250, 249) 100%)`;
+                                console.log("Background image:", mainContent.style.backgroundImage);
+                            } else {
+                                console.error('mainContent 요소를 찾을 수 없습니다.');
                             }
-
-                            const randomColor = getRandomColor();
-                            console.log("Random color:", randomColor);
-                            mainContent.style.backgroundImage = `linear-gradient(${randomColor} 0%, rgb(249, 250, 249) 100%)`;
-                            console.log("Background image:", mainContent.style.backgroundImage);
-                        } else {
-                            console.error('mainContent 요소를 찾을 수 없습니다.');
-                        }
-                    };
-                    updateBackground(); // light 모드일 때 배경 업데이트
+                        };
+                        updateBackground(); // light 모드일 때 배경 업데이트
+                    }
                 }
             }
             if (searchHomeElement) {

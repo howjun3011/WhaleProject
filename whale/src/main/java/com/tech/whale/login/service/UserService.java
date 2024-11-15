@@ -60,7 +60,6 @@ public class UserService {
             userDao.insertUserNotification(username);
             userDao.insertPageAccessSetting(username);
             userDao.insertStartPageSetting(username);
-            userDao.insertBlock(username);
             userDao.insertUserSetting(username);
             userDao.insertFollow(username);
             Integer followId = userDao.selectFollowId(username);

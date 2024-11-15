@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 communityElement.classList.toggle("light", !isDarkMode);
 
                 updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+                initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
             }
         });
     }
@@ -277,6 +278,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityElement.classList.toggle("dark", isDark);
                 communityElement.classList.toggle("light", !isDark);
+
+                initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
             }
             if (communityPostElement) {
                 communityPostElement.setAttribute("data-darkmode", darkmodeOn);
@@ -366,6 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 messageRoomElement.classList.toggle("light", !isDark);
             }
             updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+
         }
     });
 

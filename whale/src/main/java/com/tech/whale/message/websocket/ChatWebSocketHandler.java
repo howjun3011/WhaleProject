@@ -171,12 +171,22 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
            
             String senderNickname = messageDao.getUserNickname(userId);
             
+            String messageT = "";
+            
             // Home 페이지에 메시지 알림 전송
             HomeMessage homeMessage = new HomeMessage();
             homeMessage.setReceiverId(otherUserId); // receiver_id는 추가로 설정 필요
             homeMessage.setSenderId(userId);
             homeMessage.setMessageType(messageType);
-            homeMessage.setMessageText(messageDto.getMessage_text());
+            if (messageType.equals("TEXT")) {
+            	homeMessage.setMessageText(messageDto.getMessage_text());				
+			} else if (messageType.equals("IMAGE")) {
+				messageT = "이미지를 보냈습니다.";
+				homeMessage.setMessageText(messageT);								
+			} else if (messageType.equals("LINK")) {
+				messageT = "링크를 보냈습니다.";
+				homeMessage.setMessageText(messageT);
+			}
             homeMessage.setTimeDifference(calculateTimeDifference());
             homeMessage.setUserImageUrl(userImgUrl);
             homeMessage.setMessageRoomId(roomId);

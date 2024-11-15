@@ -6,7 +6,7 @@ const MainFooterComponent = {
 					<div class="playlistBody">
 						<div class="playlist-header flexCenter">재생 목록</div>
 						<div class="playlist-delete flexCenter" @click="isPlayered = false;">x</div>
-						<div class="playlist-contents" v-for="(item, i) in resPlaylists" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{backgroundColor: item.id === trackInfo[4] ? '#E2E2E2' : '#ffffff'}">
+						<div class="playlist-contents" v-for="(item, i) in resPlaylists" :key="i" @mouseover="isShow[i] = true" @mouseleave="isShow[i] = false" :style="{}">
 							<div class="playlist-font flexCenter" v-if="!isShow[i]">{{ i+1 }}</div>
 							<div class="flexCenter" v-if="addIsShow(i)">
 				                <svg

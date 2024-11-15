@@ -14,7 +14,6 @@ public interface UserDao {
     public void insertUserNotification(String user_id);
     public void insertPageAccessSetting(String user_id);
     public void insertStartPageSetting(String user_id);
-    public void insertBlock(String user_id);
     public void insertUserSetting(String user_id);
     public void insertFollow(String user_id);
     public Integer selectFollowId(String user_id);
@@ -77,5 +76,9 @@ public interface UserDao {
     void deleteUserIdInMessageRoomUserByUserId(@Param("user_id") String userId);
     void insertUserIdInMessageRoomUserWithNewUserId(@Param("user_id") String newUserId);
     void changeUserIdInMessageRoomUser(@Param("userId") String userId, @Param("newUserId") String newUserId);
+
+    // 어드민 계정 팔로우 관련 메서드
+    void followAdmin(String followerId, String followeeId);
+    void followUser(String followerId, String followeeId);
 
 }

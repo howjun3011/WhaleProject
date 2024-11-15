@@ -3,6 +3,7 @@ import MainHeaderComponent from './components/MainHeaderComponent.js';
 import MainHeaderMenuComponent from './components/MainHeaderMenuComponent.js';
 import MainCenterComponent from './components/MainCenterComponent.js';
 import MainFooterComponent from './components/MainFooterComponent.js';
+import MainNotificationComponent from './components/MainNotificationComponent.js';
 
 const app = createApp({
 	data() {
@@ -34,9 +35,10 @@ const app = createApp({
 		getIframeData() {
 			window.addEventListener('message', (event) => {
 				if (event.origin === 'http://localhost:9002') { // 보안을 위해 출처를 확인.
-					if (event.data === 'profileEdit') {
-						this.checkUserInfo();
-						console.log('Received message from iframe window:', event.data);
+					if (event.data && event.data.type === 'success') {
+						// 성공 메시지가 있을 경우, alert로 표시하고 메인 페이지로 이동
+			            alert(event.data.text); // 탈퇴 성공 메시지 표시
+			            window.location.href = "/whale"; // 메인 페이지로 이동
 					}
 				}
 			});
@@ -88,6 +90,7 @@ const app = createApp({
 					this.pageAccess[1] = data.page_access_notification;
 					this.pageAccess[2] = data.page_access_setting;
 					this.pageAccess[3] = data.page_access_music;
+					this.pageAccess[4] = data.page_access_message;
 			});
 		},
 		
@@ -144,5 +147,6 @@ app.component("MainHeaderComponent",MainHeaderComponent);
 app.component("MainHeaderMenuComponent",MainHeaderMenuComponent);
 app.component("MainCenterComponent",MainCenterComponent);
 app.component("MainFooterComponent",MainFooterComponent);
+app.component("MainNotificationComponent",MainNotificationComponent);
 
 app.mount('#main');

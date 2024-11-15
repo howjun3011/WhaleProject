@@ -6,12 +6,15 @@ import com.tech.whale.login.dao.UserDao;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.User;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +60,6 @@ public class UserService {
             userDao.insertUserNotification(username);
             userDao.insertPageAccessSetting(username);
             userDao.insertStartPageSetting(username);
-            userDao.insertBlock(username);
             userDao.insertUserSetting(username);
             userDao.insertFollow(username);
             Integer followId = userDao.selectFollowId(username);
@@ -177,5 +179,48 @@ public class UserService {
     public Date getUserEndDateService(String userId) {
     	Date status = userDao.getUserEndDate(userId);
         return status;
+    }
+
+    @Autowired
+    private SqlSessionTemplate sqlSession;
+
+    public void followAdmin(String followerId, String followeeId) {
+        // 새로 가입한 유저가 WHALE 계정을 팔로우
+        String currentFollowees;
+        try {
+            currentFollowees = sqlSession.selectOne("com.tech.whale.login.dao.UserDao.getFollowUserIds", followerId);
+        } catch (EmptyResultDataAccessException e) {
+            currentFollowees = null;
+        }
+
+        if (currentFollowees == null || currentFollowees.isEmpty()) {
+            // 팔로우한 사람이 없으면 바로 WHALE 추가
+            sqlSession.update("com.tech.whale.login.dao.UserDao.insertFollowUser",
+                    Map.of("followerId", followerId, "followeeId", followeeId));
+        } else if (!currentFollowees.contains(followeeId)) {
+            // 이미 팔로우 목록에 없을 때만 WHALE 추가
+            String updatedFollowees = currentFollowees + "," + followeeId;
+            sqlSession.update("com.tech.whale.login.dao.UserDao.updateFollowUserIds",
+                    Map.of("followerId", followerId, "updatedFollowees", updatedFollowees));
+        }
+    }
+
+    public void followUser(String followerId, String followeeId) {
+        // WHALE 계정이 새로 가입한 유저를 팔로우
+        String currentFollowees;
+        try {
+            currentFollowees = sqlSession.selectOne("com.tech.whale.login.dao.UserDao.getFollowUserIds", followerId);
+        } catch (EmptyResultDataAccessException e) {
+            currentFollowees = null;
+        }
+
+        if (currentFollowees == null || currentFollowees.isEmpty()) {
+            sqlSession.update("com.tech.whale.login.dao.UserDao.insertFollowUser",
+                    Map.of("followerId", followerId, "followeeId", followeeId));
+        } else if (!currentFollowees.contains(followeeId)) {
+            String updatedFollowees = currentFollowees + "," + followeeId;
+            sqlSession.update("com.tech.whale.login.dao.UserDao.updateFollowUserIds",
+                    Map.of("followerId", followerId, "updatedFollowees", updatedFollowees));
+        }
     }
 }

@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery 추가 -->
 <meta charset="UTF-8">
 <title>채팅방</title>
@@ -186,8 +187,9 @@
 	        <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
 	                  onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
 	        <input type="file" id="imageInput" accept="image/*" onchange="uploadImageAndSendURL()" style="display:none;">
-	        <button type="submit" style="width:60px;"><img src="static/images/btn/write_btn.png" alt="" /></button>
-	        <button type="button" style="width:60px;" onclick="document.getElementById('imageInput').click();"><img src="static/images/btn/picsong_btn.png" alt="" /></button>
+	        <button id="emoji_btn" style="width: 60px;">😀</button>
+	        <button type="submit" style="width:60px;"><img src="static/images/btn/write_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
+	        <button type="button" style="width:60px;" onclick="document.getElementById('imageInput').click();"><img src="static/images/btn/picsong_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
 	        <button type="button" class="music-upload-btn" style="width:60px;"><img src="static/images/btn/promusic_btn.png" alt="" style="width: 25px; height: 25px;" /></button>
 	    </form>
 	</div>
@@ -210,8 +212,23 @@
 		<div class="modal-item gray" onclick="closeMusicModal()">취소</div>
 	</div>
 </div>
-
-
+<script>
+	const button = document.querySelector("#emoji_btn");
+	const picker = new EmojiButton({
+	    position: 'bottom-start'
+	});
+	
+	// 이모지 선택창을 토글합니다.
+	button.addEventListener('click', () => {
+	    picker.togglePicker(button);
+	});
+	
+	// 이모지를 선택하면 입력창에 추가합니다.
+	picker.on('emoji', emoji => {
+	    const text_box = document.querySelector('#messageInput'); // 수정된 ID
+	    text_box.value += emoji; // 입력창에 이모지를 추가
+	});
+</script>
 <script>
     window.addEventListener('click', function(event) {
         const modal = document.getElementById("musicModal");

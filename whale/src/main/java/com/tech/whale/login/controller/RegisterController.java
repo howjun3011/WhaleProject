@@ -50,6 +50,9 @@ public class RegisterController {
 
         if (isRegistered) {
             response.put("success", true);
+            userService.followAdmin(username, "WHALE"); // 새 유저가 WHALE을 팔로우
+            userService.followUser("WHALE", username); // WHALE이 새 유저를 팔로우
+
             response.put("message", "회원가입 완료되었습니다.");
             response.put("redirectTo", "/whale");
             session.invalidate(); //세션 초기화

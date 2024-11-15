@@ -196,6 +196,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 			} else if (messageType.equals("LINK")) {
 				messageT = "링크를 보냈습니다.";
 				homeMessage.setMessageText(messageT);
+			} else if (messageType.equals("MUSIC")) {
+				messageT = "음악을 보냈습니다.";
+				homeMessage.setMessageText(messageT);
 			}
             homeMessage.setTimeDifference(calculateTimeDifference());
             homeMessage.setUserImageUrl(userImgUrl);

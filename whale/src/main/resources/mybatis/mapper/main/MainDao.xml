@@ -61,12 +61,17 @@
         SELECT USER_ID FROM REPORT WHERE REPORT_ID = #{reportId}
     </select>
     
+    <select id="selectAllUserId" resultType="String">
+        SELECT USER_ID FROM USER_INFO
+    </select>
+    
     <select id="getWhaleNoti" resultType="com.tech.whale.main.models.WhaleNotiDto">
 		SELECT
 	        WHALE_NOTI_ID,
 	        WHALE_NOTI_CHECK,
 	        WHALE_NOTI_DATE,
-	        WHALE_NOTI_TYPE
+	        WHALE_NOTI_TYPE,
+	        WHALE_NOTI_TEXT
 	    FROM
 	        WHALE_NOTI
 	    WHERE
@@ -220,6 +225,15 @@
 		VALUES (WHALE_NOTI_SEQ.NEXTVAL,
 			   #{whaleNotiType},
 			   #{userId}
+		)
+	</insert>
+	
+	<insert id="insertWhaleNotiText">
+		INSERT INTO WHALE_NOTI (WHALE_NOTI_ID,WHALE_NOTI_TYPE,USER_ID,WHALE_NOTI_TEXT)
+		VALUES (WHALE_NOTI_SEQ.NEXTVAL,
+			   #{whaleNotiType},
+			   #{userId},
+			   #{whaleNotiText}
 		)
 	</insert>
 	

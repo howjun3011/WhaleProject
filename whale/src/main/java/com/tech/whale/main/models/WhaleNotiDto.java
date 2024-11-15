@@ -16,4 +16,5 @@ public class WhaleNotiDto {
 	private int whale_noti_check;
 	private Date whale_noti_date;
 	private int whale_noti_type;
+	private String whale_noti_text;
 }

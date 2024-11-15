@@ -8,6 +8,7 @@
 <title>게시글 수정</title>
 <!-- CKEditor CDN -->
 <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
+<script src="static/js/setting/darkMode.js"></script>
 <link rel="stylesheet" href="static/css/streaming/searchView.css" />
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -16,26 +17,33 @@
     /* 전체 레이아웃 설정 */
     body {
         font-family: 'Nanum Gothic', '돋움', 'Dotum', sans-serif;
-        background-color: #f8f8f8;
         margin: 0;
         padding: 0;
+    }
+    
+    ::-webkit-scrollbar {
+    	display: none;
     }
 
     /* 컨테이너 */
     .container {
-        width: 800px;
+        width: 700px;
         margin: 50px auto;
-        background-color: #ffffff;
         padding: 40px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+    
+    .container[data-darkmode="0"] {background-color: #ffffff;}
+    .container[data-darkmode="1"] {background-color: #2e2e2e;}
 
     /* 제목 */
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
-        color: #333333;
     }
+    
+    .container[data-darkmode="0"] h1 {color: #333333;}
+    .container[data-darkmode="1"] h1 {color: whitesmoke; opacity: 0.6;}
 
     /* 폼 요소 */
     .form-group {
@@ -45,9 +53,11 @@
     .form-group label {
         display: block;
         font-size: 14px;
-        color: #666666;
         margin-bottom: 5px;
     }
+    
+    .container[data-darkmode="0"] .form-group label {color: #666666;}
+    .container[data-darkmode="1"] .form-group label {color: whitesmoke; opacity: 0.8;}
 
     .form-group input[type="text"],
     .form-group select {
@@ -57,10 +67,11 @@
         border-radius: 4px;
         font-size: 14px;
     }
-
-    .form-group input[readonly] {
-        background-color: #f0f0f0;
-    }
+    
+    .container[data-darkmode="1"] .form-group input[type="text"], .form-group select {background-color: #d2d2d2; opacity: 0.8;}
+    
+    .container[data-darkmode="0"] .form-group input[readonly] {background-color: #f0f0f0;}
+    .container[data-darkmode="1"] .form-group input[readonly] {background-color: whitesmoke; opacity: 0.8;}
 
     /* CKEditor 스타일 조정 */
     #post_text {
@@ -75,11 +86,13 @@
         border: 1px solid #dddddd;
         padding: 10px 15px;
         font-size: 14px;
-        color: #333333;
         cursor: pointer;
         border-radius: 4px;
         margin-top: 10px;
     }
+    
+    .container[data-darkmode="0"] .form-group .music-upload-btn {color: gray;}
+    .container[data-darkmode="1"] .form-group .music-upload-btn {color: #1f1f1f; opacity: 0.8;}
 
     .music-upload-btn img {
         vertical-align: middle;
@@ -106,7 +119,11 @@
         width: 50px;
         height: 50px;
         border-radius: 4px;
+        margin: 0 5px;
     }
+    
+    .music-info #music-title {font-weight: bold; font-size: 1em; color: #333; /* 기본 검정색 */}
+    .music-info #artist-name {font-weight: normal; font-size: 0.9em; color: #777; /* 회색 */}
 
     /* 버튼 스타일 */
     .button-group {
@@ -116,23 +133,24 @@
 
     .button-group input[type="submit"],
     .button-group input[type="button"] {
-        background-color: #03c75a; /* 네이버 그린 컬러 */
-        color: #ffffff;
+        background-color: #777777;
+        color: black;
         border: none;
-        padding: 12px 30px;
+        padding: 13px 30px;
         font-size: 16px;
         cursor: pointer;
         border-radius: 4px;
-        margin: 0 5px;
+        margin: 0 15px;
+        font-weight: 600;
     }
 
     .button-group input[type="button"] {
-        background-color: #777777;
+        background-color: #d2d2d2;
     }
 
     .button-group input[type="submit"]:hover,
     .button-group input[type="button"]:hover {
-        background-color: #02b354;
+        background-color: #f2f2f2;
     }
 
     /* 모달 스타일 */
@@ -150,79 +168,56 @@
     }
 
     .modal .modal-content {
-        width: 600px;
-        background-color: #ffffff;
-        padding: 20px;
+        width: 60%;
         border-radius: 4px;
-        overflow-y: auto;
-        max-height: 80%;
+        max-width: 600px;
+        max-height: 700px;
+        text-align: center;
+        overflow: hidden;
     }
+    
+    #musicModal[data-darkmode="0"] .modal-content {background-color: #ffffff;}
+    #musicModal[data-darkmode="1"] .modal-content {background-color: #2e2e2e;}
+    #musicModal[data-darkmode="1"] .search-result-container {color: whitesmoke;}
+    #musicModal[data-darkmode="1"] .pageBtn {color: whitesmoke;}
 
     /* 검색 섹션 스타일 */
     .searchContainer {
-        margin-bottom: 20px;
+    	margin-top: 20px;
     }
 
     .headerSearch {
         display: flex;
         align-items: center;
+        width: 60&;
     }
-
-    .headerSearch input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #dddddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .headerSearch button {
-        background-color: #03c75a;
-        border: none;
-        padding: 10px 15px;
-        margin-left: 10px;
-        cursor: pointer;
-        border-radius: 4px;
-    }
-
-    .headerSearch button img {
-        vertical-align: middle;
+    
+    .search-result-container {
+    	margin: 0 0 15px 0;
     }
 
     /* 모달 버튼 */
-    .modal-item {
-        text-align: center;
-        padding: 10px 0;
-        cursor: pointer;
-        border-top: 1px solid #dddddd;
-        font-size: 16px;
-        color: #333333;
-    }
-
-    .modal-item:hover {
-        background-color: #f9f9f9;
-    }
-
-    .modal-button-group {
-        display: flex;
-        justify-content: center; /* 버튼을 가운데 정렬 */
-        margin-top: 20px;
-    }
-
-    .modal-btn {
-        background-color: #03c75a; /* 네이버 그린 컬러 */
-        color: #ffffff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-
-    .modal-btn:hover {
-        background-color: #02b354;
-    }
+    
+	.modal-button-group {
+	    display: flex;
+	    justify-content: center; /* 버튼을 가운데 정렬 */
+	    margin: 0 0 30px 0;
+	}
+	
+	.modal-btn {
+	    background-color: transparent;
+	    color: gray;
+	    border: 1px solid #d2d2d2;
+	    padding: 10px 30px;
+	    font-size: 14px;
+	    cursor: pointer;
+	    border-radius: 4px;
+	    transition: background-color 0.3s;
+	}
+	
+	.modal-btn:hover {
+	    background-color: #f2f2f2;
+	}
 
     #remove-music-btn {
 	    margin-left: auto;
@@ -240,7 +235,7 @@
 </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" data-darkmode="${darkMode.scndAttrName}">
         <h1>게시글 수정</h1>
         <form action="communityUpdateDo" method="post" enctype="multipart/form-data" onsubmit="validateForm(event)">
             <!-- 포스트 아이디 전달 -->

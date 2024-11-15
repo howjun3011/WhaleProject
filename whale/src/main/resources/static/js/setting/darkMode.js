@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const communityElement = document.querySelector('.container');
     const communityPostElement = document.querySelector('.content-wrapper');
     const communityPostModalElement = document.querySelector('.modal');
+    const communityReg = document.querySelector('.container');
     const streamingElement = document.querySelector('.streamingBody');
     const profileHomeElement = document.querySelector('.container');
     const searchHomeElement = document.querySelector('.searchHomeBody');
@@ -121,6 +122,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDarkMode = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDarkMode);
                 communityPostModalElement.classList.toggle("light", !isDarkMode);
+
+                updateScrollbarStyle(); // 스크롤바 스타일 업데이트
+            }
+        });
+    }
+    
+    if (communityReg) {
+        communityReg.setAttribute("data-darkmode", darkmodeOn);
+        const isDarkMode = darkmodeOn === "1";
+        communityReg.classList.toggle("dark", isDarkMode);
+        communityReg.classList.toggle("light", !isDarkMode);
+
+        window.addEventListener('message', function (event) {
+            if (event.data && event.data.darkmodeOn !== undefined) {
+                darkmodeOn = event.data.darkmodeOn;
+                communityReg.setAttribute("data-darkmode", darkmodeOn);
+                const isDarkMode = darkmodeOn === "1";
+                communityReg.classList.toggle("dark", isDarkMode);
+                communityReg.classList.toggle("light", !isDarkMode);
 
                 updateScrollbarStyle(); // 스크롤바 스타일 업데이트
             }
@@ -249,6 +269,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const isDark = darkmodeOn === "1";
                 communityPostModalElement.classList.toggle("dark", isDark);
                 communityPostModalElement.classList.toggle("light", !isDark);
+            }
+            if (communityReg) {
+                communityReg.setAttribute("data-darkmode", darkmodeOn);
+                const isDark = darkmodeOn === "1";
+                communityReg.classList.toggle("dark", isDark);
+                communityReg.classList.toggle("light", !isDark);
             }
             if (streamingElement) {
                 streamingElement.setAttribute("data-darkmode", darkmodeOn);

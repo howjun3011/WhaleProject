@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap">
     <title>Feed Page</title>
     <style>
-        body {font-family: 'Noto Sans', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;}
+        body {font-family: 'Noto Sans', Arial, sans-serif; margin: 0; padding: 0;}
         body, .music-info, .username, .post-text {font-family: 'Noto Sans KR', Arial, sans-serif !important;}
         ::-webkit-scrollbar {display: none;}
         .feed-container[data-darkmode="1"]{background-color: #434343; height: 100vh;}

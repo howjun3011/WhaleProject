@@ -667,7 +667,7 @@ public class SettingController {
         if (!passwordEncoder.matches(password, storedPassword)) {
             System.out.println("비밀번호 일치하지 않음");
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
-            return "redirect:/deleteAccount";
+            return "setting/deleteAccount";
         }
 
         System.out.println("비밀번호 일치함");
@@ -685,11 +685,11 @@ public class SettingController {
             session.invalidate();  // 세션 무효화
 
             model.addAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
-            return "redirect:/deleteAccountResult";
+            return "setting/deleteAccountResult";
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
-            return "redirect:/deleteAccount";
+            return "setting/deleteAccount";
         }
     }
 

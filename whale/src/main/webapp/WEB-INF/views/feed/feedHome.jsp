@@ -15,7 +15,7 @@
         body {font-family: 'Noto Sans', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;}
         body, .music-info, .username, .post-text {font-family: 'Noto Sans KR', Arial, sans-serif !important;}
         ::-webkit-scrollbar {display: none;}
-        .feed-container[data-darkmode="1"]{background-color: #434343;}
+        .feed-container[data-darkmode="1"]{background-color: #434343; height: 100vh;}
         /* 상단 바 스타일 */
         .feed-container[data-darkmode="1"] .top-bar {background-color: #1f1f1f; display: flex; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; height: 20px;}
         .feed-container[data-darkmode="1"] .top-bar img {width: 80px; cursor: pointer; filter: invert(.7);}

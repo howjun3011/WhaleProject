@@ -186,17 +186,42 @@ public class UserService {
     private SqlSessionTemplate sqlSession;
 
     public void followAdmin(String followerId, String followeeId) {
-        // 현재 팔로우 정보를 가져옴
+        // 새로 가입한 유저가 WHALE 계정을 팔로우
         String currentFollowees;
         try {
-            currentFollowees = sqlSession.selectOne("getFollowUserIds", followerId);
+            currentFollowees = sqlSession.selectOne("com.tech.whale.login.dao.UserDao.getFollowUserIds", followerId);
         } catch (EmptyResultDataAccessException e) {
             currentFollowees = null;
         }
 
         if (currentFollowees == null || currentFollowees.isEmpty()) {
-            // 팔로우한 사람이 없으면 바로 `admintest` 추가
-            sqlSession.update("insertFollowUser", Map.of("followerId", followerId, "followeeId", followeeId));
+            // 팔로우한 사람이 없으면 바로 WHALE 추가
+            sqlSession.update("com.tech.whale.login.dao.UserDao.insertFollowUser",
+                    Map.of("followerId", followerId, "followeeId", followeeId));
+        } else if (!currentFollowees.contains(followeeId)) {
+            // 이미 팔로우 목록에 없을 때만 WHALE 추가
+            String updatedFollowees = currentFollowees + "," + followeeId;
+            sqlSession.update("com.tech.whale.login.dao.UserDao.updateFollowUserIds",
+                    Map.of("followerId", followerId, "updatedFollowees", updatedFollowees));
+        }
+    }
+
+    public void followUser(String followerId, String followeeId) {
+        // WHALE 계정이 새로 가입한 유저를 팔로우
+        String currentFollowees;
+        try {
+            currentFollowees = sqlSession.selectOne("com.tech.whale.login.dao.UserDao.getFollowUserIds", followerId);
+        } catch (EmptyResultDataAccessException e) {
+            currentFollowees = null;
+        }
+
+        if (currentFollowees == null || currentFollowees.isEmpty()) {
+            sqlSession.update("com.tech.whale.login.dao.UserDao.insertFollowUser",
+                    Map.of("followerId", followerId, "followeeId", followeeId));
+        } else if (!currentFollowees.contains(followeeId)) {
+            String updatedFollowees = currentFollowees + "," + followeeId;
+            sqlSession.update("com.tech.whale.login.dao.UserDao.updateFollowUserIds",
+                    Map.of("followerId", followerId, "updatedFollowees", updatedFollowees));
         }
     }
 }

@@ -184,7 +184,7 @@
 			<td rowspan="9" class="proImg" style="">
 				<div>
 					<c:if test="${not empty AccountUserInfo.user_image_url }">
-						<img src="/whale/static/images/setting/${AccountUserInfo.user_image_url }" alt="프사" />
+						<img src="${AccountUserInfo.user_image_url }" alt="프사" />
 					</c:if>
 					<c:if test="${empty AccountUserInfo.user_image_url }">
 						null

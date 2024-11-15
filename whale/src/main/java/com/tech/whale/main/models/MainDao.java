@@ -20,6 +20,7 @@ public interface MainDao {
 	public Integer selectAccountPrivacy(String userId);
 	public Integer selectFollowed(String userId, String targetId);
 	public String selectReportId(int reportId);
+	public List<String> selectAllUserId();
 	public List<WhaleNotiDto> getWhaleNoti(String userId);
 	public List<MessageNotiDto> getMessageNoti(String userId);
 	public List<LikeNotiDto> getLikeNoti(String userId);
@@ -33,6 +34,7 @@ public interface MainDao {
 	public void insertFeedCommentsNoti(String commentType, String feedId, String userId, String commentText);
 	public void insertFollowNoti(int followNotiType, String userId, String targetId);
 	public void insertWhaleNoti(int whaleNotiType, String userId);
+	public void insertWhaleNotiText(int whaleNotiType, String userId, String whaleNotiText);
 	public void updateLikeNoti(String like_noti_id);
 	public void updateCommentsNoti(String comments_noti_id);
 	public void updateFollowNoti(String followNotiId);

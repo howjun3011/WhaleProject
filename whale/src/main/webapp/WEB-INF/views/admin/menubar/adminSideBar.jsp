@@ -11,7 +11,7 @@
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
  	<div class="profile">
 	 	<div class="proImgBox">
-	 		<img src="/whale/static/images/setting/${myImgUrl }" alt="user_img" class="proImg"/> <br />
+	 		<img src="${myImgUrl }" alt="user_img" class="proImg"/> <br />
 	 	</div>
     </div>
  	<div class="logoutstr">

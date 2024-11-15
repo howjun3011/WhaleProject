@@ -88,6 +88,7 @@ const app = createApp({
 					this.pageAccess[1] = data.page_access_notification;
 					this.pageAccess[2] = data.page_access_setting;
 					this.pageAccess[3] = data.page_access_music;
+					this.pageAccess[4] = data.page_access_message;
 			});
 		},
 		

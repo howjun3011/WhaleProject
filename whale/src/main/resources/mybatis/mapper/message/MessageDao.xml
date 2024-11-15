@@ -61,19 +61,46 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
+	<select id="getTrackInfo" parameterType="String" resultType="map">
+	    SELECT 
+	        TRACK_ID AS track_id,
+	        TRACK_ARTIST AS track_artist,
+	        TRACK_NAME AS track_name,
+	        TRACK_COVER AS track_cover
+	    FROM 
+	        track
+	    WHERE 
+	        TRACK_ID = #{messageContent}
+	</select>
+	
 	<select id="getMessagesByRoomId" resultType="com.tech.whale.message.dto.MessageDto">
-	    SELECT message_id, message_create_date, message_text, message_room_id, message_read, user_id, message_type
-	    FROM message
-	    WHERE message_room_id = #{roomId}
+	    SELECT 
+	        m.message_id, 
+	        m.message_create_date, 
+	        m.message_text, 
+	        m.message_room_id, 
+	        m.message_read, 
+	        m.user_id, 
+	        m.message_type,
+	        CASE WHEN m.message_type = 'MUSIC' THEN t.track_artist ELSE NULL END AS track_artist,
+	        CASE WHEN m.message_type = 'MUSIC' THEN t.track_name ELSE NULL END AS track_name,
+	        CASE WHEN m.message_type = 'MUSIC' THEN t.track_cover ELSE NULL END AS track_cover
+	    FROM 
+	        message m
+	    LEFT JOIN 
+	        track t ON m.message_type = 'MUSIC' AND m.message_text = t.track_id
+	    WHERE 
+	        m.message_room_id = #{roomId}
 	    <choose>
-	    	<when test="userTypeInt == 0">
-	    		AND A = 0
-	    	</when>
-	    	<when test="userTypeInt == 1">
-	    		AND B = 0
-	    	</when>
+	        <when test="userTypeInt == 0">
+	            AND A = 0
+	        </when>
+	        <when test="userTypeInt == 1">
+	            AND B = 0
+	        </when>
 	    </choose>
-	    ORDER BY message_create_date ASC
+	    ORDER BY 
+	        m.message_create_date ASC
 	</select>
 	
 	<select id="findPostUser" resultType="String">

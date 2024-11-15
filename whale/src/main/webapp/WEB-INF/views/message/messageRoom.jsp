@@ -9,9 +9,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery 추가 -->
 <meta charset="UTF-8">
 <title>채팅방</title>
+<link rel="stylesheet" href="static/css/streaming/searchView.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap">
 <style>
     /* 기본 스타일 */
+    
+    
     body {
         font-family: 'Noto Sans KR', Arial, sans-serif;
         background-color: #f8f9fa;
@@ -249,6 +252,10 @@
 	#messageMenuOptions li:hover {
 	    background-color: #f2f2f2;
 	}
+	
+	.music-info { display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+	.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
+	.modal .modal-content-music { background-color: white; border-radius: 12px; width: 50%; height: 80%; text-align: center; overflow: hidden; }
 
 </style>
 </head>
@@ -281,8 +288,22 @@
 			    <c:when test="${msg.message_type eq 'TEXT'}">
 			        <div>${msg.message_text}</div>
 			    </c:when>
+				<c:when test="${msg.message_type == 'MUSIC'}">
+				    <div class="music-info">
+				        <img src="${msg.track_cover}" alt="Album Cover" style="width: 50px; height: 50px; border-radius: 5px;">
+				        <div>
+				            <div><strong>${msg.track_name}</strong></div>
+				            <div>${msg.track_artist}</div>
+				        </div>
+				        <label class="play-button" onclick="playMusic(this, '${msg.message_text}')" style="display: inline-block;">
+				            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;">
+				        </label>
+				        <label class="pause-button" onclick="pauseMusic(this, '${msg.message_text}')" style="display: none;">
+				            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;">
+				        </label>
+				    </div>
+				</c:when>
 			    <c:when test="${msg.message_type eq 'LINK'}">
-<%-- 			        <div>${msg.message_text}</div> --%>
 			        <c:if test="${!empty msg.previewData}">
 			            <div class="preview">
 			                <a href="${msg.previewData['url']}" target="_blank" style="text-decoration: none; color: inherit;">
@@ -322,11 +343,154 @@
 	        <textarea id="messageInput" placeholder="메시지를 입력하세요." required 
 	                  onkeypress="if(event.keyCode==13 && !event.shiftKey){ sendMessage(); return false;}"></textarea>
 	        <input type="file" id="imageInput" accept="image/*" onchange="uploadImageAndSendURL()" style="display:none;">
-	        <button type="button" onclick="document.getElementById('imageInput').click();">이미지 전송</button>
-	        <button type="submit">전송</button>
+	        <button type="submit" style="width:60px;"><img src="static/images/btn/write_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
+	        <button type="button" style="width:60px;" onclick="document.getElementById('imageInput').click();"><img src="static/images/btn/picsong_btn.png" alt="" style="width: 40px; height: 40px;" /></button>
+	        <button type="button" class="music-upload-btn" style="width:60px;"><img src="static/images/btn/promusic_btn.png" alt="" style="width: 25px; height: 25px;" /></button>
 	    </form>
 	</div>
 </div>
+
+<div id="musicModal" class="modal">
+    <div class="modal-content-music">
+	  	<div class="searchContainer" style="margin-top: 20px;">
+			<div class="headerSearch" style="width: 60%;">
+				<button class="searchBtn" id="search-button">
+					<img src="static/images/streaming/searchBtn.png" alt="Music Whale Search Button" height="14px">
+			    </button>
+			    <input class="headerInput" id="search-input" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
+			</div>
+		</div>
+		<div class="search-result-container">
+			<div id="pagination" style="margin-top: 3px;"></div>
+			<div id="search-results"></div>
+		</div>
+		<div class="modal-item gray" id="completeBtn" style="margin-top: -14px;">완료</div>
+        <div class="modal-item gray" onclick="closeMusicModal()">취소</div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById("musicModal");
+        if (event.target === modal) {
+            closeOtherModal();
+        }
+    });
+
+    document.querySelectorAll('.music-upload-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();  // 부모로의 클릭 이벤트 전파 방지
+            openMusicModal();  // 모달을 여는 함수 호출
+        });
+    });
+    
+    function openMusicModal() {
+        const musicModal = document.getElementById("musicModal");
+        musicModal.style.display = "flex";  // 모달을 표시
+    }
+
+    function closeMusicModal() {
+        const musicModal = document.getElementById("musicModal");
+        musicModal.style.display = "none";  // 모달을 닫음
+    }
+
+    window.addEventListener('click', function(event) {
+        const musicModal = document.getElementById("musicModal");
+        if (event.target === musicModal) {
+            closeMusicModal();  // 모달 바깥을 클릭하면 닫음
+        }
+    });
+    
+    document.getElementById("completeBtn").addEventListener("click", function() {
+        const selectedTrackInput = document.querySelector('input[name="track"]:checked');
+        if (!selectedTrackInput) {
+            alert("음악을 선택해주세요.");
+            return;
+        }
+
+        // 선택한 트랙의 정보를 가져옵니다 (JSON 문자열로 가정)
+        const body = selectedTrackInput.value;
+
+        // 서버로 선택한 트랙 정보를 POST 요청으로 전송합니다
+        fetch('/whale/updateMusic', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: body
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답에 문제가 있습니다: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버로부터 받은 데이터:', data);
+            
+		    const payload = roomId + ":" + now_id + ":MUSIC:" + data.track_id;
+		    socket.send(payload);
+            
+            // 모달을 닫습니다
+            closeMusicModal();
+        })
+        .catch(error => {
+            console.error('에러 발생:', error);
+            alert('음악 정보를 가져오는 중 오류가 발생했습니다.');
+        });
+    });
+    
+    let currentPlayingTrackId = null; // 현재 재생 중인 트랙 ID를 저장
+
+    
+    
+    
+    // 음악 재생 함수
+    function playMusic(element, trackId) {
+        resetAllMusicButtons(); // 모든 버튼 초기화
+        fetch(`/whale/feedPlayMusic?id=\${trackId}`)
+            .then(response => {
+                if (response.ok) {
+                    currentPlayingTrackId = trackId;
+                    element.style.display = 'none';
+                    const pauseBtn = element.parentElement.querySelector('label[onclick^="pauseMusic"]');
+                    if (pauseBtn) {
+                        pauseBtn.style.display = 'inline-block';
+                    }
+                } else {
+                    alert('음악 재생에 실패했습니다.');
+                }
+            })
+            .catch(error => console.error('에러 발생:', error));
+    }
+
+    // 음악 일시 정지 함수
+    function pauseMusic(element, trackId) {
+        fetch(`/whale/feedPauseMusic?id=\${trackId}`)
+            .then(response => {
+                if (response.ok) {
+                    currentPlayingTrackId = null;
+                    element.style.display = 'none';
+                    const playBtn = element.parentElement.querySelector('label[onclick^="playMusic"]');
+                    if (playBtn) {
+                        playBtn.style.display = 'inline-block';
+                    }
+                } else {
+                    alert('음악 일시정지에 실패했습니다.');
+                }
+            })
+            .catch(error => console.error('에러 발생:', error));
+    }
+
+    // 모든 버튼 초기화
+    function resetAllMusicButtons() {
+        document.querySelectorAll('.play-button').forEach(btn => btn.style.display = 'inline-block');
+        document.querySelectorAll('.pause-button').forEach(btn => btn.style.display = 'none');
+    }
+</script>
+
+<script src="static/js/streaming/searchView.js"></script>
 
 <script>
 	const roomId = '${roomId}';
@@ -403,7 +567,11 @@
 		    
 		    let msgContent, msgRead, msgDate;
 		    
-		    if (msgType === 'TEXT') {
+		    if (msgType === 'MUSIC') {
+		        msgContent = data.slice(4, data.length - 2).join('#');
+		        msgRead = data[data.length - 2];
+		        msgDate = data[data.length - 1];
+		    } else if (msgType === 'TEXT') {
 		        msgContent = data[4];
 		        msgRead = data[5];
 		        msgDate = data[6];
@@ -425,7 +593,29 @@
 		        contentHTML += '<div class="message-bubble">';
 		        contentHTML += '<div class="menu-button" onclick="openMessageMenu(' + msgId + ', \'' + msgUserId + '\')">•</div>';
 		        
-		        if (msgType === 'TEXT') {
+		        if (msgType === 'MUSIC') {
+		            try {
+		                const trackData = JSON.parse(msgContent);
+		                contentHTML += `
+		                    <div class="music-info">
+		                        <img src="\${trackData.TRACK_COVER}" alt="Album Cover" style="width: 50px; height: 50px; border-radius: 5px;">
+		                        <div>
+		                            <div><strong>\${trackData.TRACK_NAME}</strong></div>
+		                            <div>\${trackData.TRACK_ARTIST}</div>
+		                        </div>
+		                        <label class="play-button" onclick="playMusic(this, '\${trackData.TRACK_ID}')" style="display: inline-block;">
+		                            <img src="static/images/btn/play_btn.png" alt="play" style="width: 40px; height: 40px;">
+		                        </label>
+		                        <label class="pause-button" onclick="pauseMusic(this, '\${trackData.TRACK_ID}')" style="display: none;">
+		                            <img src="static/images/btn/pause_btn.png" alt="pause" style="width: 40px; height: 40px;">
+		                        </label>
+		                    </div>
+		                `;
+		            } catch (e) {
+		                console.error("Failed to parse MUSIC message content:", e);
+		                contentHTML += '<div>Error loading music content</div>';
+		            }
+		        } if (msgType === 'TEXT') {
 		            contentHTML += '<div>' + msgContent + '</div>';
 		        } else if (msgType === 'IMAGE') {
 		            contentHTML += '<img src="' + msgContent + '" alt="Image" style="max-width: 100%; border-radius: 5px;">';

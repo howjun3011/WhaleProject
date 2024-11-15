@@ -1,6 +1,7 @@
 package com.tech.whale.message.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tech.whale.message.dto.AllChatListDto;
 import com.tech.whale.message.dto.FollowListDto;
@@ -66,5 +67,7 @@ public interface MessageDao {
 	String getUserNickname(String userId);
 
 	void readMessage(String message_room_id, String otherId);
+
+	Map<String, String> getTrackInfo(String messageContent);
 }
 

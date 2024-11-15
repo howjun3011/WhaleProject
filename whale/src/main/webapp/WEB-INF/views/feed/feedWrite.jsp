@@ -39,9 +39,9 @@
 			    <input class="headerInput" id="search-input" placeholder="어떤 콘텐츠를 감상하고 싶으세요?" onfocus="this.placeholder=''" onblur="this.placeholder='어떤 콘텐츠를 감상하고 싶으세요?'">
 			</div>
 		</div>
-		<div class="search-result-container"">
+		<div class="search-result-container">
 			<div id="pagination" style="margin-top: 3px;"></div>
-			<div id="search-results""></div>
+			<div id="search-results"></div>
 		</div>
 		<div class="modal-item gray" id="completeBtn" style="margin-top: -14px;">완료</div>
         <div class="modal-item gray" onclick="closeMusicModal()">취소</div>

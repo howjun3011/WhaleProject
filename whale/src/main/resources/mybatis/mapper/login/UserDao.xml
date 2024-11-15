@@ -257,15 +257,22 @@
         WHERE user_id = #{userId}
     </update>
 
-    <!-- 현재 팔로우 정보를 가져오는 쿼리 -->
+    <!-- 팔로우 정보를 가져오는 쿼리 -->
     <select id="getFollowUserIds" parameterType="String" resultType="String">
         SELECT FOLLOW_USER_ID FROM follow WHERE USER_ID = #{followerId}
     </select>
 
-    <!-- 팔로우한 사람이 없을 때 바로 `admintest` 추가 -->
+    <!-- 새로 가입한 유저가 WHALE 계정을 팔로우하는 쿼리 -->
     <update id="insertFollowUser">
         UPDATE follow
         SET FOLLOW_USER_ID = #{followeeId}
+        WHERE USER_ID = #{followerId}
+    </update>
+
+    <!-- WHALE 계정이 새 유저를 팔로우할 때 기존 팔로우 목록에 새 유저 ID를 추가 -->
+    <update id="updateFollowUserIds">
+        UPDATE follow
+        SET FOLLOW_USER_ID = #{updatedFollowees}
         WHERE USER_ID = #{followerId}
     </update>
 </mapper>

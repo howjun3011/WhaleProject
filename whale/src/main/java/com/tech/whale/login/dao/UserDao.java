@@ -80,5 +80,6 @@ public interface UserDao {
 
     // 어드민 계정 팔로우 관련 메서드
     void followAdmin(String followerId, String followeeId);
+    void followUser(String followerId, String followeeId);
 
 }

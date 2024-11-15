@@ -11,260 +11,64 @@
 	<script src="static/js/setting/setting.js"></script>
 	<script src="static/js/setting/darkMode.js"></script>
 	<style>
-		.setting-container {
-			display: flex;
-			flex-direction: column;
-			overflow: hidden;
-		}
-
-		.scroll-content {
-			flex: 1;
-			overflow-y: auto;
-		}
-		.setting-body[data-darkmode="0"] .setting-item{
-			display: inline-block;
-			border-bottom: none;
-			margin: 0px;
-			border: none;
-		}
-
-		.setting-body[data-darkmode="1"] .setting-item{
-			display: inline-block;
-			border-bottom: none;
-			margin: 0px;
-			border: none;
-		}
-		.dropdown {
-			position: relative;
-			display: inline-block;
-		}
-		.setting-body[data-darkmode="0"] .dropbtn {
-			display: block;
-			border: 2px solid #ccc;
-			border-radius: 4px;
-			background-color: #fcfcfc;
-			font-weight: 400;
-			color: rgb(124, 124, 124);
-			padding: 12px;
-			width: 100px;
-			height: 45px;
-			text-align: left;
-			cursor: pointer;
-			font-size: 12px;
-			z-index: 1;
-			position: relative;
-			margin-right: 3px;
-		}
-		.setting-body[data-darkmode="1"] .dropbtn {
-			display: block;
-			border: 2px solid #335580;
-			border-radius: 4px;
-			background-color: rgb(46, 46, 46);
-			font-weight: 400;
-			color: whitesmoke;
-			padding: 12px;
-			width: 100px;
-			height: 45px;
-			text-align: left;
-			cursor: pointer;
-			font-size: 12px;
-			z-index: 1;
-			position: relative;
-			margin-right: 3px;
-		}
-
-		.setting-body[data-darkmode="0"] .dropdown-content {
-			position: absolute;
-			display: none;
-			font-weight: 400;
-			background-color: #fcfcfc;
-			min-width: 100px;
-			border-radius: 8px;
-			height: 50px;
-			box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
-			z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
-		}
-		.setting-body[data-darkmode="1"] .dropdown-content {
-			position: absolute;
-			display: none;
-			font-weight: 400;
-			background-color: rgb(46, 46, 46);
-			min-width: 100px;
-			border-radius: 8px;
-			height: 50px;
-			box-shadow: 0px 0px 10px 3px #335580;
-			z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
-		}
-
-		.setting-body[data-darkmode="0"] .dropdown-content div {
-			display: block;
-			text-decoration: none;
-			color: rgb(37, 37, 37);
-			font-size: 12px;
-			padding: 12px 20px;
-		}
-		.setting-body[data-darkmode="1"] .dropdown-content div {
-			display: block;
-			text-decoration: none;
-			color: whitesmoke;
-			font-size: 12px;
-			padding: 12px 20px;
-		}
-
-		.setting-body[data-darkmode="0"] .dropdown-content div:hover {
-			background-color: rgb(226, 226, 226);
-		}
-		.setting-body[data-darkmode="1"] .dropdown-content div:hover {
-			background-color: rgb(46, 46, 46);
-		}
-
-		.setting-body[data-darkmode="0"] .dropdown-content.show {
-			display: block;
-		}
-		.setting-body[data-darkmode="1"] .dropdown-content.show {
-			display: block;
-		}
-		.post-list {
-			display: block;
-			margin-bottom: 10px;
-			margin-left: 20px;
-			margin-right: 20px;
-			padding: 10px 10px;
-			border: 1px solid #ccc;
-			border-radius: 8px;
-		}
-
-		.no-comment-message {
-			margin-left: 20px;
-			color: #ccc;
-		}
-
-		a {
-			text-decoration: none;
-			color: black;
-		}
-		a:visited, a:hover, a:focus, a:active {
-			color: black;
-			text-decoration: none;
-		}
-		#back {
-			position: absolute;
-			left: 15px;
-			top: 55%;
-			transform: translateY(-50%);
-		}
-
-		#feed-list, #post-list {
-			margin-left: 20px;
-			margin-right: 20px;
-		}
-
-		.setting-body[data-darkmode="0"] .feed-item {
-			display: flex;
-			align-items: center;
-			margin-bottom: 10px;
-			justify-content: space-between;
-			padding: 10px;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-		}
-		.setting-body[data-darkmode="1"] .feed-item {
-			display: flex;
-			align-items: center;
-			margin-bottom: 10px;
-			justify-content: space-between;
-			padding: 10px;
-			color: whitesmoke;
-			border: 1px solid #335580;
-			border-radius: 8px;
-		}
-
-		.setting-body[data-darkmode="0"] .post-item {
-			display: flex;
-			flex-direction: column;
-			margin-bottom: 10px;
-			justify-content: space-between;
-			padding: 15px 10px;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-		}
-		.setting-body[data-darkmode="1"] .post-item {
-			display: flex;
-			flex-direction: column;
-			margin-bottom: 10px;
-			justify-content: space-between;
-			padding: 15px 10px;
-			color: whitesmoke;
-			border: 1px solid #335580;
-			border-radius: 8px;
-		}
-
-		#feed-img {
-			width: 100%;
-			max-height: 50px;
-			max-width: 50px;
-			border-radius: 6px;
-			margin-left: auto;
-		}
-
-		.comments-section {
-			margin-top: 10px;
-			padding-left: 10px;
-			margin-bottom: 10px;
-		}
-
-		.comment, .reply {
-			display: flex;
-			align-items: center;
-			margin-bottom: 5px;
-		}
-
-		.reply {
-			margin-left: 40px;
-		}
-
-		.comment-img, .reply-img, .owner-image {
-			width: 30px;
-			height: 30px;
-			border-radius: 50%;
-			margin-right: 10px;
-		}
-
-		.setting-body[data-darkmode="0"] .comment-text, .reply-text {
-			background-color: #f1f1f1;
-			padding: 8px 12px;
-			border-radius: 20px;
-		}
-		.setting-body[data-darkmode="1"] .comment-text, .reply-text {
-			background-color: #335580;
-			color: whitesmoke;
-			padding: 8px 12px;
-			border-radius: 20px;
-		}
-
-		.post-list-writer{
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.text-date-container {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-top: 5px;
-		}
-
-		.text-date-container .date {
-			color: #888;
-			margin-left: auto; /* date 우측에 고정 */
-		}
-
+		.setting-body[data-darkmode="0"] .setting-container { display: flex; flex-direction: column; overflow: hidden; }
+		.setting-body[data-darkmode="0"] .scroll-content { flex: 1; overflow-y: auto; }
+		.setting-body[data-darkmode="0"] .setting-item { display: inline-block; border-bottom: none; margin: 0px; border: none; }
+		.setting-body[data-darkmode="0"] .dropdown { position: relative; display: inline-block; }
+		.setting-body[data-darkmode="0"] .dropbtn { display: block; border: 2px solid #ccc; border-radius: 4px; background-color: #fcfcfc; font-weight: 400; color: rgb(124, 124, 124); padding: 12px; width: 100px; height: 45px; text-align: left; cursor: pointer; font-size: 12px; z-index: 1; position: relative; margin-right: 3px; }
+		.setting-body[data-darkmode="0"] .dropdown-content { position: absolute; display: none; font-weight: 400; background-color: #fcfcfc; min-width: 100px; border-radius: 8px; height: 50px; box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6); z-index: 20; }
+		.setting-body[data-darkmode="0"] .dropdown-content div { display: block; text-decoration: none; color: rgb(37, 37, 37); font-size: 12px; padding: 12px 20px; }
+		.setting-body[data-darkmode="0"] .dropdown-content div:hover { background-color: rgb(226, 226, 226); }
+		.setting-body[data-darkmode="0"] .dropdown-content.show { display: block; }
+		.setting-body[data-darkmode="0"] .post-list { display: block; margin-bottom: 10px; margin-left: 20px; margin-right: 20px; padding: 10px 10px; border: 1px solid #ccc; border-radius: 8px; }
+		.setting-body[data-darkmode="0"] .no-comment-message { margin-left: 20px; color: #ccc; }
+		.setting-body[data-darkmode="0"] a { text-decoration: none; color: black; }
+		.setting-body[data-darkmode="0"] a:visited, .setting-body[data-darkmode="0"] a:hover, .setting-body[data-darkmode="0"] a:focus, .setting-body[data-darkmode="0"] a:active { color: black; text-decoration: none; }
+		.setting-body[data-darkmode="0"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="0"] #feed-list, .setting-body[data-darkmode="0"] #post-list { margin-left: 20px; margin-right: 20px; }
+		.setting-body[data-darkmode="0"] .feed-item { display: flex; align-items: center; margin-bottom: 10px; justify-content: space-between; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+		.setting-body[data-darkmode="0"] .post-item { display: flex; flex-direction: column; margin-bottom: 10px; justify-content: space-between; padding: 15px 10px; border: 1px solid #ddd; border-radius: 8px; }
+		.setting-body[data-darkmode="0"] #feed-img { width: 100%; max-height: 50px; max-width: 50px; border-radius: 6px; margin-left: auto; }
+		.setting-body[data-darkmode="0"] .comments-section { margin-top: 10px; padding-left: 10px; margin-bottom: 10px; }
+		.setting-body[data-darkmode="0"] .comment, .setting-body[data-darkmode="0"] .reply { display: flex; align-items: center; margin-bottom: 5px; }
+		.setting-body[data-darkmode="0"] .reply { margin-left: 40px; }
+		.setting-body[data-darkmode="0"] .comment-img, .setting-body[data-darkmode="0"] .reply-img, .setting-body[data-darkmode="0"] .owner-image { width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; }
+		.setting-body[data-darkmode="0"] .comment-text, .reply-text { background-color: #f1f1f1; padding: 8px 12px; border-radius: 20px; }
+		.post-list-writer { display: flex; justify-content: space-between; align-items: center; }
+		.setting-body[data-darkmode="0"] .text-date-container { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+		.setting-body[data-darkmode="0"] .text-date-container .date { color: #888; margin-left: auto; }
+		/* --------------------------------------------------------------------------------------------------------------------------- */
+		.setting-body[data-darkmode="1"] .setting-container { display: flex; flex-direction: column; overflow: hidden; }
+		.setting-body[data-darkmode="1"] .scroll-content { flex: 1; overflow-y: auto; }
+		.setting-body[data-darkmode="1"] .setting-item { display: inline-block; border-bottom: none; margin: 0px; border: none; }
+		.setting-body[data-darkmode="1"] .dropdown { position: relative; display: inline-block; }
+		.setting-body[data-darkmode="1"] .dropbtn { display: block; border: 2px solid #335580; border-radius: 4px; background-color: rgb(46, 46, 46); font-weight: 400; color: whitesmoke; padding: 12px; width: 100px; height: 45px; text-align: left; cursor: pointer; font-size: 12px; z-index: 1; position: relative; margin-right: 3px; }
+		.setting-body[data-darkmode="1"] .dropdown-content { position: absolute; display: none; font-weight: 400; background-color: rgb(46, 46, 46); min-width: 100px; border-radius: 8px; height: 50px; box-shadow: 0px 0px 10px 3px #335580; z-index: 20; }
+		.setting-body[data-darkmode="1"] .dropdown-content div { display: block; text-decoration: none; color: whitesmoke; font-size: 12px; padding: 12px 20px; }
+		.setting-body[data-darkmode="1"] .dropdown-content div:hover { background-color: rgb(46, 46, 46); }
+		.setting-body[data-darkmode="1"] .dropdown-content.show { display: block; }
+		.setting-body[data-darkmode="1"] .post-list { display: block; margin-bottom: 10px; margin-left: 20px; margin-right: 20px; padding: 10px 10px; border: 1px solid #ccc; border-radius: 8px; }
+		.setting-body[data-darkmode="1"] .no-comment-message { margin-left: 20px; color: #ccc; }
+		.setting-body[data-darkmode="1"] a { text-decoration: none; color: black; }
+		.setting-body[data-darkmode="1"] a:visited, .setting-body[data-darkmode="1"] a:hover, .setting-body[data-darkmode="1"] a:focus, .setting-body[data-darkmode="1"] a:active { color: black; text-decoration: none; }
+		.setting-body[data-darkmode="1"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="1"] #feed-list, .setting-body[data-darkmode="1"] #post-list { margin-left: 20px; margin-right: 20px; }
+		.setting-body[data-darkmode="1"] .feed-item { display: flex; align-items: center; margin-bottom: 10px; justify-content: space-between; padding: 10px; color: whitesmoke; border: 1px solid #335580; border-radius: 8px; }
+		.setting-body[data-darkmode="1"] .post-item { display: flex; flex-direction: column; margin-bottom: 10px; justify-content: space-between; padding: 15px 10px; color: whitesmoke; border: 1px solid #335580; border-radius: 8px; }
+		.setting-body[data-darkmode="1"] #feed-img { width: 100%; max-height: 50px; max-width: 50px; border-radius: 6px; margin-left: auto; }
+		.setting-body[data-darkmode="1"] .comments-section { margin-top: 10px; padding-left: 10px; margin-bottom: 10px; }
+		.setting-body[data-darkmode="1"] .comment, .setting-body[data-darkmode="1"] .reply { display: flex; align-items: center; margin-bottom: 5px; }
+		.setting-body[data-darkmode="1"] .reply { margin-left: 40px; }
+		.setting-body[data-darkmode="1"] .comment-img, .setting-body[data-darkmode="1"] .reply-img, .setting-body[data-darkmode="1"] .owner-image { width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; }
+		.setting-body[data-darkmode="1"] .comment-text, .setting-body[data-darkmode="1"] .reply-text { background-color: #335580; color: whitesmoke; padding: 8px 12px; border-radius: 20px; }
+		.setting-body[data-darkmode="1"] .post-list-writer { display: flex; justify-content: space-between; align-items: center; }
+		.setting-body[data-darkmode="1"] .text-date-container { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+		.setting-body[data-darkmode="1"] .text-date-container .date { color: #888; margin-left: auto; }
 	</style>
 	<style id="darkmode-scrollbar-styles"></style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
 	<div class="setting-container">
 		<div class="setting-header">
 			<a href="activity" id="back"><img src="static/images/setting/back.png" alt="back"></a>
@@ -341,7 +145,7 @@
 										<div id="feed-list">
 											<div class="feed-item">
 												<img src="${feed.feed_owner_image}" alt="owner_image" class="owner-image">
-												${feed.feed_owner_id} ${feed.feed_text}
+												<div class="owner-id" style="font-weight: bold; margin-right: 4px; font-size: 19px;">${feed.feed_owner_id}</div> ${feed.feed_text}
 												<img src="${feed.feed_img_url}" alt="feed_img" id="feed-img">
 											</div>
 

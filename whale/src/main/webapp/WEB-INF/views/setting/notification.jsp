@@ -10,55 +10,15 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-.setting-body[data-darkmode="0"] .setting-item{
-    justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
-	border: none;
-	border-bottom: 1px solid #eaeaea;
-	border-radius: 0px;
-}
-.setting-body[data-darkmode="1"] .setting-item{
-    justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
-	border: none;
-	border-bottom: 1px solid #335580;
-	border-radius: 0px;
-}
-.toggle-slide {
-    display: none; /* 체크박스를 숨김 */
-}
-label {
-    width: 50px;
-    height: 25px;
-    background-color: #808080; /* 초기 배경색 */
-    text-indent: -9999px;
-    border-radius: 25px;
-    position: relative;
-    cursor: pointer;
-    transition: 0.5s;
-}
-label::after {
-    content: '';
-    position: absolute;
-    width: 17px;
-    height: 17px;
-    background-color: #e5e5e5; /* 슬라이더 기본 색상 */
-    border-radius: 25px; /* 원형 슬라이더 */
-    top: 4px;
-    left: 4px;
-    transition: 0.5s;
-}
-
-.toggle-slide:checked + label {
-    background-color: #335580; /* 토글 ON 상태일 때 배경색 */
-}
-.toggle-slide:checked + label::after {
-    left: 29px; /* 토글 ON 상태일 때 슬라이더 이동 */
-}
-#back {
-    position: absolute; 
-    left: 15px; 
-    top: 55%; 
-    transform: translateY(-50%);
-}
+	.setting-body[data-darkmode="0"] .setting-item { justify-content: space-between; border: none; border-bottom: 1px solid #eaeaea; border-radius: 0px; }
+	.toggle-slide { display: none; }
+	label { width: 50px; height: 25px; background-color: #808080; text-indent: -9999px; border-radius: 25px; position: relative; cursor: pointer; transition: 0.5s; }
+	label::after { content: ''; position: absolute; width: 17px; height: 17px; background-color: #e5e5e5; border-radius: 25px; top: 4px; left: 4px; transition: 0.5s; }
+	.toggle-slide:checked + label { background-color: #335580; }
+	.toggle-slide:checked + label::after { left: 29px; }
+	#back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+	/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+	.setting-body[data-darkmode="1"] .setting-item { justify-content: space-between; border: none; border-bottom: 1px solid #535353; border-radius: 0px; }
 </style>
 </head>
 <body>
@@ -96,7 +56,6 @@ label::after {
 	var likeNotificationOn = ${likeNotificationOn};
 	var commentNotificationOn = ${commentNotificationOn};
 	var messageNotificationOn = ${messageNotificationOn};
-
 
 	// 페이지가 로드될 때 기본 값 설정
 	window.onload = function() {

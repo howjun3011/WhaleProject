@@ -11,49 +11,26 @@
 	<script src="static/js/setting/setting.js"></script>
 	<script src="static/js/setting/darkMode.js"></script>
 	<style>
-		.complete-btn {
-			font-size: 20px;
-			position: absolute;
-			top: 15px;
-			right: 7px;
-			background-color: transparent; /* 버튼의 배경색을 투명으로 설정 */
-			border: none;
-			padding: 5px 10px;
-			border-radius: 4px;
-			cursor: pointer;
-		}
-		.complete-btn:hover {
-			color: #5A5A5A;
-		}
-		#back {
-			position: absolute;
-			left: 15px;
-			top: 55%;
-			transform: translateY(-50%);
-		}
-		input[type='radio'] {
-			margin-left: auto;
-			margin-right: 0;
-			/* 기본스타일 지우고 라디오 버튼 구현 */
-			-webkit-appearance: none; /* 웹킷 브라우저에서 기본 스타일 제거  */
-			-moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거 */
-			appearance: none; /* 기본 브라우저에서 기본 스타일 제거 */
-			width: 13px;
-			height: 13px;
-			border: 1px solid #ccc; /* 체크되지 않았을 때의 테두리 색상 */
-			border-radius: 50%;
-			outline: none; /* focus 시에 나타나는 기본 스타일 제거 */
-			cursor: pointer;
-		}
-		input[type='radio']:checked {
-			background-color: black; /* 체크 시 내부 원으로 표시될 색상 */
-			border: 3px solid #ccc; /* 테두리와 원 사이의 색상 */
-			box-shadow: 0 0 0 1.6px black; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
-		}
+		.setting-body[data-darkmode="0"] .complete-btn { font-size: 20px; position: absolute; top: 15px; right: 7px; background-color: transparent; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+		.setting-body[data-darkmode="0"] .complete-btn:hover { color: #5A5A5A; }
+		.setting-body[data-darkmode="0"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="0"] input[type='radio'] { margin-left: auto; margin-right: 0; -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 13px; height: 13px; border: 1px solid #ccc; border-radius: 50%; outline: none; cursor: pointer; }
+		.setting-body[data-darkmode="0"] input[type='radio']:checked { background-color: black; border: 3px solid #ccc; box-shadow: 0 0 0 1.6px black; }
+		/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+		.setting-body[data-darkmode="1"] .complete-btn { font-size: 20px; position: absolute; top: 15px; right: 7px; background-color: transparent; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+		.setting-body[data-darkmode="1"] .complete-btn:hover { color: lightgray; }
+		.setting-body[data-darkmode="1"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="1"] input[type='radio'] { margin-left: auto; margin-right: 0; -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 13px; height: 13px; border: 1px solid #ccc; border-radius: 50%; outline: none; cursor: pointer; }
+		.setting-body[data-darkmode="1"] input[type='radio']:checked { background-color: black; border: 3px solid #ccc; box-shadow: 0 0 0 1.6px black; }
+		.setting-body[data-darkmode="1"] .search-result-container #pagination .pageBtn { color: whitesmoke; }
+		.setting-body[data-darkmode="1"] .search-result-container #pagination span { color: whitesmoke; }
+		.setting-body[data-darkmode="1"] .search-result-container #search-results .track-details div { color: whitesmoke; }
+		.setting-body[data-darkmode="1"] .search-result-container #search-results .track-details .artist-name { color: whitesmoke; }
+		.setting-body[data-darkmode="1"] .track-item { border-bottom: 1.5px solid #5a5a5a; }
 	</style>
 </head>
 <body>
-	<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+	<div class="setting-body">
 		<div class="setting-container">
 			<div class="setting-header">
 				<a href="profileEdit" id="back"><img src="static/images/setting/back.png" alt="back"></a>

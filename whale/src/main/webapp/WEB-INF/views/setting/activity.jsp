@@ -10,24 +10,10 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-a{
-	text-decoration: none;
-	color: black;
-}
-a:visited, a:hover, a:focus, a:active {
-	color: black;
-	text-decoration: none;
-}
-.setting-item{
-	margin-top: 3px;
-	margin-bottom: 3px;
-}
-#back {
-    position: absolute; 
-    left: 15px; 
-    top: 55%; 
-    transform: translateY(-50%);
-}
+	a { text-decoration: none; color: black; }
+	a:visited, a:hover, a:focus, a:active { color: black; text-decoration: none; }
+	.setting-item { margin-top: 3px; margin-bottom: 3px; }
+	#back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
 </style>
 </head>
 <body>

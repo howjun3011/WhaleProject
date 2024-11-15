@@ -10,18 +10,12 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-a{
-	text-decoration: none;
-	color: black;
-}
-a:visited, a:hover, a:focus, a:active {
-	color: black;
-	text-decoration: none;
-}
+a { text-decoration: none; color: black; }
+a:visited, a:hover, a:focus, a:active { color: black; text-decoration: none; }
 </style>
 </head>
 <body>
-	<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+	<div class="setting-body">
 		<div class="setting-container">
 			<div class="setting-header">환경설정</div>
 			<div class="setting-grid">

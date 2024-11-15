@@ -126,7 +126,11 @@
         updateChatList(homeMessage);
         
         // 알림 표시 함수 호출
-        showNotification(homeMessage.userImageUrl, homeMessage.senderNickname, homeMessage.messageText);
+        showNotification(homeMessage.userImageUrl, 
+        		homeMessage.messageType, 
+        		homeMessage.senderId, 
+        		homeMessage.senderNickname, 
+        		homeMessage.messageText);
     };
 
     socket.onclose = function(event) {
@@ -142,22 +146,23 @@
     }
 
     // 알림 생성 함수 추가
-    function showNotification(userImageUrl, userNickname, messageText) {
+    function showNotification(userImageUrl, messageType, senderId, userNickname, messageText) {
         const container = document.getElementById('notification-container');
 
         const notification = document.createElement('div');
         notification.className = 'notification';
 
-        // 알림 내용 설정 (유저 이미지와 메시지 텍스트)
         notification.innerHTML = `
+        <a href="/whale/messageGo?u=\${senderId}" style="text-decoration: none; color: inherit;">
             <img src="\${userImageUrl}" alt="User Image" style="width:40px; height:40px; border-radius:50%;">
             <div class="text-content">
                 <div><strong>\${userNickname}</strong></div>
-                <div>\${messageText}</div>
+                	<div>\${messageText}</div>                	                	
             </div>
+        </a>
         `;
-
         container.appendChild(notification);
+
 
         // 2초 후에 알림 제거
         setTimeout(() => {

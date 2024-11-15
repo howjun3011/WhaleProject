@@ -139,6 +139,8 @@ public class MessageController {
 		List<FollowListDto> followList = messageDao.getFollowList(now_id);
 		List<LinkMessageDto> linkMessageUser = messageDao.getLinkUser(user_id);
 		System.out.println(link_id);
+		
+		model.addAttribute("now_id", now_id);
 		model.addAttribute("followList", followList);
 		model.addAttribute("linkMessageUser",linkMessageUser);
 		model.addAttribute("link_id", link_id);

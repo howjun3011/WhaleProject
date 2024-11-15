@@ -113,6 +113,7 @@
     <br>
     <div class="scroll-content">
         <c:forEach var="link" items="${linkMessageUser}">
+        <c:if test="${link.user_id != now_id}">
             <c:url var="messageLinkUrl" value="/messageLinkGo">
 		        <c:param name="u" value="${link.user_id}" />
 		        <c:param name="l" value="${link_id}" />
@@ -131,6 +132,7 @@
                 </div>
             </a>
             <hr class="separator-line"/>
+        </c:if>
         </c:forEach>
         <c:forEach var="follow" items="${followList}">
             <c:forEach var="link" items="${linkMessageUser}">

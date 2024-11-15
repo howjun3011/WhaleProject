@@ -28,10 +28,10 @@ function resize() {
 
     if (mainContentElement) {
         const availableWidth = windowWidth - libraryWidth - detailWidth;
-        if (availableWidth > 200) { // Ensure minimum space for mainContentFrame
+        if (availableWidth > 200) {
             mainContentElement.style.width = `${availableWidth}px`;
         } else {
-            mainContentElement.style.width = `200px`; // Assign minimum width to avoid collapsing
+            mainContentElement.style.width = `200px`;
         }
     }
 }
@@ -62,10 +62,10 @@ function playTrack(trackId) {
         .then(response => {
             if (response.ok) {
                 console.log("Track is now playing");
-                return Promise.resolve(); // 성공 시 Promise 반환
+                return Promise.resolve();
             } else {
                 console.error("Failed to play track");
-                return Promise.reject(new Error("Failed to play track")); // 실패 시 에러 반환
+                return Promise.reject(new Error("Failed to play track"));
             }
         })
         .catch(error => {
@@ -85,10 +85,10 @@ function pauseTrack(trackId) {
         .then(response => {
             if (response.ok) {
                 console.log("Track is now paused");
-                return Promise.resolve(); // 성공 시 Promise 반환
+                return Promise.resolve();
             } else {
                 console.error("Failed to pause track");
-                return Promise.reject(new Error("Failed to pause track")); // 실패 시 에러 반환
+                return Promise.reject(new Error("Failed to pause track"));
             }
         })
         .catch(error => {
@@ -109,10 +109,9 @@ $(document).ready(function () {
     var isExpanded = false;
 
     $('#toggleButton').click(function () {
-        isExpanded = !isExpanded; // 상태를 토글
-        $('.mainLibraryFrame').toggleClass('expanded', isExpanded); // 메인 라이브러리 프레임 요소에 클래스 추가/제거
+        isExpanded = !isExpanded;
+        $('.mainLibraryFrame').toggleClass('expanded', isExpanded);
 
-        // SVG 아이콘 변경
         const path = $('#toggleButton path');
         if (isExpanded) {
             path.attr('d', 'M3 22a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v18a1 1 0 0 1-1 1zM15.5 2.134A1 1 0 0 0 14 3v18a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V6.464a1 1 0 0 0-.5-.866l-6-3.464zM9 2a1 1 0 0 0-1 1v18a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1z'); // 확장 시 새로운 d 값
@@ -163,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (window.location.pathname === '/whale/streaming/home') {
 		updateScrollButtons(); // 초기 상태
 	    const container = document.getElementById('recommendationContents');
-	    container.addEventListener('scroll', updateScrollButtons); // 스크롤 이벤트 감지
+	    container.addEventListener('scroll', updateScrollButtons);
 	}
 });
 
@@ -238,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const headerInput = document.querySelector('.headerInput');
 
     headerInput.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {  // Enter 키 확인
+        if (event.key === "Enter") {
             goSearch();
         }
     });
@@ -285,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (window.location.pathname === '/whale/streaming/search') {
 		updateSearchScrollButtons(); // 초기 상태
 	    const container = document.querySelector('.searchResults');
-	    container.addEventListener('scroll', updateSearchScrollButtons); // 스크롤 이벤트 감지
+	    container.addEventListener('scroll', updateSearchScrollButtons);
 	}
 });
 
@@ -329,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (window.location.pathname === '/whale/streaming/artistDetail') {
 		updateArtistDetailScrollButtons();
 	    const container = document.querySelector('.albumsWrap');
-	    container.addEventListener('scroll', updateArtistDetailScrollButtons); // 스크롤 이벤트 감지
+	    container.addEventListener('scroll', updateArtistDetailScrollButtons);
 	}
 });
 
@@ -378,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (window.location.pathname === '/whale/streaming/artistDetail') {
 		updatePlayListScrollButtons();
 	    const container = document.querySelector('.relatedPlaylists');
-	    container.addEventListener('scroll', updatePlayListScrollButtons); // 스크롤 이벤트 감지
+	    container.addEventListener('scroll', updatePlayListScrollButtons);
 	}
 });
 
@@ -436,11 +435,8 @@ function playAllPlaylist(playlistId) {
 }
 
 // 메인 스트리밍 화면 좋아요 버튼
-// insertTrackLike 함수를 전역으로 선언
-// trackInfo 배열을 전역 변수로 설정하고 기본 초기화
 let trackInfo = [];
 
-// player_state_changed 이벤트 리스너 설정
 function initializePlayer(player) {
     player.addListener('player_state_changed', (state) => {
         // 트랙 정보가 있을 때만 trackInfo 배열 초기화
@@ -545,7 +541,6 @@ function setupPlayer() {
     };
 }
 
-// Fetch Web API 함수 예시
 async function fetchWebApi(url, method) {
     const response = await fetch(`https://api.spotify.com/${url}`, {
         method: method,
@@ -645,14 +640,11 @@ async function checkTrackLikeStatus(trackId, trackElement) {
             || trackElement.querySelector(".recentlyPlayedTrackLike img");
 
         if (data.result === "liked") {
-            // 좋아요 상태일 때 liked.png로 변경
             imgElement.src = `${window.contextPath}/static/images/streaming/liked.png`;
         } else {
-            // 좋아요 상태가 아닐 때 기본 이미지로 변경
             imgElement.src = `${window.contextPath}/static/images/streaming/like.png`;
         }
     } catch (error) {
-        // console.error("Error checking track like status:", error);
     }
 }
 
@@ -696,7 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname === '/whale/streaming/home') {
         updateRecentlyPlayedScrollButtons(); // 초기 상태
         const container = document.querySelector('.recentlyPlayedTracks');
-        container.addEventListener('scroll', updateRecentlyPlayedScrollButtons); // 스크롤 이벤트 감지
+        container.addEventListener('scroll', updateRecentlyPlayedScrollButtons);
     }
 });
 
@@ -712,9 +704,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // 이미지 경로 비교 후 변경
             if (currentSrc.includes("like.png")) {
-                button.src = `${window.contextPath}/static/images/streaming/liked.png`; // liked 상태로 변경
+                button.src = `${window.contextPath}/static/images/streaming/liked.png`;
             } else {
-                button.src = `${window.contextPath}/static/images/streaming/like.png`; // like 상태로 변경
+                button.src = `${window.contextPath}/static/images/streaming/like.png`;
             }
         });
     });
@@ -722,7 +714,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 페이지 로드 시 trackDetailLike의 좋아요 상태 확인
 document.addEventListener("DOMContentLoaded", function() {
-    const trackDetailElement = document.querySelector(".trackDetailLike"); // trackDetailLike 요소 선택
+    const trackDetailElement = document.querySelector(".trackDetailLike");
 
     if (trackDetailElement) {
         const trackId = trackDetailElement.getAttribute("data-track-id"); // trackDetailLike의 트랙 ID 가져오기
@@ -746,10 +738,8 @@ async function checkTrackDetailLikeStatus(trackId, trackElement) {
         const iconElement = trackElement.querySelector(".icon"); // icon 요소 선택
 
         if (data.result === "liked") {
-            // 좋아요 상태일 때 invert(1)로 변경
             iconElement.style.filter = "invert(0)";
         } else {
-            // 좋아요 상태가 아닐 때 기본 상태로 변경
             iconElement.style.filter = "invert(1)";
         }
     } catch (error) {
@@ -764,11 +754,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     likeButtons.forEach(button => {
         button.addEventListener("click", function() {
-            // 현재 filter 속성 확인 후 invert 적용 여부를 토글
             if (button.style.filter === "invert(1)") {
-                button.style.filter = "invert(0)"; // 기본 상태로 변경
+                button.style.filter = "invert(0)";
             } else {
-                button.style.filter = "invert(1)"; // liked 상태로 변경
+                button.style.filter = "invert(1)";
             }
         });
     });
@@ -834,7 +823,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname === '/whale/streaming/home') {
         updateFeaturedLeftContentScrollButtons(); // 초기 상태
         const container = document.querySelector('.featuredPlaylistsContent');
-        container.addEventListener('scroll', updateFeaturedLeftContentScrollButtons); // 스크롤 이벤트 감지
+        container.addEventListener('scroll', updateFeaturedLeftContentScrollButtons);
     }
 });
 
@@ -878,7 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname === '/whale/streaming/home') {
         updateRecommendedArtistsLeftContentScrollButtons(); // 초기 상태
         const container = document.querySelector('.recommendedArtistsContainer');
-        container.addEventListener('scroll', updateRecommendedArtistsLeftContentScrollButtons); // 스크롤 이벤트 감지
+        container.addEventListener('scroll', updateRecommendedArtistsLeftContentScrollButtons);
     }
 });
 
@@ -972,24 +961,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSearchPlayListContentScrollButtons(); // 초기 상태 설정
     const container = document.querySelector('.searchRelatedPlaylists');
     if (container) {
-		container.addEventListener('scroll', updateSearchPlayListContentScrollButtons); // 스크롤 이벤트 감지
+		container.addEventListener('scroll', updateSearchPlayListContentScrollButtons);
 	}
 });
 
 function toggleIcon(element) {
-    // SVG 아이콘과 그 안의 path 요소를 가져옴
     const svg = element.querySelector("svg");
     const path = svg.querySelector("path");
 
-	/*
-    if (path.getAttribute("d")) {
-        // 현재 하트가 채워진 상태일 때, 빈 하트로 변경
-        path.setAttribute("d", "");
-    } else {
-        // 현재 빈 하트 상태일 때, 채워진 하트로 변경
-        path.setAttribute("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
-    }
-    */
 	if (path.getAttribute("fill") === 'rgb(203, 130, 163)') {
         path.setAttribute("fill", "#000000");
     } else {

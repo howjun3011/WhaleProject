@@ -143,6 +143,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 }
             } else if ("IMAGE".equals(messageType)) {
                 messageDto.setMessage_text(messageContent);
+            } else if ("MUSIC".equals(messageType)) {
+                // track_id에 기반해 track 정보 조회
+                Map<String, String> trackInfo = messageDao.getTrackInfo(messageContent);
+                if (trackInfo != null) {
+                    String trackJson = objectMapper.writeValueAsString(trackInfo);
+                    messageDto.setMessage_text(trackJson);  // JSON으로 직렬화된 트랙 정보를 저장
+                }
             } else {
                 messageDto.setMessage_text(messageContent);
             }
@@ -160,6 +167,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // 채팅방에 메시지 브로드캐스트
             broadcastToRoom(roomId, new TextMessage(formattedMessage));
 
+            if ("MUSIC".equals(messageType)) {
+				messageDto.setMessage_text(messageContent);
+			}
             // DB에 메시지 저장
             messageDao.saveMessage(messageDto);
             

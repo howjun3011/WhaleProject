@@ -2,6 +2,7 @@ package com.tech.whale.admin.board.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.dao.ComDao;
 import com.tech.whale.community.dto.PostDto;
+import com.tech.whale.main.models.MainDao;
 
 @Service
 public class AdminWhaleNotiService implements AdminServiceInter{
@@ -26,6 +28,10 @@ public class AdminWhaleNotiService implements AdminServiceInter{
 	private AdminIDao adminIDao;
 	@Autowired
     private ComDao comDao;
+	
+	// [ 메인 알람 기능]
+    @Autowired
+    private MainDao mainDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -109,6 +115,13 @@ public class AdminWhaleNotiService implements AdminServiceInter{
 		String whale_text = request.getParameter("whale_text");
 		
 		adminIDao.whaleNotiRegDo(user_id,whale_text);
+		
+		// [ 메인 알람 기능: 모든 유저의 알람 테이블 추가 ]
+		List<String> allUser = mainDao.selectAllUserId();
+		
+		for (String userId : allUser) {
+			mainDao.insertWhaleNotiText(1, userId, whale_text);
+		}
 	}
 	
 	

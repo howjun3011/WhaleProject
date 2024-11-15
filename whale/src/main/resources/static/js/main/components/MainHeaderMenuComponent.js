@@ -10,10 +10,24 @@ const MainHeaderMenuComponent = {
 						</div>
 						<Transition name="menuTransition">
 							<div v-if="notificationIndex === 4 && notifications[4].length !== 0" class="header-expanded-content">
-								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[4]" :key="j" @click="fetchNoti('updateWhaleNoti?wn='+notification.whale_noti_id)">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[4]" :key="j" style="height: 80px;" @click="fetchNoti('updateWhaleNoti?wn='+notification.whale_noti_id)">
 									<div class="header-notification-content" v-if="notification.whale_noti_type === 0">
 										<span style="font-weight: 400;">신고 처리가 완료되었습니다.</span><br>
 										<div style="width: inherit; font-size: 9px; text-align: right;">
+											{{
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (1000))+'초전' :
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (60 * 1000))+'분전' :
+												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 24 * 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (60 * 60 * 1000))+'시간전' :
+												Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (24 * 60 * 60 * 1000))+'일전'
+											}}
+											{{ notification.whale_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
+										</div>
+									</div>
+									<div class="hearder-delete-noti flexCenter" @click.stop="fetchNoti('deleteWhaleNoti?wn='+notification.whale_noti_id)"><div>x</div></div>
+									<div class="header-notification-content" v-if="notification.whale_noti_type === 1">
+										<p style="font-weight: 400; text-align: center;">[공지]</p>
+										<p style="padding: 2px 30px;">{{ notification.whale_noti_text }}</p>
+										<div style="width: inherit; font-size: 9px; text-align: right; margin-right: 30px;">
 											{{
 												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (1000))+'초전' :
 												(nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) < 60 * 60 * 1000 ? Math.floor((nowTime.getTime() - new Date(notification.whale_noti_date).getTime()) / (60 * 1000))+'분전' :

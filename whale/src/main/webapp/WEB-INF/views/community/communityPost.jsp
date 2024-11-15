@@ -31,11 +31,11 @@
     .content-wrapper[data-darkmode="0"] .footer {text-align: center; margin: 30px 0; font-size: 12px; color: #868e96;}
     .content-wrapper[data-darkmode="0"] .announcement {background-color: #f2f2f2; /* 연한 회색 배경 */ font-weight: bold; /* 글씨를 굵게 */}
     #userModal[data-darkmode="0"] {display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}
-    #userModal[data-darkmode="0"] .modal-content {background-color: #ffffff; margin: 20% auto; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
-    #userModal[data-darkmode="0"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="0"] .modal-content {background-color: #ffffff; margin: 20% auto; padding: 20px; border-radius: 8px; width: 270px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
+    #userModal[data-darkmode="0"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; margin-top: 10px;}
     #userModal[data-darkmode="0"] .close:hover, .close:focus {color: #333; text-decoration: none; cursor: pointer;}
-    #userModal[data-darkmode="0"] .modal-links a {display: block; padding: 10px; margin-top: 10px; text-align: center; background-color: #1a73e8; color: white; border-radius: 5px; text-decoration: none; font-weight: bold;}
-    #userModal[data-darkmode="0"] .modal-links a:hover {background-color: #1666c1;}
+    #userModal[data-darkmode="0"] .modal-links a {display: block; padding: 15px 10px; margin-top: 10px; text-align: center; background-color: #d2d2d2; color: #1f1f1f; border-radius: 5px; text-decoration: none; font-weight: bold;}
+    #userModal[data-darkmode="0"] .modal-links a:hover {background-color: #f2f2f2;}
     #userModal[data-darkmode="0"] .user-id {font-weight: bold; cursor: pointer;}
     #userModal[data-darkmode="0"] .user-id:hover {color: #1666c1;}
     #userModal[data-darkmode="0"] .pagination .current {font-weight: bold; color: #1a73e8;}
@@ -64,12 +64,12 @@
     .content-wrapper[data-darkmode="1"] .announcement {background-color: #3f3f3f; /* 연한 회색 배경 */ font-weight: bold; /* 글씨를 굵게 */}
     .content-wrapper[data-darkmode="1"] .pagination .current {background-color: white; font-weight: bold; color: #adb5bd;}
     #userModal[data-darkmode="1"] {display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);}
-    #userModal[data-darkmode="1"] .modal-content {background-color: #2e2e2e; margin: 20% auto; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
+    #userModal[data-darkmode="1"] .modal-content {background-color: #2e2e2e; margin: 20% auto; padding: 20px; border-radius: 8px; width: 270px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}
     #userModal[data-darkmode="1"] .modal-header {color: whitesmoke;}
-    #userModal[data-darkmode="1"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;}
+    #userModal[data-darkmode="1"] .close {color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; margin-top: 10px;}
     #userModal[data-darkmode="1"] .close:hover, .close:focus {color: whitesmoke; text-decoration: none; cursor: pointer;}
-    #userModal[data-darkmode="1"] .modal-links a {display: block; padding: 10px; margin-top: 10px; text-align: center; background-color: #335580; color: white; border-radius: 5px; text-decoration: none; font-weight: bold;}
-    #userModal[data-darkmode="1"] .modal-links a:hover {background-color: #335580;}
+    #userModal[data-darkmode="1"] .modal-links a {display: block; padding: 15px 10px; margin-top: 10px; text-align: center; background-color: #d2d2d2; color: #1f1f1f; border-radius: 5px; text-decoration: none; font-weight: bold;}
+    #userModal[data-darkmode="1"] .modal-links a:hover {background-color: #f2f2f2;}
     #userModal[data-darkmode="1"] .user-id {font-weight: bold; cursor: pointer;}
     #userModal[data-darkmode="1"] .user-id:hover {color: #335580;}
 	
@@ -243,11 +243,11 @@
 <div id="userModal" class="modal" style="display: none;" data-darkmode="${darkMode.scndAttrName}">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <div class="modal-header" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+        <div class="modal-header" style="display: flex; align-items: center; margin-bottom: 20px;">
             <img id="modal-user-image" src="" alt="User Image" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 15px;">
             <div class="modal-info">
                 <h2 id="modal-user-nickname"></h2>
-                <p style="margin-top: -10px;" id="modal-user-id"></p>
+                <p id="modal-user-id"></p>
             </div>
         </div>
         <div class="modal-links">

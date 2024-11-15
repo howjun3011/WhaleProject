@@ -186,17 +186,6 @@
         VALUES (#{user_id})
     </insert>
 
-    <!-- BLOCK 테이블 관련 메서드 -->
-    <delete id="deleteUserFromBlockByUserId">
-        DELETE FROM BLOCK
-        WHERE user_id = #{user_id}
-    </delete>
-
-    <insert id="insertUserIntoBlockWithNewUserId">
-        INSERT INTO BLOCK (user_id)
-        VALUES (#{user_id})
-    </insert>
-
     <!-- PROFILE 테이블 관련 메서드 -->
     <delete id="deleteUserProfileByUserId">
         DELETE FROM PROFILE

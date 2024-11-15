@@ -14,10 +14,6 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/streaming/mainFunction.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/setting/darkMode.js"></script>
-    <!-- 조건에 따라 JavaScript 파일을 포함 -->
-    <c:if test="${page == 'detail' || page == 'playlistDetail' || page == 'artistDetail' || page == 'albumDetail' || page == 'likedTracks'}">
-<%--        <script src="${pageContext.request.contextPath}/static/js/streaming/mainContentBackground.js" defer></script>--%>
-    </c:if>
     <script>
         window.contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
         const page = "${page}";
@@ -98,14 +94,12 @@
                         <div class="recommendations">
                             <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
                             <div class="recommendationWrapper">
-                                <!-- 왼쪽 버튼 -->
                                 <button class="slideButton left" id="scrollLeftBtn" onclick="scrollLeftContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
                                 </button>
                                 <div class="recommendationContents" id="recommendationContents">
-                                    <!-- trackPaging 데이터를 반복문으로 출력 -->
                                     <c:forEach var="track" items="${trackPaging.items}">
                                         <div class="recommendationContent" data-track-id="${track.id}">
                                             <div class="recommendationLike"
@@ -136,7 +130,6 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!-- 오른쪽 버튼 -->
                                 <button class="slideButton right" id="scrollRightBtn" onclick="scrollRightContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Like Button" width="30"
@@ -147,7 +140,6 @@
                         <div class="recentlyPlayed">
                             <h3 class="recentlyPlayedTitle">최근 재생한 항목</h3>
                             <div class="recentlyPlayedWrap">
-                                <!-- 왼쪽 버튼 -->
                                 <button class="slideButton left" id="scrollRecentlyPlayedLeftBtn"
                                         onclick="scrollRecentlyPlayedLeftContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
@@ -189,7 +181,6 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!-- 오른쪽 버튼 -->
                                 <button class="slideButton right" id="scrollRecentlyPlayedRightBtn"
                                         onclick="scrollRecentlyPlayedRightContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -201,7 +192,6 @@
                         <div class="featuredPlaylists">
                             <h3 class="featuredPlaylistsTitle">추천 플레이리스트</h3>
                             <div class="featuredPlaylistsWrap">
-                                <!-- 왼쪽 버튼 -->
                                 <button class="slideButton left" id="scrollFeaturedLeftBtn"
                                         onclick="scrollFeaturedLeftContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
@@ -223,7 +213,6 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!-- 오른쪽 버튼 -->
                                 <button class="slideButton right" id="scrollFeaturedRightBtn"
                                         onclick="scrollFeaturedRightContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -235,7 +224,6 @@
                         <div class="recommendedArtists">
                             <h3 class="recommendedArtistsTitle">추천 아티스트</h3>
                             <div class="recommendedArtistsWrap">
-                                <!-- 왼쪽 버튼 -->
                                 <button class="slideButton left" id="scrollRecommendedArtistsLeftBtn"
                                         onclick="scrollRecommendedArtistsLeftContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
@@ -255,7 +243,6 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!-- 오른쪽 버튼 -->
                                 <button class="slideButton right" id="scrollRecommendedArtistsRightBtn"
                                         onclick="scrollRecommendedArtistsRightContent()">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -269,7 +256,6 @@
                         <div class="trackDetail">
                             <div class="trackDetailContainer">
                                 <c:if test="${not empty trackDetail.album.images}">
-                                    <!-- 첫 번째 이미지를 불러옵니다 -->
                                     <img src="${trackDetail.album.images[0].url}" alt="${trackDetail.name}" width="230"
                                          height="230" style="border-radius: 8px;">
                                 </c:if>
@@ -277,7 +263,6 @@
                                     <p class="detailSort">곡</p>
                                     <p id="trackName" class="trackName" style="cursor: default;">${trackDetail.name}</p>
                                     <div class="trackDescription">
-                                        <!-- 아티스트 이미지 표시 -->
                                         <c:if test="${not empty artistDetail.images}">
                                             <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"
                                                  width="24" height="24" style="border-radius: 50%;">
@@ -312,7 +297,6 @@
                                 </svg>
                             </div>
                         </div>
-                        <!-- 가사 출력 -->
                         <div class="lyrics">
                             <h3>가사</h3>
                             <pre style="padding-top: 10px">${lyrics}</pre>
@@ -358,14 +342,12 @@
                         </div>
                         <div class="searchAlbumsContainer">
                             <h3 class="searchAlbumsContainerTitle">앨범</h3>
-                            <!-- 왼쪽 버튼 -->
                             <button class="searchAlbumsSlideButton left" id="searchAlbumsScrollLeftBtn"
                                     onclick="scrollLeftSearchAlbumsContent()">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                      alt="Like Button" width="30"
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                             </button>
-                            <!-- 앨범 목록 -->
                             <div class="searchAlbums">
                                 <div class="searchAlbumsWrap">
                                     <c:forEach var="album" items="${albums}">
@@ -385,7 +367,6 @@
                                     </c:forEach>
                                 </div>
                             </div>
-                            <!-- 오른쪽 버튼 -->
                             <button class="searchAlbumsSlideButton right" id="searchAlbumsScrollRightBtn"
                                     onclick="scrollRightSearchAlbumsContent()">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -393,10 +374,8 @@
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                             </button>
                         </div>
-                        <!-- 관련된 플레이리스트 목록 -->
                         <div class="searchPlayListContainer">
                             <h3 class="searchPlayListContainerTitle">관련된 플레이리스트</h3>
-                            <!-- 왼쪽 버튼 -->
                             <button class="searchPlayListSlideButton left" id="searchPlayListScrollLeftBtn"
                                     onclick="scrollLeftSearchPlayListContent()">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
@@ -417,7 +396,6 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <!-- 오른쪽 버튼 -->
                             <button class="searchPlayListSlideButton right" id="searchPlayListScrollRightBtn"
                                     onclick="scrollRightSearchPlayListContent()">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -433,7 +411,6 @@
                                     <div class="artistDetailWrap">
                                         <div class="artistDetailImage">
                                             <c:if test="${not empty artistDetail.images}">
-                                                <!-- 첫 번째 이미지를 불러옵니다 -->
                                                 <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"
                                                      width="230"
                                                      height="230" style="border-radius: 8px;">
@@ -453,9 +430,6 @@
                                                 <%--<p>인기도: ${artistDetail.popularity}</p>--%>
                                         </div>
                                     </div>
-
-
-                                    <!-- 인기 곡 목록 -->
                                     <div class="topTracks">
                                         <h3 style="margin: 0 0 15px 10px;">인기</h3>
                                         <div class="topTracks-tracks"
@@ -467,21 +441,16 @@
                                         </div>
                                         <c:forEach var="track" items="${topTracks}" varStatus="status">
                                             <div class="topTrackItem">
-                                                <!-- 순위 표시 -->
                                                 <span class="rank">${status.index + 1}</span>
-                                                <!-- 재생/일시정지 버튼 -->
                                                 <button class="playPauseButton"
                                                         onclick="togglePlayPause('${track.id}', this)">
                                                     <svg class="icon" style="width: 20px; filter: invert(1);"
                                                          viewBox="0 0 24 24">
-                                                        <!-- 초기 재생 아이콘 -->
                                                         <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                                     </svg>
                                                 </button>
                                                 <div class="topTrackInfo" onclick="playAndNavigate('${track.id}');">
-                                                    <!-- 곡 이미지와 이름 -->
                                                     <c:if test="${not empty track.album.images}">
-                                                        <!-- 곡 이미지 클릭 시 재생 후 디테일 페이지로 이동 -->
                                                         <img src="${track.album.images[0].url}" alt="${track.name}"
                                                              width="50" height="50"
                                                              style="border-radius: 4px; padding-left: 5px; cursor: pointer;"
@@ -489,14 +458,12 @@
                                                     </c:if>
                                                     <p class="topTrackName" style="cursor: pointer;">${track.name}</p>
                                                 </div>
-                                                <!-- 앨범 이름 -->
                                                 <p class="albumName"
                                                    onclick="navigateToAlbumDetail('${track.album.id}')"
                                                    style="padding-left: 5px; cursor: pointer;">${track.album.name}</p>
                                                 <!-- 트랙의 길이 표시 (분/초 변환) -->
                                                 <c:set var="minutes" value="${track.durationMs / 60000}"/>
                                                 <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}"/>
-
                                                 <!-- 소수점 제거 후 출력 -->
                                                 <p class="trackTime" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>
 		                                        <div class="trackLike"
@@ -508,13 +475,11 @@
 		                                                     toggleIcon(this)">
 		                                            <c:choose>
 		                                                <c:when test="${trackLike[status.index]}">
-		                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
 		                                                    <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
 		                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
 		                                                    </svg>
 		                                                </c:when>
 		                                                <c:otherwise>
-		                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
 		                                                    <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
 		                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
 		                                                    </svg>
@@ -526,14 +491,12 @@
                                     </div>
                                     <div class="albumsContainer">
                                         <h3 class="albumsContainerTitle">앨범</h3>
-                                        <!-- 왼쪽 버튼 -->
                                         <button class="artistDetailSlideButton left" id="artistDetailScrollLeftBtn"
                                                 onclick="scrollLeftArtistDetailContent()">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                                  alt="Like Button" width="30"
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
                                         </button>
-                                        <!-- 앨범 목록 -->
                                         <div class="albums">
                                             <div class="albumsWrap">
                                                 <c:forEach var="album" items="${albums}">
@@ -553,7 +516,6 @@
                                                 </c:forEach>
                                             </div>
                                         </div>
-                                        <!-- 오른쪽 버튼 -->
                                         <button class="artistDetailSlideButton right" id="artistDetailScrollRightBtn"
                                                 onclick="scrollRightArtistDetailContent()">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -561,17 +523,14 @@
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
                                         </button>
                                     </div>
-                                    <!-- 연관된 아티스트 목록 -->
                                         <%--                                    <div class="relatedArtists">--%>
                                         <%--                                        <h3>연관된 아티스트</h3>--%>
                                         <%--                                        <c:forEach var="relatedArtist" items="${relatedArtists}">--%>
                                         <%--                                            <p>${relatedArtist.name}</p>--%>
                                         <%--                                        </c:forEach>--%>
                                         <%--                                    </div>--%>
-                                    <!-- 관련된 플레이리스트 목록 -->
                                     <div class="playListContainer">
                                         <h3 class="playListContainerTitle">관련된 플레이리스트</h3>
-                                        <!-- 왼쪽 버튼 -->
                                         <button class="playListSlideButton left" id="playListScrollLeftBtn"
                                                 onclick="scrollLeftPlayListContent()">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
@@ -592,7 +551,6 @@
                                                 </div>
                                             </c:forEach>
                                         </div>
-                                        <!-- 오른쪽 버튼 -->
                                         <button class="playListSlideButton right" id="playListScrollRightBtn"
                                                 onclick="scrollRightPlayListContent()">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
@@ -663,9 +621,7 @@
                                 <c:forEach var="trackItem" items="${playlistDetail.tracks.items}" varStatus="status">
                                     <div class="trackItem"
                                          style="${status.last ? 'padding-bottom: 20px;' : ''}">
-                                        <!-- 순위 표시 -->
                                         <span class="rank">${status.index + 1}</span>
-                                        <!-- 재생/일시정지 버튼 -->
                                         <button class="playPauseButton"
                                                 onclick="togglePlayPause('${trackItem.track.id}', this)">
                                             <svg class="icon" style="width: 20px;"
@@ -675,16 +631,13 @@
                                         </button>
                                         <div class="trackImageAndTitle"
                                              onclick="playAndNavigate('${trackItem.track.id}');">
-                                            <!-- 트랙 이미지 표시 -->
                                             <c:if test="${not empty trackItem.track.album.images}">
                                                 <img src="${trackItem.track.album.images[0].url}"
                                                      alt="${trackItem.track.name}" width="50" height="50"
                                                      style="border-radius: 4px; padding-left: 5px; cursor: pointer;">
                                             </c:if>
-                                            <!-- 트랙 제목과 아티스트 이름 표시 -->
                                             <p class="trackHover">${trackItem.track.name} - ${trackItem.track.artists[0].name}</p>
                                         </div>
-                                        <!-- 앨범 이름 -->
                                         <p class="albumName"
                                            onclick="navigateToAlbumDetail('${trackItem.track.album.id}')"
                                            style="padding-left: 5px; cursor: pointer;">${trackItem.track.album.name}</p>
@@ -702,13 +655,11 @@
                                                      toggleIcon(this)">
                                             <c:choose>
                                                 <c:when test="${trackLike[status.index]}">
-                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
                                                     <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
                                                     <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
@@ -733,7 +684,6 @@
                                     <p class="detailSort">${albumDetail.albumType}</p>
                                     <p id="trackName" class="trackName" style="cursor: default;">${albumDetail.name}</p>
                                     <div class="trackDescription">
-                                        <!-- 아티스트 이미지 표시 -->
                                         <c:if test="${not empty artistDetail.images}">
                                             <img src="${artistDetail.images[0].url}" alt="${artistDetail.name}"
                                                  width="24" height="24" style="border-radius: 50%;">
@@ -771,14 +721,11 @@
                                 <div class="playlist-tracks-top" style="padding-left: 5px;">제목</div>
                                 <div class="playlist-tracks-top" style="justify-content: center;">시간</div>
                             </div>
-                            <!-- 트랙 목록 -->
                             <div class="albumTracks">
                                 <c:forEach var="trackItem" items="${tracks}" varStatus="status">
                                     <div class="trackItem" onclick="playAndNavigate('${trackItem.id}');"
                                          style="${status.last ? 'padding-bottom: 20px;' : ''}">
-                                        <!-- 순위 표시 -->
                                         <span class="rank">${status.index + 1}</span>
-                                        <!-- 재생/일시정지 버튼 -->
                                         <button class="playPauseButton"
                                                 onclick="togglePlayPause('${trackItem.id}', this)">
                                             <svg class="icon" style="width: 20px; filter: invert(1);"
@@ -786,7 +733,6 @@
                                                 <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                             </svg>
                                         </button>
-                                        <!-- 트랙 제목과 아티스트 이름 표시 -->
                                         <div style="display: block; cursor: pointer;">
                                             <p class="albumTracksName"
                                                onclick="navigateToDetail('${trackItem.id}')"
@@ -808,13 +754,11 @@
                                                      toggleIcon(this)">
                                             <c:choose>
                                                 <c:when test="${trackLike[status.index]}">
-                                                    <!-- 좋아요 상태일 때 채워진 하트 -->
                                                     <svg class="icon likeIcon" style="width: 20px; fill: rgb(203, 130, 163); cursor: pointer;" viewBox="0 0 24 24">
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <!-- 좋아요 상태가 아닐 때 빈 하트 -->
                                                     <svg class="icon likeIcon" style="width: 20px; fill: #000000; cursor: pointer;" viewBox="0 0 24 24">
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                                                     </svg>
@@ -856,9 +800,7 @@
                             <div class="playlistTracks">
                                 <c:forEach var="track" items="${likedTracks}" varStatus="status">
                                     <div class="trackItem" style="${status.last ? 'padding-bottom: 20px;' : ''}">
-                                        <!-- 순위 표시 -->
                                         <span class="rank">${status.index + 1}</span>
-                                        <!-- 재생/일시정지 버튼 -->
                                         <button class="playPauseButton"
                                                 onclick="togglePlayPause('${track.track_id}', this)">
                                             <svg class="icon" style="width: 20px; filter: invert(1);"
@@ -867,26 +809,22 @@
                                             </svg>
                                         </button>
                                         <div class="trackImageAndTitle">
-                                            <!-- 트랙 이미지 표시 -->
                                             <c:if test="${not empty track.track_cover}">
                                                 <img src="${track.track_cover}" alt="${track.track_name}" width="50"
                                                      height="50"
                                                      style="border-radius: 4px; padding-left: 5px;">
                                             </c:if>
-                                            <!-- 트랙 제목과 아티스트 이름 표시 -->
                                             <div>
                                                 <p class="trackInfoTitle" style="font-weight: 400; cursor: pointer;" onclick="playAndNavigate('${track.track_id}');">${track.track_name}</p>
                                                 <p class="trackInfoArtist" style="cursor: pointer;" onclick="navigateToArtistDetail('${artistIds[track.track_id]}')">${track.track_artist}</p>
                                             </div>
                                         </div>
-                                        <!-- 앨범 이름 -->
                                         <p class="albumName"
                                            style="padding-left: 5px; cursor: pointer;"
                                            onclick="navigateToAlbumDetail('${albumIds[track.track_id]}')">${track.track_album}</p>
                                         <!-- 트랙의 길이 표시 (분/초 변환) -->
 <%--                                        <c:set var="minutes" value="${track.durationMs / 60000}"/>--%>
 <%--                                        <c:set var="seconds" value="${(track.durationMs % 60000) / 1000}"/>--%>
-
                                         <!-- 소수점 제거 후 출력 -->
 <%--                                        <p class="trackDuration" style="justify-content: center;">${minutes.intValue()}분 ${seconds.intValue()}초</p>--%>
                                         <p class="trackDuration">
@@ -898,7 +836,6 @@
                                                 style="cursor: pointer;">
                                             <svg class="icon" style="width: 20px; fill: rgb(203, 130, 163); display: none;"
                                                  viewBox="0 0 24 24">
-                                                <!-- 조건부로 좋아요 여부에 따라 아이콘 변경 가능 -->
                                                 <path d="${track.liked ? 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' : 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'}"></path>
                                             </svg>
                                         </button>

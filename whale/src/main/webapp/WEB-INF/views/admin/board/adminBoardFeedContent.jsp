@@ -6,7 +6,7 @@
 <div class="post" data-post-id="${feedDetail.feed_id}" data-user-id="${feedDetail.user_id}">
     <div class="user-info">
         <a href="adminAccountUserInfo?userId=${feedDetail.user_id}">
-            <img src="/whale/static/images/setting/${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
+            <img src="${feedDetail.user_image_url}" alt="User Profile" class="profile-pic">
         </a>
         <span class="username">${feedDetail.user_id}</span>
     </div>
@@ -45,7 +45,7 @@
          <div class="comment-header">
              <!-- 프로필 사진 -->
              <a href="adminAccountUserInfo?userId=${comment.user_id}">
-                 <img src="/whale/static/images/setting/${comment.user_image_url}" alt="User Profile" class="profile-pic">
+                 <img src="${comment.user_image_url}" alt="User Profile" class="profile-pic">
              </a>
              <!-- 아이디와 날짜 -->
              <div class="comment-meta">
@@ -79,7 +79,7 @@
                          <div class="comment-header">
                              <!-- 프로필 사진 -->
                              <a href="adminAccountUserInfo?userId=${reply.user_id}">
-                                 <img src="/whale/static/images/setting/${reply.user_image_url}" alt="User Profile" class="profile-pic">
+                                 <img src="${reply.user_image_url}" alt="User Profile" class="profile-pic">
                              </a>
                              <!-- 아이디와 날짜 -->
                              <div class="comment-meta">

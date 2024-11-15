@@ -940,8 +940,8 @@
 				NOTICE_DATE,
 				ROW_NUMBER() OVER (ORDER BY NOTICE_ID DESC) AS RNUM
 	        FROM NOTICE_TABLE
-	        ORDER BY NOTICE_ID DESC
 			<include refid="includeWhaleNotiList" />
+	        ORDER BY NOTICE_ID DESC
 	    ) 
 	    WHERE RNUM BETWEEN #{start} AND #{end}
 	</select>

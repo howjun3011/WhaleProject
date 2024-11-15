@@ -123,6 +123,14 @@ body {min-height: 100vh;}
 
 #main.dark .playerTrackName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;}
 
+#notification-container {position: fixed; top: 90px; left: 20px; z-index: 1000;}
+.notification {display: flex; align-items: center; background-color: white; color: #333; padding: 15px 20px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; cursor: pointer; opacity: 0.9; transition: opacity 0.5s ease, transform 0.5s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);}
+.notification:hover {opacity: 1; transform: translateY(-2px);}
+.notification img {margin-right: 10px;}
+.notification .text-content {display: flex; flex-direction: column; margin-top: 4px;}
+
+#main.dark .notification {border: none; background-color: #335580; color: white;}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 #main.light > *{

@@ -228,19 +228,18 @@
 	                                </div>
 	                            </div>
 	                        </c:forEach>
-	                        
-	                        <!-- 답글 입력 폼 -->
-		                    <div class="reply-form" id="reply-form-${comment.post_comments_id}" style="display: none;">
-		                        <form action="communityDetail/comments" method="post" onsubmit="validateReplyForm(event)" class="comment-form">
-		                            <input type="hidden" name="postId" value="${postDetail.post_id}">
-		                            <input type="hidden" name="userId" value="${now_id}">
-		                            <input type="hidden" name="parentCommentId" value="${comment.post_comments_id}">
-		                            <input type="hidden" name="c" value="${communityId}">
-		                            <input type="text" name="comments" class="comment-input" placeholder="답글을 입력하세요">
-		                            <button type="submit" class="comment-btn-input">답글 달기</button>
-		                        </form>
-		                    </div>
 	                    </c:if>
+	                    <!-- 답글 입력 폼 -->
+	                    <div class="reply-form" id="reply-form-${comment.post_comments_id}" style="display: none;">
+	                        <form action="communityDetail/comments" method="post" onsubmit="validateReplyForm(event)" class="comment-form">
+	                            <input type="hidden" name="postId" value="${postDetail.post_id}">
+	                            <input type="hidden" name="userId" value="${now_id}">
+	                            <input type="hidden" name="parentCommentId" value="${comment.post_comments_id}">
+	                            <input type="hidden" name="c" value="${communityId}">
+	                            <input type="text" name="comments" class="comment-input" placeholder="답글을 입력하세요">
+	                            <button type="submit" class="comment-btn-input">답글 달기</button>
+	                        </form>
+	                    </div>
 	                </div>
 	            </c:forEach>
 	            <!-- 댓글 입력 폼 -->

@@ -132,15 +132,15 @@
     <h2 class="community-link"><a href="communityPost?c=${param.c}">${communityName}</a></h2>
 
     <div class="table-container">
-        <table>
+        <table style="display: table; table-layout: fixed;">
             <tr>
-                <th>번호</th>
-                <th>태그</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>등록일</th>
-                <th>조회수</th>
-                <th>좋아요</th>
+                <th style="width: 5%;">번호</th>
+                <th style="width: 10%;">태그</th>
+                <th style="width: 45%;">제목</th>
+                <th style="width: 10%;">작성자</th>
+                <th style="width: 10%;">등록일</th>
+                <th style="width: 10%;">조회수</th>
+                <th style="width: 10%;">좋아요</th>
             </tr>
             <c:forEach items="${list}" var="p">
                 <tr 
@@ -148,14 +148,14 @@
 	                    class="announcement"
 	                </c:if>
             	>
-                    <td>${p.post_num}</td>
-                    <td>${p.post_tag_text}</td>
-                    <td><a href="communityDetail?c=${param.c}&p=${p.post_id}">${p.post_title} 
+                    <td style="width: 5%;">${p.post_num}</td>
+                    <td style="width: 10%;">${p.post_tag_text}</td>
+                    <td style="width: 45%; display: table-cell; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a href="communityDetail?c=${param.c}&p=${p.post_id}">${p.post_title} 
                     	<c:if test="${p.commentsCount != 0}">
                     	(${p.commentsCount})
                     	</c:if>
                     	</a></td>
-                    <td>
+                    <td style="width: 10%;">
 					    <span class="user-id" 
 					          data-user-id="${p.user_id}" 
 					          data-user-nickname="${p.user_nickname}" 
@@ -164,9 +164,9 @@
 					        ${p.user_id}
 					    </span>
 					</td>
-                    <td>${p.post_date}</td>
-                    <td>${p.post_cnt}</td>
-                    <td>${p.likeCount}</td> <!-- 좋아요 수 추가 -->
+                    <td style="width: 10%;">${p.post_date}</td>
+                    <td style="width: 10%;">${p.post_cnt}</td>
+                    <td style="width: 10%;">${p.likeCount}</td> <!-- 좋아요 수 추가 -->
                 </tr>
             </c:forEach>
         </table>

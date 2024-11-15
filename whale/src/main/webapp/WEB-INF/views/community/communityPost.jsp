@@ -161,7 +161,7 @@
 					          data-user-nickname="${p.user_nickname}" 
 					          data-user-image-url="${p.user_image_url}" 
 					          onclick="openModal(this)">
-					        ${p.user_id}
+					        ${p.user_nickname}
 					    </span>
 					</td>
                     <td>${p.post_date}</td>

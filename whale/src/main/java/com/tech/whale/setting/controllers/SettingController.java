@@ -712,7 +712,6 @@ public class SettingController {
             userDao.deleteUserNotiOnoffByUserId(userId);
             userDao.deleteUserStartpageSettingByUserId(userId);
             userDao.deleteUserSettingByUserId(userId);
-            userDao.deleteUserFromBlockByUserId(userId);
             userDao.deleteUserProfileByUserId(userId);
             userDao.deleteUserFollowByUserId(userId);
 //            userDao.deleteUserIdInMessageByUserId(userId);
@@ -740,7 +739,6 @@ public class SettingController {
             userDao.insertUserPageAccessSettingWithNewUserId(newUserId);
             userDao.insertUserStartpageSettingWithNewUserId(newUserId);
             userDao.insertUserSettingByUserId(newUserId);
-            userDao.insertUserIntoBlockWithNewUserId(newUserId);
             userDao.insertUserProfileWithNewUserId(newUserId);
             userDao.insertUserFollowWithNewUserId(newUserId);
 //            userDao.insertUserIdInMessageWithNewUserId(newUserId);

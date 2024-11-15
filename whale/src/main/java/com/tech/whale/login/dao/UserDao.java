@@ -55,10 +55,6 @@ public interface UserDao {
     void deleteUserSettingByUserId(@Param("user_id") String userId);
     void insertUserSettingByUserId(@Param("user_id") String newUserId);
 
-    // BLOCK 테이블 관련 메서드
-    void deleteUserFromBlockByUserId(@Param("user_id") String userId);
-    void insertUserIntoBlockWithNewUserId(@Param("user_id") String newUserId);
-
     // PROFILE 테이블 관련 메서드
     void deleteUserProfileByUserId(@Param("user_id") String userId);
     void insertUserProfileWithNewUserId(@Param("user_id") String newUserId);

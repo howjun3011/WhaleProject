@@ -6,12 +6,15 @@ import com.tech.whale.login.dao.UserDao;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.User;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,5 +180,23 @@ public class UserService {
     public Date getUserEndDateService(String userId) {
     	Date status = userDao.getUserEndDate(userId);
         return status;
+    }
+
+    @Autowired
+    private SqlSessionTemplate sqlSession;
+
+    public void followAdmin(String followerId, String followeeId) {
+        // 현재 팔로우 정보를 가져옴
+        String currentFollowees;
+        try {
+            currentFollowees = sqlSession.selectOne("getFollowUserIds", followerId);
+        } catch (EmptyResultDataAccessException e) {
+            currentFollowees = null;
+        }
+
+        if (currentFollowees == null || currentFollowees.isEmpty()) {
+            // 팔로우한 사람이 없으면 바로 `admintest` 추가
+            sqlSession.update("insertFollowUser", Map.of("followerId", followerId, "followeeId", followeeId));
+        }
     }
 }

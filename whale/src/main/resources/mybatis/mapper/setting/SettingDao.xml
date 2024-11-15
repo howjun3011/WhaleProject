@@ -133,6 +133,12 @@
 					WHEN #{settingType} = 'music' AND #{selectedValue} = 'left' THEN 0
 					WHEN #{settingType} = 'music' AND #{selectedValue} = 'right' THEN 1
 					ELSE page_access_music
+					END,
+			page_access_message =
+				CASE
+					WHEN #{settingType} = 'message' AND #{selectedValue} = 'left' THEN 0
+					WHEN #{settingType} = 'message' AND #{selectedValue} = 'right' THEN 1
+					ELSE page_access_message
 					END
 		WHERE user_id = #{userId}
 	</update>

@@ -514,12 +514,14 @@ public class SettingController {
         System.out.println("PA noficiation : " + pageAccessDto.getPage_access_notification());
         System.out.println("PA setting : " + pageAccessDto.getPage_access_setting());
         System.out.println("PA music : " + pageAccessDto.getPage_access_music());
+        System.out.println("PA message : " + pageAccessDto.getPage_access_message());
 
         // jsp로 전달
         model.addAttribute("mypage", pageAccessDto.getPage_access_mypage());
         model.addAttribute("notification", pageAccessDto.getPage_access_notification());
         model.addAttribute("setting", pageAccessDto.getPage_access_setting());
         model.addAttribute("music", pageAccessDto.getPage_access_music());
+        model.addAttribute("message", pageAccessDto.getPage_access_message());
 
         return "setting/pageAccessSetting";
     }

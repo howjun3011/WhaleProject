@@ -141,11 +141,11 @@ input[type='radio']:checked {
 					<label class="section-top">메시지</label>
 					<div class="radio-group">
 						<div class="radio-option">
-							<label for="music-left">왼쪽</label>
+							<label for="message-left">왼쪽</label>
 								<input type="radio" id="message-left" name="message" value="left">
 						</div>
 						<div class="radio-option">
-							<label for="music-right">오른쪽</label>
+							<label for="message-right">오른쪽</label>
 								<input type="radio" id="message-right" name="message" value="right" checked>
 						</div>
 					</div>
@@ -159,7 +159,7 @@ input[type='radio']:checked {
 	var notification = ${notification};
 	var setting = ${setting};
 	var music = ${music};
-	/*var message = ${message};*/
+	var message = ${message};
 
 	window.onload = function() {
 		document.getElementById('mypage-left').checked = mypage == 0;
@@ -171,10 +171,10 @@ input[type='radio']:checked {
 		document.getElementById('notification-right').checked = notification == 1;
 		document.getElementById('setting-right').checked = setting == 1;
 		document.getElementById('music-right').checked = music == 1;
-		/*document.getElementById('message-right').checked = message == 1;*/
+		document.getElementById('message-right').checked = message == 1;
 
 		document.querySelector('.setting-container').addEventListener('change', function(event) {
-			if(event.target.name === 'mypage' || event.target.name === 'notification' || event.target.name === 'setting' || event.target.name === 'music' /*|| event.target.name === 'message'*/) {
+			if(event.target.name === 'mypage' || event.target.name === 'notification' || event.target.name === 'setting' || event.target.name === 'music' || event.target.name === 'message') {
 				
 				const settingType = event.target.name; 
 				const selectedValue = event.target.value;

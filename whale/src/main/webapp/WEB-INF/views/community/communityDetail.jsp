@@ -271,7 +271,8 @@
     <script>
         // 댓글 입력 검증
         function validateCommentForm(event) {
-            var comments = document.getElementsByName("comments")[0].value.trim();
+            var comments = event.target.querySelector("[name='comments']").value.trim();
+            console.log('Complete: '+comments);
             if (comments === "") {
                 alert("댓글 내용을 작성해 주세요.");
                 event.preventDefault();

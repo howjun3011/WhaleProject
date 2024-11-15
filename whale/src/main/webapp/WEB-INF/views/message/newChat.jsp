@@ -42,7 +42,6 @@
         .container[data-darkmode="1"] a { text-decoration: none; color: black; }
         .container[data-darkmode="1"] a:visited, a:hover, a:focus, a:active { color: black; text-decoration: none; }
         .container[data-darkmode="1"] .follow-list.user-item:hover { background-color: #434343; }
-
     </style>
 </head>
 <body>

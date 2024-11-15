@@ -62,10 +62,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminReportListView?page=1&sk=${searchKeyword}"
+			                <a href="adminReportListView?page=1&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminReportListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}"
+			                <a href="adminReportListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -74,28 +74,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminReportListView?page=${i}&sk=${searchKeyword}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminReportListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminReportListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}"
+			                <a href="adminReportListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminReportListView?page=${searchVO.totPage}&sk=${searchKeyword}"
+			                <a href="adminReportListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminReportListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[처음]</a>
+			                <a href="adminReportListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminReportListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[이전]</a>
+			                <a href="adminReportListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminReportListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[다음]</a>
+			                <a href="adminReportListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminReportListView?page=1&sk=${searchKeyword}" class="pagination-disabled">[마지막]</a>
+			                <a href="adminReportListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

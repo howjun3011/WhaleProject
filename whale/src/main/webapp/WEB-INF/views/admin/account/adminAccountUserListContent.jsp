@@ -8,13 +8,17 @@
     <div class="accountSearch">
 		<form action="adminAccountUserListView" method="post" >
 	        <select name="searchType" id="searchType">
-			    <option value="user_id" <c:if test="${not empty user_id}">selected</c:if>>아이디</option>
+			    <option value="user_id" selected>아이디</option>
 			    <option value="user_email" <c:if test="${not empty user_email}">selected</c:if>>이메일</option>
 			</select>
-
-	        
-	        <input type="text" name="sk" size="50" value="${not empty sk ? sk : ''}" />
-	        <input type="submit" value="검색" />
+	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
+	        <input type="submit" value="검색" id="searchBtn"/>
+	        <select name="searchOrderBy" id="searchOrderBy">
+	        	<option value="id_status" selected>계정상태</option>
+	        	<option value="post_desc" <c:if test="${search_order_By  == 'post_desc'}">selected</c:if> >게시글순서</option>
+	        	<option value="feed_desc" <c:if test="${search_order_By  == 'feed_desc'}">selected</c:if>>피드순서</option>
+	        	<option value="comment_desc" <c:if test="${search_order_By  == 'comment_desc'}">selected</c:if>>댓글순서</option>
+	        </select>
 		</form>
     </div>
 	
@@ -60,10 +64,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminAccountUserListView?page=1"
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminAccountUserListView?page=${ulsearchVO.page - 1}"
+			                <a href="adminAccountUserListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -72,28 +76,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminAccountUserListView?page=${i}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminAccountUserListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminAccountUserListView?page=${ulsearchVO.page + 1}"
+			                <a href="adminAccountUserListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminAccountUserListView?page=${searchVO.totPage}"
+			                <a href="adminAccountUserListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminAccountUserListView?page=1" class="pagination-disabled">[처음]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminAccountUserListView?page=1" class="pagination-disabled">[이전]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminAccountUserListView?page=1" class="pagination-disabled">[다음]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminAccountUserListView?page=1" class="pagination-disabled">[마지막]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

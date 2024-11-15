@@ -14,6 +14,7 @@ import com.tech.whale.admin.dto.AdminMemoDto;
 import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.admin.dto.AdminWhaleNotiDto;
 import com.tech.whale.community.dto.PostDto;
 
 @Mapper
@@ -142,6 +143,13 @@ public interface AdminIDao {
 	public AdminCommunityDto comIdName(String postId);
 	public PostDto getAdminPost(String postId);
 	
+	public ArrayList<AdminWhaleNotiDto> adminWhaleNotiList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectWhaleNotiCnt(String sk, String selNum);
+	public void whaleNotiRegDo(String user_id, String whale_text);
 	//////////////
 	public int reportCnt();
 	public int reportResultCnt();

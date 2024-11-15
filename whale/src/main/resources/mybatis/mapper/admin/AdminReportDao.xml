@@ -18,7 +18,7 @@
 	<sql id="includeReportList">
 	    <choose>
 	        <when test="param4 == 1">
-	            AND (USER_ID LIKE '%' || #{sk} || '%')
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
 	        </when>
 	        <otherwise>
 	        </otherwise>
@@ -54,9 +54,9 @@
 	            ) AS SAME_CONTENT_COUNT,
 	            ROW_NUMBER() OVER (ORDER BY REPORT_ID DESC) AS RNUM
 	        FROM REPORT
+			<include refid="includeReportList" />
 	    ) 
 	    WHERE RNUM BETWEEN #{start} AND #{end}
-		<include refid="includeReportList" />
 	    
 	</select>
     <select id="reportContent" resultType="com.tech.whale.admin.dto.AdminReportResultDto">

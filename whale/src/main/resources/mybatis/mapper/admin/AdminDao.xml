@@ -111,8 +111,9 @@
     <select id="userAccountPostSelect" resultType="com.tech.whale.admin.dto.AdminPFCDto">
 	    SELECT *
 		FROM (
-		    SELECT P.*, ROW_NUMBER() OVER (ORDER BY POST_ID DESC) AS RNUM
+		    SELECT P.*, C.COMMUNITY_NAME, ROW_NUMBER() OVER (ORDER BY POST_ID DESC) AS RNUM
 		    FROM POST P
+		    LEFT JOIN COMMUNITY C ON P.COMMUNITY_ID = C.COMMUNITY_ID
 		    WHERE USER_ID = #{userId}
 		)
 		WHERE RNUM BETWEEN #{start} AND #{end}
@@ -153,7 +154,7 @@
 				WHERE
 					USER_ID = #{userId}
 		) NUMBERDATA
-		WHERE RNUM BETWEEN 1 AND 5
+		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY 
 		    COMMENTS_DATE DESC
 
@@ -1000,5 +1001,58 @@
 		)
 		WHERE ROWNUM &lt;= 3
 	</select>
+	
+	<sql id="includeWhaleNotiCnt">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
+	        </when>
+	        <when test="selNum == 1">
+	            WHERE (NOTICE_TEXT LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	<sql id="includeWhaleNotiList">
+	    <choose>
+	        <when test="selNum == 1">
+	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
+	        </when>
+	        <when test="selNum == 2">
+	            WHERE (NOTICE_TEXT LIKE '%' || #{sk} || '%')
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
+	
+	
+	<select id="selectWhaleNotiCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM NOTICE_TABLE
+        <include refid="includeWhaleNotiCnt" />
+    </select>
+    
+    <select id="adminWhaleNotiList" resultType="com.tech.whale.admin.dto.AdminWhaleNotiDto">
+	    SELECT *
+	    FROM (
+	        SELECT 
+	        	NOTICE_ID,
+				USER_ID,
+				NOTICE_TEXT,
+				NOTICE_DATE,
+				ROW_NUMBER() OVER (ORDER BY NOTICE_ID DESC) AS RNUM
+	        FROM NOTICE_TABLE
+	        ORDER BY NOTICE_ID DESC
+			<include refid="includeWhaleNotiList" />
+	    ) 
+	    WHERE RNUM BETWEEN #{start} AND #{end}
+	</select>
+	
+	<insert id="whaleNotiRegDo">
+		INSERT INTO NOTICE_TABLE VALUES(
+		NOTICE_TABLE_SEQ.NEXTVAL, #{user_id}, #{whale_text}, SYSDATE)
+	</insert>
 	
 </mapper>

@@ -72,7 +72,7 @@
         <c:forEach items="${AccountUserPostList }" var="dto" >
 			<tr>
 				<td>${dto.post_id }</td>
-				<td>${dto.community_id }</td>
+				<td>${dto.community_name }</td>
 				<td>${dto.post_title }</td>
 				<td><fmt:formatDate value="${dto.post_date }" pattern="yyyy.MM.dd" /></td>
 				<td>${dto.post_cnt }</td>
@@ -121,7 +121,7 @@
 	        <c:forEach items="${AccountUserCommentsList }" var="dto" >
 	        	<c:if test="${dto.feed_comments_id !=0 && not empty dto.feed_comments_id}">
 		        	<tr>
-						<td>${dto.feed_comments_id }</td>
+						<td>피드</td>
 						<td>${dto.feed_comments_id }</td>
 						<td>${dto.feed_comments_text }</td>
 						<td><fmt:formatDate value="${dto.comments_date }" pattern="yyyy.MM.dd" /></td>
@@ -129,7 +129,7 @@
 	        	</c:if>
 	        	<c:if test="${dto.post_comments_id != 0 && not empty dto.post_comments_id}">
 				<tr>
-					<td>${dto.post_comments_id }</td>
+					<td>커뮤니티</td>
 					<td>${dto.post_comments_id }</td>
 					<td>${dto.post_comments_text }</td>
 					<td><fmt:formatDate value="${dto.comments_date }" pattern="yyyy.MM.dd" /></td>

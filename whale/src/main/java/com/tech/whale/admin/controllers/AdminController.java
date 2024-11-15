@@ -141,7 +141,7 @@ public class AdminController {
 		model.addAttribute("searchVO", searchVO);
 		model.addAttribute("pname", "유저관리");
 		model.addAttribute("contentBlockJsp",
-				"../account/adminAccountUserContent.jsp");
+				"../account/adminAccountUserListContent.jsp");
 	    model.addAttribute("contentBlockCss",
 	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
 	    accountSubBar(model);
@@ -189,7 +189,7 @@ public class AdminController {
 	@RequestMapping("/adminAccountUserInfo")
 	public String adminAccountUserInfo(
 			HttpServletRequest request,
-			SearchVO searchVO,
+			AdminSearchVO searchVO,
 			Model model) {
 		
 		model.addAttribute("request", request);
@@ -212,7 +212,7 @@ public class AdminController {
 	@RequestMapping("/adminAccountOfficialInfo")
 	public String adminAccountOfficialInfo(
 			HttpServletRequest request,
-			SearchVO searchVO,
+			AdminSearchVO searchVO,
 			Model model) {
 		
 		model.addAttribute("request", request);

@@ -36,20 +36,18 @@ public class AdminAccountUserListService implements AdminServiceInter{
 		String user_id = "";
 	    String user_email = "";
 	 	
-		String[] brdTitle = request.getParameterValues("searchType");
+		String brdTitle = request.getParameter("searchType");
 		
 		if (brdTitle == null) {
 	        user_id = "user_id";
 	        model.addAttribute("user_id", "true");
 	    } else if(brdTitle != null) {
-			for (String val : brdTitle) {
-				if(val.equals("user_id")) {
-					model.addAttribute("user_id", "true");
-					user_id="user_id";
-				}else if(val.equals("user_email")) {
-					model.addAttribute("user_email", "true");
-					user_email="user_email";
-				}
+			if(brdTitle.equals("user_id")) {
+				model.addAttribute("user_id", "true");
+				user_id="user_id";
+			}else if(brdTitle.equals("user_email")) {
+				model.addAttribute("user_email", "true");
+				user_email="user_email";
 			}
 		}
 		String searchKeyword = request.getParameter("sk");
@@ -85,6 +83,8 @@ public class AdminAccountUserListService implements AdminServiceInter{
 			list = adminIDao.adminUserList(rowStart,rowEnd,searchKeyword,"2");
 		}
 		
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("searchType", brdTitle);
 		model.addAttribute("list", list);
 		model.addAttribute("ultotRowcnt", total);
 		model.addAttribute("ulsearchVO", searchVO);

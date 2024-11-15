@@ -14,10 +14,11 @@
 	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
 	        <input type="submit" value="검색" id="searchBtn"/>
 	        <select name="searchOrderBy" id="searchOrderBy">
-	        	<option value="id_status" selected>계정상태</option>
-	        	<option value="post_desc" <c:if test="${search_order_By  == 'post_desc'}">selected</c:if> >게시글순서</option>
-	        	<option value="feed_desc" <c:if test="${search_order_By  == 'feed_desc'}">selected</c:if>>피드순서</option>
-	        	<option value="comment_desc" <c:if test="${search_order_By  == 'comment_desc'}">selected</c:if>>댓글순서</option>
+	        	<option value="USER_STATUS" selected>계정상태</option>
+	        	<option value="USER_ID" <c:if test="${search_order_By  == 'USER_ID'}">selected</c:if>>아이디</option>
+	        	<option value="POST_COUNT" <c:if test="${search_order_By  == 'POST_COUNT'}">selected</c:if> >게시글순서</option>
+	        	<option value="FEED_COUNT" <c:if test="${search_order_By  == 'FEED_COUNT'}">selected</c:if>>피드순서</option>
+	        	<option value="COMMENTS_COUNT" <c:if test="${search_order_By  == 'COMMENTS_COUNT'}">selected</c:if>>댓글순서</option>
 	        </select>
 		</form>
     </div>
@@ -52,7 +53,7 @@
 					<td><fmt:formatDate value="${dto.user_date}" pattern="yyyy.MM.dd" /></td>
 					<td>${dto.user_status_str }</td>
 					<td>
-						<button class="table-btn" onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="table-btn" onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }'" >수정</button>
+						<button class="table-btn" onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }&page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="table-btn" onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }&page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'" >수정</button>
 					</td>
 				</tr>
 			</c:forEach>
@@ -64,10 +65,10 @@
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">
-			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}"
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[처음]</a>
 			
-			                <a href="adminAccountUserListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}"
+			                <a href="adminAccountUserListView?page=${ulsearchVO.page - 1}&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}"
 			                   class="${ulsearchVO.page == 1 ? 'pagination-disabled' : ''}">[이전]</a>
 			
 			                <c:forEach begin="${ulsearchVO.pageStart}" end="${ulsearchVO.pageEnd}" var="i">
@@ -76,28 +77,28 @@
 			                            <span class="pagination-active">${i} &nbsp; &nbsp;</span>
 			                        </c:when>
 			                        <c:otherwise>
-			                            <a href="adminAccountUserListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}">${i}</a> &nbsp; &nbsp;
+			                            <a href="adminAccountUserListView?page=${i}&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}">${i}</a> &nbsp; &nbsp;
 			                        </c:otherwise>
 			                    </c:choose>
 			                </c:forEach>
 			
-			                <a href="adminAccountUserListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}"
+			                <a href="adminAccountUserListView?page=${ulsearchVO.page + 1}&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[다음]</a>
 			
-			                <a href="adminAccountUserListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}"
+			                <a href="adminAccountUserListView?page=${searchVO.totPage}&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}"
 			                   class="${ulsearchVO.page == ulsearchVO.totPage ? 'pagination-disabled' : ''}">[마지막]</a>
 			            </c:when>
 			            
 			            <c:otherwise>
-			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[처음]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}" class="pagination-disabled">[처음]</a>
 			
-			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[이전]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}" class="pagination-disabled">[이전]</a>
 			
 			                <span class="pagination-active">1 &nbsp; &nbsp;</span>
 			
-			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[다음]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}" class="pagination-disabled">[다음]</a>
 			
-			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}" class="pagination-disabled">[마지막]</a>
+			                <a href="adminAccountUserListView?page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}" class="pagination-disabled">[마지막]</a>
 			            </c:otherwise>
 			            
 			        </c:choose>

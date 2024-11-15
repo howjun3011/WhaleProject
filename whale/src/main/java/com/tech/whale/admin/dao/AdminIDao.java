@@ -6,12 +6,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.tech.whale.admin.dto.AdminAdInfoDto;
 import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminMainCntDto;
 import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
-import com.tech.whale.admin.dto.AdminOfficialInfoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
 import com.tech.whale.admin.dto.AdminWhaleNotiDto;
@@ -24,11 +22,11 @@ public interface AdminIDao {
 	public int selectAdvertiserCnt(String sk, String selNum);
 	public int selectOfficialCnt(String sk, String selNum);
 	public ArrayList<AdminUserInfoDto> adminUserList(
-			int start, int end, String sk, String selNum);
-	public ArrayList<AdminOfficialInfoDto> adminOfficialList(
-			int start, int end, String sk, String selNum);
-	public ArrayList<AdminAdInfoDto> adminAdvertiserList(
-			int start, int end, String sk, String selNum);
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum,
+			@Param("searchOrderBy") String searchOrderBy);
 	public AdminUserInfoDto userAccountInfoSelect(String userId);
 	
 	public ArrayList<AdminPFCDto> userAccountFeedSelect(

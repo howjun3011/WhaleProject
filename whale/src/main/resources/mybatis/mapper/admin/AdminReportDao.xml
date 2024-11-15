@@ -150,7 +150,7 @@
 			#{report_id},
 			#{target_type},
 			#{target_id},
-			#{myAdminId},
+			#{myId},
 			SYSDATE,
 			#{action},
 			#{actionReason},

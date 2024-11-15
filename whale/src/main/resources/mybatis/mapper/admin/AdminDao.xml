@@ -31,6 +31,27 @@
 	        </otherwise>
 	    </choose>
 	</sql>
+	<sql id="includeUserListOrderby">
+	    <choose>
+	        <when test="searchOrderBy == 'USER_STATUS'">
+	            t.USER_STATUS
+	        </when>
+	        <when test="searchOrderBy == 'USER_ID'">
+	            t.USER_ID
+	        </when>
+	        <when test="searchOrderBy == 'POST_COUNT'">
+	            t.POST_COUNT DESC
+	        </when>
+	        <when test="searchOrderBy == 'FEED_COUNT'">
+	            t.FEED_COUNT DESC
+	        </when>
+	        <when test="searchOrderBy == 'COMMENTS_COUNT'">
+	            t.COMMENTS_COUNT DESC
+	        </when>
+	        <otherwise>
+	        </otherwise>
+	    </choose>
+	</sql>
 	
 	
 	<select id="selectUserCnt" parameterType="map" resultType="int">
@@ -42,34 +63,31 @@
 	    SELECT *
 		FROM (
 		    SELECT 
-		        UI.USER_ID,
-		        UI.USER_IMAGE_URL,
-		        UI.USER_NICKNAME,
-		        UI.USER_EMAIL,
-		        UI.USER_ACCESS_ID,
-		        UI.USER_STATUS,
-		        UI.USER_DATE,
-		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
-		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
-		        (
-		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
-		            FROM POST_COMMENTS pc 
-		            WHERE pc.USER_ID = UI.USER_ID
-		        ) +
-		        (
-		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
-		            FROM FEED_COMMENTS fc 
-		            WHERE fc.USER_ID = UI.USER_ID
-		        ) AS COMMENTS_COUNT,
-		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
-		    FROM 
-		        USER_INFO UI
-		    <include refid="includeUserList" />
-		    GROUP BY 
-		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL, UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE
-		) 
+		        t.*,
+		        ROW_NUMBER() OVER (ORDER BY <include refid="includeUserListOrderby" />) AS RNUM
+		    FROM (
+		        SELECT
+		            UI.USER_ID,
+		            UI.USER_IMAGE_URL,
+		            UI.USER_NICKNAME,
+		            UI.USER_EMAIL,
+		            UI.USER_ACCESS_ID,
+		            UI.USER_STATUS,
+		            UI.USER_DATE,
+		            (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
+		            (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
+		            (
+		                (SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) FROM POST_COMMENTS pc WHERE pc.USER_ID = UI.USER_ID) +
+		                (SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) FROM FEED_COMMENTS fc WHERE fc.USER_ID = UI.USER_ID)
+		            ) AS COMMENTS_COUNT
+		        FROM 
+		            USER_INFO UI
+		        <include refid="includeUserList" />
+		    ) t
+		) final
 		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY RNUM
+
 	</select>
     
     <select id="userAccountInfoSelect" resultType="com.tech.whale.admin.dto.AdminUserInfoDto">
@@ -193,54 +211,10 @@
 	    </if>
     </update>
     
-    
-    <sql id="accessIdAdd">
-	    <choose>
-	        <when test="userAccess == 1">
-	            INSERT INTO ADMIN_INFO VALUES(ADMIN_INFO_SEQ.NEXTVAL, #{userId}, #{userAccess} )
-	        </when>
-	        <when test="userAccess == 2">
-	            INSERT INTO ADVERTISER_INFO VALUES(ADVERTISER_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
-	        </when>
-	        <when test="userAccess == 3">
-	            INSERT INTO OFFICIAL_INFO VALUES(OFFICIAL_INFO_SEQ.NEXTVAL, #{userId}, #{companyName}, #{userAccess} )
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-    
-    
-    <insert id="accessInfoAdd">
-    	<include refid="accessIdAdd" />
-    </insert>
-    <insert id="userAccessLog">
-    	INSERT INTO ACCESS_LOG VALUES(ACCESS_LOG_SEQ.NEXTVAL, #{userId}, #{accessReason}, #{userAccess}, SYSDATE, #{adminId} )
-    </insert>
-    
     <update id="userInfoAccessModify" >
     	UPDATE USER_INFO SET USER_ACCESS_ID = #{userAccess} WHERE USER_ID = #{userId}
     </update>
     
-    <sql id="accessIdDelete">
-	    <choose>
-	        <when test="userAccessNow == 1">
-	            DELETE FROM ADMIN_INFO WHERE USER_ID = #{userId}
-	        </when>
-	        <when test="userAccessNow == 2">
-	            DELETE FROM ADVERTISER_INFO WHERE USER_ID = #{userId}
-	        </when>
-	        <when test="userAccessNow == 3">
-	            DELETE FROM OFFICIAL_INFO WHERE USER_ID = #{userId}
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-    
-    <delete id="userAccessDrop" >
-    	<include refid="accessIdDelete" />
-    </delete>
     
     <update id="userStatusModify" >
     	UPDATE USER_INFO SET USER_STATUS = #{userStatus} WHERE USER_ID = #{userId}
@@ -250,88 +224,6 @@
     	INSERT INTO USER_STATUS_LOG VALUES(USER_STATUS_LOG_SEQ.NEXTVAL, #{userId}, #{userStatus}, #{statusReason}, SYSDATE, #{adminId} )
     </insert>
 
-
-
-
-
-
-
-
-	<sql id="includeOfficialCnt">
-	    <choose>
-	        <when test="param2 == 1">
-	            WHERE (USER_ID LIKE '%' || #{sk} || '%')
-	        </when>
-	        <when test="param2 == 2">
-	            WHERE (OFFICIAL_NAME LIKE '%' || #{sk} || '%')
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-	
-	<sql id="includeOfficialList">
-	    <choose>
-	        <when test="param4 == 1">
-	            AND (UI.USER_ID LIKE '%' || #{sk} || '%')
-	            
-	        </when>
-	        <when test="param4 == 2">
-	            AND (O.OFFICIAL_NAME LIKE '%' || #{sk} || '%')
-	        </when>
-	        <otherwise>
-	        </otherwise>
-	    </choose>
-	</sql>
-	
-	<select id="selectOfficialCnt" parameterType="map" resultType="int">
-        SELECT COUNT(*) FROM OFFICIAL_INFO
-        <include refid="includeOfficialCnt" />
-    </select>
-    
-    <select id="adminOfficialList" resultType="com.tech.whale.admin.dto.AdminOfficialInfoDto">
-	    SELECT *
-		FROM (
-		    SELECT 
-		        UI.USER_ID,
-		        UI.USER_IMAGE_URL,
-		        UI.USER_NICKNAME,
-		        UI.USER_EMAIL,
-		        UI.USER_ACCESS_ID,
-		        UI.USER_STATUS,
-		        UI.USER_DATE,
-		        O.OFFICIAL_NAME AS OFFICIAL_NAME,
-		        (SELECT COUNT(DISTINCT fw.FOLLOW_ID) FROM FOLLOW fw WHERE fw.USER_ID = UI.USER_ID) AS FOLLOW,
-		        (SELECT COUNT(DISTINCT fw.FOLLOW_ID) FROM FOLLOW fw WHERE fw.FOLLOW_USER_ID = UI.USER_ID) AS FOLLOWER,
-		        (SELECT COUNT(DISTINCT p.POST_ID) FROM POST p WHERE p.USER_ID = UI.USER_ID) AS POST_COUNT,
-		        (SELECT COUNT(DISTINCT f.FEED_ID) FROM FEED f WHERE f.USER_ID = UI.USER_ID) AS FEED_COUNT,
-		        (
-		            SELECT COUNT(DISTINCT pc.POST_COMMENTS_ID) 
-		            FROM POST_COMMENTS pc 
-		            WHERE pc.USER_ID = UI.USER_ID
-		        ) +
-		        (
-		            SELECT COUNT(DISTINCT fc.FEED_COMMENTS_ID) 
-		            FROM FEED_COMMENTS fc 
-		            WHERE fc.USER_ID = UI.USER_ID
-		        ) AS COMMENTS_COUNT,
-		        ROW_NUMBER() OVER (ORDER BY UI.USER_ID) AS RNUM
-		    FROM 
-		        USER_INFO UI
-		    LEFT JOIN
-		    	OFFICIAL_INFO O ON UI.USER_ID = O.USER_ID
-		    WHERE UI.USER_ACCESS_ID = 3
-		    <include refid="includeOfficialList" />
-		    GROUP BY 
-		        UI.USER_ID, UI.USER_IMAGE_URL, UI.USER_NICKNAME, UI.USER_EMAIL,
-		         UI.USER_ACCESS_ID, UI.USER_STATUS, UI.USER_DATE, O.OFFICIAL_NAME
-		) 
-		WHERE RNUM BETWEEN #{start} AND #{end}
-		ORDER BY RNUM
-	</select>
-	
-	
-	
 	<sql id="includeBoardCnt">
 	    <choose>
 	        <when test="selNum == 1">
@@ -413,8 +305,10 @@
 		        TEXT,
 		        DATE_FIELD,
 		        POST_ID,
+		        POST_NUM,
 		        POST_TITLE,
 		        COMMUNITY_NAME,
+		        COMMUNITY_ID,
 		        POST_TAG_TEXT,
 		        REPORT_FEED_COUNT,
 		        REPORT_POST_COUNT
@@ -425,8 +319,10 @@
 		            SUBSTR(F.FEED_TEXT, 1, 20) AS TEXT,
 		            F.FEED_DATE AS DATE_FIELD,
 		            NULL AS POST_ID,
+		            NULL AS POST_NUM,
 		            NULL AS POST_TITLE,
 		            NULL AS COMMUNITY_NAME,
+		            NULL AS COMMUNITY_ID,
 		            NULL AS POST_TAG_TEXT,
 		            (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE F.FEED_ID = R.FEED_ID) AS REPORT_FEED_COUNT,
 		            NULL AS REPORT_POST_COUNT
@@ -439,8 +335,10 @@
 		            DBMS_LOB.SUBSTR(P.POST_TEXT, 20, 1) AS TEXT,
 		            P.POST_DATE AS DATE_FIELD,
 		            P.POST_ID,
+		            P.POST_NUM,
 		            P.POST_TITLE,
 		            C.COMMUNITY_NAME,
+		            C.COMMUNITY_ID,
 		            PT.POST_TAG_TEXT,
 		            NULL AS REPORT_FEED_COUNT,
 		            (SELECT COUNT(DISTINCT R.REPORT_ID) FROM REPORT R WHERE P.POST_ID = R.POST_ID) AS REPORT_POST_COUNT
@@ -495,7 +393,7 @@
 	    INSERT INTO POST_DEL_LOG 
 	    (POST_DEL_LOG_ID, POST_DEL_REASON, DEL_DATE, ADMIN_ID, POST_ID, POST_COMMENTS_ID)
 	    SELECT POST_DEL_LOG_SEQ.NEXTVAL, #{comments_del_reason}, SYSDATE, 
-	    (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}),
+	    #{user_id},
 	    #{post_id}, POST_COMMENTS_ID
 	    FROM POST_COMMENTS
 	    WHERE POST_ID = #{post_id}
@@ -507,7 +405,7 @@
 	<insert id="postDelLog">
 	    INSERT INTO POST_DEL_LOG VALUES( 
 	    POST_DEL_LOG_SEQ.NEXTVAL, #{del_reason}, SYSDATE, 
-		(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), #{post_id}, null)
+		#{user_id}, #{post_id}, null)
 
 	</insert>
 	
@@ -549,7 +447,7 @@
 	    INSERT INTO FEED_DEL_LOG 
 	    (FEED_DEL_LOG_ID, FEED_DEL_REASON, DEL_DATE, ADMIN_ID, FEED_ID, FEED_COMMENTS_ID)
 	    SELECT FEED_DEL_LOG_SEQ.NEXTVAL, #{comments_del_reason}, SYSDATE, 
-	    (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}),
+	    #{user_id},
 	    #{feed_id}, FEED_COMMENTS_ID
 	    FROM FEED_COMMENTS
 	    WHERE FEED_ID = #{feed_id}
@@ -561,13 +459,13 @@
 	<insert id="feedDelLog">
 	    INSERT INTO FEED_DEL_LOG VALUES( 
 	    FEED_DEL_LOG_SEQ.NEXTVAL, #{del_reason}, SYSDATE, 
-		(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), #{feed_id}, null)
+		#{user_id}, #{feed_id}, null)
 	</insert>
 	
 	<insert id="feedCommentsOneDelLog">
 	    INSERT INTO FEED_DEL_LOG VALUES( 
 	    FEED_DEL_LOG_SEQ.NEXTVAL, #{comments_del_reason}, SYSDATE, 
-		(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), #{feed_id}, ${feed_comments_id})
+		#{user_id}, #{feed_id}, ${feed_comments_id})
 	</insert>
 	
 	<delete id="feedCommentsLikeOneDel">
@@ -584,7 +482,7 @@
 	<insert id="postCommentsOneDelLog">
 	    INSERT INTO POST_DEL_LOG VALUES( 
 	    POST_DEL_LOG_SEQ.NEXTVAL, #{comments_del_reason}, SYSDATE, 
-		(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), #{post_id}, ${post_comments_id})
+		#{user_id}, #{post_id}, ${post_comments_id})
 	</insert>
 	
 	<delete id="postCommentsLikeOneDel">
@@ -625,7 +523,7 @@
 	    SELECT POST_DEL_LOG_SEQ.NEXTVAL, 
 	           #{comments_del_reason}, 
 	           SYSDATE, 
-	           (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), 
+	           #{user_id}, 
 	           #{post_id}, 
 	           POST_COMMENTS_ID
 	    FROM POST_COMMENTS
@@ -655,7 +553,7 @@
 	    SELECT FEED_DEL_LOG_SEQ.NEXTVAL, 
 	           #{comments_del_reason}, 
 	           SYSDATE, 
-	           (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{user_id}), 
+	           #{user_id}, 
 	           #{feed_id}, 
 	           FEED_COMMENTS_ID
 	    FROM FEED_COMMENTS
@@ -808,10 +706,6 @@
 		<include refid="includepfIdFind" />
 	</select>
 	
-	<select id="myAdminId" resultType="int">
-		select admin_id from admin_info where user_id = #{myId}
-	</select>
-	
 	<update id="updateUserStatus">
 		UPDATE USER_INFO SET USER_STATUS = 0 WHERE USER_ID = #{userId}
 	</update>
@@ -889,6 +783,8 @@
 	<select id="getAdminPost" resultType="com.tech.whale.community.dto.PostDto">
 	    SELECT 
 	        P.POST_ID, 
+	        P.COMMUNITY_ID, 
+	        P.POST_NUM, 
 	        P.USER_ID, 
 	        P.POST_TEXT, 
 	        TO_CHAR(P.POST_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분"', 'NLS_DATE_LANGUAGE = KOREAN') AS POST_DATE, 
@@ -955,23 +851,23 @@
 	
 	<select id="adminMemo" resultType="com.tech.whale.admin.dto.AdminMemoDto">
 		SELECT MEMO_WRITING,MEMO_UPDATE_DATE FROM ADMIN_MEMO 
-		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+		WHERE USER_ID =  #{myId}
 	</select>
 	<select id="memoCheck" resultType="int">
 		SELECT COUNT(*) FROM ADMIN_MEMO 
-		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+		WHERE USER_ID = #{myId}
 	</select>
 	<insert id="memoCreate">
 		INSERT INTO ADMIN_MEMO VALUES(
 			ADMIN_MEMO_SEQ.NEXTVAL,
-			(SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId}),
+			#{myId},
 			NULL, 
 			SYSDATE
 		)
 	</insert>
 	<update id="memoUpdate">
 		UPDATE ADMIN_MEMO SET MEMO_WRITING = #{memoUpdateStr}, MEMO_UPDATE_DATE = SYSDATE
-		WHERE ADMIN_ID = (SELECT ADMIN_ID FROM ADMIN_INFO WHERE USER_ID = #{myId})
+		WHERE USER_ID = #{myId}
 	</update>
 	
 	<select id="musigToday" resultType="int">

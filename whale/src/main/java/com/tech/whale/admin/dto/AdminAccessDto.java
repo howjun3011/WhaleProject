@@ -17,7 +17,7 @@ public class AdminAccessDto {
 	private int ACCESS_LOG_ID;
 	private int OFFICIAL_ID;
 	private int ADVERTISER_ID;
-	private int ADMIN_ID;
+	private String ADMIN_ID;
 	private String ACCESS_REASON;
 	private Date ACCESS_LOG_DATE;
 	

@@ -76,7 +76,7 @@
 						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<%-- <button onclick = "feedDelete('${dto.feed_id}','${ulsearchVO.page}','${searchType }')" >삭제</button> --%>
 					</td>
 					</c:if>
 					
@@ -92,7 +92,7 @@
 						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
-						<button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button>
+						<%-- <button onclick = "postDelete('${dto.post_id }','${ulsearchVO.page}','${searchType }')" >삭제</button> --%>
 					</td>
 					</c:if>
 					

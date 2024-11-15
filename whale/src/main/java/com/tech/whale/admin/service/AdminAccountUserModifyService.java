@@ -42,31 +42,16 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
 		String userId = request.getParameter("userId");
-		String companyName = request.getParameter("companyName");
-		String accessReason = request.getParameter("accessReason");
 		int userAccess = Integer.parseInt(request.getParameter("userAccess"));
 		int userAccessNow = Integer.parseInt(request.getParameter("userAccessNow"));
-		
-		String adminId = (String) session.getAttribute("user_id");
 		
 		if(userAccessNow == 0) {
 			if(userAccess!= 0) {
 				adminIDao.userInfoAccessModify(userId, userAccess);
-				adminIDao.accessInfoAdd(userId, userAccess, companyName);
-				adminIDao.userAccessLog(userId, userAccess,accessReason,adminId);
-				model.addAttribute("권한설정 완료", "accessMsg");
 			}
 		}else {
-			adminIDao.userAccessDrop(userId, userAccessNow);
 			adminIDao.userInfoAccessModify(userId, userAccess);
-			adminIDao.userAccessLog(userId, userAccess,accessReason,adminId);
-			if(userAccess!= 0) {
-				adminIDao.accessInfoAdd(userId, userAccess, companyName);
-			}
-			model.addAttribute("권한설정 완료", "accessMsg");
 		}
-		
-		
 		
 	}
 	

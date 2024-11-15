@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.service.AdminAccountUserInfoService;
@@ -68,8 +69,6 @@ public class AdminController {
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminAccountUserListView", "유저관리");
-//	    subMenu.put("adminAccountOfficialListView", "오피셜관리");
-//	    subMenu.put("adminAccountClientListView", "광고주관리 오류남");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -109,25 +108,6 @@ public class AdminController {
 		model.addAttribute("request", request);
 		adminMainPageService.memoUpdate(model);
 		return "redirect:adminMainView";
-	}
-	
-	
-	@RequestMapping("/adminAccountOfficialListView")
-	public String adminAccountOfficialListView(
-			HttpServletRequest request,
-			AdminSearchVO searchVO,
-			Model model) {
-		model.addAttribute("request", request);
-		model.addAttribute("pname", "오피셜관리");
-		model.addAttribute("contentBlockJsp",
-				"../account/adminAccountOfficialContent.jsp");
-	    model.addAttribute("contentBlockCss",
-	    		"/whale/static/css/admin/account/adminAccountOfficialListContent.css");
-	    accountSubBar(model);
-	    
-	    adminAccountUserListService.officialList(model);
-	    
-		return "/admin/view/adminOutlineForm";
 	}
 	
 	
@@ -188,10 +168,18 @@ public class AdminController {
 	
 	@RequestMapping("/adminAccountUserInfo")
 	public String adminAccountUserInfo(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
 			HttpServletRequest request,
 			AdminSearchVO searchVO,
 			Model model) {
 		
+		model.addAttribute("searchOrderBy", searchOrderBy);
+		model.addAttribute("sk", sk);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("page", page);
 		model.addAttribute("request", request);
 		model.addAttribute("searchVO", searchVO);
 		model.addAttribute("pname", "유저정보");
@@ -236,9 +224,17 @@ public class AdminController {
 	
 	@RequestMapping("/adminAccountUserModify")
 	public String adminAccountUserModify(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
 			HttpServletRequest request,
 			Model model) {
 		
+		model.addAttribute("searchOrderBy", searchOrderBy);
+		model.addAttribute("sk", sk);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("page", page);
 		model.addAttribute("request", request);
 		model.addAttribute("pname", "유저정보수정");
 		model.addAttribute("contentBlockJsp",
@@ -306,10 +302,6 @@ public class AdminController {
 		
 		return "redirect:adminAccountUserModify?userId="+userId;
 	}
-	
-	///////////////////////////////////////// 보드
-	
-	
 	
 	
 }

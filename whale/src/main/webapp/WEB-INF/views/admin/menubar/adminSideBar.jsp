@@ -24,7 +24,7 @@
 		<li><a href="adminMainView">관리자메인</a></li>
 	    <li><a href="adminAccountUserListView">계정관리</a></li>
 	    <li><a href="adminBoardListView">게시판</a></li>
-	    <li><a href="adminReportListView">신고|문의</a></li>
+	    <li><a href="adminReportListView">신고문의</a></li>
 	    <li><a href="adminStatisticCFView">통계</a></li>
 	    <li><a href="">처리내역</a></li>
 	    <li><a href="">관리자설정</a></li>

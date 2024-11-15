@@ -647,14 +647,14 @@ public class SettingController {
     @Transactional
     public String deleteAccountMethod(HttpSession session,
                                       @RequestParam("password") String password,
-                                      RedirectAttributes redirectAttributes) {
+                                      Model model) {
         System.out.println("deleteAccountMethod 실행");
 
         // 세션에서 user_id 가져오기
         String sessionUserId = (String) session.getAttribute("user_id");
         System.out.println(sessionUserId);
         if (sessionUserId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            model.addAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/login";
         }
 
@@ -666,7 +666,7 @@ public class SettingController {
         // 입력한 비밀번호와 DB의 암호화 비밀번호를 비교
         if (!passwordEncoder.matches(password, storedPassword)) {
             System.out.println("비밀번호 일치하지 않음");
-            redirectAttributes.addFlashAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "redirect:/deleteAccount";
         }
 
@@ -684,11 +684,11 @@ public class SettingController {
             System.out.println("사용자 삭제 완료");
             session.invalidate();  // 세션 무효화
 
-            redirectAttributes.addFlashAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
+            model.addAttribute("successMessage", "회원 탈퇴가 완료되었습니다.");
             return "redirect:/deleteAccountResult";
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
+            model.addAttribute("errorMessage", "회원 탈퇴 중 오류가 발생했습니다.");
             return "redirect:/deleteAccount";
         }
     }

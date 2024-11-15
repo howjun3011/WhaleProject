@@ -74,12 +74,10 @@ function getSearchResults(keyword) {
                     displayFeedResults(response.feedList);
                 }
             } else {
-                // 오류 처리
                 $('.mainSearchResult').html('<p>검색 결과가 없습니다.</p>');
             }
         },
         error: function (xhr, status, error) {
-            // AJAX 오류 처리
             $('.mainSearchResult').html('<p>오류가 발생했습니다. 다시 시도해주세요.</p>');
         }
     });

@@ -21,8 +21,8 @@
     
     <select id="followingCount" resultType="int">
     SELECT COUNT(*) AS FOLLOWING_COUNT
-	FROM FOLLOW 
-	WHERE INSTR(FOLLOW_USER_ID, #{param1}) > 0
+    FROM FOLLOW
+    WHERE (',' || FOLLOW_USER_ID || ',') LIKE CONCAT('%,', CONCAT(#{user_id}, ',%'))
     </select>
     <select id="getNotiId" resultType="com.tech.whale.main.models.FollowNotiDto">
     SELECT FOLLOW_NOTI_USER_ID AS TARGET_USER_ID
@@ -48,9 +48,10 @@
     </select>
     
     <select id="getFollowingList" resultType="com.tech.whale.profile.dto.ProfileDto">
-    SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID FROM USER_INFO U
-    JOIN FOLLOW F ON U.USER_ID = F.USER_ID
-    WHERE INSTR(F.FOLLOW_USER_ID, #{param1}) > 0
+	SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID
+	FROM USER_INFO U
+	JOIN FOLLOW F ON U.USER_ID = F.USER_ID
+	WHERE (',' || FOLLOW_USER_ID || ',') LIKE CONCAT('%,', CONCAT(#{user_id}, ',%'))
     </select>
     
 	<update id="doUnfollowing">

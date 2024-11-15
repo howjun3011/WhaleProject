@@ -246,6 +246,7 @@ const MainHeaderMenuComponent = {
 			fetch('main/'+l);
 			setTimeout(() => {this.getNotification();}, 500);
 		},
+		logoutWhale() {
 			// 스프링 서버 정보 초기화
 			location.href='/whale/main/logout';
 		},

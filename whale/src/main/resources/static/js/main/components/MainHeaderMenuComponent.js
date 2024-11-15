@@ -4,7 +4,7 @@ const MainHeaderMenuComponent = {
 			<div class="headerMenu-wrap" v-if="headerMenuCheck[0]" @click="closeMenu()">
 				<div class="headerMenu-containers" @click.stop="">
 					<div class="headerMenu-container" id="headerMenu-alarm" v-if="headerMenuCheck[1]">
-						<div class="header-contents flexCenter" @click="toggleExpand(4)" :style="{backgroundColor: notificationIndex === 4 && notifications[4].length !== 0 ? '#efefef' : '#FCFCFC'}">
+						<div class="header-contents flexCenter" @click="toggleExpand(4)" :style="{}">
 							<p class="header-alarm-content">WHALE</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[4] !== 0">{{ notiCounts[4] }}</div>
 						</div>
@@ -28,7 +28,7 @@ const MainHeaderMenuComponent = {
 							</div>
 						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(0)" :style="{backgroundColor: notificationIndex === 0 && notifications[0].length !== 0 ? '#efefef' : '#FCFCFC'}">
+						<div class="header-contents flexCenter" @click="toggleExpand(0)" :style="{}">
 							<p class="header-alarm-content">메시지</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[0] !== 0">{{ notiCounts[0] }}</div>
 						</div>
@@ -72,7 +72,7 @@ const MainHeaderMenuComponent = {
 							</div>
 						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(1)" :style="{backgroundColor: notificationIndex === 1 && notifications[1].length !== 0 ? '#efefef' : '#FCFCFC'}">
+						<div class="header-contents flexCenter" @click="toggleExpand(1)" :style="{}">
 							<p class="header-alarm-content">좋아요</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[1] !== 0">{{ notiCounts[1] }}</div>
 						</div>
@@ -96,7 +96,7 @@ const MainHeaderMenuComponent = {
 							</div>
 						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(2)" :style="{backgroundColor: notificationIndex === 2 && notifications[2].length !== 0 ? '#efefef' : '#FCFCFC'}">
+						<div class="header-contents flexCenter" @click="toggleExpand(2)" :style="{}">
 							<p class="header-alarm-content">댓글</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[2] !== 0">{{ notiCounts[2] }}</div>
 						</div>
@@ -121,7 +121,7 @@ const MainHeaderMenuComponent = {
 							</div>
 						</Transition>
 						
-						<div class="header-contents flexCenter" @click="toggleExpand(3)" :style="{backgroundColor: notificationIndex === 3 && notifications[3].length !== 0 ? '#efefef' : '#FCFCFC'}">
+						<div class="header-contents flexCenter" @click="toggleExpand(3)" :style="{}">
 							<p class="header-alarm-content">팔로우</p>
 							<div class="header-noti-menu-counts" v-if="notiCounts[3] !== 0">{{ notiCounts[3] }}</div>
 						</div>
@@ -193,7 +193,7 @@ const MainHeaderMenuComponent = {
 						</Transition>
 					</div>
 					<div class="headerMenu-container" id="headerMenu-profile" v-if="headerMenuCheck[2]">
-						<div class="header-contents flexCenter" style="height: 60px; background-color: #f9f9f9; pointer-events: none;"><p class="header-nick-content">{{ userNickname }}님</p></div>
+						<div class="header-contents flexCenter" style="height: 60px; pointer-events: none;"><p class="header-nick-content">{{ userNickname }}님</p></div>
 						<div class="header-contents flexCenter" @click="redirectIframe(0,5,'')"><p class="header-profile-content">마이페이지</p></div>
 						<div class="header-contents flexCenter" @click="redirectIframe(2,6,'')"><p class="header-profile-content">설정</p></div>
 						<div class="header-contents flexCenter" @click="logoutWhale()" style="border: none; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px;"><p class="header-profile-content">로그아웃</p></div>

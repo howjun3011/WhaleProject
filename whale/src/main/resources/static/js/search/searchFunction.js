@@ -119,14 +119,14 @@ function displayPostResults(postList) {
     }
 
     postList.forEach(function (post) {
-        // 1. 이미지 태그 제거
+        // 이미지 태그 제거
         let cleanText = post.post_text.replace(/<img[^>]*>/g, '');
 
-        // 2. DOMParser를 사용하여 HTML 파싱
+        // DOMParser를 사용하여 HTML 파싱
         let parser = new DOMParser();
         let doc = parser.parseFromString(cleanText, 'text/html');
 
-        // 3. 모든 텍스트 노드 수집 (내용이 있는 것만)
+        // 모든 텍스트 노드 수집 (내용이 있는 것만)
         function getTextNodes(node) {
             let textNodes = [];
             if (node.nodeType === Node.TEXT_NODE) {
@@ -143,7 +143,7 @@ function displayPostResults(postList) {
 
         let textNodes = getTextNodes(doc.body);
 
-        // 4. 텍스트 노드를 <p> 태그로 감싸고, 최대 두 개만 사용
+        // 텍스트 노드를 <p> 태그로 감싸고, 최대 두 개만 사용
         let fragment = doc.createDocumentFragment();
         textNodes.slice(0, 1).forEach(function (textNode) {
             let p = doc.createElement('p');
@@ -151,18 +151,23 @@ function displayPostResults(postList) {
             fragment.appendChild(p);
         });
 
-        // 5. 결과 HTML 생성
+        // 결과 HTML 생성
         let tempDiv = doc.createElement('div');
         tempDiv.appendChild(fragment);
         let finalContent = tempDiv.innerHTML;
 
-        // 6. 게시글 HTML 구성
+        // 게시글 HTML 구성
         let postHtml = `
             <a href="communityDetail?c=${encodeURIComponent(post.community_id)}&p=${encodeURIComponent(post.post_id)}">
                 <div class="postItem">
-                    <h3>${post.post_title}</h3>
+                    <div class="postItemFlexBox">
+                        <div class="title">
+                            <p class="post-tag">${post.post_tag_text}</p>
+                            <h3>${post.post_title}</h3>                
+                        </div>
+                        <span>${post.user_nickname}</span>
+                    </div>
                     ${finalContent}
-                    <span>${post.user_nickname}</span>
                 </div>
             </a>`;
         resultDiv.append(postHtml);

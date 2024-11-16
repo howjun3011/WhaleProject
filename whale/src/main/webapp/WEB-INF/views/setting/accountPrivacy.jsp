@@ -51,24 +51,22 @@
     </div>
 </div>
 <script>
-    // JSP에서 서버로부터 받아온 비공개 계정 설정 값을 자바스크립트 변수로 전달
-    var accountPrivacyOn = ${accountPrivacyOn};
+    var accountPrivacyOn = ${accountPrivacyOn}; // 서버에서 전달된 비공개 계정 여부 값
 
     window.onload = function () {
         // 비공개 계정이 1이면 토글 버튼을 선택된 상태로 표현
         document.getElementById('privite-toggle-slide').checked = accountPrivacyOn == 1;
     };
 
+    // 토글 버튼 상태가 변경되었을 때 실행
     document.getElementById('privite-toggle-slide').addEventListener('change', function () {
         let accountPrivacy = this.checked ? 1 : 0; // 토글 상태에 따라 1 또는 0 설정
 
         // AJAX 요청
-        const xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest(); // 비동기 서버 요청을 처리하기 위해 객체 생성
         xhr.open('POST', '/whale/updatePrivacy', true); // 서버에 POST 요청을 보냄
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 전송할 데이터 형식 설정
-
-        // 서버로 데이터 전송
-        xhr.send('account_privacy=' + accountPrivacy);
+        xhr.send('account_privacy=' + accountPrivacy); // 서버로 데이터 전송
 
         // 서버 응답 처리
         xhr.onreadystatechange = function () {
@@ -77,7 +75,7 @@
             }
         };
 
-        // 계정이 비공개에서 공개로 변경되는 경우 privateFollowNoti 호출
+        // 계정이 비공개에서 공개로 전환되는 경우 실행
         if (accountPrivacy === 0) {
             const followNotiXhr = new XMLHttpRequest();
             followNotiXhr.open('POST', '/whale/privateFollowNoti', true);
@@ -87,9 +85,9 @@
             followNotiXhr.onreadystatechange = function () {
                 if (followNotiXhr.readyState == XMLHttpRequest.DONE) {
                     if (followNotiXhr.status == 200) {
-                        alert('Private follow notification sent successfully');
+                        console.log('Private follow notification sent successfully');
                     } else {
-                        alert('Failed to send private follow notification');
+                        console.log('Failed to send private follow notification');
                     }
                 }
             };

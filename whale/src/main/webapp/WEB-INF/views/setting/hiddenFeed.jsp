@@ -54,7 +54,7 @@
 <script>
 	// 스크롤바
 	document.addEventListener("DOMContentLoaded", function () {
-		// localStorage의 darkmodeOn 값 확인
+		// localStorage의 darkmodeOn 값을 가져와서 저장
 		const darkmodeOn = localStorage.getItem("darkmodeOn");
 
 		// darkmodeOn 값에 따라 스크롤바 스타일을 적용

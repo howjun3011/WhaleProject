@@ -38,7 +38,8 @@
             <form id="profileForm" action="/whale/deleteAccountMethod" method="post">
                 <table>
                     <tr>
-                        <td><input type="password" name="password" placeholder="비밀번호 확인"/></td>
+                        <td><input type="password" name="password" placeholder="비밀번호 확인"/>
+                        <span id="password_match_hint" class="hint-icon"> </span></td>
                         <td>
                             <button type="submit" style="display: none;" id="hiddenSubmitBtn">탈퇴하기</button>
                         </td>
@@ -53,34 +54,20 @@
         </c:if>
     </div>
     <script>
-    // 완료 버튼 클릭 시 폼 제출
-    $('#completeBtn').on('click', function (e) {
-        e.preventDefault(); // 기본 동작(페이지 리로드) 방지
-        const passwordInput = $('input[name="password"]').val();
+        // 완료 버튼 클릭 시 폼 제출
+        $('#completeBtn').on('click', function (e) {
+            e.preventDefault(); // 기본 동작(페이지 리로드) 방지
+            const passwordInput = $('input[name="password"]').val();
 
-        if (passwordInput.trim() === '') {
-            alert('비밀번호를 입력해주세요.');
-            return;
-        }
-
-        // 숨겨진 "탈퇴하기" 버튼 클릭 이벤트 트리거
-        $('#hiddenSubmitBtn').click();
-
-        // 버튼이 눌렸을 경우
-        $('#editPhotoBtn').on('mousedown', function() {
-            $(this).css('color', 'gray');
-        });
-
-        // 버튼 뗐을 경우, 다크모드 여부에 따라 색상 설정
-        $('#editPhotoBtn').on('mouseup', function() {
-            console.log('버튼 클릭');
-            if ($('.setting-body').attr('data-darkmode') === '1') {
-                $(this).css('color', 'whitesmoke');
-            } else {
-                $(this).css('color', '#335580');
+            // 비밀번호를 입력하지 않고 완료 버튼 클릭할 경우
+            if (passwordInput.trim() === '') {
+                $('input[name="password"]').focus(); // 비밀번호 입력 필드로 포커스 이동
+                return;
             }
+
+            // 숨겨진 "탈퇴하기" 버튼 클릭 이벤트 트리거
+            $('#hiddenSubmitBtn').click();
         });
-    });
     </script>
 </body>
 </html>

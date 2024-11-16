@@ -27,17 +27,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class SettingController {
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     UserInfoDto userinfoDto;
     StartpageDto startpageDto;
     UserSettingDto userSettingDto;
     UserNotificationDto userNotificationDto;
-    BlockDto blockDto;
     PageAccessDto pageAccessDto;
     LikeListDto likeListDto;
     CommentListDto commentListDto;
-    HiddenFeedDto hiddenFeedDto;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private MainService mainService;
@@ -63,15 +60,14 @@ public class SettingController {
     public String profileEdit(HttpServletRequest request, HttpSession session, Model model) {
         System.out.println("profileEdit() ctr");
 
-        // 세션에서 user_id 가져오기
+        // 세션에서 가져온 user_id 저장
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println(session_user_id); // debug
 
+        // user_id의 정보 가져오기
         userinfoDto = settingDao.getProfile(session_user_id);
 
+        // model에 저장
         model.addAttribute("profile", userinfoDto);
-        System.out.println("current_img_url: " + userinfoDto.getUser_image_url()); // debug
-        System.out.println("대표곡: " + userinfoDto.getUser_track_id()); // debug
 
         return "setting/profileEdit";
     }
@@ -89,30 +85,34 @@ public class SettingController {
         System.out.println("checkCurrentPassword() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
+
+        // 사용자의 현재 비밀번호 가져오기
         String dbPassword = settingDao.getCurrentPassword(session_user_id);
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>(); // 응답 데이터 저장할 Map 객체 생성(key-value)
+
+        // passwordEncoder.matches()를 사용해 입력한 비밀번호(currentPassword)를 암호화해 DB에 저장된 비밀번호(dbPassword)와 비교
         if (passwordEncoder.matches(currentPassword, dbPassword)) {
+            // 비밀번호가 일치하라 경우 응답 데이터에 status를 valid로 설정
             response.put("status", "valid");
         } else {
             response.put("status", "invalid");
         }
 
-        return response;
+        return response; // json 형태로 전달
     }
 
     @PostMapping("/updateNewPassword")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> updateNewPassword(
-            @RequestParam("new_password") String newPassword, HttpSession session) {
+    public ResponseEntity<Map<String, String>> updateNewPassword(@RequestParam("new_password") String newPassword, HttpSession session) {
         System.out.println("updateNewPassword() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
-        String encodedPassword = passwordEncoder.encode(newPassword); // 암호화된 새로운 pw
+        String encodedPassword = passwordEncoder.encode(newPassword); // encode()를 사용해 입력된 비밀번호를 해싱 처리
 
-        // JSON 응답으로 success 메시지 반환
-        Map<String, String> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>(); // Map 객체 생성
 
+        // 암호화된 새로운 비밀번호 업데이트
         settingDao.updatePassword(session_user_id, encodedPassword);
         response.put("status", "success");
 
@@ -120,25 +120,21 @@ public class SettingController {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@RequestParam("user_nickname") String nickname,
-                                @RequestParam("user_email") String email,
-                                @RequestParam(value = "user_profile_image_url", required = false) String userProfileImageUrl,
-                                HttpSession session) {
+    public String updateProfile(@RequestParam("user_nickname") String nickname, @RequestParam("user_email") String email, @RequestParam(value = "user_profile_image_url", required = false) String userProfileImageUrl, HttpSession session) {
         System.out.println("updateProfile() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        // 새로운 프로필 이미지가 없을 경우 기존 이미지 사용
+        // 프로필 이미지를 변경하지 않은 경우 DB에 저장된 url 값을 가져오기
         if (userProfileImageUrl == null || userProfileImageUrl.isEmpty()) {
             userProfileImageUrl = settingDao.getCurrentProfileImage(session_user_id);
         }
 
         // DB에 변경한 프로필 정보 업데이트
         settingDao.updateProfile(nickname, email, userProfileImageUrl, session_user_id);
-
         System.out.println("DB 업데이트 완료");
 
-        return "redirect:/profileEdit";
+        return "redirect:/profileEdit"; // profileEdit 페이지로 리다이렉트
     }
 
     @RequestMapping("/representiveSong")
@@ -150,23 +146,24 @@ public class SettingController {
 
     @PostMapping(value = "/updateRepresentive", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateRepresentive(@RequestBody HashMap<String, Object> map, HttpSession session) {
+        // 클라이언트가 보낸 데이터를 HashMap으로 받음
         System.out.println("updateRepresentive() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println(session_user_id);
 
-        // [ 스트리밍 검색 기능: 트랙 테이블에 해당 정보 확인 후 추가. 프라이머리 키를 반환. ]
-        String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name");
+        // 스트리밍 검색 기능
+        // 클라이언트가 보낸 JSON 데이터를 파싱해서 트랙 정보 추출
+        String artistName = ((ArrayList<HashMap<String, String>>) map.get("artists")).get(0).get("name"); // artists 필드는 배열 형식이므로 ArrayList<HashMap<String, String>>로 캐스팅
         String trackName = map.get("name").toString();
         String albumName = ((Map<String, String>) map.get("album")).get("name");
-        String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url");
+        String albumCover = (((Map<String, ArrayList<HashMap<String, String>>>) map.get("album")).get("images")).get(0).get("url"); // 앨범 객체의 images 배열의 첫 번째 이미지 객체 url 가져오기
         String trackSpotifyId = map.get("id").toString();
 
+        // selectTrackIdService 메소드 호출해서 trackId 가져오기
         String trackId = streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
         System.out.println(trackId);
 
-        // user_info 테이블의 representivesong 필드에 trackId 업데이트
-        settingDao.updateRepresentiveSong(session_user_id, trackId);
+        settingDao.updateRepresentiveSong(session_user_id, trackId); // user_info 테이블의 representivesong 필드에 trackId 업데이트
         System.out.println("대표곡 업데이트 완료");
 
         // 성공 응답 반환
@@ -188,9 +185,7 @@ public class SettingController {
 
 //      비공개 계정 설정 값 가져오기
         userSettingDto = settingDao.getAccountPrivacyByUserId(session_user_id);
-        System.out.println("accountPrivacy value : " + userSettingDto.getAccount_privacy());
 
-//      JSP로 데이터 전달
         model.addAttribute("accountPrivacyOn", userSettingDto.getAccount_privacy());
 
         return "setting/accountPrivacy";
@@ -203,15 +198,9 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        // Follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
-        List<String> followList = settingDao.getFollowRequestList(session_user_id);
+        List<String> followList = settingDao.getFollowRequestList(session_user_id); // Follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
 
-        // debug
-        for (String follow : followList) {
-            System.out.println(follow);
-        }
-
-        // 비공개 계정에서 공개로 풀었을 경우 follow 테이블에 추가(상대방 팔로잉에 +1) + follow_noti 테이블에서 알림 삭제 + 상대방한테 follow 알림 보내기
+        // 비공개 계정에서 공개로 전환할 경우 follow 테이블에 추가(상대방 팔로잉에 +1) + follow_noti 테이블에서 팔로우 요청 알림 삭제 + 상대방한테 follow_noti 알림 보내기 + 사용자한테 follow_noti 알림 보내기
         for (String follow_id : followList) {
             mainService.privateFollowNotiMainService(session_user_id, follow_id);
         }
@@ -219,7 +208,6 @@ public class SettingController {
         return "success";
     }
 
-    //  슬라이드 버튼에 의해서 on이면 0(비공개 계정 설정), off면 1(공개 계정 설정)
     @PostMapping("/updatePrivacy")
     @ResponseBody
     public String updatePrivacy(@RequestParam("account_privacy") int accountPrivacy, HttpSession session) {
@@ -227,8 +215,7 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-//       DB 업데이트
-        settingDao.updateAccountPrivacy(session_user_id, accountPrivacy);
+        settingDao.updateAccountPrivacy(session_user_id, accountPrivacy); // 비공개 계정 여부 DB 업데이트
 
         return "success";
     }
@@ -239,7 +226,8 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        List<HiddenFeedDto> hiddenFeedList = settingDao.getHiddenFeedList(session_user_id);
+        // 숨긴 피드 가져오기
+        List<HiddenFeedDto> hiddenFeedList = settingDao.getHiddenFeedList(session_user_id); 
 
         model.addAttribute("hiddenFeedList", hiddenFeedList);
 
@@ -628,15 +616,14 @@ public class SettingController {
 
     @RequestMapping("/deleteAccount")
     public String deleteAccount(HttpServletRequest request, HttpSession session, Model model) {
-        System.out.println("deleteAccount 페이지 열림");
+        System.out.println("deleteAccount ctr()");
 
-        // 세션에서 user_id 가져오기 (필요 시 사용)
-        String sessionUserId = (String) session.getAttribute("user_id");
-        if (sessionUserId == null) {
+        String session_user_id = (String) session.getAttribute("user_id");
+
+        if (session_user_id == null) {
             // 세션에 user_id가 없으면 로그인 페이지로 리다이렉트
             return "redirect:/";
         }
-
         return "setting/deleteAccount";
     }
 
@@ -645,32 +632,26 @@ public class SettingController {
 
     @PostMapping("/deleteAccountMethod")
     @Transactional
-    public String deleteAccountMethod(HttpSession session,
-                                      @RequestParam("password") String password,
-                                      Model model) {
-        System.out.println("deleteAccountMethod 실행");
+    public String deleteAccountMethod(HttpSession session, @RequestParam("password") String password, Model model) {
+        System.out.println("deleteAccountMethod ctr()");
 
-        // 세션에서 user_id 가져오기
         String sessionUserId = (String) session.getAttribute("user_id");
-        System.out.println(sessionUserId);
+
+        // session에 아이디가 없을 경우
         if (sessionUserId == null) {
             model.addAttribute("errorMessage", "로그인이 필요합니다.");
-            return "redirect:/login";
+            return "redirect:/login"; // login 페이지로 리다이렉트
         }
 
-        // 비밀번호 검증 로직
+        // 암호화된 현재 비밀번호 가져오기
         String storedPassword = userDao.getPasswordByUsername(sessionUserId);
-        System.out.println("DB에서 가져온 암호화된 비밀번호: " + storedPassword);
-        System.out.println("입력한 비밀번호: " + password);
 
-        // 입력한 비밀번호와 DB의 암호화 비밀번호를 비교
+        // 입력한 비밀번호와 DB의 암호화된 비밀번호 비교
         if (!passwordEncoder.matches(password, storedPassword)) {
-            System.out.println("비밀번호 일치하지 않음");
+            // 비밀번호가 일치하지 않을 경우
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "setting/deleteAccount";
         }
-
-        System.out.println("비밀번호 일치함");
 
         try {
             // 탈퇴 전 팔로잉 관계 해제
@@ -695,7 +676,8 @@ public class SettingController {
 
     @RequestMapping("/deleteAccountResult")
     public String deleteAccountResult() {
-        System.out.println("deleteAccountResult 페이지 열림");
+        System.out.println("deleteAccountResult ctr()");
+
         return "setting/deleteAccountResult";
     }
 

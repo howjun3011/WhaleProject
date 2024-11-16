@@ -55,25 +55,28 @@
 	<script>
 		// 완료 버튼 클릭 시 데이터 업데이트
 		document.getElementById("completeBtn").addEventListener("click", function() {
-			const body = $('input[name="track"]:checked')[0].value;
+			const body = $('input[name="track"]:checked')[0].value; // 사용자가 선택한 트랙의 값 가져오기(체크된 라디오 버튼의 value)
+
+			// 서버로 요청 전송
 			fetch(`/whale/updateRepresentive`, {
 				headers: {
 					'Accept': 'application/json',
-		            'Content-Type': 'application/json'
+		            'Content-Type': 'application/json' // 요청 데이터의 Content-Type 설정
 		        },
 		        method: 'POST',
-		        body: body
+		        body: body // 요청 본문에 사용자가 선택한 트랙 정보를 포함
 			})
+			// 서버 응답 처리
 			.then(response => {
 				if(response.ok) {
-					// 서버에서 성공 응답을 받은 경우 페이지 이동
+					// 서버에서 성공 응답을 받은 경우 profileEdit 페이지로 이동
 					window.location.href = '/whale/profileEdit';
 				} else {
-					console.log('서버 응답에 오류가 있습니다.');
+					console.log('서버 응답에 오류가 있습니다.'); // debug
 				}
 			})
 			.catch(error => {
-				console.log('요청 중 오류 발생:', error);
+				console.log('요청 중 오류 발생:', error); // debug
 			});
 		});
 	</script>

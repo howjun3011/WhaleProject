@@ -95,48 +95,7 @@
         </div>
     </div>
     <script>
-    // 이미지 업로드 및 미리보기 함수 (전역 범위)
-    function uploadImageAndPreview(event) {
-        var file = event.target.files[0];
-        if (file) {
-            // 이미지 미리보기
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById("profileImage").src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-
-            // 이미지 파일을 서버에 업로드
-            var formData = new FormData();
-            formData.append('file', file);
-
-            $.ajax({
-                url: '/whale/uploadImageSetting',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(response) {
-                    console.log('Server response:', response);
-                    if (response.status === 'success') {
-                        var imageUrl = response.imageUrl;
-                        // 이미지 URL을 숨겨진 필드에 저장
-                        document.getElementById("user_profile_image_url").value = imageUrl;
-                    } else {
-                        console.error('Image upload failed');
-                        alert('이미지 업로드에 실패했습니다.');
-                    }
-                },
-                error: function(error) {
-                    console.error('Error:', error);
-                    alert('이미지 업로드 중 오류가 발생했습니다.');
-                }
-            });
-        }
-    }
-
-    // DOM이 로드된 후 실행되는 함수
+    // 페이지가 로드되었을 때 실행될 초기화 함수
     $(document).ready(function() {
         // 사진 수정 버튼 클릭 시 파일 선택 창 열기
         $('#editPhotoBtn').on('click', function() {
@@ -151,21 +110,70 @@
             $('#profileForm').submit();
         });
 
-        // 버튼이 눌렸을 경우
+        // 사진 수정 버튼이 눌렸을 경우
         $('#editPhotoBtn').on('mousedown', function() {
             $(this).css('color', 'gray');
         });
 
         // 버튼 뗐을 경우, 다크모드 여부에 따라 색상 설정
         $('#editPhotoBtn').on('mouseup', function() {
-            console.log('버튼 클릭');
             if ($('.setting-body').attr('data-darkmode') === '1') {
-                $(this).css('color', 'whitesmoke');
+                $(this).css('color', 'whitesmoke'); // 다크모드일 경우
             } else {
-                $(this).css('color', '#335580');
+                $(this).css('color', '#335580'); // 라이트모드일 경우
             }
         });
     });
+
+    // 이미지 업로드 및 미리보기 함수
+    function uploadImageAndPreview(event) {
+        var file = event.target.files[0]; // 사용자가 선택한 파일 가져오기(input[type = "file"]의 change 이벤트로 전달된 파일)
+
+        // 사용자가 파일을 선택한 경우에만 실행
+        if (file) {
+            // 1. 이미지 미리보기
+            var reader = new FileReader(); // FileReader 객체 생성해서 파일 내용 읽을 준비
+
+            // FileReader가 파일 읽기를 완료했을 때 호출될 콜백 함수 정의
+            reader.onload = function(e) {
+                // 읽은 파일 데이터를 <img> 태그의 src 속성에 설정해서 미리보기를 표시
+                document.getElementById("profileImage").src = e.target.result;
+            };
+
+            // 파일을 Base64 데이터 url로 읽어오기(이미지 미리보기용)
+            reader.readAsDataURL(file);
+
+            // 2. 서버로 이미지 파일 업로드
+            var formData = new FormData(); // FormData 객체 생성(파일 데이터를 서버로 전송하기 위한 포맷)
+            formData.append('file', file); // FormData에 파일 데이터를 'file'이라는 키로 추가
+
+            // jQuery AJAX 요청을 사용해 서버에 데이터 전송(구글 클라우드 스토리지에 업로드)
+            $.ajax({
+                url: '/whale/uploadImageSetting', // 업로드를 처릴할 서버의 url
+                type: 'POST',
+                data: formData, // 전송할 데이터(FormData 객체)
+                contentType: false, // jQuery에서 기본적으로 데이터 url 인코딩하는 설정을 비활성화(파일 전송이므로 필요)
+                processData: false, // jQuery에서 데이터를 자동으로 처리하지 않돋록 설정(파일 전송이므로 필요)
+                dataType: 'json',
+                // 서버로부터 성공적인 응답을 받았을 때 실행될 콜백 함수
+                success: function(response) {
+                    console.log('Server response:', response); // debug
+                    if (response.status === 'success') {
+                        var imageUrl = response.imageUrl; // 서버에서 반환된 이미지 url 저장
+                        document.getElementById("user_profile_image_url").value = imageUrl; // 업로드한 이미지 url을 숨겨진 <input> 필드에 저장
+                    } else {
+                        console.error('Image upload failed');
+                        alert('이미지 업로드에 실패했습니다.');
+                    }
+                },
+                // 서버 요청 도중 에러 발생 시 실행될 콜백 함수
+                error: function(error) {
+                    console.error('Error:', error);
+                    alert('이미지 업로드 중 오류가 발생했습니다.');
+                }
+            });
+        }
+    }
     </script>
 </body>
 </html>

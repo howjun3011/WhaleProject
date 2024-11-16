@@ -45,125 +45,139 @@
 		.setting-body[data-darkmode="1"] .checkmark-icon img { width: 100%; height: 100%; }
 	</style>
 	<script>
+		// 페이지가 완전히 로드된 후 실행되는 초기화 함수
 		$(document).ready(function() {
-			// 비밀번호 입력 이벤트를 제대로 바인딩
+			// 완료 버튼 숨기기
+			$("#completeBtn").hide();
+
+			// 비밀번호 입력 이벤트를 제대로 바인딩(입력 이벤트가 발생할 때마다 validatedPassword 함수 호출)
 			$("#current_password, #update_password, #check_password").on("input", validatePassword);
 		});
 
+		// 사용자가 입력한 현재 비밀번호 확인 함수
 		function checkCurrentPassword(current_password) {
 			console.log("Current Password: ", current_password); // debug
 
+			// ajax 요청
 			$.ajax({
-				url: "/whale/checkCurrentPassword", // 서버의 API URL
+				url: "/whale/checkCurrentPassword",
 				type: "POST",
 				data: { current_password: current_password }, // 사용자가 입력한 비밀번호를 전송
+
+				// 서버 응답을 성공적으로 받은 경우 실행될 콜백 함수
 				success: function(response) {
-					console.log("응답: ", response); // 서버에서 받은 응답
+					console.log("응답: ", response); // debug
 
 					// 응답의 status가 'valid'인 경우
 					if (response.status === "valid") {
-						alert("비밀번호가 확인되었습니다.");
 						// 현재 비밀번호 컨테이너 숨기기
 						$("#current-password-container").hide();
-						// 새로운 비밀번호 입력 필드 보여주기
+						// 새로운 비밀번호 입력 필드와 확인 필드 표시
 						$("#new-password-container").show();
 						$("#confirm-password-container").show();
-						// 비밀번호 입력 이벤트 바인딩
+						// 새로운 비밀번호 입력 및 확인 필드에 유효성 검사 이벤트 바인딩
 						$("#update_password, #check_password").on("input", validatePassword);
 					} else {
-						alert("현재 비밀번호가 일치하지 않습니다.");
 						$("#pass-check").text("현재 비밀번호 불일치").css("color", "#FF6C6C");
+						$("#current_password").val("");
 					}
 				},
+				// 서버 요청 중 에러 발생 시 실행될 콜백 함수
 				error: function(xhr, status, error) {
-					console.error("오류: ", error); // 오류 로그
-					alert("서버와 통신 중 문제가 발생했습니다.");
+					console.error("오류: ", error);
 				}
 			});
 		}
 
 		// 비밀번호 유효성 검사 함수
 		function validatePassword() {
-			let currentPassword = $("#current_password").val();
-			let newPassword = $("#update_password").val();
-			let checkPassword = $("#check_password").val();
+			// 각 필드의 값 가져오기
+			let currentPassword = $("#current_password").val(); // 현재 비밀번호
+			let newPassword = $("#update_password").val(); // 새로운 비밀번호
+			let checkPassword = $("#check_password").val(); // 비밀번호 확인
+			// 비밀번호 정규식 : 8자리 이상, 대문자, 소문자, 숫자, 특수문자 포함 필수
 			let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-			let password_checkmark_1 = $("#password_checkmark_1");
-			let password_checkmark_2 = $("#password_checkmark_2");
-			let passwordHint = $("#password_hint");
-			let password_match_hint = $("#password_match_hint");
+			// 체크마크 및 힌트를 표시할 html 요소 가져오기
+			let password_checkmark_1 = $("#password_checkmark_1"); // 새로운 비밀번호 체크마크
+			let password_checkmark_2 = $("#password_checkmark_2"); // 비밀번호 확인 체크마크
+			let passwordHint = $("#password_hint"); // 새로운 비밀번호 입력에 대한 힌트
+			let password_match_hint = $("#password_match_hint"); // 비밀번호 확인에 대한 힌트
 
+			// 필드 크기에 따라 힌트 크기를 조정하는 resize 함수
 			function resize() {
-				var inputWidth = $('#update_password').width();
-				console.log(inputWidth);
-				$('#password_hint').css({'width': (inputWidth-5)+'px'});
+				var inputWidth = $('#update_password').width(); // 새로운 비밀번호 필드의 너비
+				var inputWidth2 = $('#check_password').width(); // 비밀번호 확인 필드의 너비
+				$('#password_hint').css({'width': (inputWidth-5)+'px'}); // 힌트 너비를 입력 필드에 맞게 조정
+				$('#password_match_hint').css({'width': (inputWidth2-5)+'px'}); // 힌트 너비를 입력 필드에 맞게 조정
 			};
 
 			// 새로운 비밀번호 유효성 검사
 			if (newPassword.length === 0) {
-				passwordHint.html("");
-				password_checkmark_1.html("");
+				// 새로운 비밀번호 필드가 비어있는 경우
+				passwordHint.html(""); // 힌트 비우기
+				password_checkmark_1.html(""); // 체크마크 제거
 			} else if (currentPassword === newPassword) {
-				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
-				password_checkmark_1.html("");
+				// 새로운 비밀번호가 현재 비밀번호와 동일한 경우
+				passwordHint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C"); // 힌트 표시
+				password_checkmark_1.html(""); // 체크마크 제거
 			} else if (!passwordRegex.test(newPassword)) {
-				passwordHint.text("특수문자, 대소문자, 숫자를 포함한 8자리 이상 입력하세요.").css("color", "#FF6C6C");
-				password_checkmark_1.html("");
-				$(document).ready(() => {resize();});
+				// 새로운 비밀번호가 정규식 조건을 만족하지 않는 경우
+				passwordHint.text("특수문자, 대소문자, 숫자를 포함한 8자리 이상 입력하세요.").css("color", "#FF6C6C"); // 힌트 표시
+				password_checkmark_1.html(""); // 체크마크 제거
+				$(document).ready(() => {resize();}); // 입력 필드 크기에 맞게 힌트 크기 조정
 			} else {
-				// 비밀번호가 유효한 경우
-				passwordHint.html("");
-				password_checkmark_1.html('<img src="static/images/setting/passcheck.png" alt="일치">');
+				// 새로운 비밀번호가 유효한 경우
+				passwordHint.html(""); // 힌트 비우기
+				password_checkmark_1.html('<img src="static/images/setting/passcheck.png" alt="일치">'); // 체크마크 추가
 			}
 
-			// 두 비밀번호가 일치하는지 검사
-			if (newPassword.length === 0 || checkPassword.length === 0) { // 필드가 비어있으면
-				password_match_hint.html("");
-				password_checkmark_2.html("");
+			// 새로운 비밀번호 필드와 비밀번호 확인 필드의 값 일치 여부 검사
+			if (newPassword.length === 0 || checkPassword.length === 0) {
+				// 필드가 비어있으면
+				password_match_hint.html(""); // 힌트 비우기
+				password_checkmark_2.html(""); // 체크마크 제거
+				$("#completeBtn").hide(); // 완료 버튼 숨기기
 			} else if ((currentPassword === newPassword) && (newPassword === checkPassword)) {
-				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C");
-				password_checkmark_2.html("");
-			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) { // 정규식을 만족하면서 두 필드가 일치
-				password_match_hint.html("");
-				// 이미지 동적 추가
-				password_checkmark_2.html('<img src="static/images/setting/passcheck.png" alt="일치">');
+				// 현재 비밀번호와 새로운 비밀번호가 같으면서 확인 비밀번호도 일치하는 경우
+				password_match_hint.text("현재 비밀번호 사용 불가능").css("color", "#FF6C6C"); // 힌트 표시
+				password_checkmark_2.html(""); // 체크마크 제거
+				$("#completeBtn").hide(); // 완료 버튼 숨기기
+			} else if (newPassword === checkPassword && passwordRegex.test(newPassword)) {
+				// 새로운 비밀번호와 확인 비밀번호가 일치하고 정규식 조건을 만족하는 경우
+				password_match_hint.html(""); // 힌트 비우기
+				password_checkmark_2.html('<img src="static/images/setting/passcheck.png" alt="일치">'); // 체크마크 추가
+				$("#completeBtn").show(); // 완료 버튼 표시
 			} else {
-				password_checkmark_2.html("");
-				password_match_hint.text("불일치").css("color", "#FF6C6C");
+				password_checkmark_2.html(""); // 체크마크 제거
+				password_match_hint.text("불일치").css("color", "#FF6C6C"); // 힌트 표시
+				$("#completeBtn").hide(); // 완료 버튼 숨기기
 			}
 		}
 
+		// 비밀번호 변경 요청 처리하는 함수
 		function updatePassword() {
-			let currentPassword = $("#current_password").val();
-			let newPassword = $("#update_password").val();
-			let checkPassword = $("#check_password").val();
+			let newPassword = $("#update_password").val(); // 새로운 비밀번호
 
-			if (newPassword !== checkPassword) {
-				alert("비밀번호가 일치하지 않습니다.");
-				return;
-			} else if ((currentPassword === newPassword) && (newPassword === checkPassword)) {
-				alert("현재 비밀번호와 같은 비밀번호를 사용할 수 없습니다.");
-				return;
-			}
-
-			console.log("new_password:", newPassword); // 값 확인
-
+			// 서버에 새로운 비밀번호 전송
 			$.ajax({
 				url: "/whale/updateNewPassword",
 				type: "POST",
-				data: { new_password: newPassword },
+				data: { new_password: newPassword }, // 새로운 비밀번호를 서버에 전달
+
+				// 서버 응답이 성공적일 때 실행되는 콜백 함수
 				success: function(response) {
 					// JSON 응답 처리
 					if (response.status === "success") {
 						alert("비밀번호가 성공적으로 변경되었습니다.");
-						window.location.href = "/whale/profileEdit";
+						window.location.href = "/whale/profileEdit"; // profileEdit 페이지로 리다이렉트
 					} else {
 						alert("비밀번호 변경에 실패했습니다.");
 					}
 				},
+				// 서버 요청 중 오류 발생 시 실행되는 콜백 함수
 				error: function(xhr, status, error) {
-					console.error("오류: ", error); // 오류 로그
+					console.error("오류: ", error);
 					alert("비밀번호 변경 요청에 실패했습니다: " + xhr.responseText);
 				}
 			});
@@ -176,7 +190,7 @@
 		<div class="setting-header">
 			<a href="profileEdit" id="back"><img src="static/images/setting/back.png" alt="back"></a>
 			비밀번호 변경
-			<button type="button" id="completeBtn" class="complete-btn" onclick="updatePassword();">완료</button>
+			<button type="button" id="completeBtn" class="complete-btn" style="display: none;" onclick="updatePassword();">완료</button>
 		</div>
 		<div id="password-fields">
 			<!-- 현재 비밀번호 컨테이너 -->

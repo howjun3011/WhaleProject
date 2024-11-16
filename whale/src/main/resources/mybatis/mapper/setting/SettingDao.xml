@@ -247,7 +247,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	<select id="getHiddenFeedList" parameterType="map" resultType="com.tech.whale.setting.dto.HiddenFeedDto">
+	<select id="getHiddenFeedList" resultType="com.tech.whale.setting.dto.HiddenFeedDto">
 		SELECT F.FEED_ID, F.FEED_TEXT, FI.FEED_IMG_URL
 		FROM FEED F JOIN FEED_IMG FI
 						 ON F.FEED_ID = FI.FEED_ID

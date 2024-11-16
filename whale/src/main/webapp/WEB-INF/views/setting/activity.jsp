@@ -17,7 +17,7 @@
 </style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
 	<div class="setting-container">
 		<div class="setting-header">
 		<a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>

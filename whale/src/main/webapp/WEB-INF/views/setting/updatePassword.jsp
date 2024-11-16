@@ -10,112 +10,39 @@
 	<script src="static/js/setting/setting.js"></script>
 	<script src="static/js/setting/darkMode.js"></script>
 	<style>
-		a{
-			text-decoration: none;
-			color: black;
-		}
-		a:visited, a:hover, a:focus, a:active {
-			color: black;
-			text-decoration: none;
-		}
-		#back {
-			position: absolute;
-			left: 15px;
-			top: 55%;
-			transform: translateY(-50%);
-		}
-		.complete-btn {
-			font-size: 20px;
-			position: absolute;
-			top: 15px;
-			color: black;
-			right: 7px;
-			background-color: transparent; /* 버튼의 배경색을 투명으로 설정 */
-			border: none;
-			padding: 5px 10px;
-			border-radius: 4px;
-			cursor: pointer;
-		}
-		.complete-btn:hover {
-			color: #5A5A5A;
-		}
-		.setting-body[data-darkmode="0"] button{
-			background-color: transparent;
-			border: none;
-			cursor: pointer;
-			margin-left: 5px;
-			color: #335580;
-		}
-		.setting-body[data-darkmode="0"] button:hover{
-			color: black;
-		}
-		.setting-body[data-darkmode="1"] button{
-			background-color: transparent;
-			border: none;
-			cursor: pointer;
-			margin-left: 5px;
-			color: whitesmoke;
-		}
-		.setting-body[data-darkmode="1"] button:hover{
-			color: lightgray;
-		}
-		#password-fields{
-			display: block;
-			margin-top: 20px;
-			justify-content: center;
-		}
-		.input-container{
-			display: flex;
-			flex-direction: column;
-			min-height: 40px;
-			margin: 20px auto 0 auto;
-			width: fit-content;
-		}
-		.input-row{
-			display: flex;
-			align-items: center;
-		}
-		#password_hint, #password_match_hint{
-			display: flex;
-			margin-top: 3px;
-			font-size: 10px;
-			margin-left: 3px;
-		}
-		#pass-check{
-			font-size: 10px;
-			margin-top: 3px;
-			margin-left: 5px;
-		}
-		.setting-body[data-darkmode="0"] input[type="password"] {
-			padding: 5px;
-			background-color: #FCFCFC;
-			border: none; /* 테두리 없애기 */
-			border-bottom: 2px solid #ccc; /* 밑줄 추가 */
-			outline: none; /* 포커스 시 파란 테두리 없애기 */
-		}
-		.setting-body[data-darkmode="0"] input[type="password"]:focus {
-			border-bottom: 2px solid #7E7E7E; /* 포커스 시 밑줄 색 변경 */
-		}
-		.setting-body[data-darkmode="1"] input[type="password"] {
-			padding: 5px;
-			color: whitesmoke;
-			background-color: rgb(46, 46, 46);
-			border: none; /* 테두리 없애기 */
-			border-bottom: 2px solid #ccc; /* 밑줄 추가 */
-			outline: none; /* 포커스 시 파란 테두리 없애기 */
-		}
-		.setting-body[data-darkmode="1"] input[type="password"]:focus {
-			border-bottom: 2px solid #f1f1f1; /* 포커스 시 밑줄 색 변경 */
-		}
-		.checkmark-icon {
-			width: 17px; /* 아이콘 크기 조정 */
-			height: 17px;
-			margin-left: 5px;
-		}
-		.checkmark-icon img {
-			width: 100%;
-			height: 100%;
-		}
+		.setting-body[data-darkmode="0"] button { background-color: transparent; border: none; cursor: pointer; margin-left: 5px; color: #335580; }
+		.setting-body[data-darkmode="0"] button:hover { color: black; }
+		.setting-body[data-darkmode="0"] a { text-decoration: none; color: black; }
+		.setting-body[data-darkmode="0"] a:visited, .setting-body[data-darkmode="0"] a:hover, .setting-body[data-darkmode="0"] a:focus, .setting-body[data-darkmode="0"] a:active { color: black; text-decoration: none; }
+		.setting-body[data-darkmode="0"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="0"] .complete-btn { font-size: 20px; position: absolute; top: 15px; color: black; right: 7px; background-color: transparent; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+		.setting-body[data-darkmode="0"] .complete-btn:hover { color: #5A5A5A; }
+		.setting-body[data-darkmode="0"] #password-fields { display: block; margin-top: 20px; justify-content: center; }
+		.setting-body[data-darkmode="0"] .input-container { display: flex; flex-direction: column; min-height: 40px; margin: 20px auto 0 auto; width: fit-content; }
+		.setting-body[data-darkmode="0"] .input-row { display: flex; align-items: center; }
+		.setting-body[data-darkmode="0"] #password_hint, .setting-body[data-darkmode="0"] #password_match_hint { display: flex; margin-top: 3px; font-size: 10px; margin-left: 3px; }
+		.setting-body[data-darkmode="0"] #pass-check { font-size: 10px; margin-top: 3px; margin-left: 5px; }
+		.setting-body[data-darkmode="0"] input[type="password"] { padding: 5px; background-color: #FCFCFC; border: none; border-bottom: 2px solid #ccc; outline: none; }
+		.setting-body[data-darkmode="0"] input[type="password"]:focus { border-bottom: 2px solid #7E7E7E; }
+		.setting-body[data-darkmode="0"] .checkmark-icon { width: 17px; height: 17px; margin-left: 5px; }
+		.setting-body[data-darkmode="0"] .checkmark-icon img { width: 100%; height: 100%; }
+		/* ----------------------------------------------------------------------------------------------------------------------------------------------- */
+		.setting-body[data-darkmode="1"] button { background-color: transparent; border: none; cursor: pointer; margin-left: 5px; color: whitesmoke; }
+		.setting-body[data-darkmode="1"] button:hover { color: lightgray; }
+		.setting-body[data-darkmode="1"] a { text-decoration: none; color: black; }
+		.setting-body[data-darkmode="1"] a:visited, a:hover, a:focus, a:active { color: black; text-decoration: none; }
+		.setting-body[data-darkmode="1"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+		.setting-body[data-darkmode="1"] .complete-btn { font-size: 20px; position: absolute; top: 15px; color: black; right: 7px; background-color: transparent; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+		.setting-body[data-darkmode="1"] .complete-btn:hover { color: lightgray; }
+		.setting-body[data-darkmode="1"] #password-fields { display: block; margin-top: 20px; justify-content: center; }
+		.setting-body[data-darkmode="1"] .input-container { display: flex; flex-direction: column; min-height: 40px; margin: 20px auto 0 auto; width: fit-content; }
+		.setting-body[data-darkmode="1"] .input-row { display: flex; align-items: center; }
+		.setting-body[data-darkmode="1"] #password_hint, .setting-body[data-darkmode="1"]  #password_match_hint { display: flex; margin-top: 3px; font-size: 10px; margin-left: 3px; }
+		.setting-body[data-darkmode="1"] #pass-check { font-size: 10px; margin-top: 3px; margin-left: 5px; }
+		.setting-body[data-darkmode="1"] input[type="password"] { padding: 5px; color: whitesmoke; background-color: rgb(46, 46, 46); border: none; border-bottom: 2px solid #ccc; outline: none; }
+		.setting-body[data-darkmode="1"] input[type="password"]:focus { border-bottom: 2px solid #f1f1f1; }
+		.setting-body[data-darkmode="1"] .checkmark-icon { width: 17px; height: 17px; margin-left: 5px; }
+		.setting-body[data-darkmode="1"] .checkmark-icon img { width: 100%; height: 100%; }
 	</style>
 	<script>
 		$(document).ready(function() {
@@ -241,11 +168,10 @@
 				}
 			});
 		}
-
 	</script>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
 	<div class="setting-container">
 		<div class="setting-header">
 			<a href="profileEdit" id="back"><img src="static/images/setting/back.png" alt="back"></a>

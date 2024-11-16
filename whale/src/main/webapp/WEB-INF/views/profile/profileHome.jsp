@@ -39,6 +39,7 @@
 	.container[data-darkmode="0"] .stats a:hover { color: inherit; text-decoration: none; }
 	.container[data-darkmode="0"] .feed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
 	.container[data-darkmode="0"] .feed-grid img { width: 100%; height: 200px; object-fit: cover; }
+	.container[data-darkmode="0"] .privacy-account { padding: 10px 0 0 10px; color: #aaa; }
 	.container[data-darkmode="0"] .no-feed-message { text-align: center; font-size: 16px; color: #aaa; margin-top: 20px; }
 	.container[data-darkmode="0"] .music-item { position: relative; display: inline-block; overflow: hidden; width: 100%; }
 	.container[data-darkmode="0"] .music-item img { width: 100%; height: auto; transition: filter 0.3s ease; }
@@ -94,7 +95,8 @@
 	.container[data-darkmode="1"] .stats a:hover { color: inherit; text-decoration: none; }
 	.container[data-darkmode="1"] .feed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 10px; }
 	.container[data-darkmode="1"] .feed-grid img { width: 100%; height: 200px; object-fit: cover; }
-	.container[data-darkmode="1"] .no-feed-message { text-align: center; font-size: 16px; color: #aaa; margin-top: 20px; }
+	.container[data-darkmode="1"] .privacy-account { padding: 10px 0 0 10px; color: #ccc; }
+	.container[data-darkmode="1"] .no-feed-message { text-align: center; font-size: 16px; color: #ccc; margin-top: 20px; }
 	.container[data-darkmode="1"] .music-item { position: relative; display: inline-block; overflow: hidden; width: 100%; }
 	.container[data-darkmode="1"] .music-item img { width: 100%; height: auto; transition: filter 0.3s ease; }
 	.container[data-darkmode="1"] .music-item:hover img { filter: brightness(0.7); }
@@ -243,7 +245,7 @@
 			<%-- 기존 피드 표시 코드 --%>
 			<c:choose>
 				<c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
-					<div style="padding: 10px 0 0 10px">비공개 계정입니다.</div>
+					<div class= "privacy-account">비공개 계정입니다.</div>
 				</c:when>
 				<c:when test="${empty feedList}">
 					<div class="no-feed-message">작성한 피드가 없습니다</div>
@@ -265,7 +267,7 @@
 			<!-- 추후 추가할 음악 이미지나 콘텐츠를 여기에 표시 -->
 			 <c:choose>
 				<c:when test="${profile.account_privacy == 1 && !isFollower && now_id != userId}">
-					<div style="padding: 10px 0 0 10px">비공개 계정입니다.</div>
+					<div class= "privacy-account">비공개 계정입니다.</div>
 				</c:when>
 				<c:when test="${empty feedList}">
 					<div class="no-feed-message">작성한 피드가 없습니다</div>

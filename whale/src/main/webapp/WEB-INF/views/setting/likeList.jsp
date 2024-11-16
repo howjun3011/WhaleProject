@@ -11,300 +11,55 @@
     <script src="static/js/setting/setting.js"></script>
     <script src="static/js/setting/darkMode.js"></script>
     <style>
-        .setting-container {
-            display: flex;
-            flex-direction: column; /* 헤더와 스크롤 콘텐츠를 세로로 배치 */
-            overflow: hidden; /* 부모에서 스크롤 숨김 */
-        }
-
-        .scroll-content {
-            flex: 1; /* 남은 공간을 차지 */
-            overflow-y: auto; /* 세로 스크롤 활성화 */
-        }
-
-        .setting-body[data-darkmode="0"] .setting-item{
-            display: inline-block;
-            border-bottom: none;
-            margin: 0px;
-            border: none;
-        }
-
-        .setting-body[data-darkmode="1"] .setting-item{
-            display: inline-block;
-            border-bottom: none;
-            margin: 0px;
-            border: none;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            z-index: 10; /* 드롭다운 컨테이너의 z-index를 높임 */
-        }
-
-        .setting-body[data-darkmode="0"] .dropbtn {
-            display: block;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            background-color: #fcfcfc;
-            font-weight: 400;
-            color: rgb(124, 124, 124);
-            padding: 12px;
-            width: 100px;
-            height: 45px;
-            text-align: left;
-            cursor: pointer;
-            font-size: 12px;
-            z-index: 1;
-            position: relative;
-            margin-right: 3px;
-        }
-        .setting-body[data-darkmode="1"] .dropbtn {
-            display: block;
-            border: 2px solid #335580;
-            border-radius: 4px;
-            background-color: rgb(46, 46, 46);
-            font-weight: 400;
-            color: whitesmoke;
-            padding: 12px;
-            width: 100px;
-            height: 45px;
-            text-align: left;
-            cursor: pointer;
-            font-size: 12px;
-            z-index: 1;
-            position: relative;
-            margin-right: 3px;
-        }
-
-        .setting-body[data-darkmode="0"] .dropdown-content {
-            position: absolute;
-            display: none;
-            font-weight: 400;
-            background-color: #fcfcfc;
-            min-width: 100px;
-            border-radius: 8px;
-            height: 50px;
-            box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
-            z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
-        }
-        .setting-body[data-darkmode="1"] .dropdown-content {
-            position: absolute;
-            display: none;
-            font-weight: 400;
-            background-color: rgb(46, 46, 46);
-            min-width: 100px;
-            border-radius: 8px;
-            height: 50px;
-            box-shadow: 0px 0px 10px 3px #335580;
-            z-index: 20; /* 드롭다운 목록의 z-index를 더 높임 */
-        }
-
-        .setting-body[data-darkmode="0"] .dropdown-content div {
-            display: block;
-            text-decoration: none;
-            color: rgb(37, 37, 37);
-            font-size: 12px;
-            padding: 12px 20px;
-        }
-        .setting-body[data-darkmode="1"] .dropdown-content div {
-            display: block;
-            text-decoration: none;
-            color: whitesmoke;
-            font-size: 12px;
-            padding: 12px 20px;
-        }
-
-        .setting-body[data-darkmode="0"] .dropdown-content div:hover {
-            background-color: rgb(226, 226, 226);
-        }
-        .setting-body[data-darkmode="1"] .dropdown-content div:hover {
-            background-color: rgb(46, 46, 46);
-        }
-
-        .setting-body[data-darkmode="0"] .dropdown-content.show {
-            display: block;
-        }
-        .setting-body[data-darkmode="1"] .dropdown-content.show {
-            display: block;
-        }
-
-        .like-list {
-            margin-left: 20px;
-            margin-right: 20px;
-        }
-
-        .setting-body[data-darkmode="0"] .post-list {
-            display: block;
-            align-items: center;
-            margin-bottom: 10px;
-            justify-content: space-between;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .setting-body[data-darkmode="1"] .post-list {
-            display: block;
-            align-items: center;
-            margin-bottom: 10px;
-            justify-content: space-between;
-            padding: 10px;
-            color: whitesmoke;
-            border: 1px solid #335580;
-            border-radius: 8px;
-        }
-
-        .post-list-writer{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3개의 열 */
-            gap: 10px; /* 이미지 사이 간격 */
-            padding: 5px 5px;
-        }
-
-        .image-item {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .image-item::before {
-            content: "";
-            display: block;
-            padding-top: 100%; /* 1:1 비율로 높이 설정 */
-        }
-
-        .image-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 3px;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 이미지의 비율을 유지하면서 컨테이너에 맞게 자름 */
-        }
-
-        .no-like-message {
-            color: #ccc;
-        }
-
-        a {
-            text-decoration: none;
-            color: black;
-        }
-
-        a:visited, a:hover, a:focus, a:active {
-            color: black;
-            text-decoration: none;
-        }
-
-        #back {
-            position: absolute;
-            left: 15px;
-            top: 55%;
-            transform: translateY(-50%);
-        }
-        .setting-body[data-darkmode="0"] .cnt-date-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-        }
-
-        .setting-body[data-darkmode="0"] .cnt-date-container .views, .total-like, .total-comment {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            margin-right: 7px;
-        }
-
-        .setting-body[data-darkmode="0"] .cnt-date-container .date {
-            color: #888;
-            margin-left: auto; /* date 우측에 고정 */
-        }
-
-        .setting-body[data-darkmode="0"] .cnt-date-container img {
-            margin: 0;
-            width: 19px;
-            height: 19px;
-        }
-
-        .setting-body[data-darkmode="1"] .cnt-date-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-        }
-
-        .setting-body[data-darkmode="1"] .cnt-date-container .views, .total-like, .total-comment {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            margin-right: 7px;
-        }
-
-        .setting-body[data-darkmode="1"] .cnt-date-container .date {
-            color: #888;
-            margin-left: auto; /* date 우측에 고정 */
-        }
-
-        .setting-body[data-darkmode="1"] .cnt-date-container img {
-            margin: 0;
-            width: 19px;
-            height: 19px;
-            filter: invert(1);
-        }
-
-        .setting-body[data-darkmode="0"] .total-like img{
-            filter: drop-shadow(0px 0px 0px #000);
-            scale: 1.6;
-        }
-
-        .setting-body[data-darkmode="0"] .total-like .filter{
-            filter: drop-shadow(0px 0px 0px #000);
-            display: flex;
-        }
-
-        .setting-body[data-darkmode="0"] .total-comment img{
-            filter: drop-shadow(0px 0px 0px #000);
-            scale: 1.4;
-        }
-
-        .setting-body[data-darkmode="0"] .total-comment .filter{
-            filter: drop-shadow(1px 0px 0px #000);
-            display: flex;
-        }
-
-        .setting-body[data-darkmode="1"] .total-like img{
-            filter: drop-shadow(1px 0px 0px #fff);
-            scale: 1.6;
-        }
-
-        .setting-body[data-darkmode="1"] .total-like .filter{
-            filter: drop-shadow(1px 0px 0px #fff);
-            display: flex;
-        }
-
-        .setting-body[data-darkmode="1"] .total-comment img{
-            filter: drop-shadow(1px 0px 0px #fff);
-            scale: 1.4;
-        }
-
-        .setting-body[data-darkmode="1"] .total-comment .filter{
-            filter: drop-shadow(1px 0px 0px #fff);
-            display: flex;
-        }
-
+        .setting-container { display: flex; flex-direction: column; overflow: hidden; }
+        .scroll-content { flex: 1; overflow-y: auto; }
+        .like-list { margin-left: 20px; margin-right: 20px; }
+        .dropdown { position: relative; display: inline-block; z-index: 10; }
+        .image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 5px 5px; }
+        .image-item { position: relative; width: 100%; overflow: hidden; }
+        .image-item::before { content: ""; display: block; padding-top: 100%; }
+        .image-item img { position: absolute; top: 0; left: 0; border-radius: 3px; width: 100%; height: 100%; object-fit: cover; }
+        .no-like-message { color: #ccc; }
+        a { text-decoration: none; color: black; }
+        a:visited, a:hover, a:focus, a:active { color: black; text-decoration: none; }
+        #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+        .post-list-writer { display: flex; justify-content: space-between; align-items: center; }
+        .setting-body[data-darkmode="0"] .setting-item { display: inline-block; border-bottom: none; margin: 0px; border: none; }
+        .setting-body[data-darkmode="0"] .dropbtn { display: block; border: 2px solid #ccc; border-radius: 4px; background-color: #fcfcfc; font-weight: 400; color: rgb(124, 124, 124); padding: 12px; width: 100px; height: 45px; text-align: left; cursor: pointer; font-size: 12px; z-index: 1; position: relative; margin-right: 3px; }
+        .setting-body[data-darkmode="0"] .dropdown-content { position: absolute; display: none; font-weight: 400; background-color: #fcfcfc; min-width: 100px; border-radius: 8px; height: 50px; box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6); z-index: 20; }
+        .setting-body[data-darkmode="0"] .dropdown-content div { display: block; text-decoration: none; color: rgb(37, 37, 37); font-size: 12px; padding: 12px 20px; }
+        .setting-body[data-darkmode="0"] .dropdown-content div:hover { background-color: rgb(226, 226, 226); }
+        .setting-body[data-darkmode="0"] .dropdown-content.show { display: block; }
+        .setting-body[data-darkmode="0"] .post-list { display: block; align-items: center; margin-bottom: 10px; justify-content: space-between; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .setting-body[data-darkmode="0"] .cnt-date-container { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+        .setting-body[data-darkmode="0"] .cnt-date-container .views, .total-like, .total-comment { display: flex; align-items: center; gap: 2px; margin-right: 7px; }
+        .setting-body[data-darkmode="0"] .cnt-date-container .date { color: #888; margin-left: auto; }
+        .setting-body[data-darkmode="0"] .cnt-date-container img { margin: 0; width: 19px; height: 19px; }
+        .setting-body[data-darkmode="0"] .total-like img { filter: drop-shadow(0px 0px 0px #000); scale: 1.6; }
+        .setting-body[data-darkmode="0"] .total-like .filter { filter: drop-shadow(0px 0px 0px #000); display: flex; }
+        .setting-body[data-darkmode="0"] .total-comment img { filter: drop-shadow(0px 0px 0px #000); scale: 1.4; }
+        .setting-body[data-darkmode="0"] .total-comment .filter { filter: drop-shadow(1px 0px 0px #000); display: flex; }
+        /* --------------------------------------------------------------------------------------------------------------------------------------------------- */
+        .setting-body[data-darkmode="1"] .setting-item { display: inline-block; border-bottom: none; margin: 0px; border: none; }
+        .setting-body[data-darkmode="1"] .dropbtn { display: block; border: 2px solid #335580; border-radius: 4px; background-color: rgb(46, 46, 46); font-weight: 400; color: whitesmoke; padding: 12px; width: 100px; height: 45px; text-align: left; cursor: pointer; font-size: 12px; z-index: 1; position: relative; margin-right: 3px; }
+        .setting-body[data-darkmode="1"] .dropdown-content { position: absolute; display: none; font-weight: 400; background-color: rgb(46, 46, 46); min-width: 100px; border-radius: 8px; height: 50px; box-shadow: 0px 0px 10px 3px #335580; z-index: 20; }
+        .setting-body[data-darkmode="1"] .dropdown-content div { display: block; text-decoration: none; color: whitesmoke; font-size: 12px; padding: 12px 20px; }
+        .setting-body[data-darkmode="1"] .dropdown-content div:hover { background-color: rgb(46, 46, 46); }
+        .setting-body[data-darkmode="1"] .dropdown-content.show { display: block; }
+        .setting-body[data-darkmode="1"] .post-list { display: block; align-items: center; margin-bottom: 10px; justify-content: space-between; padding: 10px; color: whitesmoke; border: 1px solid #335580; border-radius: 8px; }
+        .setting-body[data-darkmode="1"] .cnt-date-container { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+        .setting-body[data-darkmode="1"] .cnt-date-container .views, .total-like, .total-comment { display: flex; align-items: center; gap: 2px; margin-right: 7px; }
+        .setting-body[data-darkmode="1"] .cnt-date-container .date { color: #888; margin-left: auto; }
+        .setting-body[data-darkmode="1"] .cnt-date-container img { margin: 0; width: 19px; height: 19px; filter: invert(1); }
+        .setting-body[data-darkmode="1"] .total-like img { filter: drop-shadow(1px 0px 0px #fff); scale: 1.6; }
+        .setting-body[data-darkmode="1"] .total-like .filter { filter: drop-shadow(1px 0px 0px #fff); display: flex; }
+        .setting-body[data-darkmode="1"] .total-comment img { filter: drop-shadow(1px 0px 0px #fff); scale: 1.4; }
+        .setting-body[data-darkmode="1"] .total-comment .filter { filter: drop-shadow(1px 0px 0px #fff); display: flex; }
     </style>
     <style id="darkmode-scrollbar-styles"></style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
     <div class="setting-container">
         <div class="setting-header">
             <a href="activity" id="back"><img src="static/images/setting/back.png" alt="back"></a>

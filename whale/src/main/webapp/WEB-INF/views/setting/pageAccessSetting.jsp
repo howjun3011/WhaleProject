@@ -11,65 +11,20 @@
 <script src="static/js/setting/setting.js"></script>
 <script src="static/js/setting/darkMode.js"></script>
 <style>
-.setting-body[data-darkmode="0"] .setting-item{
-	display: block;
-	justify-content: space-between;
-	border: none;
-	border-radius: 0px;
-	border-bottom: 1px solid #EAEAEA;
-}
-.setting-body[data-darkmode="1"] .setting-item{
-	display: block;
-	justify-content: space-between;
-	border: none;
-	border-radius: 0px;
-	border-bottom: 1px solid #335580;
-}
-.section-top{
-	font-weight: bold;
-}
-.radio-group{
-	width: 100%;
-	margin-top: 8px;
-}
-.radio-option{
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 3px;
-}
-.radio-option label{
-	margin-bottom: 3px;
-}
-input[type='radio'] {
-	margin-left: auto;
-	margin-right: 0;
-	/* 기본스타일 지우고 라디오 버튼 구현 */
-	-webkit-appearance: none; /* 웹킷 브라우저에서 기본 스타일 제거  */
-	-moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거 */
-	appearance: none; /* 기본 브라우저에서 기본 스타일 제거 */
-	width: 13px;
-	height: 13px;
-	border: 1px solid #ccc; /* 체크되지 않았을 때의 테두리 색상 */
-	border-radius: 50%;
-	outline: none; /* focus 시에 나타나는 기본 스타일 제거 */
-	cursor: pointer; 
-}
-input[type='radio']:checked {
-	background-color: #335580; /* 체크 시 내부 원으로 표시될 색상 */
-	border: 3px solid #ccc; /* 테두리와 원 사이의 색상 */
-	box-shadow: 0 0 0 1.6px #335580; /* 테두리, 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보임, 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로 나옴) */
-}
-#back {
-    position: absolute; 
-    left: 15px; 
-    top: 55%; 
-    transform: translateY(-50%);
-}
+	.setting-body[data-darkmode="0"] .setting-item { display: block; justify-content: space-between; border: none; border-radius: 0px; border-bottom: 1px solid #EAEAEA; }
+	.section-top { font-weight: bold; }
+	.radio-group { width: 100%; margin-top: 8px; }
+	.radio-option { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+	.radio-option label { margin-bottom: 3px; }
+	input[type='radio'] { margin-left: auto; margin-right: 0; -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 13px; height: 13px; border: 1px solid #ccc; border-radius: 50%; outline: none; cursor: pointer; }
+	input[type='radio']:checked { background-color: #335580; border: 3px solid #ccc; box-shadow: 0 0 0 1.6px #335580; }
+	#back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+	/* ---------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+	.setting-body[data-darkmode="1"] .setting-item { display: block; justify-content: space-between; border: none; border-radius: 0px; border-bottom: 1px solid #535353; }
 </style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
 	<div class="setting-container">
 		<div class="setting-header">
 		<a href="accessibility" id="back"><img src="static/images/setting/back.png" alt="back"></a>

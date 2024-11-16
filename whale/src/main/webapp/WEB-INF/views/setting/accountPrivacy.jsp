@@ -10,59 +10,27 @@
     <script src="static/js/setting/setting.js"></script>
     <script src="static/js/setting/darkMode.js"></script>
     <style>
-        .setting-item {
-            justify-content: space-between; /* 요소 사이에 공간을 균등하게 배분 */
-        }
-
-        .setting-grid{
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        #privite-toggle-slide {
-            display: none;
-        }
-
-        label {
-            width: 50px;
-            height: 25px;
-            background-color: #808080; /* 초기 배경색 */
-            text-indent: -9999px;
-            border-radius: 25px;
-            position: relative;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-
-        label::after {
-            content: '';
-            position: absolute;
-            width: 17px;
-            height: 17px;
-            background-color: #e5e5e5;
-            border-radius: 25px;
-            top: 4px;
-            left: 4px;
-            transition: 0.5s;
-        }
-
-        #privite-toggle-slide:checked + label {
-            background-color: #335580; /* 토글 ON 상태일 때 배경색 */
-        }
-
-        #privite-toggle-slide:checked + label::after {
-            left: 29px;
-        }
-
-        #back {
-            position: absolute;
-            left: 15px;
-            top: 55%;
-            transform: translateY(-50%);
-        }
+        .setting-body[data-darkmode="0"] .setting-item { justify-content: space-between; }
+        .setting-body[data-darkmode="0"] .setting-grid { grid-template-columns: repeat(2, 1fr); }
+        .setting-body[data-darkmode="0"] #privite-toggle-slide { display: none; }
+        .setting-body[data-darkmode="0"] label { width: 50px; height: 25px; background-color: #808080; text-indent: -9999px; border-radius: 25px; position: relative; cursor: pointer; transition: 0.5s; }
+        .setting-body[data-darkmode="0"] label::after { content: ''; position: absolute; width: 17px; height: 17px; background-color: #e5e5e5; border-radius: 25px; top: 4px; left: 4px; transition: 0.5s; }
+        .setting-body[data-darkmode="0"] #privite-toggle-slide:checked + label { background-color: #335580; }
+        .setting-body[data-darkmode="0"] #privite-toggle-slide:checked + label::after { left: 29px; }
+        .setting-body[data-darkmode="0"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
+        /* ------------------------------------------------------------------------------------------------------------------------------------------------- */
+        .setting-body[data-darkmode="1"] .setting-item { justify-content: space-between; color: whitesmoke; }
+        .setting-body[data-darkmode="1"] .setting-grid { grid-template-columns: repeat(2, 1fr); }
+        .setting-body[data-darkmode="1"] #privite-toggle-slide { display: none; }
+        .setting-body[data-darkmode="1"] label { width: 50px; height: 25px; background-color: #808080; text-indent: -9999px; border-radius: 25px; position: relative; cursor: pointer; transition: 0.5s; }
+        .setting-body[data-darkmode="1"] label::after { content: ''; position: absolute; width: 17px; height: 17px; background-color: #e5e5e5; border-radius: 25px; top: 4px; left: 4px; transition: 0.5s; }
+        .setting-body[data-darkmode="1"] #privite-toggle-slide:checked + label { background-color: #335580; }
+        .setting-body[data-darkmode="1"] #privite-toggle-slide:checked + label::after { left: 29px; }
+        .setting-body[data-darkmode="1"] #back { position: absolute; left: 15px; top: 55%; transform: translateY(-50%); }
     </style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
     <div class="setting-container">
         <div class="setting-header">
             <a href="account" id="back"><img src="static/images/setting/back.png" alt="back"></a>

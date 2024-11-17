@@ -142,7 +142,8 @@ export default {
             return `rgb(${r}, ${g}, ${b})`;
         },
         changeBackground() {
-            document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
+            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(17, 18, 17) 100%)`;}
+            else {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(249, 250, 249) 100%)`;}
         },
         addIsShow(i) {
             this.isPlayed.push(false);
@@ -192,6 +193,7 @@ export default {
 <style scoped>
     .playlistDetail {display: flex; align-items: center; width: 95%; height: 35%; padding: 40px 0 20px 15px;}
     .playlistDetailContainer {display: flex; gap: 20px; color: white; align-items: end; width: 100%; padding-left: 20px; overflow-x: scroll; -ms-overflow-style: none;}
+    #app.light .playlistDetailContainer {color: #111;}
     .playlistDetailInfo {width: 75%; height: 170px; overflow: auto; white-space: nowrap; text-overflow: ellipsis;}
     .detailSort {margin-top: 15px; margin-left: 2px; font-size: 12px; font-weight: 300; letter-spacing: 0.3px; opacity: 0.7;}
     .trackDescription{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8; display: flex; align-items: center; margin-top: 15px; gap: 5px;}
@@ -204,8 +206,11 @@ export default {
     .playlistBtn {height: 22px;}
     .playlist-tracks {position: relative; display: grid; grid-template-columns: 6% 83% 11%; width: 95%; margin-left: 20px;}
     .playlist-tracks:hover {border-radius: 5px; background-color: #5e5e5e;}
-    .playlist-tracks-top {display: flex; align-items: center; height: 25px; border-top: 0.5px solid rgb(197, 197, 197, 0.7); padding-top: 10px; padding-bottom: 6px; font-size: 13px; color: #ffffff; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks:hover {background-color: #f0f0f0;}
+    .playlist-tracks-top {display: flex; align-items: center; height: 25px; border-bottom: 0.5px solid rgb(197, 197, 197, 0.7); padding-top: 10px; padding-bottom: 6px; font-size: 13px; color: #ffffff; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks-top {border-bottom: 0.5px solid #111; color: #111;}
     .playlist-tracks-content {display: flex; align-items: center; height: 32px; color: #ffffff; font-size: 14px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks-content {color: #000;}
     .playlistTrackBtn:hover {opacity: 0.8;}
     .playlistTrackBtn:active {opacity: 0.6;}
     .likeBtn {height: 16px; cursor: pointer;}

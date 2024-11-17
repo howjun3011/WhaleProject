@@ -17,6 +17,7 @@ import com.tech.whale.setting.dao.SettingDao;
 import com.tech.whale.setting.dto.PageAccessDto;
 import com.tech.whale.setting.dto.StartpageDto;
 import com.tech.whale.setting.dto.UserInfoDto;
+import com.tech.whale.setting.dto.UserSettingDto;
 
 @Service
 public class MainService {
@@ -147,5 +148,11 @@ public class MainService {
 			mainDao.deleteFollowNoti(userId, targetId);
 			mainDao.insertFollowNoti(1, targetId, userId);
 		}
+	}
+	
+	// [ 노드용 다크 모드 정보 출력 ]
+	public int getDarkModeMainService(String userId) {
+		UserSettingDto userSettingDto = settingDao.getDarkmode(userId);
+		return userSettingDto.getDarkmode_setting_onoff();
 	}
 }

@@ -182,7 +182,8 @@ export default {
             return `rgb(${r}, ${g}, ${b})`;
         },
         changeBackground() {
-            document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 10%, rgb(17, 18, 17) 90%)`;
+            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(17, 18, 17) 100%)`;}
+            else {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(249, 250, 249) 100%)`;}
         },
         addIsShow(i) {
             this.isPlayed.push(false);
@@ -313,19 +314,24 @@ export default {
 <style scoped>
     .playlistDetail {display: flex; align-items: center; width: 95%; height: 35%; padding: 40px 0 20px 20px;}
     .playlistDetailContainer {display: flex; gap: 20px; color: white; align-items: end; width: 100%; padding-left: 20px; overflow-x: scroll; -ms-overflow-style: none;}
+    #app.light .playlistDetailContainer {color: #111;}
     .playlistDetailInfo {width: 75%; height: 170px; overflow: auto; white-space: nowrap; text-overflow: ellipsis;}
     .detailSort {margin-top: 15px; margin-left: 2px; font-size: 12px; font-weight: 300; letter-spacing: 0.3px; opacity: 0.7;}
     .trackDescription{font-size: 12px; font-weight: 300; letter-spacing: .2px; opacity: .8; display: flex; align-items: center; margin-top: 15px; gap: 5px;}
     .playlistName {font-size: 64px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
     .playlist-tracks {position: relative; display: grid; grid-template-columns: 7% 48% 35% 10%; width: 100%;}
     .playlist-tracks:hover {border-radius: 5px; background-color: #5e5e5e;}
-    .playlist-tracks-top {display: flex; align-items: center; height: 25px; border-top: 0.5px solid rgb(197, 197, 197, 0.7); padding-top: 10px; padding-bottom: 6px; font-size: 13px; color: #ffffff; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks:hover {background-color: #f0f0f0;}
+    .playlist-tracks-top {display: flex; align-items: center; height: 25px; border-bottom: 0.5px solid rgb(197, 197, 197, 0.7); padding-top: 10px; padding-bottom: 6px; font-size: 13px; color: #ffffff; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks-top {border-bottom: 0.5px solid #111; color: #111;}
     .playlist-tracks-content {display: flex; align-items: center; height: 32px; color: #ffffff; font-size: 14px; font-weight: 300; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .playlist-tracks-content {color: #000;}
     .playlistTrackBtn:hover {opacity: 0.8;}
     .playlistTrackBtn:active {opacity: 0.6;}
     .likeBtn {height: 16px; cursor: pointer;}
     .artistContainer {position: relative; margin: 40px 0 10px 20px; width: 95%;}
     .artistFont {color: white; margin: 0 0 15px 10px;}
+    #app.light .artistFont {color: #111;}
     .albumsWrap{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin-left: 5px;}
     .albumItem{width: fit-content;}
     .artistDetailSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
@@ -334,6 +340,7 @@ export default {
     .artistDetailSlideButton.hidden {opacity: 0; pointer-events: none; /* 클릭 불가 */}
     .albumItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}
     .trackName {margin-top: 5px; margin-left: 2px; color: white; font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
+    #app.light .trackName {color: #111;}
     .relatedPlaylists{display: flex; gap: 20px; overflow-x: scroll; white-space: nowrap; padding-bottom: 10px; margin-left: 5px;}
     .playlistItem{width: fit-content;}
     .playlistItem p {width: 150px; /* 이미지 너비와 동일하게 설정 */ white-space: nowrap; /* 한 줄로 표시 */ overflow: hidden; /* 넘치는 텍스트 숨김 */ text-overflow: ellipsis; /* 말줄임표 표시 */ margin: 5px 0; /* 간격 조정 */}

@@ -100,7 +100,7 @@ const app = createApp({
 		
 		// [ Page Access Setting ]
 		checkPageAccess() {
-			if (this.isOver === false) {
+			if (this.isOver === true) {
 				fetch('main/checkPageAccess')
 					.then(response => response.json())
 					.then(data => {

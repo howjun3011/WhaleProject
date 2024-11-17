@@ -20,6 +20,7 @@ export default {
     this.executeResize();
     this.receiveMessageMain();
     this.checktype();
+    this.getDarkMode();
   },
   methods: {
     // [ Resize ]
@@ -64,6 +65,7 @@ export default {
       if (event.data.type === 'albumDetail') {this.$router.replace(`/whale/streaming/detail/album/${ event.data.albumId }`);}
       else if (event.data.type === 'trackDetail') {this.$router.replace(`/whale/streaming/detail/track/${ event.data.trackId }`);}
       else if (event.data.type === 'artistDetail') {this.$router.replace(`/whale/streaming/detail/artist/${ event.data.artistId }`);}
+      else if (event.data === 'darkmodeOn') {this.getDarkMode();}
       else {await this.sendDeviceId(event);}
     },
 
@@ -74,12 +76,12 @@ export default {
             device_id: sessionStorage.device_id,
         };
         fetch(`/whale/streaming/getDeviceId`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(body)
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(body)
         })
         .then((response) => response.json())
         .then((data) => {
@@ -95,6 +97,26 @@ export default {
       let id;
 
       fetch(`/whale/streaming/getType`, {
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          type = data.type;
+          id = data.id;
+
+          if (type === 'albumDetail') {this.$router.replace(`/whale/streaming/detail/album/${ id }`);}
+          else if (type === 'trackDetail') {this.$router.replace(`/whale/streaming/detail/track/${ id }`);}
+          else if (type === 'artistDetail') {this.$router.replace(`/whale/streaming/detail/artist/${ id }`);}
+          else {this.$router.replace('/whale/streaming/recommend');}
+        })
+    },
+
+    getDarkMode() {
+      fetch(`http://localhost:9002/whale/main/getDarkMode?userId=${ sessionStorage.userId }`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -103,13 +125,18 @@ export default {
         })
         .then((response) => response.json())
         .then((data) => {
-            type = data.type;
-            id = data.id;
+          localStorage.setItem('darkmodeOn', data);
 
-            if (type === 'albumDetail') {this.$router.replace(`/whale/streaming/detail/album/${ id }`);}
-            else if (type === 'trackDetail') {this.$router.replace(`/whale/streaming/detail/track/${ id }`);}
-            else if (type === 'artistDetail') {this.$router.replace(`/whale/streaming/detail/artist/${ id }`);}
-            else {this.$router.replace('/whale/streaming/recommend');}
+          const darkmodeOn = localStorage.getItem('darkmodeOn');
+          const mainElement = document.getElementById('app');
+
+          if (darkmodeOn === "1") {
+              mainElement.classList.add("dark");
+              mainElement.classList.remove("light");
+          } else {
+              mainElement.classList.add("light");
+              mainElement.classList.remove("dark");
+          }
         })
     },
   },

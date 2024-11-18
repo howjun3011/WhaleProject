@@ -163,11 +163,31 @@
 	<update id="reportAdminCh">
 		UPDATE REPORT SET REPORT_ADMIN_CHECK = 1 WHERE REPORT_ID = #{report_id}
 	</update>
-   
+    
+    <sql id="includeTotalReport">
+    	<choose>
+    		<when test="writingType == 'feed_comments'">
+    			FEED_COMMENT_ID
+    		</when>
+    		<when test="writingType == 'post_comments'">
+    			POST_COMMENT_ID
+    		</when>
+    		<when test="writingType == 'feed'">
+    			FEED_ID
+    		</when>
+    		<when test="writingType == 'post'">
+    			POST_ID
+    		</when>
+    		<when test="writingType == 'message'">
+    			MESSAGE_ID
+    		</when>
+    	</choose>
+    </sql>
+    
 	<select id="totalReport" resultType="com.tech.whale.admin.dto.AdminReportOverlapDto">
 		SELECT REPORT_ID, USER_ID FROM REPORT
-		WHERE ${writingType}_ID = 
-			(SELECT ${writingType}_ID FROM REPORT WHERE REPORT_ID = #{report_id})
+		WHERE <include refid="includeTotalReport" /> = 
+			(SELECT <include refid="includeTotalReport" /> FROM REPORT WHERE REPORT_ID = #{report_id})
 			AND REPORT_ADMIN_CHECK IS NULL
 	</select>
 	

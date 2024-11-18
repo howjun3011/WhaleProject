@@ -10,12 +10,12 @@
 
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
 	<div class="profile-container">
-	 	<div class="profile">
+	 	<div class="profile" onclick = "location.href = 'adminAccountUserInfo?userId=${myId }&page=1&sk=&searchType=&searchOrderBy='">
 		 	<div class="proImgBox">
 		 		<img src="${myImgUrl }" alt="user_img" class="proImg"/> <br />
 		 	</div>
 		 	<div class="logoutstr">
-		        <a href="adminMyInfoView">${myId }</a>
+		        <a href="adminAccountUserInfo?userId=${myId }&page=1&sk=&searchType=&searchOrderBy=">${myId }</a>
 		        <a href="#" onclick="logoutWhale()">로그아웃</a>
 		    </div>
 	    </div>

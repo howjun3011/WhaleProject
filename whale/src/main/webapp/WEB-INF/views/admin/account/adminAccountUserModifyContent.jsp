@@ -141,6 +141,10 @@
 				<td>닉네임</td>
 				<form id="nicknameForm" action="adminUserNicknameModify" method="post">
 				<td>
+					<input type="hidden" name="searchOrderBy" value="${searchOrderBy}" />
+					<input type="hidden" name="page" value="${page}" />
+					<input type="hidden" name="sk" value="${sk}" />
+					<input type="hidden" name="searchType" value="${searchType}" />
 					<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />&nbsp;
 					<input type="text" name="userNickname" value="${AccountUserInfo.user_nickname }" />
 					<button onclick="confirmUpdate()" >수정</button>
@@ -195,6 +199,10 @@
 	        		</tr>
 	        		<tr style="border-bottom: none;">
 	        			<td colspan="2" style="margin: 0 auto;">
+	        				<input type="hidden" name="searchOrderBy" value="${searchOrderBy}" />
+							<input type="hidden" name="page" value="${page}" />
+							<input type="hidden" name="sk" value="${sk}" />
+							<input type="hidden" name="searchType" value="${searchType}" />
 	        				<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
 	        				<button type="button" onclick="statusUpdate()">저장</button>
 	            			<button type="button" onclick="closeStatus()">취소</button>
@@ -240,6 +248,10 @@
 				<tr style="border-bottom: none;">
 					<td colspan="2">
 						<div class="submit" style="margin: 0 auto;">
+							<input type="hidden" name="searchOrderBy" value="${searchOrderBy}" />
+							<input type="hidden" name="page" value="${page}" />
+							<input type="hidden" name="sk" value="${sk}" />
+							<input type="hidden" name="searchType" value="${searchType}" />
 							<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
 							<input type="hidden" name="userAccessNow" value="${AccountUserInfo.user_access_id }" />
 							<button type="button" onclick="accessUpdate()" disabled>저장</button>

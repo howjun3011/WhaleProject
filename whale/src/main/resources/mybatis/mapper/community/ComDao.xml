@@ -86,8 +86,8 @@
 	            u.USER_IMAGE_URL,  -- 유저 정보 추가
 	            ROW_NUMBER() OVER(
 	                ORDER BY 
-	                    CASE WHEN t.POST_TAG_TEXT = '[공지]' THEN 0 ELSE 1 END, 
-	                    p.POST_ID DESC
+	                    CASE WHEN p.POST_TAG_ID = 5 THEN 0 ELSE 1 END, -- 공지를 최상단으로 정렬
+	                    p.POST_NUM DESC
 	            ) AS POST_SEQ
 	        FROM POST p
 	        JOIN POST_TAG t ON p.POST_TAG_ID = t.POST_TAG_ID
@@ -109,6 +109,7 @@
 	        GROUP BY POST_ID
 	    ) comments_count ON p.POST_ID = comments_count.POST_ID -- 댓글 수 조인
 	    WHERE p.POST_SEQ BETWEEN #{param1} AND #{param2}
+	    ORDER BY p.POST_SEQ -- 외부 쿼리에서 정렬 추가
 	</select>
     
     <select id="selectBoardCount" resultType="Integer">

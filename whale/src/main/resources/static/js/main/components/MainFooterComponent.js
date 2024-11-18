@@ -360,8 +360,8 @@ const MainFooterComponent = {
 		
 		// 플레이어 정보 송신 기능
 		sendStreaming(i,j) {
-			let x = $("#leftIframe").get(0).src;
-			let y = $("#rightIframe").get(0).src;
+			let x = $("#leftIframe").get(0) ? $("#leftIframe").get(0).src : "";
+			let y = $("#rightIframe").get(0) ? $("#rightIframe").get(0).src : "";
 			if (x === 'http://localhost:9002/whale/streaming') {this.fetchIframe('leftIframe',i);}
 			else if (y === 'http://localhost:9002/whale/streaming') {this.fetchIframe('rightIframe',i);}
 			else {this.$emit('footer-music-toggle', 3, 0, j);}

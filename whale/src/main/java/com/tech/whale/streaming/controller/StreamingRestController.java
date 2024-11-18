@@ -133,4 +133,16 @@ public class StreamingRestController {
     public void playAllLikeTrack(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	streamingService.playAllLikeTrackService(session, map.get("uris").toString());
     }
+    
+    // 트랙 아이디 인서트
+    @PostMapping(value = "/streaming/insertTrackInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void insertTrackInfo(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	String artistName = map.get("artistName").toString();
+    	String trackName = map.get("trackName").toString();
+    	String albumName = map.get("albumName").toString();
+    	String albumCover = map.get("trackCover").toString();
+    	String trackSpotifyId = map.get("trackSpotifyId").toString();
+    	
+    	streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
+    }
 }

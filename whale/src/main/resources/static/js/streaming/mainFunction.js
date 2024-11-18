@@ -996,3 +996,32 @@ function playAllLikeTrack(i) {
         body: JSON.stringify({ uris: i })
     });
 }
+
+// 트랙 아이디 복사 함수
+function copyTrackId(a,b,c,d,e) {
+    // 해당 트랙 Whale DB에 저장
+    const body = {
+        artistName: c,
+        trackName: b,
+        albumName: d,
+        trackCover: a,
+        trackSpotifyId: e
+    };
+
+    fetch(`/whale/streaming/insertTrackInfo`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(body)
+    });
+    // 클립 보드 카피 기능
+    var t = document.createElement("textarea");
+    document.body.appendChild(t);
+    t.value = `%music%${e}`;
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+    alert('해당 트랙 아이디를 복사했습니다.');
+}

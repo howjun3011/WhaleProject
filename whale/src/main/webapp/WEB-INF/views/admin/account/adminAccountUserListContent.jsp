@@ -53,7 +53,7 @@
 					<td><fmt:formatDate value="${dto.user_date}" pattern="yyyy.MM.dd" /></td>
 					<td>${dto.user_status_str }</td>
 					<td>
-						<button class="table-btn" onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }&page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="table-btn" onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }&page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'" >수정</button>
+						<button class="table-btn" onclick = "location.href = 'adminAccountUserInfo?userId=${dto.user_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'">조회</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="table-btn" onclick = "location.href = 'adminAccountUserModify?userId=${dto.user_id }&page=1&sk=${searchKeyword}&searchType=${searchType}&searchOrderBy=${search_order_By}'" >수정</button>
 					</td>
 				</tr>
 			</c:forEach>

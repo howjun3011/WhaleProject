@@ -152,20 +152,6 @@ public class AdminController {
 	}
 	
 	
-	@RequestMapping("/adminMyInfoView")
-	public String adminMyInfoView(HttpServletRequest request, Model model) {
-		
-		model.addAttribute("request", request);
-		model.addAttribute("pname", "나의정보");
-		model.addAttribute("contentBlockJsp",
-				"../account/adminMyInfoContent.jsp");
-	    model.addAttribute("contentBlockCss",
-	    		null);
-	    accountSubBar(model);
-		return "/admin/view/adminOutlineForm";
-	}
-	
-	
 	@RequestMapping("/adminAccountUserInfo")
 	public String adminAccountUserInfo(
 			@RequestParam("page") int page,
@@ -197,30 +183,6 @@ public class AdminController {
 		return "/admin/view/adminOutlineForm";
 	}
 	
-	@RequestMapping("/adminAccountOfficialInfo")
-	public String adminAccountOfficialInfo(
-			HttpServletRequest request,
-			AdminSearchVO searchVO,
-			Model model) {
-		
-		model.addAttribute("request", request);
-		model.addAttribute("searchVO", searchVO);
-		model.addAttribute("pname", "유저정보");
-		model.addAttribute("contentBlockJsp",
-				"../account/adminAccountUserInfoContent.jsp");
-		model.addAttribute("contentBlockCss",
-				"/whale/static/css/admin/account/adminAccountUserInfoContent.css");
-		accountSubBar(model);
-		
-		adminAccountUserInfoService.execute(model);
-		adminUserInfoPostService.execute(model);
-		adminUserInfoFeedService.execute(model);
-		adminUserInfoCommentService.execute(model);
-		
-		return "/admin/view/adminOutlineForm";
-	}
-	
-	
 	
 	@RequestMapping("/adminAccountUserModify")
 	public String adminAccountUserModify(
@@ -251,6 +213,10 @@ public class AdminController {
 	
 	@RequestMapping("/adminUserAccessModify")
 	public String adminUserAccessModify(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
 			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
@@ -260,11 +226,20 @@ public class AdminController {
 		adminAccountUserModifyService.modifyAccess(model,session);
 		
 		
-		return "redirect:adminAccountUserModify?userId="+userId;
+		return "redirect:adminAccountUserModify?"
+				+ "userId=" + userId
+				+ "&page=" + page
+				+ "&searchType=" + searchType
+				+ "&searchOrderBy=" + searchOrderBy
+				+ "&sk=" + sk;
 	}
 	
 	@RequestMapping("/adminUserStatusModify")
 	public String adminUserStatusModify(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
 			HttpSession session,
 			HttpServletRequest request,
 			Model model) {
@@ -274,11 +249,20 @@ public class AdminController {
 		adminAccountUserModifyService.modifyStatus(model,session);
 		
 		
-		return "redirect:adminAccountUserModify?userId="+userId;
+		return "redirect:adminAccountUserModify?"
+				+ "userId=" + userId
+				+ "&page=" + page
+				+ "&searchType=" + searchType
+				+ "&searchOrderBy=" + searchOrderBy
+				+ "&sk=" + sk;
 	}
 	
 	@RequestMapping("/adminUserNicknameModify")
 	public String adminUserNicknameModify(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
@@ -287,7 +271,12 @@ public class AdminController {
 		adminUserNicknameModifyService.execute(model);
 		
 				
-		return "redirect:adminAccountUserModify?userId="+userId;
+		return "redirect:adminAccountUserModify?"
+				+ "userId=" + userId
+				+ "&page=" + page
+				+ "&searchType=" + searchType
+				+ "&searchOrderBy=" + searchOrderBy
+				+ "&sk=" + sk;
 	}
 	
 	@RequestMapping("/adminUserImgDelete")

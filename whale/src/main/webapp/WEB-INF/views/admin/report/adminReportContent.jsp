@@ -66,10 +66,10 @@
                 <td>(내용없음)</td>
                 </c:if>
                 <th>처리자</th>
-                <c:if test="${reportContent.admin_id != 0}">
+                <c:if test="${reportContent.admin_id != null}">
                 <td>${reportContent.admin_id }</td>
                 </c:if>
-                <c:if test="${reportContent.admin_id == 0}">
+                <c:if test="${reportContent.admin_id == null}">
                 <td>(내용없음)</td>
                 </c:if>
             </tr>
@@ -109,7 +109,7 @@
 			<tr>
 			    <th>이미지</th>
 			    <td colspan="3">
-			    	<img src="/whale/static/images/${imgPath}/${reportContent.report_img_url}" alt="Post Image" style="max-width: 600px; height:90%;">
+			    	<img src="${reportContent.report_img_url}" alt="Post Image" style="max-width: 600px; height:90%;">
 			    </td>
 			</tr>
         </tbody>

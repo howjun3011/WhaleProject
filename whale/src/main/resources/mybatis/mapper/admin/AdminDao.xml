@@ -1033,4 +1033,30 @@
 		) UNI
 	</select>
 	
+	<insert id="insertReport">
+		insert into 
+		report(
+			REPORT_ID, 
+			USER_ID, 
+			FEED_ID, 
+			REPORT_WHY, 
+			REPORT_DATE, 
+			REPORT_TAG, 
+			REPORT_USER_ID, 
+			REPORT_TEXT) 
+		values(
+			REPORT_SEQ.nextval,
+			#{adminId},
+			0,
+			'-관리자판단 유저 제재-',
+			sysdate,
+			'관리자 직접 제재',
+			#{adminId},
+			'-게시글없음-'
+			)
+	</insert>
+	<select id="reportGetSeq" resultType="int">
+		SELECT REPORT_SEQ.CURRVAL FROM DUAL
+	</select>
+	
 </mapper>

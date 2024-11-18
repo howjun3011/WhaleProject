@@ -170,4 +170,7 @@ public interface AdminIDao {
 	public int tagToday();
 	public List<AdminMainRankDto> rankToday();
 	
+	public void insertReport(String userId, String adminId);
+	public int reportGetSeq();
+	
 }

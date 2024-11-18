@@ -11,15 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
+import com.tech.whale.admin.dao.AdminReportIDao;
 import com.tech.whale.admin.dto.AdminAccessDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.main.models.MainDao;
 
 @Service
 public class AdminAccountUserModifyService implements AdminServiceInter{
 
 	@Autowired
 	private AdminIDao adminIDao;
-	
+	@Autowired
+	private AdminReportIDao adminReportIDao;
 	
 	@Override
 	public void execute(Model model) {
@@ -72,8 +75,15 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 			adminIDao.userStatusModify(userId, userStatus);
 			adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
 		} else if(userStatus == 1) {
+			adminIDao.insertReport(userId,adminId);
+			int report_seq = adminIDao.reportGetSeq();
+			String writingStatus="작성글 삭제";
+			adminReportIDao.reportResult(
+					report_seq,"feed",0,adminId,writingStatus,statusReason,userId,"영구 정지",2);
 			adminIDao.userStatusModify(userId, userStatus);
 			adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
+			
+			adminReportIDao.reportAdminCh(report_seq);
 		}
 		
 	}

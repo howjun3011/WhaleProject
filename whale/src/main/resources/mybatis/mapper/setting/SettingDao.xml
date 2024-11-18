@@ -64,7 +64,7 @@
 			MESSAGE_NOTIFICATION_ONOFF = #{messageNotificationOnOff}
 		WHERE USER_ID = #{session_user_id}
 	</update>
-	<select id="getNotificationSettingsByUserId" parameterType="String" resultType="com.tech.whale.setting.dto.UserNotificationDto">
+	<select id="getNotificationSettingsByUserId" resultType="com.tech.whale.setting.dto.UserNotificationDto">
 		SELECT ALL_NOTIFICATION_OFF, LIKE_NOTIFICATION_ONOFF, COMMENT_NOTIFICATION_ONOFF, MESSAGE_NOTIFICATION_ONOFF
 		FROM USER_NOTIFICATION_ONOFF
 		WHERE USER_ID = #{session_user_id}

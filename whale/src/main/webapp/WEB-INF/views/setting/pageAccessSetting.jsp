@@ -110,6 +110,7 @@
 	</div>
 </div>
 <script>
+	// jsp에서 전달받은 페이지 접근 설정값을 변수로 저장
 	var mypage = ${mypage};
 	var notification = ${notification};
 	var setting = ${setting};
@@ -117,6 +118,7 @@
 	var message = ${message};
 
 	window.onload = function() {
+		// DB에서 불러온 값에 따라 라디오 버튼을 체크
 		document.getElementById('mypage-left').checked = mypage == 0;
 		document.getElementById('notification-left').checked = notification == 0;
 		document.getElementById('setting-left').checked = setting == 0;
@@ -128,28 +130,33 @@
 		document.getElementById('music-right').checked = music == 1;
 		document.getElementById('message-right').checked = message == 1;
 
+		// 라디오 버튼 값 변경 시 설정 업데이트
 		document.querySelector('.setting-container').addEventListener('change', function(event) {
 			if(event.target.name === 'mypage' || event.target.name === 'notification' || event.target.name === 'setting' || event.target.name === 'music' || event.target.name === 'message') {
 				
-				const settingType = event.target.name; 
-				const selectedValue = event.target.value;
-				
+				const settingType = event.target.name; // 변경된 설정 항목 이름을 가져오기
+				const selectedValue = event.target.value; // 선택된 값(left 또는 right)을 가져오기
+
+				// 설정 업데이트 함수 호출
 				updatePageAccessSetting(settingType, selectedValue);
 			}
 		});
 	}
-	
+
+	// AJAX를 사용해 페이지 접근 설정을 서버에 업데이트하는 함수
 	function updatePageAccessSetting(settingType, selectedValue) {
 	    $.ajax({
 	        url: '/whale/updatePageAccessSetting',
 	        type: 'POST',
 	        data: {
-	            settingType: settingType,
-	            selectedValue: selectedValue
+	            settingType: settingType, // 설정 항목 이름
+	            selectedValue: selectedValue // 선택된 값
 	        },
+			// 요청이 성공했을 때 실행되는 콜백
 	        success: function(response) {
 	            console.log('응답: ', response.message);
 	        },
+			// 요청이 실패했을 때 실행되는 콜백
 	        error: function(xhr, status, error) {
 	            console.error('업데이트 실패: ', error);
 	        }

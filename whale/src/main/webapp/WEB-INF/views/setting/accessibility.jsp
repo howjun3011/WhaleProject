@@ -65,13 +65,16 @@
 
             // 페이지가 로드될 때 기본값 설정
             window.onload = function () {
+                // 다크모드 값이 1일 경우 토글버튼이 on 상태가 되도록 설정
                 document.getElementById('toggle-slide').checked = darkmodeOn == 1;
             };
 
+        // 다크모드 토글 버튼의 상태가 변경되었을 때 실행
         document.getElementById('toggle-slide').addEventListener('change', function () {
+            // 변경된 다크모드 값을 저장
             let darkmodeOn = this.checked ? 1 : 0;
 
-            // 다크 모드 상태를 localStorage에 저장
+            // 다크 모드 상태를 localStorage에 저장(페이지 새로고침 후에도 유지)
             localStorage.setItem('darkmodeOn', darkmodeOn);
 
             // AJAX 요청
@@ -83,25 +86,28 @@
             xhr.send('darkmode_setting_onoff=' + darkmodeOn);
 
             xhr.onreadystatechange = function () {
+                // 요청 상태가 DONE일 때
                 if (xhr.readyState === XMLHttpRequest.DONE) {
+                    // HTTP 상태코드가 200이면(= 요청이 성공적으로 처리되었으면)
                     if (xhr.status === 200) {
-                        console.log('Darkmode setting update in DB.');
-                        // 이 부분에서 event.target.checked 상태에 따라 다른 로그를 출력
                         if (darkmodeOn === 1) {
-                            console.log("Dark mode enabled (1)");
+                            console.log("Dark mode ON");
 
                         } else {
-                            console.log("Dark mode disabled (0)");
+                            console.log("Dark mode OFF");
                         }
                     } else {
                         console.log('Error updating darkmode setting. Status:', xhr.status, 'Response:', xhr.responseText);
                     }
                 }
             };
-            
+
+            // 현재 창이 iframe 안에 있을 경우, 해당 iframe의 ID를 가져오기
             let currentIframe = window.frameElement.id;
-            
-            if (currentIframe === 'rightIframe') {
+
+            // 다크모드 상태를 동기화(postMessage 메소드를 통해 iframe 간 메시지를 전달하고, 각 iframe은 자신의 상태를 업데이트하도록 동작)
+            if (currentIframe === 'rightIframe') { // 현재 iframe이 rightIframe이면
+                // 부모 창을 통해 leftIframe으로 다크모드 상태를 전송
             	window.parent.document.getElementById('leftIframe').contentWindow.postMessage('darkmodeOn','https://localhost:5500');
             } else {
             	window.parent.document.getElementById('rightIframe').contentWindow.postMessage('darkmodeOn','https://localhost:5500');

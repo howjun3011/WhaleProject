@@ -64,6 +64,7 @@
    </div>
 </div>
 <script>
+   // jsp에서 전달받은 시작페이지 설정값을 변수로 저장
    var music = ${music};
    var feed = ${feed};
    var community = ${community};
@@ -89,11 +90,12 @@
        });
    }
 
-   // 이미지 변경
+   // 이미지 변경 함수
    function changeImage(value, side) {
-       const imageId = side === 'left' ? 'left-image' : 'right-image';
-       const imageElement = document.getElementById(imageId);
+       const imageId = side === 'left' ? 'left-image' : 'right-image'; // 왼쪽 또는 오른쪽 이미지 ID 결정
+       const imageElement = document.getElementById(imageId); // 이미지 요소 가져오기
 
+      // 선택된 값에 따라 이미지 src 업데이트
        switch (value) {
            case 'music':
                imageElement.src = 'static/images/setting/startpage_music.png';
@@ -112,20 +114,24 @@
    
    // 설정 업데이트 함수
    function updateStartpageSetting() {
+      // 현재 체크된 왼쪽과 오른쪽 라디오 버튼의 값을 가져옴
        const leftValue = document.querySelector('input[name="left"]:checked').value;
        const rightValue = document.querySelector('input[name="right"]:checked').value;
 
+       // ajax 요청
        $.ajax({
-           url: '/whale/updateStartpageSetting',
+           url: '/whale/updateStartpageSetting', // 요청을 보낼 URL
            type: 'POST',
-           data: JSON.stringify({
-               left: leftValue,
-               right: rightValue
+           data: JSON.stringify({ // 데이터를 JSON 형식으로 변환
+               left: leftValue, // 왼쪽 설정값
+               right: rightValue // 오른쪽 설정값
            }),
            contentType: 'application/json',
+           // 요청 성공 시 실행
            success: function(response) {
                console.log('응답: ', response.message);
            },
+           // 요청 실패 시 실행
            error: function(xhr, status, error) {
                console.log('업데이트 실패: ', error);
            }

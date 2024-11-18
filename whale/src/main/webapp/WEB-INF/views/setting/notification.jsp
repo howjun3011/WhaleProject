@@ -22,7 +22,7 @@
 </style>
 </head>
 <body>
-<div class="setting-body" data-darkmode="${darkMode.scndAttrName}">
+<div class="setting-body">
 	<div class="setting-container">
 	    <div class="setting-header">
 	    <a href="settingHome" id="back"><img src="static/images/setting/back.png" alt="back"></a>
@@ -57,28 +57,36 @@
 	var commentNotificationOn = ${commentNotificationOn};
 	var messageNotificationOn = ${messageNotificationOn};
 
-	// 페이지가 로드될 때 기본 값 설정
+	// 페이지 로드 시, 서버에서 전달받은 값을 각 토글 스위치의 초기 상태 설정
 	window.onload = function() {
-		// 모든 알림 해제가 1이면 토글 버튼을 선택된 상태로 표현
 		document.getElementById('toggle-slide-1').checked = allNotificationOff == 1;
 		document.getElementById('toggle-slide-2').checked = likeNotificationOn == 1;
 		document.getElementById('toggle-slide-3').checked = commentNotificationOn == 1;
 		document.getElementById('toggle-slide-4').checked = messageNotificationOn == 1;
 	};
 
+	// 모든 알림 해제 토글 버튼에 변경 이벤트 리스너 추가
 	document.getElementById('toggle-slide-1').addEventListener('change', function() {
+		// 현재 토글 상태 확인해서 값 설정
 	    let allNotificationOff = this.checked ? 1 : 0;
 	
 	    // AJAX 요청
-	    const xhr = new XMLHttpRequest();
-	    xhr.open('POST', '/whale/updateNotifications', true); // 서버에 POST 요청 보냄
+	    const xhr = new XMLHttpRequest(); // 서버에 요청을 보내기 위한 XMLHttpRequest 객체 생성
+	    xhr.open('POST', '/whale/updateNotifications', true); // 서버에 보낼 요청을 post 방식으로 설정하고 url 지정
 	    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	
 	    // 서버로 데이터 전송
-	    xhr.send('all_notification_off=' + allNotificationOff + '&like_notification_onoff=0&comment_notification_onoff=0&message_notification_onoff=0');
-	
+		if(allNotificationOff === 1) { // 모든 알림 해제 토글 버튼이 켜질 경우, 나머지 3개의 버튼의 값을 0으로 보내기
+	    	xhr.send('all_notification_off=' + allNotificationOff + '&like_notification_onoff=0&comment_notification_onoff=0&message_notification_onoff=0');
+		} else { // 모든 알림 해제 토글 버튼이 꺼질 경우, 나머지 3개의 버튼의 값을 1로 보내기
+	    	xhr.send('all_notification_off=' + allNotificationOff + '&like_notification_onoff=1&comment_notification_onoff=1&message_notification_onoff=1');
+		}
+
+		// 서버 응답 상태 변경 시 호출되는 이벤트 핸들러 정의
 	    xhr.onreadystatechange = function() {
+			// 요청 완료 상태 확인
 	        if (xhr.readyState === XMLHttpRequest.DONE) {
+				// HTTP 응답 상태가 200일 때(성공)
 	            if (xhr.status === 200) {
 	                console.log('Notification settings updated in DB.');
 	            } else {
@@ -86,34 +94,63 @@
 	            }
 	        }
 	    };
-	
+
+		// 모든 알림 해제 토글 버튼이 켜진 경우
 	    if (allNotificationOff) {
 	        console.log('모든 알림 해제 ON');
 	        
-	        // 아래 세 개의 알림을 OFF 상태로 설정하고 비활성화
+	        // 나머지 세 개의 알림을 OFF 상태로 설정
 	        document.getElementById('toggle-slide-2').checked = false;
 	        document.getElementById('toggle-slide-3').checked = false;
 	        document.getElementById('toggle-slide-4').checked = false;
-	
+
+	        // 나머지 세 개의 알림을 비활성화 상태로 설정
 	        document.getElementById('toggle-slide-2').disabled = true;
 	        document.getElementById('toggle-slide-3').disabled = true;
 	        document.getElementById('toggle-slide-4').disabled = true;
 	    } else {
 	        console.log('모든 알림 해제 OFF');
+
+	        // 나머지 세 개의 알림을 ON 상태로 설정
+			document.getElementById('toggle-slide-2').checked = true;
+			document.getElementById('toggle-slide-3').checked = true;
+			document.getElementById('toggle-slide-4').checked = true;
+
+	        // 나머지 세 개의 알림을 활성화 상태로 설정
 	        document.getElementById('toggle-slide-2').disabled = false;
 	        document.getElementById('toggle-slide-3').disabled = false;
 	        document.getElementById('toggle-slide-4').disabled = false;
 	    }
 	});
-	
+
+	// 좋아요 알림 토글 버튼에 변경 이벤트 리스너 추가
+	document.getElementById('toggle-slide-2').addEventListener('change', function() {
+		// 좋아요 알림의 상태 전달(체크 여부에 따라 true/false)
+		updateIndividualNotification('like_notification_onoff', this.checked);
+	});
+	// 댓글 알림 토글 버튼에 변경 이벤트 리스너 추가
+	document.getElementById('toggle-slide-3').addEventListener('change', function() {
+		// 댓글 알림의 상태 전달(체크 여부에 따라 true/false)
+		updateIndividualNotification('comment_notification_onoff', this.checked);
+	});
+	// 메시지 알림 토글 버튼에 변경 이벤트 리스너 추가
+	document.getElementById('toggle-slide-4').addEventListener('change', function() {
+		// 메시지 알림의 상태 전달(체크 여부에 따라 true/false)
+		updateIndividualNotification('message_notification_onoff', this.checked);
+	});
+
+	// 알림 개별 설정 업데이트 함수
 	function updateIndividualNotification(notificationType, isOn) {
-		const xhr = new XMLHttpRequest();
+		const xhr = new XMLHttpRequest(); // XMLHttpRequest 객체 생성해서 서버와 비동기 통신 준비
 		xhr.open('POST', '/whale/updateIndividualNotification', true);
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(notificationType + "=" + (isOn ? 1 : 0));
-		
+		xhr.send(notificationType + "=" + (isOn ? 1 : 0)); // notificationType은 알림 유형, isOn은 0 또는 1
+
+		// 요청 상태 변경 시 호출되는 이벤트 핸들러
 		xhr.onreadystatechange = function() {
+			// 요청이 완료되었는지 확인
 			if(xhr.readyState === XMLHttpRequest.DONE) {
+				// 응답 상태가 200일 경우 성공 메시지를 로그에 출력
 				if(xhr.status === 200) {
 					console.log(notificationType + ' setting updated in DB.');
 				} else {
@@ -122,16 +159,6 @@
 			}
 		};
 	}
-	
-	document.getElementById('toggle-slide-2').addEventListener('change', function() {
-		updateIndividualNotification('like_notification_onoff', this.checked);
-	});
-	document.getElementById('toggle-slide-3').addEventListener('change', function() {
-		updateIndividualNotification('comment_notification_onoff', this.checked);
-	});
-	document.getElementById('toggle-slide-4').addEventListener('change', function() {
-		updateIndividualNotification('message_notification_onoff', this.checked);
-	});
 </script>
 </body>
 </html>

@@ -83,6 +83,7 @@
 		            RR.TARGET_TYPE,
 		            RR.TARGET_ID,
 		            RR.ADMIN_ID,
+		            RR.USER_ACTION,
 		            RR.REPORT_RESULT_DATE,
 		            RR.REPORT_RESULT_ACTION,
 		            RR.REPORT_RESULT_REASON

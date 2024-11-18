@@ -1,6 +1,5 @@
 package com.tech.whale.admin.service;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
-import com.tech.whale.admin.dto.AdminUserInfoDto;
 
 @Service
 public class AdminUserImgDeleteService implements AdminServiceInter{
@@ -32,29 +30,6 @@ public class AdminUserImgDeleteService implements AdminServiceInter{
 		String userImgUrl = request.getParameter("userImgUrl");
 		
 		adminIDao.userImgDelete(userId,userImgUrl);
-		
-        // 로컬에서 이미지파일삭제
-//		String workPath = System.getProperty("user.dir");
-//		String root = workPath + "/src/main/resources/static/images/setting";
-//		String userImgPath = root + "/" + userImgUrl;
-//		File file = new File(userImgPath);
-//        if(userImgUrl.equals("pro.png") || userImgUrl.equals("PRO.PNG") ) {
-//        	
-//        }else if(userImgUrl.trim().isEmpty() || userImgUrl == null) {
-//        	System.out.println("null값 이미지 유알앨: "+userImgUrl);
-//        }else {
-//        	
-//        	if (file.exists()) {
-//        		if (file.delete()) {
-//        			System.out.println("파일이 삭제 성공: " + userImgPath);
-//        		} else {
-//        			throw new RuntimeException("파일 삭제 실패: " + userImgPath);
-//        		}
-//        	} else {
-//        		throw new RuntimeException("삭제할 파일명 없음: " + userImgPath);
-//        	}
-//        }
-        
 
 	}
 

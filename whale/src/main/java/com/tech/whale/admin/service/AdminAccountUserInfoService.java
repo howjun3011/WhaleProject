@@ -28,7 +28,6 @@ public class AdminAccountUserInfoService implements AdminServiceInter{
 		String userId = request.getParameter("userId");
 		if(userId == null||userId.trim().isEmpty()) {
 			userId = (String) map.get("userId");
-			System.out.println("애드민인포 유저 아이디" + userId);
 		}
 		AdminUserInfoDto dto = adminIDao.userAccountInfoSelect(userId);
 		

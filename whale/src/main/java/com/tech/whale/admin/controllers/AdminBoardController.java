@@ -1,6 +1,7 @@
 package com.tech.whale.admin.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -488,12 +489,15 @@ public class AdminBoardController {
             Model model) {
 		
 		PostDto postDto = new PostDto();
-	    postDto.setPost_id(postId);
 	    postDto.setPost_title(postTitle);
 	    postDto.setPost_text(postText);
 	    postDto.setPost_tag_id(postTagId);
-		
-	    postUpdateService.updatePost(postDto);
+	    
+	    List<Integer> notice_list = adminNoticeListService.noticeList(postId);
+	    for(Integer var : notice_list) {
+	    	postDto.setPost_id(var);
+	    	postUpdateService.updatePost(postDto);
+	    }
 
         return "redirect:adminNoticeContentView?postId="+postId
         		+ "&page=" + page

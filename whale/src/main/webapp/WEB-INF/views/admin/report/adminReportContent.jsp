@@ -86,10 +86,10 @@
                 <td>(내용없음)</td>
                 </c:if>
                 <th>유저제재</th>
-                <c:if test="${reportContent.report_result_action != null }">
-                <td style="text-align: left;">${reportContent.report_result_action }</td>
+                <c:if test="${reportContent.user_action != null }">
+                <td style="text-align: left;">${reportContent.user_action }</td>
                 </c:if>
-                <c:if test="${reportContent.report_result_action == null }">
+                <c:if test="${reportContent.user_action == null }">
                 <td>(내용없음)</td>
                 </c:if>
             </tr>
@@ -106,14 +106,6 @@
                 <th>신고글</th>
                 <td colspan="3"  style="text-align: left;">${reportContent.report_text }</td>
             </tr>
-
-			<tr>
-			    <th>이미지</th>
-			    <td colspan="3">
-			    	<img src="${reportContent.report_img_url}" alt="Post Image" style="max-width: 600px; height:90%;">
-			    </td>
-			</tr>
-
 
         </tbody>
         <tr style="border-bottom: none; height: 80px;">

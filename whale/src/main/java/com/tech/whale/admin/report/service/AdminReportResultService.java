@@ -88,10 +88,9 @@ public class AdminReportResultService implements AdminServiceInter{
 		
 		if(userStatus >= 1) {
 			userStatus = 1;
+			adminIDao.userStatusModify(userId, userStatus);
+			adminIDao.userStatusLog(userId, userStatus,statusReason,myId);
 		}
-		
-		adminIDao.userStatusModify(userId, userStatus);
-		adminIDao.userStatusLog(userId, userStatus,statusReason,myId);
 	}
 	
 	@Transactional

@@ -70,7 +70,7 @@
     	<p>메모장</p>
     	<form id="memoForm" action="adminMemoSave" method="post">
 	    	<textarea id="admin_Memo" name="admin_Memo" rows="" cols="" oninput="checkByteLimit(this, 3000)">${admin_Memo.memo_writing }</textarea> <br />
-	    	<p id="byteCount">0 / 3000 bytes  <fmt:formatDate value="${admin_Memo.memo_update_date }" pattern="yyyy.MM.dd" /> <input type="submit" value="저장하기" /></p>
+	    	<p id="byteCount"><span id="byteText">0 / 3000 bytes</span>  <fmt:formatDate value="${admin_Memo.memo_update_date }" pattern="yyyy.MM.dd" /> <input type="submit" value="저장하기" /></p>
     	</form>
     </div>
 </div>
@@ -94,7 +94,7 @@
 	        textarea.value = truncatedText; // 초과된 부분 제거
 	    }
 	
-	    document.getElementById("byteCount").textContent = byteCount + " / " + maxBytes + " bytes";
+	    document.getElementById("byteText").textContent = byteCount + " / " + maxBytes + " bytes";
 	}
 	
 	

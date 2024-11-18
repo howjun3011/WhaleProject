@@ -16,5 +16,6 @@ public class AdminReportResultDto extends AdminReportListDto{
 	private Date report_result_date;
 	private String report_result_action;
 	private String report_result_reason ;
+	private String user_action ;
 	
 }

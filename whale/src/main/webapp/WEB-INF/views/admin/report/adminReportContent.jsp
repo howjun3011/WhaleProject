@@ -38,7 +38,7 @@
 <div class="content" name="content" id="content">
 	
 	<h1>신고상세</h1>
-	<table class="contentTable">
+	<table class="contentTable" style="height: 60px; border-top: 1px solid #999;">
         <colgroup>
             <col width="15%" />
             <col width="35%" />
@@ -75,7 +75,7 @@
             </tr>
             <tr>
                 <th>신고내용</th>
-                <td colspan="3"  style="text-align: left;">${reportContent.report_why }</td>
+                <td colspan="3" style="text-align: center;">${reportContent.report_why }</td>
             </tr>
             <tr>
                 <th>작성글제재</th>
@@ -96,7 +96,7 @@
             <tr>
                 <th>처리사유</th>
                 <c:if test="${reportContent.report_result_reason != null}">
-                <td colspan="3"  style="text-align: left;">${reportContent.report_result_reason }</td>
+                <td colspan="3"  style="text-align: center;">${reportContent.report_result_reason }</td>
                 </c:if>
                 <c:if test="${reportContent.report_result_reason == null}">
                 <td colspan="3" >(내용없음)</td>
@@ -106,14 +106,8 @@
                 <th>신고글</th>
                 <td colspan="3"  style="text-align: left;">${reportContent.report_text }</td>
             </tr>
-			<tr>
-			    <th>이미지</th>
-			    <td colspan="3">
-			    	<img src="/whale/static/images/${imgPath}/${reportContent.report_img_url}" alt="Post Image" style="max-width: 600px; height:90%;">
-			    </td>
-			</tr>
         </tbody>
-        <tr style="border-bottom: none;">
+        <tr style="border-bottom: none; height: 80px;">
         	<td colspan="4">
         		<input id="submitButton" type="button" value="처리하기" onclick="showReportForm()" />
         		<input type="button" value="목록" onclick='location.href = "adminReportListView?page=${ulsearchVO.page}&sk=${searchKeyword}&searchType=${searchType }"' />
@@ -122,7 +116,7 @@
     </table>
     <br /><br />
     <form id="reportStatusForm" action="adminReportSubmit" method="post">
-       	<table>
+       	<table class="contentTable" style="height: 60px; border-top: 1px solid #999;">
        		<tr>
        			<td>작성자</td>
        			<td>
@@ -181,7 +175,7 @@
 	<h1>유저상세</h1>
 	<table class="userInfo">
 		<tr>
-			<td rowspan="9" class="proImg" style="">
+			<td rowspan="9" class="proImg" style="width: 40%;">
 				<div>
 					<c:if test="${not empty AccountUserInfo.user_image_url }">
 						<img src="${AccountUserInfo.user_image_url }" alt="프사" />
@@ -191,8 +185,8 @@
 					</c:if>
 				</div>
 			</td>
-			<td>아이디</td>
-			<td>${AccountUserInfo.user_id }</td>
+			<td style="width: 10%;">아이디</td>
+			<td style="width: 50%;">${AccountUserInfo.user_id }</td>
 		</tr>
 		<tr>
 			<td>닉네임</td>

@@ -10,7 +10,7 @@ const MainHeaderMenuComponent = {
 						</div>
 						<Transition name="menuTransition">
 							<div v-if="notificationIndex === 4 && notifications[4].length !== 0" class="header-expanded-content">
-								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[4]" :key="j" style="height: 80px;" @click="fetchNoti('updateWhaleNoti?wn='+notification.whale_noti_id)">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[4]" :key="j" :style="{height: notification.whale_noti_type === 1 ? '80px' : '55px'}" @click="fetchNoti('updateWhaleNoti?wn='+notification.whale_noti_id)">
 									<div class="header-notification-content" v-if="notification.whale_noti_type === 0">
 										<span style="font-weight: 400;">신고 처리가 완료되었습니다.</span><br>
 										<div style="width: inherit; font-size: 9px; text-align: right;">
@@ -116,8 +116,8 @@ const MainHeaderMenuComponent = {
 						</div>
 						<Transition name="menuTransition">
 							<div v-if="notificationIndex === 2 && notifications[2].length !== 0" class="header-expanded-content">
-								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[2]" :key="j" @click="redirectIframeNoti(1,2,j,'updateCommentsNoti?cn='+notification.comments_noti_id)">
-									<div class="header-notification-content">
+								<div class="header-notification flexCenter" v-for="(notification, j) in notifications[2]" :key="j" style="height: 80px;" @click="redirectIframeNoti(1,2,j,'updateCommentsNoti?cn='+notification.comments_noti_id)">
+									<div class="header-notification-content" style="padding: 0 30px;">
 										<span style="font-weight: 400;">{{ notifications[2][j].target_user_id }}</span>님이 당신의 {{ notifications[2][j].comments_noti_type }}에 <span style="font-weight: 400;">댓글</span>을 달았습니다.<br>
 										<div style="width: inherit; font-size: 9px; text-align: right;">
 											<div style="float: left; width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10px;">{{ notification.post_comments_text !== null ? '\"'+notification.post_comments_text+'\"' : '\"'+notification.feed_comments_text+'\"' }}&nbsp</div>

@@ -413,11 +413,18 @@
 	// 텍스트 메시지 전송
 	function sendMessage() {
 	    const messageInput = document.getElementById("messageInput");
-	    const message = messageInput.value.trim();
+	    let message = messageInput.value.trim(); // 'let'으로 선언하여 재할당 가능하게 함
+	    let payload = ""; // 'payload'를 함수 상단에서 선언
+	
 	    if (message) {
-	        const payload = roomId + ":" + now_id + ":TEXT:" + message;
+	        if (message.includes('%music%')) {
+	            message = message.replace('%music%', '').trim(); // 변경된 값을 다시 할당
+	            payload = roomId + ":" + now_id + ":MUSIC:" + message;
+	        } else {
+	            payload = roomId + ":" + now_id + ":TEXT:" + message;
+	        }
 	        socket.send(payload);
-	        messageInput.value = "";
+	        messageInput.value = "";	    		
 	    }
 	}
 	

@@ -129,6 +129,7 @@ public interface AdminIDao {
 	public void feedCommentsLikeParentDel(int feed_comments_id);
 	public void updateUserStatus(String userId);
 	public String myImg(String userId);
+	public void endActionUpdate(String userId);
 	
 	////////////////
 	public ArrayList<AdminPFCDto> adminNoticeList(
@@ -152,7 +153,7 @@ public interface AdminIDao {
 	public int reportCnt();
 	public int reportResultCnt();
 	public int writingCnt();
-	public ArrayList<AdminMainCntDto> mainNotice();
+	public ArrayList<AdminWhaleNotiDto> mainNotice();
 	public AdminMemoDto adminMemo(String myId);
 	public int memoCheck(String myId);
 	public void memoCreate(String myId);

@@ -837,13 +837,12 @@
 		FROM DUAL
 	</select>
 	
-	<select id="mainNotice" resultType="com.tech.whale.admin.dto.AdminMainCntDto">
-		SELECT TO_CHAR(POST_ID) AS POST_ID, POST_TITLE, POST_DATE
+	<select id="mainNotice" resultType="com.tech.whale.admin.dto.AdminWhaleNotiDto">
+		SELECT TO_CHAR(NOTICE_ID) AS NOTICE_ID, NOTICE_TEXT, NOTICE_DATE
 		FROM (
-		    SELECT TO_CHAR(POST_ID) AS POST_ID, SUBSTR(NVL(TO_CHAR(POST_TITLE),''),1,20) AS POST_TITLE, POST_DATE
-		    FROM POST
-		    WHERE POST_TAG_ID = 5
-		    ORDER BY POST_ID DESC
+		    SELECT TO_CHAR(NOTICE_ID) AS NOTICE_ID, SUBSTR(NVL(TO_CHAR(NOTICE_TEXT),''),1,20) AS NOTICE_TEXT, NOTICE_DATE
+		    FROM NOTICE_TABLE
+		    ORDER BY NOTICE_ID DESC
 		)
 		WHERE ROWNUM &lt;= 3
 
@@ -950,5 +949,10 @@
 		INSERT INTO NOTICE_TABLE VALUES(
 		NOTICE_TABLE_SEQ.NEXTVAL, #{user_id}, #{whale_text}, SYSDATE)
 	</insert>
+	
+	<update id="endActionUpdate">
+		UPDATE REPORT_RESULT SET USER_END_ACTION = NULL
+		WHERE TARGET_USER_ID = #{user_id}
+	</update>
 	
 </mapper>

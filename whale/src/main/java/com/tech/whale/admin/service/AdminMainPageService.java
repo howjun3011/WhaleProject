@@ -16,6 +16,7 @@ import com.tech.whale.admin.dao.AdminStatisticIDao;
 import com.tech.whale.admin.dto.AdminMainCntDto;
 import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
+import com.tech.whale.admin.dto.AdminWhaleNotiDto;
 import com.tech.whale.admin.dto.AdminLVDataDto;
 
 @Service
@@ -32,7 +33,7 @@ public class AdminMainPageService implements AdminServiceInter{
 		int report_null = adminIDao.reportCnt();
 		int report_result_today = adminIDao.reportResultCnt();
 		int writing_today = adminIDao.writingCnt();
-		ArrayList<AdminMainCntDto> mainNotice = adminIDao.mainNotice();
+		ArrayList<AdminWhaleNotiDto> mainNotice = adminIDao.mainNotice();
 		List<AdminLVDataDto> mainStatistic = adminStatisticIDao.cfStatistic12();
 		int musig_today = adminIDao.musigToday();
 		int tag_today = adminIDao.tagToday();

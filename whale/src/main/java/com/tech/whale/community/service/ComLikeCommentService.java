@@ -87,7 +87,7 @@ public class ComLikeCommentService {
     		Integer commentNoti = mainDao.selectCommentsNotiPostCommentId(parentCommentId);
             String postUserId = mainDao.selectPostCommentUserId(parentCommentId);
             if (commentNoti == 1 && !postUserId.equals(userId)) {
-            	mainDao.insertPostCommentsNoti("게시글 댓글", postId, userId, commentText);
+            	mainDao.insertPostCCNoti("게시글 댓글", parentCommentId, postId, userId, commentText);
             }
     	}
     }

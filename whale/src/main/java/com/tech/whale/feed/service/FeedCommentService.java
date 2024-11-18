@@ -75,7 +75,7 @@ public class FeedCommentService {
         Integer commentNoti = mainDao.selectCommentsNotiFeedCommentId(parentCommentId);
         String feedUserId = mainDao.selectFeedCommentUserId(parentCommentId);
         if (commentNoti == 1 && !feedUserId.equals(userId)) {
-            mainDao.insertFeedCommentsNoti("피드 댓글", feedId+"", userId, replyText);
+            mainDao.insertFeedCCNoti("피드 댓글", parentCommentId, feedId+"", userId, replyText);
         }
     }
     

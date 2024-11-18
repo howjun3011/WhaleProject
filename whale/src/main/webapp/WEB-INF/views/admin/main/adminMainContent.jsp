@@ -8,26 +8,26 @@
     <div class="blockContainer">
 	    <div class="divStep">
 	        <div class="block" id="block1">
-	        	<span class="block5-name"  onclick="window.location.href='adminReportListView'">신고현황</span>
+	        	<p class="block5-name"  onclick="window.location.href='adminReportListView'">신고현황</p>
 	        	<div id="reportToday">
 	        		오늘완료- ${report_result_today } 건<br />
 	        		미완료- ${report_null } 건
 	        	</div>
 	        </div>
 	        <div class="block" id="block2">
-	        	<span class="block5-name" onclick="window.location.href='adminBoardListView'">오늘 작성된 글</span>
+	        	<p class="block5-name" onclick="window.location.href='adminBoardListView'">오늘 작성된 글</p>
 	        	<div id="writingToday" class="blok-2-4">
 	        		${writing_today} 건
 	        	</div>
 	        </div>
 	        <div class="block" id="block3">
-	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘재생횟수</span>
+	        	<p class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘 재생 횟수</p>
 	        	<div id="musigToday" class="blok-2-4">
 	        		${musig_today} 건
 	        	</div>
 	        </div>
 	        <div class="block" id="block4">
-	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘음악태그</span>
+	        	<p class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘 음악 태그</p>
 	        	<div id="tagToday" class="blok-2-4">
 	        		${tag_today} 건
 	        	</div>
@@ -35,7 +35,7 @@
 	    </div>
 	    <div class="divStep">
 	        <div class="block" id="block5">
-	        	<span class="block5-name" onclick="window.location.href='adminNoticeListView'">공지사항</span>
+	        	<p class="block5-name" onclick="window.location.href='adminNoticeListView'">공지사항</p>
 	        	<table id="noticce" class="block5-7">
 	        		<c:forEach items="${mainNotice }" var="mn">
 	        			<tr>
@@ -46,7 +46,7 @@
 	        	</table>
 	        </div>
 	        <div class="block" id="block7">
-	        	<span class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘 음악 순위</span>
+	        	<p class="block5-name" onclick="window.location.href='adminStatisticTrackView'">오늘 음악 순위</p>
 	        	<table class="block5-7">
 	        		<c:forEach items="${rank_today }" var="rt" varStatus="status">
 	        			<tr>
@@ -59,7 +59,7 @@
 	    </div>
 	    <div class="divStep">
 	        <div class="block" id="block8">
-	        	<span class="block5-name" onclick="window.location.href='adminStatisticCFView'">커뮤&피드 작성글</span>
+	        	<p class="block5-name" onclick="window.location.href='adminStatisticCFView'">커뮤&피드 작성글</p>
 	        	<div class="chartBox">
 		        	<canvas id="reportChart"></canvas>
 		    	</div>

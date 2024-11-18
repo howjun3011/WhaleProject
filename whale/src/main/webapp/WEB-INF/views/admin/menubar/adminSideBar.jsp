@@ -9,14 +9,16 @@
 </script>
 
 <div id="adminSideBar" name="adminSideBar" class="adminSideBar">
- 	<div class="profile">
-	 	<div class="proImgBox">
-	 		<img src="${myImgUrl }" alt="user_img" class="proImg"/> <br />
-	 	</div>
-    </div>
- 	<div class="logoutstr">
-        <a href="adminMyInfoView">${myId }</a> <br />
-        <a href="#" onclick="logoutWhale()">로그아웃</a>
+	<div class="profile-container">
+	 	<div class="profile">
+		 	<div class="proImgBox">
+		 		<img src="${myImgUrl }" alt="user_img" class="proImg"/> <br />
+		 	</div>
+		 	<div class="logoutstr">
+		        <a href="adminMyInfoView">${myId }</a>
+		        <a href="#" onclick="logoutWhale()">로그아웃</a>
+		    </div>
+	    </div>
     </div>
     <ul>
 		<li><a href="adminMainView">관리자메인</a></li>
@@ -25,8 +27,10 @@
 	    <li><a href="adminReportListView">신고문의</a></li>
 	    <li><a href="adminStatisticCFView">통계</a></li>
 	    <li><a href="">처리내역</a></li>
+	    <!--
 	    <li><a href="">관리자설정</a></li>
 	    <li><a href="">사용가이드</a></li>
+	    -->
 	    <li><a href="/whale/main">Whale</a></li>
 	</ul>
 </div>

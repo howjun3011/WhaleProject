@@ -88,20 +88,25 @@ export default {
 
 <style scoped>
     .mainLibraryFrame {display: flex; justify-content: center; align-items: center; width: 100px; min-width: 100px; height: 100%; background-color: #1f1f1f; transition: width 0.5s ease;}
+    #app.light .mainLibraryFrame {background-color: #f0f0f0;}
     .mainLibraryFrame.expanded {width: 300px; max-width: 300px;}
     .mainLibrary {position: relative; display: flex; justify-content: center; width: 72%; height: 96%; background-color: #2e2e2e; border-radius: 12px; transition: width 0.5s ease;}
+    #app.light .mainLibrary {background-color: #fff;}
     .mainLibraryFrame.expanded .mainLibrary {width: 88%;}
     .libraryBtn {position: absolute; top: 20px; left: 25px; height: 22px; fill: #9f9f9f;}
     .libraryBtn:hover {opacity: 0.8; cursor: grab;}
     .libraryBtn:active {opacity: 0.6; cursor: grab;}
     .mainLibraryName {position: absolute; top: 25px; left: 60px; color: white; font-size: 13px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8; overflow: hidden; white-space: nowrap; text-overflow: clip;}
+    #app.light .mainLibraryName {color: #111;}
     .playlist-container {display: flex; flex-direction: column; justify-content: flex-start; padding-top: 64px; overflow: auto; -ms-overflow-style: none;}
     .playlist-content {position: relative; display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; margin-bottom: 5px; border-radius: 8px;}
     .playlist-content:hover {background-color: rgba(60,60,60,0.8);}
+    #app.light .playlist-content:hover {background-color: #f0f0f0;}
     .mainLibraryFrame.expanded .playlist-content {width: 200px;}
     .playlistCover {width: 45px; height: 45px;}
     .playlistCover:hover {cursor: grab;}
     .mainLibraryFrame.expanded .playlistCover {position: absolute; top: 7.5px; left: 10px;}
     .libraryInfo {width: 100px; height: 50px; margin-left: 38px; padding: 19px 0 0 5px; overflow: auto; white-space: nowrap; text-overflow: clip;}
     .libraryInfoFont {color: white; font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8; user-select: none;}
+    #app.light .libraryInfoFont {color: #111;}
 </style>

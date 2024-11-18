@@ -223,14 +223,17 @@ export default {
     .recommendationsHeader {width: 100%; height: 30px;}
     .recommendations {position: relative; width: 100%; height: 240px; margin-bottom: 25px;}
     .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .recommendationTitle {color: #111;}
     .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
     .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
     .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
+    #app.light .recommendationContent:hover {background-color: #f0f0f0;}
     .recommendationLike{position: absolute; width: 30px; height: 30px; top: 105px; background: transparent;}
     .recommendationLike:hover{opacity: 0.7;}
     .recommendationLike:active{opacity: 0.6;}
     .recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}
     .recommendationInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
+    #app.light .recommendationInfo {color: #111;}
     .trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
     .artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}
     .artistDetailSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}

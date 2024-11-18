@@ -9,7 +9,7 @@
                         <img :src="search.artists.items[0].images[0].url" :alt="search.artists.items[0].name" width="100" height="100" style="border-radius: 50%; cursor: pointer;">
                     </div>
                     <p class="searchArtistName">{{ search.artists.items[0].name }}</p>
-                    <p class="artistName" style="color: white;">아티스트</p>
+                    <p class="artistName">아티스트</p>
                 </div>
             </div>
         </div>
@@ -163,16 +163,20 @@ export default {
     .recommendationsHeader {width: 100%; height: 30px;}
     .recommendations {position: relative; width: 100%; height: 240px; margin-top: 20px;}
     .recommendationTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding-left: 10px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8;}
+    #app.light .recommendationTitle {color: #111;}
     .recommendationContents {display: flex; width: 100%; height: 195px; overflow: auto; -ms-overflow-style: none;}
     .recommendationContent {position: relative; flex: 0 0 auto; width: 150px; height: 100%; border-radius: 15px; opacity: 0.9;}
     .recommendationContent:hover {background-color: rgba(60,60,60,0.8);}
+    #app.light .recommendationContent:hover {background-color: #f0f0f0;}
     .recommendationLike{position: absolute; width: 30px; height: 30px; top: 100px; background: transparent;}
     .recommendationLike:hover{opacity: 0.7;}
     .recommendationLike:active{opacity: 0.6;}
     .recommendationCover {display: flex; justify-content: center; align-items: center; width: 100%; height: 155px;}
     .recommendationInfo {width: 100%; height: 40px; padding: 0 12px; color: #FFFFFF;}
+    #app.light .recommendationInfo {color: #111;}
     .trackName {font-size: 12px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8;}
-    .artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8;}
+    .artistName {font-size: 11px; font-weight: 200; letter-spacing: 0.4px; opacity: 0.8; color: white;}
+    #app.light .artistName {color: #111;}
     .artistDetailSlideButton {cursor: pointer; position: absolute; z-index: 1; transition: opacity 0.3s ease; border: 0; background-color: transparent; transform: translateY(-50%);}
     .artistDetailSlideButton.left {left: 0; top: 50%;}
     .artistDetailSlideButton.right {right: 0; top: 50%;}
@@ -182,22 +186,28 @@ export default {
     .searchFirstContainer > :last-child {flex: 0 0 60%;}
     .resultContainer{position: relative;}
     .resultContainerTitle {display: flex; flex-direction: column-reverse; width: 100%; height: 45px; padding: 0 0 8px 15px; color: #F2F2F2; font-size: 17px; font-weight: 400; letter-spacing: 0.2px; opacity: 0.8; box-sizing: border-box;}
+    #app.light .resultContainerTitle {color: #000;}
     .relatedArtists {height: 190px; border-radius: 15px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease;}
     .relatedArtists:hover {background-color: rgba(60,60,60,0.8);}
+    #app.light .relatedArtists:hover {background-color: #f0f0f0;}
     .artistResultCover{height: 120px; display: flex; align-items: center;}
     .artistResult{margin-left: 15px;}
     .searchArtistName{color: white; font-size: 2rem; font-weight: bold;}
+    #app.light .searchArtistName {color: #111;}
     .searchArtistName:hover {opacity: 0.6; cursor: grab;}
     /* searchResults에만 스크롤바 표시 */
     .searchResults::-webkit-scrollbar {display: block; /* 수직 스크롤바 표시 */ width: 8px; /* 스크롤바 너비 설정 */}
     /* 스크롤바의 트랙(기본 배경) 스타일 */
     .searchResults::-webkit-scrollbar-track {background: #2e2e2e; /* 트랙 배경색 설정 */}
     /* 스크롤바 핸들(스크롤 이동할 때 잡는 부분) 스타일 */
+    #app.light .searchResults::-webkit-scrollbar-track {background: #f0f0f0;}
     .searchResults::-webkit-scrollbar-thumb {background-color: #555; /* 핸들 색상 설정 */ border-radius: 4px; /* 핸들 모서리 둥글게 설정 */}
     .searchResults {width: 100%; height: 190px; overflow-y: auto; /* 스크롤바 활성화 */ scroll-behavior: smooth; display: flex; flex-direction: column;}
     .searchResult {display: flex; border-radius: 4px; opacity: 0.9; cursor: pointer; transition: transform 0.3s ease; padding: 8px 10px;}
     .searchResult:hover {background-color: rgba(60,60,60,0.8);}
+    #app.light .searchResult:hover {background-color: #f0f0f0;}
     .searchInfo{width: 100%; height: 40px; padding-left: 20px; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center;}
+    #app.light .searchInfo {color: #000;}
     .searchInfo .trackName,
     .searchInfo .artistName{white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 340px;}
     .searchCover {display: flex; justify-content: center; align-items: center;}

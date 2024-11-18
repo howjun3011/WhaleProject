@@ -383,7 +383,7 @@ body {min-height: 100vh; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .libraryBtn {position: absolute; top: 20px; left: 25px; height: 22px; fill: #9f9f9f;}
 .streamingBody[data-darkmode="0"] .libraryBtn:hover {opacity: 0.8; cursor: grab;}
 .streamingBody[data-darkmode="0"] .libraryBtn:active {opacity: 0.6; cursor: grab;}
-.streamingBody[data-darkmode="0"] .mainLibraryName {display: none; position: absolute; top: 25px; left: 60px; color: white; font-size: 13px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8; overflow: hidden; white-space: nowrap; text-overflow: clip;}
+.streamingBody[data-darkmode="0"] .mainLibraryName {display: none; position: absolute; top: 25px; left: 60px; color: #111; font-size: 13px; font-weight: 400; letter-spacing: 0.4px; opacity: 0.8; overflow: hidden; white-space: nowrap; text-overflow: clip;}
 .streamingBody[data-darkmode="0"] .mainLibraryFrame.expanded .mainLibraryName {display: block;}
 .streamingBody[data-darkmode="0"] .userPlaylists{display: flex; flex-direction: column; justify-content: flex-start; padding-top: 64px; overflow: auto; -ms-overflow-style: none;}
 .streamingBody[data-darkmode="0"] .playlist-content {position: relative; display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; margin-bottom: 5px; border-radius: 8px;}

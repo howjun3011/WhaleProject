@@ -18,7 +18,7 @@ body{
     background-color: #293846;
     color: white;
     left: 0;
-    top: 0;
+    top: 80px;
     z-index: 100;
     
 }
@@ -27,7 +27,7 @@ body{
 	width:80px; 
 	border-radius: 50%;
 	background-color: #fff; 
-	margin: 20px auto;
+	margin: 0 auto;
 }
 .proImg{
 	height:80px; 
@@ -38,10 +38,14 @@ body{
 .adminSideBar ul {
     list-style: none;
     margin:0;
+    padding: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
 }
 .adminSideBar ul li {
-	padding: 0 0 0 5px;
-    margin: 5px 0px;
+	font-size: 18px;
 }
 .adminSideBar a{
 	color: #aaa;
@@ -52,6 +56,19 @@ body{
 	text-decoration: nuderline;
 }
 .logoutstr{
-	margin: 20px auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin: 20px auto 0 auto;
 	text-align: center;
+}
+.profile-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 45px;
+}
+.profile{
+	padding: 30px 50px;
+	border-bottom: 1px solid rgb(96, 96, 96);
 }

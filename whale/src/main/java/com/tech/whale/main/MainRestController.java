@@ -161,4 +161,10 @@ public class MainRestController {
 	public void followBackNotiMain(@RequestParam HashMap<String, Object> map) {
 		mainService.followBackNotiMainService((String) map.get("ui"),(String) map.get("ti"));
 	}
+	
+	// [ 노드용 다크 모드 정보 출력 ]
+	@GetMapping(value = "/getDarkMode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public int getDarkModeMain(@RequestParam("userId") String userId) {
+		return mainService.getDarkModeMainService(userId);
+	}
 }

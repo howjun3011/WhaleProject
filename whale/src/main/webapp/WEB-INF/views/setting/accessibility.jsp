@@ -98,6 +98,14 @@
                     }
                 }
             };
+            
+            let currentIframe = window.frameElement.id;
+            
+            if (currentIframe === 'rightIframe') {
+            	window.parent.document.getElementById('leftIframe').contentWindow.postMessage('darkmodeOn','https://localhost:5500');
+            } else {
+            	window.parent.document.getElementById('rightIframe').contentWindow.postMessage('darkmodeOn','https://localhost:5500');
+            }
         });
     });
 </script>

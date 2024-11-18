@@ -257,7 +257,12 @@
                             <div class="trackDetailContainer">
                                 <c:if test="${not empty trackDetail.album.images}">
                                     <img src="${trackDetail.album.images[0].url}" alt="${trackDetail.name}" width="230"
-                                         height="230" style="border-radius: 8px;">
+                                         height="230" style="border-radius: 8px;"
+                                         onclick="copyTrackId('<c:out
+                                             value="${trackDetail.album.images[0].url}"/>', '<c:out
+                                             value="${fn:escapeXml(trackDetail.name)}"/>', '<c:out
+                                             value="${fn:escapeXml(trackDetail.artists[0].name)}"/>', '<c:out
+                                             value="${fn:escapeXml(trackDetail.album.name)}"/>', '${trackDetail.id}')">
                                 </c:if>
                                 <div class="trackDetailInfo">
                                     <p class="detailSort">곡</p>

@@ -2,7 +2,7 @@
     <div class="playlistDetail">
         <div class="playlistDetailContainer" v-if="artist !== null">
             <img :src="track.album.images[0].url" :alt="track.name" width="230"
-                        height="230" style="border-radius: 8px;">
+                        height="230" style="border-radius: 8px;" @click="copyTrackId(track.artists[0].name,track.name,track.album.name,track.album.images[0].url,track.id)">
             <div class="playlistDetailInfo">
                 <p class="detailSort">곡</p>
                 <p class="playlistName">{{ track.name }}</p>
@@ -138,6 +138,33 @@ export default {
                 fetch(`http://localhost:9002/whale/streaming/deleteTrackLikeNode?userId=${ sessionStorage.userId }&trackId=${ e }`);
             }
             this.like = !this.like;
+        },
+        copyTrackId(a,b,c,d,e) {
+            // 해당 트랙 Whale DB에 저장
+            const body = {
+                artistName: a,
+                trackName: b,
+                albumName: c,
+                trackCover: d,
+                trackSpotifyId: e
+            };
+
+            fetch(`http://localhost:9002/whale/streaming/insertTrackInfo`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(body)
+            });
+            // 클립 보드 카피 기능
+            var t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = `%music%${e}`;
+            t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+            alert('해당 트랙 아이디를 복사했습니다.');
         }
     },
 };

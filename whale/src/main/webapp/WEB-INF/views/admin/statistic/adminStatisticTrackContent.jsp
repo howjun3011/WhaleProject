@@ -9,7 +9,6 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">1일 종합 태그 순위</h1>
-	    <br />
 	    <div id="postBtn" class="btnBox">
 		    <button id="btnChart1">1일태그순위</button>
 		    <button id="btnChart2">7일태그순위</button>
@@ -21,13 +20,10 @@
 		    <button id="btnChart8">전체좋아요순위</button>
 		    <button id="btnChart9">시간별이용량</button>
 	    </div>
-	    <br />
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
 	    </div>
-	    <br />
-		<br />
-		<br />
+	    <br/>
 	</div>
 	
 </div>

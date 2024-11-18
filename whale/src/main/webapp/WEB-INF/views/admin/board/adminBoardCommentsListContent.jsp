@@ -47,14 +47,14 @@
     <table>
         <thead>
             <tr>
-                <th>커뮤/피드</th>
-                <th>부모글번호</th>
-                <th>번호</th>
-                <th>내용</th>
-                <th>아이디</th>
-                <th>등록일</th>
-                <th>신고</th>
-                <th></th>
+                <th style="width: 10%;">커뮤/피드</th>
+                <th style="width: 10%;">부모글번호</th>
+                <th style="width: 10%;">번호</th>
+                <th style="width: 20%;">내용</th>
+                <th style="width: 10%;">아이디</th>
+                <th style="width: 10%;">등록일</th>
+                <th style="width: 10%;">신고</th>
+                <th style="width: 20%;"></th>
             </tr>
         </thead>
         <tbody>

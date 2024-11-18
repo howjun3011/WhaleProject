@@ -8,7 +8,6 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">30일 신규 유저</h1>
-		<br />
 	    <div class="btnBox">
 		    <button id="btnChart1">30일신규유저</button>
 		    <button id="btnChart2">전체유저</button>
@@ -16,9 +15,6 @@
 	    <div class="chartBox">
 	        <canvas id="reportChart"></canvas>
 	    </div>
-	    <br />
-	    <br />
-	    <br />
 	</div>
 </div>
 <script>

@@ -67,11 +67,10 @@
 	    </div>
     </div>
     <div id="memo">
-    	메모장 <br />
+    	<p>메모장</p>
     	<form id="memoForm" action="adminMemoSave" method="post">
 	    	<textarea id="admin_Memo" name="admin_Memo" rows="" cols="" oninput="checkByteLimit(this, 3000)">${admin_Memo.memo_writing }</textarea> <br />
-	    	<div id="byteCount">0 / 3000 bytes  <fmt:formatDate value="${admin_Memo.memo_update_date }" pattern="yyyy.MM.dd" /> </div>
-	    	<input type="submit" value="저장하기" />
+	    	<p id="byteCount">0 / 3000 bytes  <fmt:formatDate value="${admin_Memo.memo_update_date }" pattern="yyyy.MM.dd" /> <input type="submit" value="저장하기" /></p>
     	</form>
     </div>
 </div>

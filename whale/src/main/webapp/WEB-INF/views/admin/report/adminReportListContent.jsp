@@ -32,13 +32,13 @@
         </thead>
         <tbody>
 			<c:if test="${empty list}">
-			    <tr>
+			    <tr style="height: 50px;">
 			        <td colspan="10" align="center">결과가 없습니다.</td>
 			    </tr>
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
-				<tr>
+				<tr style="height: 50px;">
 					<td>${dto.report_id }</td>
 					<td>${dto.tag_name }</td>
 					<td>${dto.writing_id }</td>
@@ -58,7 +58,7 @@
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="10">
+			    <td colspan="9">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

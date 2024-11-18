@@ -58,7 +58,7 @@
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="6">
+			    <td colspan="7">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

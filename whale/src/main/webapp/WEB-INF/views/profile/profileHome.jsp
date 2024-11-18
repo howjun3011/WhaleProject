@@ -155,6 +155,10 @@
 							<img class="lockbtn" src="static/images/btn/lock_btn.png" alt="secret" />
 						</c:if>
 						<div class="username">${profile.user_nickname}</div>
+						<c:choose>
+							<c:when test="${userId == 'WHALE'}">
+							</c:when>
+							<c:otherwise>
 								<c:if test="${now_id != userId}">
 								<div class="profile-actions">
 									<c:choose>
@@ -181,7 +185,9 @@
 									</c:choose>
 									<a href="messageGo?u=${userId}"><button class="message">메시지</button></a>
 								</div>
-							</c:if>
+							</c:if>							
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<div class="stats-and-featured-music">
 						<div class="stats">

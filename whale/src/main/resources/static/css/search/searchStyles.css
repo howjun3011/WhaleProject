@@ -32,7 +32,7 @@ input:-webkit-autofill:active {-webkit-text-fill-color: #000; -webkit-box-shadow
 .searchHomeBody[data-darkmode="0"] .postItemFlexBox h3{margin: 0;}
 .searchHomeBody[data-darkmode="0"] .postItem > * > *{margin: 0;}
 .searchHomeBody[data-darkmode="0"] .postItem p{color: rgb(164, 164, 164); margin: 20px 0 5px;}
-.searchHomeBody[data-darkmode="0"] .feedContainer{display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #cecece;}
+.searchHomeBody[data-darkmode="0"] .feedContainer{display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #fff;}
 .searchHomeBody[data-darkmode="0"] .feedItem {box-sizing: border-box; text-align: center; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; /* 넘치는 내용 숨김 */ aspect-ratio: 1 / 1;}
 .searchHomeBody[data-darkmode="0"] .feedItem img {width: 100%; height: 100%; object-fit: cover; /* 이미지가 컨테이너를 완전히 채우도록 조정 */}
 /*-----------------------------------------------------------------------------------------------------------*/

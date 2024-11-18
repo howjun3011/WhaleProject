@@ -6,7 +6,7 @@
     margin-left:390px;
     padding: 20px;
     height: 100%;
-    min-width: 800px;
+    min-width: 1400px;
 }
 
 textarea {
@@ -17,23 +17,25 @@ textarea {
 .content {
 	display:flex;
 	flex-direction: column;
-	flex-grow: 1;
+	gap: 40px;
     background-color: white;
     margin-left:5%;
     margin-top: 40px;
     /* padding: 20px; */
     height: 100%;
-    min-width: 800px;
+    min-width: 1400px;
+    width: 100%;
 }
 
 
 table {
 	margin: 20px 0;
-    width: 800px;
     border-collapse: collapse;
+    width: 70%;
     
 }
 tr {
+	height: 60px;
 	border-bottom: 1px solid #999;
 }
 th, td {
@@ -46,6 +48,10 @@ th, td {
     border-top: 1px solid #999;
 }
 
+.userInfo tr {
+	border-bottom: none;
+}
+
 .userInfo td img {
     border: 1px solid #999;
     padding: 5px;
@@ -54,6 +60,11 @@ th, td {
     width: auto;
     height: auto;
     object-fit: cover;
+}
+
+.userInfo button {
+	padding: 4px 10px;
+	margin: 10px;
 }
 
 .proImg img {

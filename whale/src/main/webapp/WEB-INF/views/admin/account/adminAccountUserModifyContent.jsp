@@ -123,7 +123,7 @@
 		<h2>유저상세</h2>
 		<table class="userInfo">
 			<tr>
-				<td rowspan="5" class="proImg" style="">
+				<td rowspan="5" class="proImg" style="width: 40%;">
 					<div>
 						<c:if test="${not empty AccountUserInfo.user_image_url }">
 							<img src="${AccountUserInfo.user_image_url }" alt="프사" />
@@ -134,8 +134,8 @@
 					</div>
 					<button onclick="confirmDelete()" >사진 삭제</button>
 				</td>
-				<td>아이디</td>
-				<td>${AccountUserInfo.user_id }</td>
+				<td style="width: 10%;">아이디</td>
+				<td style="width: 50%;">${AccountUserInfo.user_id }</td>
 			</tr>
 			<tr>
 				<td>닉네임</td>
@@ -176,7 +176,7 @@
 	    <div class="userStatusContent">
 	        <h2>계정상태 수정</h2>
 	        <form id="userStatusForm" action="adminUserStatusModify" method="post">
-	        	<table>
+	        	<table style="border-top: 1px solid #999;">
 	        		<tr>
 	        			<td>계정상태변경</td>
 	        			<td>
@@ -215,15 +215,10 @@
 	        </div>
 	    </div>
 	</div>
-
-	<br />
-	<br />
-	<br />
-	<br />
 	<div id="accessAddForm" class="accessAddForm" style="display: none;">
 		<h2>권한 수정</h2>
 		<form id="accessForm" action="adminUserAccessModify" method="post">
-			<table class="accessAddTable">
+			<table class="accessAddTable" style="border-top: 1px solid #999;">
 				<tr>
 					<td class="tdName">상호명</td>
 					<td class="tdContent">
@@ -241,16 +236,6 @@
 						<label>
 					        <input type="radio" name="userAccess" value="1" onclick="companyNameText()"/>
 					        관리자
-					    </label>
-					    &nbsp;&nbsp;
-					    <label>
-					        <input type="radio" name="userAccess" value="2" onclick="companyNameText()"/>
-					        광고주
-					    </label>
-					    &nbsp;&nbsp;
-					    <label>
-					        <input type="radio" name="userAccess" value="3" onclick="companyNameText()"/>
-					        오피셜
 					    </label>
 					</td>
 				</tr>

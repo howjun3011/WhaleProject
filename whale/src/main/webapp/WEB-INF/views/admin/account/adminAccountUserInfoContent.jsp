@@ -6,7 +6,7 @@
 	<h1>유저상세</h1>
 	<table class="userInfo">
 		<tr>
-			<td rowspan="9" class="proImg" style="">
+			<td rowspan="9" class="proImg" style="width: 40%;">
 				<div>
 					<c:if test="${not empty AccountUserInfo.user_image_url }">
 						<img src="${AccountUserInfo.user_image_url }" alt="프사" />
@@ -16,8 +16,8 @@
 					</c:if>
 				</div>
 			</td>
-			<td>아이디</td>
-			<td>${AccountUserInfo.user_id }</td>
+			<td style="width: 10%;">아이디</td>
+			<td style="width: 50%;">${AccountUserInfo.user_id }</td>
 		</tr>
 		<tr>
 			<td>닉네임</td>
@@ -52,10 +52,9 @@
 			<td>${AccountUserInfo.comments_count }</td>
 		</tr>
 	</table>
-	<hr />
 	<h1>최근활동</h4>
 	<h2>게시글</h2>
-	<table id="postList">
+	<table id="postList" style="border-top: 1px solid #999;">
 		<tr>
 			<th>번호</th>
 			<th>커뮤니티</th>
@@ -82,7 +81,7 @@
 	</table>
 	<hr />
 	<h2>피드</h2>
-	<table id="feedList">
+	<table id="feedList" style="border-top: 1px solid #999;">
 		<tr>
 			<th>번호</th>
 			<th>내용</th>
@@ -105,7 +104,7 @@
 	</table>
 	<hr />
 	<h2>댓글</h2>
-	<table id="commentList">
+	<table id="commentList" style="border-top: 1px solid #999;">
 		<tr>
 			<th>커뮤니티/피드</th>
 			<th>번호</th>

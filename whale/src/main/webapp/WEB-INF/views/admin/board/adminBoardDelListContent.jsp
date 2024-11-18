@@ -27,13 +27,13 @@
         </thead>
         <tbody>
 			<c:if test="${empty list}">
-			    <tr>
+			    <tr style="height: 50px;">
 			        <td colspan="5" align="center">결과가 없습니다.</td>
 			    </tr>
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
-				<tr>
+				<tr style="height: 50px;">
 					<c:if test="${not empty dto.feed_del_log_id && empty dto.comments_id  }">
 						<td>피드</td>
 					</c:if>

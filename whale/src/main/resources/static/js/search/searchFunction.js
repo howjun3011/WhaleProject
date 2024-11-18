@@ -191,7 +191,7 @@ function displayFeedResults(feedList) {
                     <!-- 피드 텍스트와 닉네임을 포함하려면 주석을 해제하세요 -->
                     <!-- <p>${feed.feed_text}</p> -->
                     <!-- <span>${feed.user_nickname}</span> -->
-                    ${feed.feed_img_url ? `<img src="/whale/static/images/feed/${encodeURIComponent(feed.feed_img_name)}" alt="Feed Image">` : ''}
+                    ${feed.feed_img_url ? `<img src="${feed.feed_img_url}" alt="Feed Image">` : ''}
                 </div>
             </a>`;
         containerDiv.append(feedHtml);

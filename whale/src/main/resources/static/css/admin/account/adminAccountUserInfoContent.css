@@ -28,7 +28,7 @@ table {
     
 }
 tr {
-	border-bottom: 1px solid #999;
+	height: 50px;
 }
 th, td {
     padding: 10px;
@@ -37,7 +37,6 @@ th, td {
 .userInfo {
 	table-layout: fixed;
 	margin: 20px 0;
-    width: 800px;
     border-collapse: collapse;
     border-top: 1px solid #999;
 }
@@ -61,4 +60,13 @@ th, td {
 
 #commentList {
 	margin-bottom: 50px;
+}
+
+.contentTable tr {
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.contentTable tr input, button {
+	padding: 4px 10px;
+	margin: 10px;
 }

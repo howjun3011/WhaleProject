@@ -26,11 +26,6 @@
 	    <li><a href="adminBoardListView">게시판</a></li>
 	    <li><a href="adminReportListView">신고문의</a></li>
 	    <li><a href="adminStatisticCFView">통계</a></li>
-	    <li><a href="">처리내역</a></li>
-	    <!--
-	    <li><a href="">관리자설정</a></li>
-	    <li><a href="">사용가이드</a></li>
-	    -->
 	    <li><a href="/whale/main">Whale</a></li>
 	</ul>
 </div>

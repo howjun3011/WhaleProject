@@ -955,4 +955,82 @@
 		WHERE TARGET_USER_ID = #{user_id}
 	</update>
 	
+	
+	<sql id="includeDelLogList">
+		<choose>
+			<when test="selNum == 1">
+				AND ADMIN_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<when test="selNum == 2">
+				AND WRITING_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="adminDelLogList" resultType="com.tech.whale.admin.dto.AdminBoardDelLogDto">
+		SELECT *
+		FROM(
+		    SELECT
+		        UNI.*,
+		        ROW_NUMBER() OVER (ORDER BY UNI.DEL_DATE DESC) AS RNUM
+		    FROM(
+		        SELECT 
+		            FEED_DEL_LOG_ID,
+		            NULL AS POST_DEL_LOG_ID,
+		            FEED_DEL_REASON AS DEL_REASON,
+		            DEL_DATE,
+		            ADMIN_ID,
+		            FEED_ID AS WRITING_ID,
+		            FEED_COMMENTS_ID AS COMMENTS_ID
+		        FROM
+		            FEED_DEL_LOG FDL
+		            
+		        UNION ALL
+		        
+		        SELECT 
+		            NULL AS FEED_DEL_LOG_ID,
+		            POST_DEL_LOG_ID,
+		            POST_DEL_REASON AS DEL_REASON,
+		            DEL_DATE,
+		            ADMIN_ID,
+		            POST_ID AS WRITING_ID,
+		            POST_COMMENTS_ID AS COMMENTS_ID
+		        FROM
+		        POST_DEL_LOG PDL
+		    ) UNI
+		) RESULT
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		<include refid="includeDelLogList" />
+	</select>
+	
+	<sql id="includeDelLogCnt">
+		<choose>
+			<when test="selNum == 1">
+				WHERE ADMIN_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<when test="selNum == 2">
+				WHERE WRITING_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="selectDelLogCnt" resultType="int">
+		SELECT SUM(UNI.ID_CNT) AS TOTAL_COUNT
+		FROM (
+		    SELECT COUNT(FEED_DEL_LOG_ID) AS ID_CNT
+		    FROM FEED_DEL_LOG
+		    <include refid="includeDelLogCnt" />
+		    
+		    UNION ALL
+		    
+		    SELECT COUNT(POST_DEL_LOG_ID) AS ID_CNT
+		    FROM POST_DEL_LOG
+			<include refid="includeDelLogCnt" />
+		) UNI
+	</select>
+	
 </mapper>

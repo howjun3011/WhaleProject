@@ -1,4 +1,4 @@
-package com.tech.whale.admin.board.service;
+package com.tech.whale.admin.service;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -11,11 +11,12 @@ import org.springframework.ui.Model;
 
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.dto.AdminBoardDelLogDto;
+import com.tech.whale.admin.dto.AdminUserStatusLogDto;
 import com.tech.whale.admin.service.AdminServiceInter;
 import com.tech.whale.admin.util.AdminSearchVO;
 
 @Service
-public class AdminBoardDelLogListService implements AdminServiceInter{
+public class AdminUserStatusLogListService implements AdminServiceInter{
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -33,21 +34,21 @@ public class AdminBoardDelLogListService implements AdminServiceInter{
 		    model.addAttribute("searchVO", searchVO);
 		}
 		
-		String admin_id = "";
-	    String writing_id = "";
+		String status_admin_id = "";
+	    String user_id = "";
 	 	
 		String brdTitle = request.getParameter("searchType");
 		
 		if (brdTitle == null || brdTitle.trim().isEmpty()) {
-			admin_id = "admin_id";
-	        model.addAttribute("admin_id", "true");
+			user_id = "user_id";
+	        model.addAttribute("user_id", "true");
 	    } else if(brdTitle != null) {
-			if(brdTitle.equals("admin_id")) {
-				model.addAttribute("admin_id", "true");
-				admin_id="admin_id";
-			}else if(brdTitle.equals("writing_id")) {
-				model.addAttribute("writing_id", "true");
-				writing_id="writing_id";
+			if(brdTitle.equals("status_admin_id")) {
+				model.addAttribute("status_admin_id", "true");
+				status_admin_id="status_admin_id";
+			}else if(brdTitle.equals("user_id")) {
+				model.addAttribute("user_id", "true");
+				user_id="user_id";
 			}
 		}
 		String searchKeyword = request.getParameter("sk");
@@ -56,10 +57,10 @@ public class AdminBoardDelLogListService implements AdminServiceInter{
 		}
 
 		int total = 0;
-		if(admin_id.equals("admin_id")) {
-			total = adminIDao.selectDelLogCnt(searchKeyword,"1");
-		}else if(writing_id.equals("writing_id")) {
-			total = adminIDao.selectDelLogCnt(searchKeyword,"2");
+		if(status_admin_id.equals("status_admin_id")) {
+			total = adminIDao.selectUserStatusLogCnt(searchKeyword,"1");
+		}else if(user_id.equals("user_id")) {
+			total = adminIDao.selectUserStatusLogCnt(searchKeyword,"2");
 		}
 		
 		String strPage = request.getParameter("page");
@@ -76,14 +77,13 @@ public class AdminBoardDelLogListService implements AdminServiceInter{
 		int rowStart = searchVO.getRowStart();
 		int rowEnd = searchVO.getRowEnd();
 		
-		ArrayList<AdminBoardDelLogDto> list = null;
-		if(admin_id.equals("admin_id")) {
-			list = adminIDao.adminDelLogList(rowStart,rowEnd, searchKeyword,"1");
+		ArrayList<AdminUserStatusLogDto> list = null;
+		if(status_admin_id.equals("status_admin_id")) {
+			list = adminIDao.adminUserStatusLogList(rowStart,rowEnd, searchKeyword,"1");
 		}
-		else if(writing_id.equals("writing_id")) {
-			list = adminIDao.adminDelLogList(rowStart,rowEnd,searchKeyword,"2");
+		else if(user_id.equals("user_id")) {
+			list = adminIDao.adminUserStatusLogList(rowStart,rowEnd,searchKeyword,"2");
 		}
-		
 		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchType", brdTitle);

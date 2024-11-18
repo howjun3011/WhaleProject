@@ -30,7 +30,5 @@ public class AdminUserNicknameModifyService implements AdminServiceInter{
 		
 		adminIDao.userNicknameModyfy(userId,userNickname);
 		
-		
 	}
-
 }

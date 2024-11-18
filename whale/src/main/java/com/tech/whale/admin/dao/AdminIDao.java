@@ -13,6 +13,7 @@ import com.tech.whale.admin.dto.AdminMainRankDto;
 import com.tech.whale.admin.dto.AdminMemoDto;
 import com.tech.whale.admin.dto.AdminPFCDto;
 import com.tech.whale.admin.dto.AdminUserInfoDto;
+import com.tech.whale.admin.dto.AdminUserStatusLogDto;
 import com.tech.whale.admin.dto.AdminWhaleNotiDto;
 import com.tech.whale.community.dto.PostDto;
 
@@ -172,5 +173,13 @@ public interface AdminIDao {
 	
 	public void insertReport(String userId, String adminId);
 	public int reportGetSeq();
+	public ArrayList<AdminUserStatusLogDto> adminUserStatusLogList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectUserStatusLogCnt(String sk, String selNum);
+	
+	public List<Integer> notice_list(int postId);
 	
 }

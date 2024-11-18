@@ -24,8 +24,7 @@
     function confirmDelete() {
         var result = confirm("삭제하시겠습니까?");
         if (result) {
-            window.location.href =
-            	"adminUserImgDelete?userId=${AccountUserInfo.user_id }&userImgUrl=${AccountUserInfo.user_image_url }";
+        	document.getElementById("proImgForm").submit();
         } else {
             alert("취소되었습니다.");
         }
@@ -132,6 +131,14 @@
 							프로필사진 없음
 						</c:if>
 					</div>
+					<form id="proImgForm" action="adminUserImgDelete" method="post">
+						<input type="hidden" name="userImgUrl" value="${AccountUserInfo.user_image_url }" />
+						<input type="hidden" name="userId" value="${AccountUserInfo.user_id }" />
+						<input type="hidden" name="page" value="${page}" />
+						<input type="hidden" name="searchType" value="${searchType}" />
+						<input type="hidden" name="searchOrderBy" value="${searchOrderBy }" />
+						<input type="hidden" name="sk" value="${sk}" />
+					</form>
 					<button onclick="confirmDelete()" >사진 삭제</button>
 				</td>
 				<td style="width: 10%;">아이디</td>

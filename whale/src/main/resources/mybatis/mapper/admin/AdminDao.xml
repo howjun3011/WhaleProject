@@ -202,13 +202,8 @@
     </update>
     
     <update id="userImgDelete" >
-	    UPDATE USER_INFO SET USER_IMAGE_URL = 'PRO.PNG'
+	    UPDATE USER_INFO SET USER_IMAGE_URL = 'https://storage.googleapis.com/whale_project/whale/setting/pro.png'
 	    WHERE USER_ID = #{userId}
-	    <if test="userImgUrl != null">
-	        AND USER_IMAGE_URL = #{userImgUrl}
-	    </if>
-	    <if test="userImgUrl == null">
-	    </if>
     </update>
     
     <update id="userInfoAccessModify" >
@@ -1057,6 +1052,52 @@
 	</insert>
 	<select id="reportGetSeq" resultType="int">
 		SELECT REPORT_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<sql id="includeuserStatusLogList">
+		<choose>
+			<when test="selNum == 1">
+				WHERE USER_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<when test="selNum == 2">
+				WHERE STATUS_ADMIN_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="adminUserStatusLogList" resultType="com.tech.whale.admin.dto.AdminUserStatusLogDto">
+		SELECT * FROM(
+		SELECT USL.*, ROW_NUMBER() OVER (ORDER BY USL.USER_STATUS_DATE DESC) AS RNUM
+		 FROM USER_STATUS_LOG USL
+		<include refid="includeuserStatusLogList" />
+		 )
+		WHERE RNUM BETWEEN #{start} AND #{end}
+	</select>
+	
+	<sql id="includeUserStatusLogCnt">
+		<choose>
+			<when test="selNum == 1">
+				WHERE USER_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<when test="selNum == 2">
+				WHERE STATUS_ADMIN_ID LIKE '%' || #{sk} || '%'
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="selectUserStatusLogCnt" resultType="int">
+		SELECT COUNT(*) FROM USER_STATUS_LOG
+		<include refid="includeUserStatusLogCnt" />
+	</select>
+	
+	<select id="notice_list" resultType="Integer">
+		SELECT POST_ID FROM POST 
+		WHERE POST_TITLE = (SELECT POST_TITLE FROM POST WHERE POST_ID = #{postId})
+		AND TRUNC(POST_DATE) = (SELECT TRUNC(POST_DATE) FROM POST WHERE POST_ID = #{postId})
 	</select>
 	
 </mapper>

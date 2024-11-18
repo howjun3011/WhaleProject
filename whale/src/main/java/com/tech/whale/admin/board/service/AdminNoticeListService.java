@@ -2,6 +2,7 @@ package com.tech.whale.admin.board.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -138,5 +139,11 @@ public class AdminNoticeListService implements AdminServiceInter{
 
 
     }
+	
+	public List<Integer> noticeList(int postId){
+		List<Integer> notice_list = adminIDao.notice_list(postId);
+		
+		return notice_list;
+	}
 	
 }

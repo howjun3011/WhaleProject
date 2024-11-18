@@ -24,6 +24,7 @@ import com.tech.whale.admin.service.AdminUserInfoCommentService;
 import com.tech.whale.admin.service.AdminUserInfoFeedService;
 import com.tech.whale.admin.service.AdminUserInfoPostService;
 import com.tech.whale.admin.service.AdminUserNicknameModifyService;
+import com.tech.whale.admin.service.AdminUserStatusLogListService;
 import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.vo.SearchVO;
 
@@ -51,6 +52,8 @@ public class AdminController {
 	private AdminUserImgDeleteService adminUserImgDeleteService;
 	@Autowired
 	private AdminMainPageService adminMainPageService;
+	@Autowired
+	private AdminUserStatusLogListService adminUserStatusLogListService;
 	
 	@Autowired
 	private AdminIDao adminIDao;
@@ -69,6 +72,7 @@ public class AdminController {
 	public void accountSubBar(Model model) {
 	    Map<String, String> subMenu = new LinkedHashMap<>();
 	    subMenu.put("adminAccountUserListView", "유저관리");
+	    subMenu.put("adminUserStatusLogListView", "정지내역");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -128,26 +132,6 @@ public class AdminController {
 	    
 	    adminAccountUserListService.execute(model);
 	    adminAccountUserInfoService.excuteArray(model);
-		return "/admin/view/adminOutlineForm";
-	}
-	
-	
-	
-	@RequestMapping("/adminAccountAddView")
-	public String adminAccountAddView(
-			HttpServletRequest request,
-			AdminSearchVO searchVO ,
-			Model model) {
-		
-		model.addAttribute("request", request);
-		model.addAttribute("searchVO", searchVO);
-		model.addAttribute("pname", "권한추가");
-		model.addAttribute("contentBlockJsp",
-				"../account/adminAccountAddContent.jsp");
-	    model.addAttribute("contentBlockCss",
-	    		"/whale/static/css/admin/account/adminAccountAddContent.css");
-	    accountSubBar(model);
-	    
 		return "/admin/view/adminOutlineForm";
 	}
 	
@@ -281,15 +265,44 @@ public class AdminController {
 	
 	@RequestMapping("/adminUserImgDelete")
 	public String adminUserImgDelete(
+			@RequestParam("page") int page,
+			@RequestParam("searchType") String searchType,
+			@RequestParam("sk") String sk,
+			@RequestParam("searchOrderBy") String searchOrderBy,
+			@RequestParam("userId") String userId,
 			HttpServletRequest request,
 			Model model) {
 		model.addAttribute("request", request);
-		String userId = request.getParameter("userId");
 		
 		adminUserImgDeleteService.execute(model);
 		
 		
-		return "redirect:adminAccountUserModify?userId="+userId;
+		return "redirect:adminAccountUserModify?"
+				+ "userId=" + userId
+				+ "&page=" + page
+				+ "&searchType=" + searchType
+				+ "&searchOrderBy=" + searchOrderBy
+				+ "&sk=" + sk;
+	}
+	
+	@RequestMapping("/adminUserStatusLogListView")
+	public String adminUserStatusLogListView(
+			HttpServletRequest request,
+			AdminSearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "유저관리");
+		model.addAttribute("contentBlockJsp",
+				"../account/adminUserStatusLogListContent.jsp");
+	    model.addAttribute("contentBlockCss",
+	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
+	    accountSubBar(model);
+	    
+	    adminUserStatusLogListService.execute(model);
+	    
+		return "/admin/view/adminOutlineForm";
 	}
 	
 	

@@ -392,8 +392,10 @@
         document.getElementById("hidePostItem").style.display = "none";
         document.getElementById("openPostItem").style.display = "none";
         document.getElementById("reportItem").style.display = "none";
+        document.getElementById("publicPost").style.display = "none";
 
         if (itemType === 'post') {
+        	document.getElementById("publicPost").style.display = "block";
             if (isOwner) {
                 document.getElementById("deleteItem").style.display = "block";
                 if (selectedOpenId == 1) {

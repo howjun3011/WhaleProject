@@ -25,13 +25,13 @@
     </div>
     
     <div class="div-form">
-    	<form id="whale-form" action="adminWhaleNotiRegDo" method="post">
+    	<form id="whale-form" action="adminWhaleNotiRegDo" method="post" style="display:flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px;">
     		<textarea name="whale_text" id="whale_text" cols="50" rows="2" placeholder="공지알람 입력란 :"></textarea>
     		<input type="hidden" name="searchType" value="${searchType }" />
     		<input type="hidden" name="sk" value="${searchKeyword }" />
     		<input type="hidden" name="page" value="${ulsearchVO.page}" />
+    		<button id="whale-btn" onclick="formSubmit()" >공지등록</button>
     	</form>
-    	<button id="whale-btn" onclick="formSubmit()" >공지등록</button>
     </div>
     
     <table>
@@ -51,7 +51,7 @@
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
-				<tr>
+				<tr style="height: 50px;">
 					<c:if test="${not empty dto.notice_id && dto.notice_id != 0}">
 					<td>${dto.notice_id }</td>
 					<td>${dto.notice_text }</td>

@@ -119,6 +119,7 @@
                                     <span class="comment-date">${reply.post_comments_date}</span>
                                     <!-- 답글의 기타 버튼 -->
                                     <button class="comment-other-btn" onclick="postCommentsDelete('${communityName}','${comment.post_comments_id}','${postDetail.post_id}','${page}','${searchType }','${sk }')">
+                            			삭제하기
                                     </button>
                                 </div>
                                 <div class="comment-text">${reply.post_comments_text}</div>

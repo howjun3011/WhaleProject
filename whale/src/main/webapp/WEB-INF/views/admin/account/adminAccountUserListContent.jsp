@@ -7,19 +7,19 @@
 
     <div class="accountSearch">
 		<form action="adminAccountUserListView" method="post" >
-	        <select name="searchType" id="searchType">
-			    <option value="user_id" selected>아이디</option>
-			    <option value="user_email" <c:if test="${not empty user_email}">selected</c:if>>이메일</option>
-			</select>
-	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
-	        <input type="submit" value="검색" id="searchBtn"/>
-	        <select name="searchOrderBy" id="searchOrderBy">
+			<select name="searchOrderBy" id="searchOrderBy">
 	        	<option value="USER_STATUS" selected>계정상태</option>
 	        	<option value="USER_ID" <c:if test="${search_order_By  == 'USER_ID'}">selected</c:if>>아이디</option>
 	        	<option value="POST_COUNT" <c:if test="${search_order_By  == 'POST_COUNT'}">selected</c:if> >게시글순서</option>
 	        	<option value="FEED_COUNT" <c:if test="${search_order_By  == 'FEED_COUNT'}">selected</c:if>>피드순서</option>
 	        	<option value="COMMENTS_COUNT" <c:if test="${search_order_By  == 'COMMENTS_COUNT'}">selected</c:if>>댓글순서</option>
 	        </select>
+	        <select name="searchType" id="searchType">
+			    <option value="user_id" selected>아이디</option>
+			    <option value="user_email" <c:if test="${not empty user_email}">selected</c:if>>이메일</option>
+			</select>
+	        <input type="text" name="sk" size="50" value="${not empty searchKeyword ? searchKeyword : ''}" />
+	        <input type="submit" value="검색" id="searchBtn"/>
 		</form>
     </div>
 	
@@ -61,7 +61,7 @@
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="7">
+			    <td colspan="8">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

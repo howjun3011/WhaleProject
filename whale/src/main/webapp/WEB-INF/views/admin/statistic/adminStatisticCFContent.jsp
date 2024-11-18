@@ -9,7 +9,6 @@
 <div class="content" name="content" id="content">
 	<div class="container">
 		<h1 id="statistic-name">커뮤니티 작성글 통계</h1>
-	    <br />
 	    <div class="btnCheck">
 	    	<label>
 	        	<input type="radio" name="selectStatistic" value="0" onclick="selectPF()" checked/>

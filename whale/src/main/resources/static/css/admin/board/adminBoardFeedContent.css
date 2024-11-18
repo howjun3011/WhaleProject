@@ -29,7 +29,8 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
-        }
+    z-index: 0;
+}
 
 .user-info {
     display: flex;
@@ -225,7 +226,6 @@
 .reply {
     position: relative;
     padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
 }
 
 .reply .comment-header {
@@ -300,6 +300,3 @@
 	height: 20px;
 	margin-right: 5px;
 }
-
-
-

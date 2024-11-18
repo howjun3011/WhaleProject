@@ -37,6 +37,7 @@
 	font-size: 30px;
 	font-weight: bold;
 	align-items: center;
+    z-index: 1000;
 }
 .pagename div{
 	margin-left:0;

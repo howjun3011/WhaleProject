@@ -45,14 +45,14 @@
     <table>
         <thead>
             <tr>
-                <th>커뮤/피드</th>
-                <th>번호</th>
-                <th>제목/내용</th>
-                <th>태그</th>
-                <th>아이디</th>
-                <th>등록일</th>
-                <th>신고</th>
-                <th></th>
+                <th style="width: 10%;">커뮤/피드</th>
+                <th style="width: 10%;">번호</th>
+                <th style="width: 30%;">제목/내용</th>
+                <th style="width: 10%;">태그</th>
+                <th style="width: 10%;">아이디</th>
+                <th style="width: 10%;">등록일</th>
+                <th style="width: 10%;">신고</th>
+                <th style="width: 10%;"></th>
             </tr>
         </thead>
         <tbody>
@@ -65,14 +65,14 @@
 	        <c:forEach items="${list }" var="dto" >
 				<tr>
 					<c:if test="${not empty dto.feed_id && dto.feed_id != 0}">
-					<td>피드</td>
-					<td>${dto.feed_id }</td>
-					<td>${dto.text }</td>
-					<td></td>
-					<td>${dto.user_id }</td>
-					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_feed_count }</td>
-					<td>
+					<td style="width: 10%;">피드</td>
+					<td style="width: 10%;">${dto.feed_id }</td>
+					<td style="width: 30%;">${dto.text }</td>
+					<td style="width: 10%;"></td>
+					<td style="width: 10%;">${dto.user_id }</td>
+					<td style="width: 10%;"><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
+					<td style="width: 10%;">${dto.report_feed_count }</td>
+					<td style="width: 10%;">
 						<button onclick = "location.href = 'adminBoardFeedContentView?f=${dto.feed_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -81,14 +81,14 @@
 					</c:if>
 					
 					<c:if test="${not empty dto.post_id && dto.post_id !=0}">
-					<td>${dto.community_name }</td>
-					<td>${dto.post_id }</td>
-					<td>${dto.post_title }</td>
-					<td>${dto.post_tag_text }</td>
-					<td>${dto.user_id }</td>
-					<td><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
-					<td>${dto.report_post_count }</td>
-					<td>
+					<td style="width: 10%;">${dto.community_name }</td>
+					<td style="width: 10%;">${dto.post_id }</td>
+					<td style="width: 30%;">${dto.post_title }</td>
+					<td style="width: 10%;">${dto.post_tag_text }</td>
+					<td style="width: 10%;">${dto.user_id }</td>
+					<td style="width: 10%;"><fmt:formatDate value="${dto.date_field}" pattern="yyyy.MM.dd" /></td>
+					<td style="width: 10%;">${dto.report_post_count }</td>
+					<td style="width: 10%;">
 						<button onclick = "location.href='adminBoardPostContentView?postId=${dto.post_id }&page=${ulsearchVO.page}&sk=${searchKeyword}&communityName=${dto.community_name }&searchType=${searchType }'">
 							조회
 						</button>&nbsp;&nbsp;&nbsp;&nbsp;

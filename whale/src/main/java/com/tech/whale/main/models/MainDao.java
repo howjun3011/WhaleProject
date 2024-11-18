@@ -32,6 +32,8 @@ public interface MainDao {
 	public void insertFeedCommentLikeNoti(String commentId, String userId);
 	public void insertPostCommentsNoti(String commentType, String postId, String userId, String commentText);
 	public void insertFeedCommentsNoti(String commentType, String feedId, String userId, String commentText);
+	public void insertPostCCNoti(String commentType, String parentCommentId, String postId, String userId, String commentText);
+	public void insertFeedCCNoti(String commentType, String parentCommentId, String feedId, String userId, String commentText);
 	public void insertFollowNoti(int followNotiType, String userId, String targetId);
 	public void insertWhaleNoti(int whaleNotiType, String userId);
 	public void insertWhaleNotiText(int whaleNotiType, String userId, String whaleNotiText);

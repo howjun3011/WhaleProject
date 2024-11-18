@@ -22,6 +22,7 @@ import com.tech.whale.admin.board.service.AdminBoardPostContentService;
 import com.tech.whale.admin.board.service.AdminBoardPostDelete;
 import com.tech.whale.admin.board.service.AdminNoticeListService;
 import com.tech.whale.admin.board.service.AdminWhaleNotiService;
+import com.tech.whale.admin.board.service.AdminBoardDelLogListService;
 import com.tech.whale.admin.dao.AdminIDao;
 import com.tech.whale.admin.util.AdminSearchVO;
 import com.tech.whale.community.dao.ComDao;
@@ -56,6 +57,8 @@ public class AdminBoardController {
 	private AdminNoticeListService adminNoticeListService;
 	@Autowired
 	private AdminWhaleNotiService adminWhaleNotiService;
+	@Autowired
+	private AdminBoardDelLogListService AdminBoardDelLogListService;
 	
 	@Autowired
 	private PostUpdateService postUpdateService;
@@ -85,6 +88,7 @@ public class AdminBoardController {
 	    subMenu.put("adminBoardCommentsListView", "댓글");
 	    subMenu.put("adminNoticeListView", "커뮤 공지사항");
 	    subMenu.put("adminWhaleNotiListView", "알람 공지사항");
+	    subMenu.put("adminBoardDelLogListView", "삭제내역");
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
@@ -534,6 +538,26 @@ public class AdminBoardController {
         		+ "page=" + page
         		+ "&searchType=" + searchType
         		+ "&sk=" + sk;
+	}
+	
+	@RequestMapping("/adminBoardDelLogListView")
+	public String adminBoardDelLogListView(
+			HttpServletRequest request,
+			AdminSearchVO searchVO,
+			Model model) {
+		
+		model.addAttribute("request", request);
+		model.addAttribute("searchVO", searchVO);
+		model.addAttribute("pname", "삭제내역");
+		model.addAttribute("contentBlockJsp",
+				"../board/adminBoardDelListContent.jsp");
+	    model.addAttribute("contentBlockCss",
+	    		"/whale/static/css/admin/account/adminAccountUserListContent.css");
+	    boardSubBar(model);
+	    
+	    AdminBoardDelLogListService.execute(model);
+	    
+		return "/admin/view/adminOutlineForm";
 	}
 	
 }

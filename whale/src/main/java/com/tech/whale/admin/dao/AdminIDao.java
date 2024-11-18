@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.tech.whale.admin.dto.AdminBoardDelLogDto;
 import com.tech.whale.admin.dto.AdminCommunityDto;
 import com.tech.whale.admin.dto.AdminMainCntDto;
 import com.tech.whale.admin.dto.AdminMainRankDto;
@@ -130,6 +131,13 @@ public interface AdminIDao {
 	public void updateUserStatus(String userId);
 	public String myImg(String userId);
 	public void endActionUpdate(String userId);
+	
+	public ArrayList<AdminBoardDelLogDto> adminDelLogList(
+			@Param("start") int start,
+			@Param("end") int end, 
+			@Param("sk") String sk,
+			@Param("selNum") String selNum);
+	public int selectDelLogCnt(String sk, String selNum);
 	
 	////////////////
 	public ArrayList<AdminPFCDto> adminNoticeList(

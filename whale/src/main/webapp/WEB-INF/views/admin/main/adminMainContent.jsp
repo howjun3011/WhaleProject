@@ -35,12 +35,12 @@
 	    </div>
 	    <div class="divStep">
 	        <div class="block" id="block5">
-	        	<p class="block5-name" onclick="window.location.href='adminNoticeListView'">공지사항</p>
+	        	<p class="block5-name" onclick="window.location.href='adminWhaleNotiListView'">공지알람</p>
 	        	<table id="noticce" class="block5-7">
 	        		<c:forEach items="${mainNotice }" var="mn">
 	        			<tr>
-		        			<td><a href="adminNoticeContentView?postId=${mn.post_id }&page=1&searchType=&sk=&communityName=">${mn.post_title }..</a></td>
-		        			<td><fmt:formatDate value="${mn.post_date }" pattern="yyyy.MM.dd" /></td>
+		        			<td>${mn.notice_text }..</td>
+		        			<td><fmt:formatDate value="${mn.notice_date }" pattern="yyyy.MM.dd" /></td>
 	        			</tr>
 	        		</c:forEach>
 	        	</table>

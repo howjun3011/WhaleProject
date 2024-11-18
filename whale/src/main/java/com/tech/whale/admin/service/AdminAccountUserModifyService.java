@@ -66,8 +66,15 @@ public class AdminAccountUserModifyService implements AdminServiceInter{
 		String statusReason = request.getParameter("statusReason");
 		int userStatus = Integer.parseInt(request.getParameter("userStatus"));
 		String adminId = (String) session.getAttribute("user_id");
-		adminIDao.userStatusModify(userId, userStatus);
-		adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
+		
+		if(userStatus == 0) {
+			adminIDao.endActionUpdate(userId);
+			adminIDao.userStatusModify(userId, userStatus);
+			adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
+		} else if(userStatus == 1) {
+			adminIDao.userStatusModify(userId, userStatus);
+			adminIDao.userStatusLog(userId, userStatus,statusReason,adminId);
+		}
 		
 	}
 

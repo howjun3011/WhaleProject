@@ -23,7 +23,6 @@
                 <th>구분</th>
                 <th>글번호</th>
                 <th>신고자</th>
-                <th>신고분류</th>
                 <th>중복신고</th>
                 <th>신고날짜</th>
                 <th>상태</th>
@@ -33,17 +32,16 @@
         <tbody>
 			<c:if test="${empty list}">
 			    <tr style="height: 50px;">
-			        <td colspan="10" align="center">결과가 없습니다.</td>
+			        <td colspan="8" align="center">결과가 없습니다.</td>
 			    </tr>
 			</c:if>
 			<c:if test="${not empty list}">
 	        <c:forEach items="${list }" var="dto" >
 				<tr style="height: 50px;">
 					<td>${dto.report_id }</td>
-					<td>${dto.tag_name }</td>
+					<td>${dto.report_tag }</td>
 					<td>${dto.writing_id }</td>
 					<td>${dto.user_id }</td>
-					<td>${dto.report_tag }</td>
 					<td>${dto.same_content_count }</td>
 					<td><fmt:formatDate value="${dto.report_date}" pattern="yyyy.MM.dd  hh:mm" /></td>
 					<td>${dto.reportStatus }</td>
@@ -58,7 +56,7 @@
         </tbody>
         <tfoot>
         	<tr>
-			    <td colspan="9">
+			    <td colspan="8">
 			        <c:choose>
 			        
 			            <c:when test="${not empty ulsearchVO}">

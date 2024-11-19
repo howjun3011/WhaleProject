@@ -430,6 +430,7 @@ public class StreamingController {
         String uris = "";
 
 		if (likedTracks != null && !likedTracks.isEmpty()) {
+			// *****************************************************************************************
 			// 각 트랙의 좋아요 여부를 확인하여 TrackDto의 필드에 추가
 			for (TrackDto track : likedTracks) {
 				boolean isLiked = streamingService.selectTrackLikeService(session, track.getTrack_id());
@@ -437,6 +438,7 @@ public class StreamingController {
 				
 				uris += "spotify:track:"+track.getTrack_id()+",";
 			}
+			// *****************************************************************************************
 
 			// 각 트랙의 앨범 ID를 가져오기 위해 Spotify API 호출
 			Map<String, String> albumIds = new HashMap<>();

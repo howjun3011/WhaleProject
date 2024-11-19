@@ -123,7 +123,6 @@ const app = createApp({
 				.then(data => {
 					this.notifications[0] = data;
 					this.notiCounts[0] = this.notifications[0].length;
-					console.log(this.notifications[0]);
 			});
 			// 좋아요
 			fetch('main/likeNoti')

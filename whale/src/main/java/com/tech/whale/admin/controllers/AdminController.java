@@ -76,14 +76,11 @@ public class AdminController {
 	    
 	    model.addAttribute("subMenu", subMenu);
 	}
-
 	
 	@RequestMapping("/adminMainView")
 	public String adminMainView(HttpServletRequest request,
 			HttpSession session,
 			Model model) {
-		
-		String userId = (String) session.getAttribute("user_id");
 		
 		model.addAttribute("request", request);
 		model.addAttribute("pname", "HOME");
@@ -108,7 +105,6 @@ public class AdminController {
 	@Transactional
 	public String adminMemoSave(HttpServletRequest request,
 			Model model) {
-		System.out.println("메모 세이브 컨트롤러");
 		model.addAttribute("request", request);
 		adminMainPageService.memoUpdate(model);
 		return "redirect:adminMainView";
@@ -293,7 +289,7 @@ public class AdminController {
 		
 		model.addAttribute("request", request);
 		model.addAttribute("searchVO", searchVO);
-		model.addAttribute("pname", "유저관리");
+		model.addAttribute("pname", "정지내역");
 		model.addAttribute("contentBlockJsp",
 				"../account/adminUserStatusLogListContent.jsp");
 	    model.addAttribute("contentBlockCss",

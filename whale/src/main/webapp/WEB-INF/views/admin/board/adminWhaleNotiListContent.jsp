@@ -26,7 +26,7 @@
     
     <div class="div-form">
     	<form id="whale-form" action="adminWhaleNotiRegDo" method="post" style="display:flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px;">
-    		<textarea name="whale_text" id="whale_text" cols="50" rows="2" placeholder="공지알람 입력란 :"></textarea>
+    		<textarea name="whale_text" id="whale_text" cols="130" rows="3" placeholder="공지알람 입력란 :" style="resize: none;"></textarea>
     		<input type="hidden" name="searchType" value="${searchType }" />
     		<input type="hidden" name="sk" value="${searchKeyword }" />
     		<input type="hidden" name="page" value="${ulsearchVO.page}" />

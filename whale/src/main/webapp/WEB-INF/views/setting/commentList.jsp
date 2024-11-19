@@ -76,10 +76,12 @@
 		</div>
 		<div class="scroll-content">
 			<form id="filterForm" action="/whale/commentList" method="get">
+				<!-- 숨겨진 필드에 드롭다운 선택 값을 저장 -->
 				<input type="hidden" name="sortOrder" id="sortOrder" value="${selectedSortOrder}">
 				<input type="hidden" name="postType" id="postType" value="${selectedPostType}">
 
 				<div class="setting-item">
+					<!-- 정렬 순서 드롭다운 -->
 					<div class="dropdown">
 						<button type="button" class="dropbtn" onclick="toggleDropdown(this)">
 							<span class="dropbtn_content">${selectedSortOrder}</span>
@@ -173,42 +175,59 @@
 	</div>
 </div>
 <script>
+	// 드롭다운 토글 함수
 	function toggleDropdown(button) {
-		const dropdownContent = button.nextElementSibling;
+		const dropdownContent = button.nextElementSibling; // 버튼의 다음 형제요소(dropdown-content) 가져오기
 		closeAllDropdowns();
-		dropdownContent.classList.toggle('show');
+		dropdownContent.classList.toggle('show'); // 드롭다운 열기/닫기
+
+		// 현재 버튼의 텍스트 가져오기
 		const currentValue = button.querySelector('.dropbtn_content').innerText;
+
+		// 드롭다운 버튼의 현재 텍스트 값에 따라 표시해야 할 반대 옵션 정의(현재 드롭다운 버튼에 표시된 텍스트와 다른 값을 표시하기 위해 사용)
 		const optionPairs = {
 			'최신순': '오래된순',
 			'오래된순': '최신순',
 			'게시글': '피드',
 			'피드': '게시글'
 		};
-		const options = dropdownContent.querySelectorAll('div');
+		const options = dropdownContent.querySelectorAll('div'); // 드롭다운 메뉴 안의 모든 옵션 요소 가져오기
+		// options에 포함된 각 요소를 순회하며, 순회 중 현재 요소는 option 변수에 저장됨
 		options.forEach(option => {
+			// 각 옵션의 텍스트가 반대 옵션과 일치하면 표시('block'), 그렇지 않으면 숨기기('none')
 			option.style.display = option.innerText === optionPairs[currentValue] ? 'block' : 'none';
 		});
 	}
 
+	// 선택한 값을 hidden 필드에 설정하고 드롭다운 닫기
 	function updateSelection(field, value, element) {
 		document.getElementById(field).value = value;
+
+		// 선택한 값으로 드롭다운 버튼의 텍스트를 변경
 		const dropbtn = element.closest('.dropdown').querySelector('.dropbtn_content');
-		dropbtn.innerText = value;
+		dropbtn.innerText = value; // 선택한 값으로 드롭다운 버튼의 텍스트 변경
+
+		// 모든 드롭다운 메뉴 닫기
 		closeAllDropdowns();
+
+		// 폼 제출
 		document.getElementById('filterForm').submit();
 	}
 
+	// 모든 드롭다운 닫기
 	function closeAllDropdowns() {
 		document.querySelectorAll('.dropdown-content.show').forEach(function (dropdown) {
-			dropdown.classList.remove('show');
+			dropdown.classList.remove('show'); // 'show' 클래스를 제거해서 드롭다운 메뉴 숨기기
 		});
 	}
 
+	// 외부 클릭 시 드롭다운 닫기
 	window.onclick = function (event) {
-		if (!event.target.matches('.dropbtn')) {
-			closeAllDropdowns();
+		if (!event.target.matches('.dropbtn')) { // 클릭된 요소가 드롭다운 버튼이 아니면
+			closeAllDropdowns(); // 모든 드롭다운 메뉴 닫기
 		}
 	};
+
 	// 스크롤바
 	document.addEventListener("DOMContentLoaded", function () {
 		// localStorage의 darkmodeOn 값 확인

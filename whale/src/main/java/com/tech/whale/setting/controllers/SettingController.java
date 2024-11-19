@@ -251,16 +251,6 @@ public class SettingController {
 
         List<LikeListDto> postLikeList = settingDao.getFilteredPostLikeList(session_user_id, orderBy, postType);
 
-        // debug
-        for (LikeListDto likeListDto : postLikeList) {
-            System.out.println("post_id: " + likeListDto.getPost_id());
-            System.out.println("community_id: " + likeListDto.getCommunity_id());
-            System.out.println("post_title: " + likeListDto.getPost_text());
-            System.out.println("post_text: " + likeListDto.getPost_title());
-            System.out.println("post_tag_text: " + likeListDto.getPost_tag_text());
-        }
-
-        model.addAttribute("session_user_id", session_user_id);
         model.addAttribute("postLikeList", postLikeList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);
@@ -276,21 +266,26 @@ public class SettingController {
 
         String orderBy = sortOrder.equals("최신순") ? "DESC" : "ASC";
 
-        List<CommentListDto> postFeedList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType);
-        List<CommentListDto> postFeedCommentList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType);
+        List<CommentListDto> postFeedList = settingDao.getFilteredPostCommentList(session_user_id, orderBy, postType); // 글 정보와 댓글 정보
+        List<CommentListDto> postFeedCommentList = settingDao.getFilteredPostReplyCommentList(session_user_id, orderBy, postType); // 답글 정보
 
-        // 게시글과 피드 ID를 각각 중복 없이 저장할 Set
-        Set<Integer> uniquePostIds = new HashSet<>();
-        Set<Integer> uniqueFeedIds = new HashSet<>();
+        // 게시글과 피드 ID를 각각 중복 없이 저장할 Set 생성
+        Set<Integer> uniquePostIds = new HashSet<>(); // 게시글 ID를 저장하는 Set
+        Set<Integer> uniqueFeedIds = new HashSet<>(); // 피드 ID를 저장하는 Set
 
-        // 중복 제거된 게시글과 피드 리스트를 담을 리스트
+        // 중복 제거된 게시글 또는 피드 데이터를 담을 리스트
         List<CommentListDto> filteredPostFeedCommentList = new ArrayList<>();
 
+        // postFeedList에 있는 각 데이터를 순회하며 중복 제거 작업 수행
         for (CommentListDto dto : postFeedList) {
+            // 현재 선택된 postType이 게시글이고, Set(uniquePostIds)에 현재 게시글 ID(dto.getPost_id())를 추가했을 때 중복이 아니라면
+            // 중복되지 않은 게시글 데이터를 결과 리스트에 추가
             if ("게시글".equals(postType) && uniquePostIds.add(dto.getPost_id())) {
-                filteredPostFeedCommentList.add(dto);  // 중복되지 않은 post_id만 추가
+                filteredPostFeedCommentList.add(dto);
+            // 현재 선택된 postType이 피드이고, Set(uniqueFeedIds)에 현재 피드 ID(dto.getFeed_id())를 추가했을 때 중복이 아니라면
+            // 중복되지 않은 피드 데이터를 결과 리스트에 추가
             } else if ("피드".equals(postType) && uniqueFeedIds.add(dto.getFeed_id())) {
-                filteredPostFeedCommentList.add(dto);  // 중복되지 않은 feed_id만 추가
+                filteredPostFeedCommentList.add(dto);
             }
         }
 
@@ -298,18 +293,6 @@ public class SettingController {
         model.addAttribute("postFeedCommentList", postFeedCommentList);
         model.addAttribute("selectedSortOrder", sortOrder);
         model.addAttribute("selectedPostType", postType);
-
-        // debug
-        for (CommentListDto commentListDto : postFeedCommentList) {
-            System.out.println("피드");
-            System.out.println("Feed_id: " + commentListDto.getFeed_id());
-            System.out.println("Feed_text: " + commentListDto.getFeed_text());
-            System.out.println("Feed_comments_text: " + commentListDto.getFeed_comments_text());
-            System.out.println("Feed_img_name: " + commentListDto.getFeed_img_url());
-            System.out.println("Feed_comments_id: " + commentListDto.getFeed_comments_id());
-            System.out.println("Parent_comments_id: " + commentListDto.getParent_comments_id());
-            System.out.println("----------------------------------------------------");
-        }
 
         return "setting/commentList";
     }
@@ -320,16 +303,9 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-//      알림 설정 값 가져오기 + Dto에 저장
+        // DB에 저장된 알림 상태 가져오기
         userNotificationDto = settingDao.getNotificationSettingsByUserId(session_user_id);
 
-//      debug
-        System.out.println("1: " + userNotificationDto.getAll_notification_off());
-        System.out.println("2: " + userNotificationDto.getLike_notification_onoff());
-        System.out.println("3: " + userNotificationDto.getComment_notification_onoff());
-        System.out.println("4: " + userNotificationDto.getMessage_notification_onoff());
-
-//      JSP로 데이터 전달
         model.addAttribute("allNotificationOff", userNotificationDto.getAll_notification_off());
         model.addAttribute("likeNotificationOn", userNotificationDto.getLike_notification_onoff());
         model.addAttribute("commentNotificationOn", userNotificationDto.getComment_notification_onoff());
@@ -340,55 +316,28 @@ public class SettingController {
 
     @PostMapping("/updateNotifications")
     @ResponseBody
-    public String updateNotifications(
-            @RequestParam("all_notification_off") int allNotificationOff,
-            @RequestParam("like_notification_onoff") int likeNotificationOnoff,
-            @RequestParam("comment_notification_onoff") int commentNotificationOnoff,
-            @RequestParam("message_notification_onoff") int messageNotificationOnoff,
-            HttpSession session) {
-
+    public String updateNotifications(@RequestParam("all_notification_off") int allNotificationOff, @RequestParam("like_notification_onoff") int likeNotificationOnoff, @RequestParam("comment_notification_onoff") int commentNotificationOnoff, @RequestParam("message_notification_onoff") int messageNotificationOnoff, HttpSession session) {
         System.out.println("updateNotifications() ctr");
 
-//      debug
-        System.out.println("all_notification_off: " + allNotificationOff);
-        System.out.println("like_notification_onoff: " + likeNotificationOnoff);
-        System.out.println("comment_notification_onoff: " + commentNotificationOnoff);
-        System.out.println("message_notification_onoff: " + messageNotificationOnoff);
-
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println("session_user_id: " + session_user_id); // debug
 
-        if (session_user_id == null) {
-            System.out.println("session_user_id is null");
-            return "failed";
-        }
-
-        try {
-            // DB 업데이트 호출
-            settingDao.updateNotificationSettings(session_user_id, allNotificationOff, likeNotificationOnoff, commentNotificationOnoff, messageNotificationOnoff);
-            System.out.println("DB 업데이트 성공");
-        } catch (Exception e) {
-            System.err.println("DB 업데이트 중 오류 발생");
-            e.printStackTrace();
-            return "failed";
-        }
+        settingDao.updateNotificationSettings(session_user_id, allNotificationOff, likeNotificationOnoff, commentNotificationOnoff, messageNotificationOnoff);
+        System.out.println("DB 업데이트 성공");
 
         return "success";
     }
 
     @PostMapping("/updateIndividualNotification")
     @ResponseBody
-    public String updateIndividualNotification(@RequestParam("like_notification_onoff") Optional<Integer> likeNotificationOnOff,
-                                               @RequestParam("comment_notification_onoff") Optional<Integer> commentNotificationOnOff,
-                                               @RequestParam("message_notification_onoff") Optional<Integer> messageNotificationOnOff,
-                                               HttpSession session) {
+    public String updateIndividualNotification(@RequestParam("like_notification_onoff") Optional<Integer> likeNotificationOnOff, @RequestParam("comment_notification_onoff") Optional<Integer> commentNotificationOnOff, @RequestParam("message_notification_onoff") Optional<Integer> messageNotificationOnOff, HttpSession session) {
+        // 각각의 매개변수를 Optional<Integer> 타입으로 전달
         System.out.println("updateIndividualNotification() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
 
         // 각 알림 상태에 따라 DB 업데이트 처리
-        if (likeNotificationOnOff.isPresent()) {
-            settingDao.updateLikeNotification(session_user_id, likeNotificationOnOff.get());
+        if (likeNotificationOnOff.isPresent()) { // isPresent()를 사용해 값이 있는지 여부를 확인(값이 존재하면 true, 값이 없으면 false)
+            settingDao.updateLikeNotification(session_user_id, likeNotificationOnOff.get()); // get()으로 값을 꺼내서 사용
         }
         if (commentNotificationOnOff.isPresent()) {
             settingDao.updateCommentNotification(session_user_id, commentNotificationOnOff.get());
@@ -406,8 +355,8 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
+        // DB에서 다크모드 설정 값 가져오기
         userSettingDto = settingDao.getDarkmode(session_user_id);
-        System.out.println("darkmodeOn: " + userSettingDto.getDarkmode_setting_onoff());
 
         model.addAttribute("darkmodeOn", userSettingDto.getDarkmode_setting_onoff());
 
@@ -418,24 +367,12 @@ public class SettingController {
     @ResponseBody
     public String updateDarkmode(@RequestParam("darkmode_setting_onoff") int darkmodeOn, HttpSession session) {
         System.out.println("updateDarkmode() ctr");
-        System.out.println("darkmode_setting_onoff: " + darkmodeOn); // debug
 
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println("session_user_id: " + session_user_id); // debug
 
-        if (session_user_id == null) {
-            System.out.println("session_user_id is null");
-            return "failed";
-        }
-
-        try {
-            settingDao.updateDarkmode(session_user_id, darkmodeOn);
-            System.out.println("DB 업데이트 성공");
-        } catch (Exception e) {
-            System.out.println("DB 업데이트 중 오류 발생");
-            e.printStackTrace();
-            return "failed";
-        }
+        // DB에 다크모드 설정 값 업데이트
+        settingDao.updateDarkmode(session_user_id, darkmodeOn);
+        System.out.println("DB 업데이트 성공");
 
         return "success";
     }
@@ -445,17 +382,9 @@ public class SettingController {
         System.out.println("startpageSetting() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println("session_user_id: " + session_user_id); // debug
 
         startpageDto = settingDao.getStartpageSetting(session_user_id);
 
-//      debug
-        System.out.println(startpageDto.getStartpage_music_setting());
-        System.out.println(startpageDto.getStartpage_feed_setting());
-        System.out.println(startpageDto.getStartpage_community_setting());
-        System.out.println(startpageDto.getStartpage_message_setting());
-
-        // jsp로 전달
         model.addAttribute("music", startpageDto.getStartpage_music_setting());
         model.addAttribute("feed", startpageDto.getStartpage_feed_setting());
         model.addAttribute("community", startpageDto.getStartpage_community_setting());
@@ -469,8 +398,8 @@ public class SettingController {
     public ResponseEntity<Map<String, String>> updateStartpageSetting(@RequestBody Map<String, String> request, @SessionAttribute("user_id") String userId) {
         System.out.println("updateStartpageSetting() ctr");
 
-        String left = request.get("left");
-        String right = request.get("right");
+        String left = request.get("left"); // 클라이언트에서 보낸 json 데이터에서 left 키의 값을 가져오기
+        String right = request.get("right"); // 클라이언트에서 보낸 json 데이터에서 right 키의 값을 가져오기
 
         try {
             // 선택된 값에 따라 DB 업데이트
@@ -493,18 +422,10 @@ public class SettingController {
         System.out.println("pageAccessSetting() ctr");
 
         String session_user_id = (String) session.getAttribute("user_id");
-        System.out.println("session_user_id: " + session_user_id); // debug
 
+        // DB에서 페이지 접근 설정 값 가져오기
         pageAccessDto = settingDao.getPageAccessSetting(session_user_id);
 
-        // debug
-        System.out.println("PA mypage : " + pageAccessDto.getPage_access_mypage());
-        System.out.println("PA noficiation : " + pageAccessDto.getPage_access_notification());
-        System.out.println("PA setting : " + pageAccessDto.getPage_access_setting());
-        System.out.println("PA music : " + pageAccessDto.getPage_access_music());
-        System.out.println("PA message : " + pageAccessDto.getPage_access_message());
-
-        // jsp로 전달
         model.addAttribute("mypage", pageAccessDto.getPage_access_mypage());
         model.addAttribute("notification", pageAccessDto.getPage_access_notification());
         model.addAttribute("setting", pageAccessDto.getPage_access_setting());
@@ -516,9 +437,7 @@ public class SettingController {
 
     @PostMapping("/updatePageAccessSetting")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> updatePageAccessSetting(@RequestParam("settingType") String settingType,
-                                                                       @RequestParam("selectedValue") String selectedValue,
-                                                                       @SessionAttribute("user_id") String userId) {
+    public ResponseEntity<Map<String, String>> updatePageAccessSetting(@RequestParam("settingType") String settingType, @RequestParam("selectedValue") String selectedValue, @SessionAttribute("user_id") String userId) {
         System.out.println("updatePageAccessSetting() ctr");
 
         try {

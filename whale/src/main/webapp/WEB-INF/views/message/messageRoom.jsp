@@ -68,6 +68,8 @@
 	.container[data-darkmode="1"] .chat-message.left .message-bubble::after { content: ''; position: absolute; top: 10px; left: -10px; border: 10px solid transparent; border-right-color: #ffffff; display: none; }
 	.container[data-darkmode="1"] .chat-message.right .message-bubble::after { content: ''; position: absolute; top: 10px; right: -10px; border: 10px solid transparent; border-left-color: #d1e7dd; display: none; }
 	.container[data-darkmode="1"] .chat-message .message-info { font-size: 0.9em; color: #868e96; margin-top: 5px; }
+	.container[data-darkmode="1"] .music-info strong{color: #111;}
+	.container[data-darkmode="1"] .music-info > div > div {color: #111;}
 	.container[data-darkmode="1"] .chat-input { display: flex; align-items: center; padding: 10px; background-color: #1f1f1f; border-top: 1px solid #1f1f1f; gap: 10px; }
 	.container[data-darkmode="1"] .chat-input textarea { flex-grow: 1; height: 50px; background-color: #434343; color: whitesmoke; border: 1px solid #434343; border-radius: 5px; padding: 10px; resize: none; font-size: 1em; }
 	.container[data-darkmode="1"] .chat-input button { width: 90px; height: 50px; background-color: #335580; border: none; color: #ffffff; border-radius: 5px; font-size: 1em; cursor: pointer; transition: background-color 0.3s ease; }

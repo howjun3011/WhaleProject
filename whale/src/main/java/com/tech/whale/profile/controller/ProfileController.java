@@ -39,7 +39,7 @@ public class ProfileController {
 	
 	@RequestMapping("/profileHome")
 	public String profileHome(HttpServletRequest request, HttpSession session, @RequestParam("u") String userId, Model model) {
-		System.out.println("profile : " + userId);
+		
 		ProfileDto profile = proDao.getUserProfile(userId);
 		Integer followerCount = proDao.followerCount(userId);
 		int frcount = (followerCount != null) ? followerCount : 0;
@@ -48,11 +48,12 @@ public class ProfileController {
 		Integer feedCount = proDao.feedCount(userId);
 		int fdcount = (feedCount != null) ? feedCount : 0;
 		String now_id = (String) session.getAttribute("user_id");
-		
+		String adminId = "WHALE";
 		List<ProfileDto> followerList = proDao.getFollowerList(userId);
 		FollowNotiDto profile2 = proDao.getNotiId(userId, now_id);
 		List<FeedDto> feedList = feedDao.getFeedsProfile(userId);
 		
+		model.addAttribute("WHALE", adminId);
 		model.addAttribute("now_id", now_id);
 		model.addAttribute("followerList", followerList);
 		model.addAttribute("frCount", frcount);

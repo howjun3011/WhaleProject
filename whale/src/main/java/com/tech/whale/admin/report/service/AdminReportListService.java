@@ -114,7 +114,6 @@ public class AdminReportListService implements AdminServiceInter{
 	}
 	
 	public void content(Model model) {
-		
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request =
 				(HttpServletRequest) map.get("request");
@@ -123,19 +122,19 @@ public class AdminReportListService implements AdminServiceInter{
 		if(report_id.trim().isEmpty() || report_id == null) {
 			report_id = (String) model.getAttribute("report_id");
 		}
-		AdminReportResultDto reportContent =
-				adminReportIDao.reportContent(report_id);	
 		
+		AdminReportResultDto reportContent =
+				adminReportIDao.reportContent(report_id);
 		Integer feed_id = reportContent.getFeed_id();
 		Integer feed_comment_id = reportContent.getFeed_comment_id();
 		Integer post_id = reportContent.getPost_id();
 		Integer post_comment_id = reportContent.getPost_comment_id();
 		Integer message_id = reportContent.getMessage_id();
 		String userId = reportContent.getReport_user_id();
-		
 		String imgPath = null;
 		String writingType = null;
 		String writingId = null;
+		
 		if(feed_id != null && feed_id != 0) {
 			imgPath = "feed";
 			writingType ="feed";

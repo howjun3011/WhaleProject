@@ -6,7 +6,7 @@
 <html>
 <head>
 	
-    <title>계정관리</title>
+    <title>${pname }</title>
     <link rel="stylesheet" href="/whale/static/css/admin/menubar/adminSideBar.css">
     <link rel="stylesheet" href="/whale/static/css/admin/menubar/adminSubBar.css">
     <link rel="stylesheet" href="/whale/static/css/admin/menubar/adminHeader.css">

@@ -39,13 +39,14 @@
     AND FEED_OPEN = 0
     </select>
     
-    <select id="getFollowerList" resultType="com.tech.whale.profile.dto.ProfileDto">
-    SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID FROM USER_INFO U
-    WHERE U.USER_ID IN (SELECT REGEXP_SUBSTR(F.FOLLOW_USER_ID, '[^,]+', 1, LEVEL) AS FOLLOW_USER_ID
-    FROM FOLLOW F
-    WHERE F.USER_ID = #{param1}
-    CONNECT BY REGEXP_SUBSTR(F.FOLLOW_USER_ID, '[^,]+', 1, LEVEL) IS NOT NULL)
-    </select>
+    
+    
+	<select id="getFollowerList" resultType="com.tech.whale.profile.dto.ProfileDto">
+	    SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID
+	    FROM USER_INFO U
+	    JOIN FOLLOW F ON (',' || F.FOLLOW_USER_ID || ',') LIKE CONCAT('%,', CONCAT(U.USER_ID, ',%'))
+	    WHERE F.USER_ID = #{param1}
+	</select>
     
     <select id="getFollowingList" resultType="com.tech.whale.profile.dto.ProfileDto">
 	SELECT U.USER_IMAGE_URL, U.USER_NICKNAME, U.USER_ID

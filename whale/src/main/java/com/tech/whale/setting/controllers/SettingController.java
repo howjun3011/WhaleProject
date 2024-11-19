@@ -32,8 +32,6 @@ public class SettingController {
     UserSettingDto userSettingDto;
     UserNotificationDto userNotificationDto;
     PageAccessDto pageAccessDto;
-    LikeListDto likeListDto;
-    CommentListDto commentListDto;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -93,7 +91,6 @@ public class SettingController {
 
         // passwordEncoder.matches()를 사용해 입력한 비밀번호(currentPassword)를 암호화해 DB에 저장된 비밀번호(dbPassword)와 비교
         if (passwordEncoder.matches(currentPassword, dbPassword)) {
-            // 비밀번호가 일치하라 경우 응답 데이터에 status를 valid로 설정
             response.put("status", "valid");
         } else {
             response.put("status", "invalid");
@@ -112,8 +109,7 @@ public class SettingController {
 
         Map<String, String> response = new HashMap<>(); // Map 객체 생성
 
-        // 암호화된 새로운 비밀번호 업데이트
-        settingDao.updatePassword(session_user_id, encodedPassword);
+        settingDao.updatePassword(session_user_id, encodedPassword); // 암호화된 새로운 비밀번호 업데이트
         response.put("status", "success");
 
         return new ResponseEntity<>(response, HttpStatus.OK);

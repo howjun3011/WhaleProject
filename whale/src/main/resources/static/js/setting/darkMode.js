@@ -14,43 +14,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateScrollbarStyle = () => {
         const styleSheet = document.getElementById("darkmode-scrollbar-styles");
-        if (darkmodeOn === "1") {
-            styleSheet.innerHTML = `
-                html::-webkit-scrollbar {display: block; width: 8px;}
-                html::-webkit-scrollbar-track {background: #2e2e2e;}
-                html::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
-                html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
-            `;
-        } else {
-            styleSheet.innerHTML = `
-                html::-webkit-scrollbar {display: block; width: 8px;}
-                html::-webkit-scrollbar-track {background: #fff;}
-                html::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
-                html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
-            `;
+        if (styleSheet) {
+            if (darkmodeOn === "1") {
+                styleSheet.innerHTML = `
+                    html::-webkit-scrollbar {display: block; width: 8px;}
+                    html::-webkit-scrollbar-track {background: #2e2e2e;}
+                    html::-webkit-scrollbar-thumb {background-color: #555; border-radius: 4px;}
+                    html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+                `;
+            } else {
+                styleSheet.innerHTML = `
+                    html::-webkit-scrollbar {display: block; width: 8px;}
+                    html::-webkit-scrollbar-track {background: #fff;}
+                    html::-webkit-scrollbar-thumb {background-color: #ccc; border-radius: 4px;}
+                    html {width: 100%; height: 190px; overflow-y: auto; scroll-behavior: smooth; display: flex; flex-direction: column;}
+                `;
+            }
         }
     };
 
     if (settingElement) {
         settingElement.setAttribute("data-darkmode", darkmodeOn);
         const isDarkMode = darkmodeOn === "1";
-        toggleSlide.checked = isDarkMode;
+
+        if(toggleSlide) {
+            toggleSlide.checked = isDarkMode;
+            settingElement.classList.toggle("dark", isDarkMode);
+            settingElement.classList.toggle("light", !isDarkMode);
+
+            toggleSlide.addEventListener('change', function () {
+                darkmodeOn = this.checked ? "1" : "0";
+                localStorage.setItem('darkmodeOn', darkmodeOn);
+                settingElement.setAttribute("data-darkmode", darkmodeOn);
+                settingElement.classList.toggle("dark", darkmodeOn === "1");
+                settingElement.classList.toggle("light", darkmodeOn !== "1");
+                window.parent.postMessage({darkmodeOn: darkmodeOn}, "*");
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/whale/updateDarkmode', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('darkmode_setting_onoff=' + darkmodeOn);
+            });
+        }
         settingElement.classList.toggle("dark", isDarkMode);
         settingElement.classList.toggle("light", !isDarkMode);
-
-        toggleSlide.addEventListener('change', function () {
-            darkmodeOn = this.checked ? "1" : "0";
-            localStorage.setItem('darkmodeOn', darkmodeOn);
-            settingElement.setAttribute("data-darkmode", darkmodeOn);
-            settingElement.classList.toggle("dark", darkmodeOn === "1");
-            settingElement.classList.toggle("light", darkmodeOn !== "1");
-            window.parent.postMessage({darkmodeOn: darkmodeOn}, "*");
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/whale/updateDarkmode', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send('darkmode_setting_onoff=' + darkmodeOn);
-        });
     }
 
     if (feedElement) {
@@ -87,7 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 communityElement.classList.toggle("light", !isDarkMode);
 
                 updateScrollbarStyle(); // 스크롤바 스타일 업데이트
-                initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
+
+                // initializeEmojiPicker 함수가 정의되어 있는지 확인 후 호출
+                if (typeof initializeEmojiPicker === 'function') {
+                    initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
+                }
             }
         });
     }
@@ -279,7 +290,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 communityElement.classList.toggle("dark", isDark);
                 communityElement.classList.toggle("light", !isDark);
 
-                initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
+                // initializeEmojiPicker 함수가 정의되어 있는지 확인 후 호출
+                if (typeof initializeEmojiPicker === 'function') {
+                    initializeEmojiPicker(); // 이모지 선택기 재초기화(messageRoom)
+                }
             }
             if (communityPostElement) {
                 communityPostElement.setAttribute("data-darkmode", darkmodeOn);

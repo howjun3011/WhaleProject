@@ -150,6 +150,12 @@ public class MainRestController {
 		mainService.deleteFollowNotiMainService((String) map.get("ui"),(String) map.get("ti"));
 	}
 	
+	// [ 팔로우 알림 삭제 처리 ]
+	@GetMapping("/deleteFollowNotiId")
+	public void deleteFollowNotiIdMain(@RequestParam HashMap<String, Object> map) {
+		mainService.deleteFollowNotiIdMainService((String) map.get("fn"));
+	}
+	
 	// [ 비공개 팔로우 알림 수락 처리 ]
 	@GetMapping("/privateFollowNoti")
 	public void privateFollowNotiMain(@RequestParam HashMap<String, Object> map) {

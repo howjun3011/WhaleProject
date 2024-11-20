@@ -125,6 +125,11 @@ public class MainService {
 		mainDao.deleteFollowNoti(userId, targetId);
 	}
 	
+	// [ 팔로우 알림 삭제 처리 ]
+	public void deleteFollowNotiIdMainService(String followNotiId) {
+		mainDao.deleteFollowNotiId(followNotiId);
+	}
+	
 	// [ 비공개 팔로우 알림 수락 처리 ]
 	public void privateFollowNotiMainService(String userId, String targetId) {
 		proDao.doFollowing(userId, targetId);

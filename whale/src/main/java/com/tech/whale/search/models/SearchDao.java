@@ -12,5 +12,5 @@ import com.tech.whale.setting.dto.UserInfoDto;
 public interface SearchDao {
 	public List<UserInfoDto> selectSearchUserInfo();
 	public List<PostDto> selectSearchPostInfo();
-	public List<FeedDto> selectSearchFeedInfo();
+	public List<FeedDto> selectSearchFeedInfo(String userId);
 }

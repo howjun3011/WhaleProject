@@ -53,8 +53,24 @@
         		LEFT JOIN FEED_TAG FT ON FT.FEED_ID = F.FEED_ID
         		LEFT JOIN USER_INFO UI ON UI.USER_ID = F.USER_ID
 				LEFT JOIN FEED_IMG FI ON FI.FEED_ID = F.FEED_ID
+				LEFT JOIN USER_SETTING US ON US.USER_ID = F.USER_ID
+				LEFT JOIN FOLLOW FL ON FL.USER_ID = F.USER_ID
         WHERE
         	F.FEED_OPEN = 0
+        	AND
+        	(
+        		US.ACCOUNT_PRIVACY = 0
+        		OR
+        		(
+        			US.ACCOUNT_PRIVACY = 1
+        			AND
+        			(
+        				(SELECT COUNT(*) FROM FOLLOW WHERE USER_ID = F.USER_ID AND FOLLOW_USER_ID LIKE '%'||#{userId}||'%') = 1
+        				OR
+        				F.USER_ID = #{userId}
+        			)
+        		)
+        	)
         ORDER BY F.FEED_DATE DESC, F.FEED_ID DESC
     </select>
     

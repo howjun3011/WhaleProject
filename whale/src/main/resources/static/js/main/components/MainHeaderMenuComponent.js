@@ -154,7 +154,7 @@ const MainHeaderMenuComponent = {
 											{{ notification.follow_noti_check === 1 ? ' | 읽음' : ' | 읽지않음' }}
 										</div>
 									</div>
-									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 0" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)"><div>x</div></div>
+									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 0" @click.stop="fetchNoti('deleteFollowNotiId?fn='+notification.follow_noti_id)"><div>x</div></div>
 									<div class="header-notification-content" v-if="notification.follow_noti === 1" style="margin-bottom: 1.5px;">
 										<span style="font-weight: 400;">{{ notifications[3][j].target_user_id }}</span>님이 당신에게 팔로우를 요청했습니다. 
 										<div style="display: inline-block; width: inherit; font-size: 9px; text-align: right;">
@@ -169,7 +169,7 @@ const MainHeaderMenuComponent = {
 									<div class="hearder-follow-noti" v-if="notification.follow_noti === 1">
 										<div></div>
 										<div class="header-follow-select" @click.stop="fetchNoti('privateFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">수락</div>
-										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">거절</div>
+										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNotiId?fn='+notification.follow_noti_id)">거절</div>
 										<div></div>
 									</div>
 									<div class="header-notification-content" v-if="notification.follow_noti === 2">
@@ -198,10 +198,10 @@ const MainHeaderMenuComponent = {
 									<div class="hearder-follow-noti" v-if="notification.follow_noti === 3">
 										<div></div>
 										<div class="header-follow-select" @click.stop="fetchNoti('followBackNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">수락</div>
-										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)">거절</div>
+										<div class="header-follow-select" @click.stop="fetchNoti('deleteFollowNotiId?fn='+notification.follow_noti_id)">거절</div>
 										<div></div>
 									</div>
-									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 2" @click.stop="fetchNoti('deleteFollowNoti?ui='+notification.user_id+'&ti='+notification.target_user_id)"><div>x</div></div>
+									<div class="hearder-delete-noti flexCenter" v-if="notification.follow_noti === 2" @click.stop="fetchNoti('deleteFollowNotiId?fn='+notification.follow_noti_id)"><div>x</div></div>
 								</div>
 							</div>
 						</Transition>

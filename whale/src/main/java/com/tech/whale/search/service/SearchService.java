@@ -3,6 +3,8 @@ package com.tech.whale.search.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,9 +103,9 @@ public class SearchService {
 		return resultList;
 	}
   
-	public List<FeedDto> getSearchFeedService(String keyword) {
+	public List<FeedDto> getSearchFeedService(String keyword, HttpSession session) {
 		List<FeedDto> resultList = new ArrayList<>();
-		List<FeedDto> feedLists = searchDao.selectSearchFeedInfo();
+		List<FeedDto> feedLists = searchDao.selectSearchFeedInfo((String) session.getAttribute("user_id"));
 
 		if (keyword == null || keyword.isEmpty()) {
 			return resultList;

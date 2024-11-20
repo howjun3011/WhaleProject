@@ -284,10 +284,6 @@
 		<include refid="includeBoardCnt" />
 		ORDER BY 
 		    DATE_FIELD
-
-
-
-
     </select>
     
     <select id="adminBoardList" resultType="com.tech.whale.admin.dto.AdminPFCDto">
@@ -346,10 +342,7 @@
 		) NUMBERDATA
 		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY DATE_FIELD DESC
-
-
 	</select>
-	
 	
 	<delete id="postDel">
 		DELETE FROM POST WHERE POST_ID = #{post_id}
@@ -620,10 +613,6 @@
 		<include refid="includeBoardCommentsCnt" />
 		ORDER BY 
 		    DATE_FIELD
-
-
-
-
     </select>
     
     <select id="adminBoardCommentsList" resultType="com.tech.whale.admin.dto.AdminPFCDto">
@@ -671,8 +660,6 @@
 		) NUMBERDATA
 		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY DATE_FIELD DESC
-
-
 	</select>
 	
 	<select id="comName" resultType="String">

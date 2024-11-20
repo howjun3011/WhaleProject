@@ -25,7 +25,6 @@
 	    </div>
 	    <br/>
 	</div>
-	
 </div>
 <script>
 	
@@ -33,83 +32,83 @@
     	
     	var musicLabels1 = [];
     	<c:forEach var="label" items="${musicLabels1}">
-    	musicLabels1.push('${label}');
+    	musicLabels1.push(`${label}`);
     	</c:forEach>
     	var musicValues1 = [];
     	<c:forEach var="value" items="${musicValues1}">
-    	musicValues1.push(${value});
+    	musicValues1.push(Number(${value}));
     	</c:forEach>
     	
     	var musicLabels2 = [];
     	<c:forEach var="label" items="${musicLabels2}">
-    	musicLabels2.push('${label}');
+    	musicLabels2.push(`${label}`);
     	</c:forEach>
     	var musicValues2 = [];
     	<c:forEach var="value" items="${musicValues2}">
-    	musicValues2.push(${value});
+    	musicValues2.push(Number(${value}));
     	</c:forEach>
     	
     	var musicLabels3 = [];
     	<c:forEach var="label" items="${musicLabels3}">
-    	musicLabels3.push('${label}');
+    	musicLabels3.push(`${label}`);
     	</c:forEach>
     	var musicValues3 = [];
     	<c:forEach var="value" items="${musicValues3}">
-    	musicValues3.push(${value});
+    	musicValues3.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels4 = [];
     	<c:forEach var="label" items="${musicLabels4}">
-    	musicLabels4.push('${label}');
+    	musicLabels4.push(`${label}`);
     	</c:forEach>
     	var musicValues4 = [];
     	<c:forEach var="value" items="${musicValues4}">
-    	musicValues4.push(${value});
+    	musicValues4.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels5 = [];
     	<c:forEach var="label" items="${musicLabels5}">
-    	musicLabels5.push('${label}');
+    	musicLabels5.push(`${label}`);
     	</c:forEach>
     	var musicValues5 = [];
     	<c:forEach var="value" items="${musicValues5}">
-    	musicValues5.push(${value});
+    	musicValues5.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels6 = [];
     	<c:forEach var="label" items="${musicLabels6}">
-    	musicLabels6.push('${label}');
+    	musicLabels6.push(`${label}`);
     	</c:forEach>
     	var musicValues6 = [];
     	<c:forEach var="value" items="${musicValues6}">
-    	musicValues6.push(${value});
+    	musicValues6.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels7 = [];
     	<c:forEach var="label" items="${musicLabels7}">
-    	musicLabels7.push('${label}');
+    	musicLabels7.push(`${label}`);
     	</c:forEach>
     	var musicValues7 = [];
     	<c:forEach var="value" items="${musicValues7}">
-    	musicValues7.push(${value});
+    	musicValues7.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels8 = [];
     	<c:forEach var="label" items="${musicLabels8}">
-    	musicLabels8.push('${label}');
+    	musicLabels8.push(`${label}`);
     	</c:forEach>
     	var musicValues8 = [];
     	<c:forEach var="value" items="${musicValues8}">
-    	musicValues8.push(${value});
+    	musicValues8.push(Number(${value}));
     	</c:forEach>  
     	
     	var musicLabels9 = [];
     	<c:forEach var="label" items="${musicLabels9}">
-    	musicLabels9.push('${label}');
+    	musicLabels9.push(`${label}`);
     	</c:forEach>
     	var musicValues9 = [];
     	<c:forEach var="value" items="${musicValues9}">
-    	musicValues9.push(${value});
+    	musicValues9.push(Number(${value}));
     	</c:forEach>  
     	
     	
@@ -182,7 +181,10 @@
     	        });
     	    });
     	
-    	
+    	    console.log('musicLabels1:', musicLabels1);
+    	    console.log('musicValues1:', musicValues1);
+
+    	    
         const ctx = document.getElementById('reportChart').getContext('2d');
         let chartData = {
                 labels: musicLabels1,

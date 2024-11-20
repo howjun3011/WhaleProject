@@ -69,10 +69,10 @@ public class SearchController {
     // [ 피드 검색 결과 송출 ]
     @GetMapping("/search/feed")
     @ResponseBody
-    public Map<String, Object> searchFeed(@RequestParam("keyword") String keyword) {
+    public Map<String, Object> searchFeed(@RequestParam("keyword") String keyword, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
         try {
-            List<FeedDto> feedList = searchService.getSearchFeedService(keyword);
+            List<FeedDto> feedList = searchService.getSearchFeedService(keyword,session);
             result.put("success", true);
             result.put("feedList", feedList);
         } catch (Exception e) {

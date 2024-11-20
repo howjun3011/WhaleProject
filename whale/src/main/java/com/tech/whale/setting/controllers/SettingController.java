@@ -179,7 +179,7 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-//      비공개 계정 설정 값 가져오기
+        // 비공개 계정 설정 값 가져오기
         userSettingDto = settingDao.getAccountPrivacyByUserId(session_user_id);
 
         model.addAttribute("accountPrivacyOn", userSettingDto.getAccount_privacy());
@@ -194,9 +194,13 @@ public class SettingController {
 
         String session_user_id = (String) session.getAttribute("user_id");
 
-        List<String> followList = settingDao.getFollowRequestList(session_user_id); // Follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
+        List<String> followList = settingDao.getFollowRequestList(session_user_id); // follow_noti 테이블에서 팔로우 요청 보낸 사람 리스트 가져오기
 
-        // 비공개 계정에서 공개로 전환할 경우 follow 테이블에 추가(상대방 팔로잉에 +1) + follow_noti 테이블에서 팔로우 요청 알림 삭제 + 상대방한테 follow_noti 알림 보내기 + 사용자한테 follow_noti 알림 보내기
+        // 비공개 계정에서 공개로 전환할 때, 기존에 사용자에게 팔로우 수락 요청을 보낸 사람이 있을 경우
+        // 1. 사용자 팔로워에 상대방 추가
+        // 2. 사용자에게 온 팔로우 수락 요청 알림 삭제
+        // 3. 상대방에게 사용자가 팔로우를 수락했다는 알림 보내기
+        // 4. 상대방의 팔로워 목록에 사용자가 없으면 상대방에게 맞팔로우 요청 알림 보내기
         for (String follow_id : followList) {
             mainService.privateFollowNotiMainService(session_user_id, follow_id);
         }

@@ -22,7 +22,7 @@
     	
     	var userLabels1 = [];
     	<c:forEach var="label" items="${userLabels1}">
-    	userLabels1.push('${label}');
+    	userLabels1.push(`${label}`);
     	</c:forEach>
     	var userValues1 = [];
     	<c:forEach var="value" items="${userValues1}">
@@ -32,7 +32,7 @@
     	
     	var userLabels2 = [];
     	<c:forEach var="label" items="${userLabels2}">
-    	userLabels2.push('${label}');
+    	userLabels2.push(`${label}`);
     	</c:forEach>
     	var userValues2 = [];
     	<c:forEach var="value" items="${userValues2}">

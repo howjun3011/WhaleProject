@@ -23,7 +23,7 @@
     	
     	var reportLabels1 = [];
     	<c:forEach var="label" items="${reportLabels1}">
-    	reportLabels1.push('${label}');
+    	reportLabels1.push(`${label}`);
     	</c:forEach>
     	var reportValues1 = [];
     	<c:forEach var="value" items="${reportValues1}">
@@ -33,7 +33,7 @@
     	
     	var reportLabels2 = [];
     	<c:forEach var="label" items="${reportLabels2}">
-    	reportLabels2.push('${label}');
+    	reportLabels2.push(`${label}`);
     	</c:forEach>
     	var reportValues2 = [];
     	<c:forEach var="value" items="${reportValues2}">
@@ -43,7 +43,7 @@
     	
     	var reportLabels3 = [];
     	<c:forEach var="label" items="${reportLabels3}">
-    	reportLabels3.push('${label}');
+    	reportLabels3.push(`${label}`);
     	</c:forEach>
     	var reportValues3 = [];
     	<c:forEach var="value" items="${reportValues3}">

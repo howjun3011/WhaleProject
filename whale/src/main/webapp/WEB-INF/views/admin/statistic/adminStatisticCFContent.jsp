@@ -76,7 +76,7 @@
     	
     	var cfLabels1 = [];
     	<c:forEach var="label" items="${cfLabels1}">
-    	cfLabels1.push('${label}');
+    	cfLabels1.push(`${label}`);
     	</c:forEach>
     	var cfValues1 = [];
     	<c:forEach var="value" items="${cfValues1}">
@@ -86,7 +86,7 @@
     	
     	var cfLabels2 = [];
     	<c:forEach var="label" items="${cfLabels2}">
-    	cfLabels2.push('${label}');
+    	cfLabels2.push(`${label}`);
     	</c:forEach>
     	var cfValues2 = [];
     	<c:forEach var="value" items="${cfValues2}">
@@ -96,7 +96,7 @@
     	
     	var cfLabels3 = [];
     	<c:forEach var="label" items="${cfLabels3}">
-    	cfLabels3.push('${label}');
+    	cfLabels3.push(`${label}`);
     	</c:forEach>
     	var cfValues3 = [];
     	<c:forEach var="value" items="${cfValues3}">
@@ -106,7 +106,7 @@
     	
     	var cfLabels4 = [];
     	<c:forEach var="label" items="${cfLabels4}">
-    	cfLabels4.push('${label}');
+    	cfLabels4.push(`${label}`);
     	</c:forEach>
     	var cfValues4 = [];
     	<c:forEach var="value" items="${cfValues4}">
@@ -116,7 +116,7 @@
     	
     	var cfLabels5 = [];
     	<c:forEach var="label" items="${cfLabels5}">
-    	cfLabels5.push('${label}');
+    	cfLabels5.push(`${label}`);
     	</c:forEach>
     	var cfValues5 = [];
     	<c:forEach var="value" items="${cfValues5}">
@@ -126,7 +126,7 @@
     	
     	var cfLabels6 = [];
     	<c:forEach var="label" items="${cfLabels6}">
-    	cfLabels6.push('${label}');
+    	cfLabels6.push(`${label}`);
     	</c:forEach>
     	var cfValues6 = [];
     	<c:forEach var="value" items="${cfValues6}">
@@ -136,7 +136,7 @@
     	
     	var cfLabels7 = [];
     	<c:forEach var="label" items="${cfLabels7}">
-    	cfLabels7.push('${label}');
+    	cfLabels7.push(`${label}`);
     	</c:forEach>
     	var cfValues7 = [];
     	<c:forEach var="value" items="${cfValues7}">
@@ -146,7 +146,7 @@
     	
     	var cfLabels8 = [];
     	<c:forEach var="label" items="${cfLabels8}">
-    	cfLabels8.push('${label}');
+    	cfLabels8.push(`${label}`);
     	</c:forEach>
     	var cfValues8 = [];
     	<c:forEach var="value" items="${cfValues8}">
@@ -156,7 +156,7 @@
     	
     	var cfLabels9 = [];
     	<c:forEach var="label" items="${cfLabels9}">
-    	cfLabels9.push('${label}');
+    	cfLabels9.push(`${label}`);
     	</c:forEach>
     	var cfValues9 = [];
     	<c:forEach var="value" items="${cfValues9}">
@@ -166,7 +166,7 @@
     	
     	var cfLabels10 = [];
     	<c:forEach var="label" items="${cfLabels10}">
-    	cfLabels10.push('${label}');
+    	cfLabels10.push(`${label}`);
     	</c:forEach>
     	var cfValues10 = [];
     	<c:forEach var="value" items="${cfValues10}">
@@ -176,7 +176,7 @@
     	
     	var cfLabels11 = [];
     	<c:forEach var="label" items="${cfLabels11}">
-    	cfLabels11.push('${label}');
+    	cfLabels11.push(`${label}`);
     	</c:forEach>
     	var cfValues11 = [];
     	<c:forEach var="value" items="${cfValues11}">
@@ -186,7 +186,7 @@
     	
     	var cfLabels12 = [];
     	<c:forEach var="label" items="${cfLabels12}">
-    	cfLabels12.push('${label}');
+    	cfLabels12.push(`${label}`);
     	</c:forEach>
     	var cfValues12 = [];
     	<c:forEach var="value" items="${cfValues12}">
@@ -196,7 +196,7 @@
     	
     	var cfLabels13 = [];
     	<c:forEach var="label" items="${cfLabels13}">
-    	cfLabels13.push('${label}');
+    	cfLabels13.push(`${label}`);
     	</c:forEach>
     	var cfValues13 = [];
     	<c:forEach var="value" items="${cfValues13}">

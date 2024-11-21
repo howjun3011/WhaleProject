@@ -609,8 +609,8 @@ public class SettingController {
     @Transactional
     public void deleteUserAndUpdateReferences(String userId) {
         String newUserId = "delete" + (int) (Math.random() * 100000);
-
         try {
+        	/*
             // 참조 테이블 데이터 임시 삭제
             userDao.deleteUserPageAccessSettingByUserId(userId);
             userDao.deleteUserNotiOnoffByUserId(userId);
@@ -654,6 +654,19 @@ public class SettingController {
 
             // jdbcTemplate.execute(enableFollowConstraintSql);
             jdbcTemplate.execute(enableMessageConstraintSql);
+            */
+            
+            
+            
+            // 탈퇴 재시도: 성공하자
+            String newPassword = "delete" + (int) (Math.random() * 100000);
+            
+            userDao.deleteUserById(userId);
+            userDao.deleteFollowNotiByUserId(userId);
+            userDao.insertDeleteUserInfo(newUserId, newPassword);
+            userDao.insertDeleteUserSetting(newUserId);
+            userDao.updateMessageUserId(newUserId, userId);
+            userDao.updateMessageRoomUserId(newUserId, userId);
         } catch (Exception e) {
             e.printStackTrace();
         }

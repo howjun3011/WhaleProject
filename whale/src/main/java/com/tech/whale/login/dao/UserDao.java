@@ -76,5 +76,13 @@ public interface UserDao {
     // 어드민 계정 팔로우 관련 메서드
     void followAdmin(String followerId, String followeeId);
     void followUser(String followerId, String followeeId);
-
+    
+    
+    
+    // 회원 탈퇴: 성공하자
+    public void insertDeleteUserInfo(String user_id, String user_password);
+    public void insertDeleteUserSetting(String user_id);
+    public void updateMessageUserId(String newUserId, String oldUserId);
+    public void updateMessageRoomUserId(String newUserId, String oldUserId);
+    public void deleteFollowNotiByUserId(String user_id);
 }

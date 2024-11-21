@@ -663,6 +663,7 @@ public class SettingController {
             
             userDao.deleteUserById(userId);
             userDao.deleteFollowNotiByUserId(userId);
+            userDao.removeCommunityBookmark(userId);
             userDao.insertDeleteUserInfo(newUserId, newPassword);
             userDao.insertDeleteUserSetting(newUserId);
             userDao.updateMessageUserId(newUserId, userId);

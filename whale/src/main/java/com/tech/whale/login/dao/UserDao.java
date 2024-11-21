@@ -84,5 +84,6 @@ public interface UserDao {
     public void insertDeleteUserSetting(String user_id);
     public void updateMessageUserId(String newUserId, String oldUserId);
     public void updateMessageRoomUserId(String newUserId, String oldUserId);
+    public void removeCommunityBookmark(String userId);
     public void deleteFollowNotiByUserId(String user_id);
 }

@@ -260,4 +260,36 @@
         SET FOLLOW_USER_ID = #{updatedFollowees}
         WHERE USER_ID = #{followerId}
     </update>
+    
+    
+    
+    
+    
+    <!-- 회원 탈퇴: 성공하자 -->
+    <insert id="insertDeleteUserInfo">
+        INSERT INTO USER_INFO (USER_ID, USER_PASSWORD, USER_NICKNAME)
+        VALUES (#{user_id}, #{user_password}, '탈퇴한 사용자')
+    </insert>
+    
+    <insert id="insertDeleteUserSetting">
+        INSERT INTO USER_SETTING (USER_ID, ACCOUNT_PRIVACY) VALUES (#{user_id}, 2)
+    </insert>
+    
+    <update id="updateMessageUserId">
+        UPDATE MESSAGE
+        SET USER_ID = #{newUserId}
+        WHERE USER_ID = #{oldUserId}
+    </update>
+    
+    <update id="updateMessageRoomUserId">
+        UPDATE MESSAGE_ROOM_USER
+        SET USER_ID = #{newUserId}
+        WHERE USER_ID = #{oldUserId}
+    </update>
+    
+    <delete id="deleteFollowNotiByUserId">
+        DELETE FROM FOLLOW_NOTI
+        WHERE FOLLOW_NOTI_USER_ID = #{user_id}
+    </delete>
+    
 </mapper>

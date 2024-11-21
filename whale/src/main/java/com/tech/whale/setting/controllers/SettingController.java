@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.tech.whale.login.dao.UserDao;
+import com.tech.whale.main.models.MainDao;
 import com.tech.whale.main.service.MainService;
 import com.tech.whale.setting.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -548,6 +549,8 @@ public class SettingController {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MainDao mainDao;
 
     @PostMapping("/deleteAccountMethod")
     @Transactional
@@ -615,19 +618,21 @@ public class SettingController {
             userDao.deleteUserSettingByUserId(userId);
             userDao.deleteUserProfileByUserId(userId);
             userDao.deleteUserFollowByUserId(userId);
-//            userDao.deleteUserIdInMessageByUserId(userId);
-//            userDao.deleteUserIdInMessageRoomUserByUserId(userId);
+            // userDao.deleteUserIdInMessageByUserId(userId);
+            // userDao.deleteUserIdInMessageRoomUserByUserId(userId);
+            mainDao.deleteFollowNotiUserId(userId);
+            mainDao.deleteFollowNotiTargetId(userId);
 
             // user_info 테이블의 user_id 업데이트
             String updateNicknameSql = "UPDATE user_info SET user_nickname = '탈퇴한 사용자' WHERE user_id = ?"; // JDBC를 이용한 강제 SQL 실행
             String updateStatusSql = "UPDATE user_info SET user_status = 2 WHERE user_id = ?";
             String updateEmailSql = "UPDATE user_info SET USER_EMAIL = '' WHERE user_id = ?";
-            String disableFollowConstraintSql = "ALTER TABLE FOLLOW_NOTI DISABLE CONSTRAINT SYS_C007581";
-            String enableFollowConstraintSql = "ALTER TABLE FOLLOW_NOTI ENABLE CONSTRAINT SYS_C007581";
+            // String disableFollowConstraintSql = "ALTER TABLE FOLLOW_NOTI DISABLE CONSTRAINT SYS_C007581";
+            // String enableFollowConstraintSql = "ALTER TABLE FOLLOW_NOTI ENABLE CONSTRAINT SYS_C007581";
             String disableMessageConstraintSql = "ALTER TABLE MESSAGE DISABLE CONSTRAINT MESSAGE6_FR_KEY";
             String enableMessageConstraintSql = "ALTER TABLE MESSAGE ENABLE CONSTRAINT MESSAGE6_FR_KEY";
 
-            jdbcTemplate.execute(disableFollowConstraintSql);
+            // jdbcTemplate.execute(disableFollowConstraintSql);
             jdbcTemplate.execute(disableMessageConstraintSql);
             jdbcTemplate.update(updateNicknameSql, userId);
             jdbcTemplate.update(updateStatusSql, userId);
@@ -642,12 +647,12 @@ public class SettingController {
             userDao.insertUserSettingByUserId(newUserId);
             userDao.insertUserProfileWithNewUserId(newUserId);
             userDao.insertUserFollowWithNewUserId(newUserId);
-//            userDao.insertUserIdInMessageWithNewUserId(newUserId);
-//            userDao.insertUserIdInMessageRoomUserWithNewUserId(newUserId);
+            // userDao.insertUserIdInMessageWithNewUserId(newUserId);
+            // userDao.insertUserIdInMessageRoomUserWithNewUserId(newUserId);
             userDao.changeUserIdInMessage(userId, newUserId);
             userDao.changeUserIdInMessageRoomUser(userId, newUserId);
 
-            jdbcTemplate.execute(enableFollowConstraintSql);
+            // jdbcTemplate.execute(enableFollowConstraintSql);
             jdbcTemplate.execute(enableMessageConstraintSql);
         } catch (Exception e) {
             e.printStackTrace();

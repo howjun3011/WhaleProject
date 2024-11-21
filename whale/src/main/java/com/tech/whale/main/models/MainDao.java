@@ -45,6 +45,8 @@ public interface MainDao {
 	public void deleteCommentsNoti(String comments_noti_id);
 	public void deleteFollowNoti(String userId, String targetId);
 	public void deleteFollowNotiId(String followNotiId);
+	public void deleteFollowNotiUserId(String userId);
+	public void deleteFollowNotiTargetId(String targetId);
 	public void deleteFollowNotiSetting(String userId);
 	public void deleteWhaleNoti(String whaleNotiId);
 }

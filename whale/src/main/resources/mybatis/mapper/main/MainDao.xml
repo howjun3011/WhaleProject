@@ -287,6 +287,14 @@
 		DELETE FROM FOLLOW_NOTI WHERE FOLLOW_NOTI_ID = #{followNotiId}
 	</delete>
 	
+	<delete id="deleteFollowNotiUserId">
+		DELETE FROM FOLLOW_NOTI WHERE FOLLOW_NOTI_USER_ID = #{userId}
+	</delete>
+	
+	<delete id="deleteFollowNotiTargetId">
+		DELETE FROM FOLLOW_NOTI WHERE FOLLOW_NOTI_USER_ID = #{targetId}
+	</delete>
+	
 	<delete id="deleteFollowNotiSetting">
 		DELETE FROM FOLLOW_NOTI WHERE USER_ID = #{userId} AND FOLLOW_NOTI = 1
 	</delete>

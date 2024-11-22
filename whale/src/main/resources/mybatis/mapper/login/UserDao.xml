@@ -287,6 +287,15 @@
         WHERE USER_ID = #{oldUserId}
     </update>
     
+    <update id="removeCommunityBookmark">
+	    UPDATE COMMUNITY
+	    SET COMMUNITY_FOLLOW = TRIM(',' FROM REPLACE(',' || COMMUNITY_FOLLOW || ',', ',' || #{userId} || ',', ','))
+	    WHERE COMMUNITY_FOLLOW LIKE '%,' || #{userId} || ',%'
+	           OR COMMUNITY_FOLLOW LIKE #{userId} || ',%'
+	           OR COMMUNITY_FOLLOW LIKE '%,' || #{userId}
+	           OR COMMUNITY_FOLLOW = #{userId}
+	</update>
+    
     <delete id="deleteFollowNotiByUserId">
         DELETE FROM FOLLOW_NOTI
         WHERE FOLLOW_NOTI_USER_ID = #{user_id}

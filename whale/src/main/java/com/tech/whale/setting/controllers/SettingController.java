@@ -661,8 +661,9 @@ public class SettingController {
             // 탈퇴 재시도: 성공하자
             String newPassword = "delete" + (int) (Math.random() * 100000);
             
-            userDao.deleteUserById(userId);
             userDao.deleteFollowNotiByUserId(userId);
+            userDao.deleteUserById(userId);
+            userDao.removeCommunityBookmark(userId);
             userDao.insertDeleteUserInfo(newUserId, newPassword);
             userDao.insertDeleteUserSetting(newUserId);
             userDao.updateMessageUserId(newUserId, userId);

@@ -146,7 +146,7 @@ const MainFooterComponent = {
 					if (this.startPage[0] === 0) {this.fetchIframe('leftIframe',sessionStorage.device_id);}
 					if (this.startPage[1] === 0) {this.fetchIframe('rightIframe',sessionStorage.device_id);}
 					
-					(async () => {try {await this.fetchWebApi(`v1/me/player`,'PUT',{ device_ids: [ sessionStorage.device_id ]});} catch(error) {}})();
+					(async () => {try {await this.fetchWebApi(`v1/me/player`,'PUT',{ device_ids: [ sessionStorage.device_id ] });} catch(error) {}})();
 					
 			        console.log('Ready with Device ID', device_id);
 			    });

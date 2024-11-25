@@ -21,15 +21,15 @@
     </script>
 </head>
 <body class="streamingBody">
-<div class="header">
-    <div class="headerItems">
+<div class="header flexCenter">
+    <div class="headerItems flexCenter">
         <button class="homeBtn">
             <button class="homeBtn" onclick="goMain()">
                 <img src="${pageContext.request.contextPath}/static/images/streaming/homeBtn.png"
                      alt="Music Whale Search Button" height="20px">
             </button>
         </button>
-        <div class="headerSearch">
+        <div class="headerSearch flexCenter">
             <button class="searchBtn" onclick="goSearch()">
                 <img src="${pageContext.request.contextPath}/static/images/streaming/searchBtn.png"
                      alt="Music Whale Search Button" height="14px">
@@ -40,7 +40,7 @@
     </div>
 </div>
 <div class="main">
-    <div class="mainLibraryFrame">
+    <div class="mainLibraryFrame flexCenter">
         <div class="mainLibrary">
             <svg id="toggleButton"
                  data-encore-id="icon"
@@ -55,7 +55,7 @@
             </svg>
             <p class="mainLibraryName">내 라이브러리</p>
             <div class="userPlaylists">
-                <div class="playlist-content" onclick="navigateToLikedTracks()">
+                <div class="playlist-content flexCenter" onclick="navigateToLikedTracks()">
                     <div class="playlistCover">
                         <img src="https://misc.scdn.co/liked-songs/liked-songs-64.png" alt="WHALE LIKE TRACK" width="45"
                              height="45"
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <c:forEach var="playlist" items="${userPlaylists}">
-                    <div class="playlist-content">
+                    <div class="playlist-content flexCenter">
                         <c:if test="${not empty playlist.images}">
                             <div class="playlistCover" onclick="playPlaylist('${playlist.id}')">
                                 <img src="${playlist.images[0].url}" alt="${playlist.name}" width="45" height="45"
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-    <div class="mainContentFrame">
+    <div class="mainContentFrame flexCenter">
         <div class="mainContent">
             <div class="mainContentMargin">
                 <div class="recommendationsHeader"></div>
@@ -94,7 +94,7 @@
                         <div class="recommendations">
                             <div class="recommendationTitle"><p class="titleName">내가 즐겨 듣는 노래</p></div>
                             <div class="recommendationWrapper">
-                                <button class="slideButton xButton left" id="scrollLeftBtn" onclick="scrollContent('.x0', 'left')">
+                                <button class="slideButton xButton left" onclick="scrollContent('.x0', 'left')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -112,7 +112,7 @@
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>
-                                            <div class="recommendationCover" onclick="navigateToDetail('${track.id}')">
+                                            <div class="recommendationCover flexCenter" onclick="navigateToDetail('${track.id}')">
                                                 <img src="${track.album.images[0].url}" alt="${track.name}" width="120"
                                                      height="120" style="border-radius: 8px;">
                                             </div>
@@ -130,7 +130,7 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <button class="slideButton xButton right" id="scrollRightBtn" onclick="scrollContent('.x0', 'right')">
+                                <button class="slideButton xButton right" onclick="scrollContent('.x0', 'right')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -139,17 +139,16 @@
                         </div>
                         <div class="recentlyPlayed">
                             <h3 class="recentlyPlayedTitle">최근 재생한 항목</h3>
-                            <div class="recentlyPlayedWrap">
-                                <button class="slideButton xButton left" id="scrollRecentlyPlayedLeftBtn"
-                                        onclick="scrollContent('.x1', 'left')">
+                            <div class="recentlyPlayedWrap flexCenter">
+                                <button class="slideButton xButton left" onclick="scrollContent('.x1', 'left')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
                                 </button>
-                                <div class="recentlyPlayedTracks x1">
+                                <div class="recommendationContents x1">
                                     <c:forEach var="playHistory" items="${recentlyPlayedTracks}">
-                                        <div class="recentlyPlayedTrack" data-track-id="${playHistory.track.id}">
-                                            <div class="recentlyPlayedTrackLike"
+                                        <div class="recommendationContent" data-track-id="${playHistory.track.id}">
+                                            <div class="recommendationLike"
                                                  onclick="insertTrackLike('<c:out value="${playHistory.track.album.images[0].url}"/>',
                                                  						  '<c:out value="${fn:escapeXml(playHistory.track.name)}"/>',
                                                  						  '<c:out value="${fn:escapeXml(playHistory.track.artists[0].name)}"/>',
@@ -160,19 +159,19 @@
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>
-                                            <div class="trackCover"
+                                            <div class="recommendationCover flexCenter"
                                                  onclick="navigateToDetail('${playHistory.track.id}')">
                                                 <img src="${playHistory.track.album.images[0].url}"
                                                      alt="${playHistory.track.name}" width="120" height="120"
                                                      style="border-radius: 8px;">
                                             </div>
-                                            <div class="recentlyPlayedTrackPlay"
+                                            <div class="recommendationPlay"
                                                  onclick="playTrack('${playHistory.track.id}')">
                                                 <img src="${pageContext.request.contextPath}/static/images/streaming/play.png"
                                                      alt="Like Button" width="30"
                                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                                             </div>
-                                            <div class="trackInfo">
+                                            <div class="recommendationInfo">
                                                 <p class="trackName"
                                                    onclick="navigateToDetail('${playHistory.track.id}')">${playHistory.track.name}</p>
                                                 <p class="artistName"
@@ -181,8 +180,7 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <button class="slideButton xButton right" id="scrollRecentlyPlayedRightBtn"
-                                        onclick="scrollContent('.x1', 'right')">
+                                <button class="slideButton xButton right" onclick="scrollContent('.x1', 'right')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Like Button" width="30"
                                          height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -190,31 +188,29 @@
                             </div>
                         </div>
                         <div class="featuredPlaylists">
-                            <h3 class="featuredPlaylistsTitle">추천 플레이리스트</h3>
-                            <div class="featuredPlaylistsWrap">
-                                <button class="slideButton xButton left" id="scrollFeaturedLeftBtn"
-                                        onclick="scrollContent('.x2', 'left')">
+                            <h3 class="recentlyPlayedTitle">추천 플레이리스트</h3>
+                            <div class="recentlyPlayedWrap flexCenter">
+                                <button class="slideButton xButton left" onclick="scrollContent('.x2', 'left')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Previous Button" width="30" height="30"
                                          style="border-radius: 8px; opacity: 0.75;">
                                 </button>
-                                <div class="featuredPlaylistsContent x2">
+                                <div class="recommendationContents x2">
                                     <c:forEach var="playlist" items="${featuredPlaylists}">
-                                        <div class="featuredPlaylist" data-playlist-id="${playlist.id}">
-                                            <div class="featuredPlaylistCover"
+                                        <div class="recommendationContent" data-playlist-id="${playlist.id}">
+                                            <div class="recommendationCover flexCenter"
                                                  onclick="playPlaylist('${playlist.id}')">
                                                 <img src="${playlist.images[0].url}" alt="${playlist.name}" width="120"
                                                      height="120" style="border-radius: 8px;">
                                             </div>
-                                            <div class="featuredPlaylistInfo">
-                                                <p class="playlistName"
+                                            <div class="recommendationInfo">
+                                                <p class="trackName"
                                                    onclick="playPlaylist('${playlist.id}')">${playlist.name}</p>
                                             </div>
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <button class="slideButton xButton right" id="scrollFeaturedRightBtn"
-                                        onclick="scrollContent('.x2', 'right')">
+                                <button class="slideButton xButton right" onclick="scrollContent('.x2', 'right')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Next Button" width="30" height="30"
                                          style="border-radius: 8px; opacity: 0.75;">
@@ -222,18 +218,17 @@
                             </div>
                         </div>
                         <div class="recommendedArtists">
-                            <h3 class="recommendedArtistsTitle">추천 아티스트</h3>
-                            <div class="recommendedArtistsWrap">
-                                <button class="slideButton xButton left" id="scrollRecommendedArtistsLeftBtn"
-                                        onclick="scrollContent('.x3', 'left')">
+                            <h3 class="recentlyPlayedTitle">추천 아티스트</h3>
+                            <div class="recentlyPlayedWrap flexCenter">
+                                <button class="slideButton xButton left" onclick="scrollContent('.x3', 'left')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                          alt="Previous Button" width="30" height="30"
                                          style="border-radius: 8px; opacity: 0.75;">
                                 </button>
-                                <div class="recommendedArtistsContainer x3">
+                                <div class="recommendationContents x3">
                                     <c:forEach var="artist" items="${recommendedArtists}">
-                                        <div class="artistItem" onclick="navigateToArtistDetail('${artist.id}')">
-                                            <div class="artistItemCover">
+                                        <div class="recommendationContent" onclick="navigateToArtistDetail('${artist.id}')">
+                                            <div class="recommendationCover flexCenter">
                                                 <c:if test="${not empty artist.images}">
                                                     <img src="${artist.images[0].url}" alt="${artist.name}" width="120"
                                                          height="120" style="border-radius: 50%;">
@@ -243,8 +238,7 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <button class="slideButton xButton right" id="scrollRecommendedArtistsRightBtn"
-                                        onclick="scrollContent('.x3', 'right')">
+                                <button class="slideButton xButton right" onclick="scrollContent('.x3', 'right')">
                                     <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                          alt="Next Button" width="30" height="30"
                                          style="border-radius: 8px; opacity: 0.75;">
@@ -291,7 +285,7 @@
                                           d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
                                 </svg>
                             </button>
-                            <div class="trackDetailLike" data-track-id="${trackDetail.id}"
+                            <div class="trackDetailLike flexCenter" data-track-id="${trackDetail.id}"
                                  onclick="insertTrackLike('<c:out
                                          value="${trackDetail.album.images[0].url}"/>', '<c:out
                                          value="${fn:escapeXml(trackDetail.name)}"/>', '<c:out
@@ -347,8 +341,7 @@
                         </div>
                         <div class="searchAlbumsContainer">
                             <h3 class="searchAlbumsContainerTitle">앨범</h3>
-                            <button class="searchAlbumsSlideButton xButton left" id="searchAlbumsScrollLeftBtn"
-                                    onclick="scrollContent('.x0', 'left')">
+                            <button class="searchAlbumsSlideButton xButton left" onclick="scrollContent('.x0', 'left')">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                      alt="Like Button" width="30"
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -370,24 +363,22 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <button class="searchAlbumsSlideButton xButton right" id="searchAlbumsScrollRightBtn"
-                                    onclick="scrollContent('.x0', 'right')">
+                            <button class="searchAlbumsSlideButton xButton right" onclick="scrollContent('.x0', 'right')">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                      alt="Like Button" width="30"
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                             </button>
                         </div>
-                        <div class="searchPlayListContainer">
-                            <h3 class="searchPlayListContainerTitle">관련된 플레이리스트</h3>
-                            <button class="searchAlbumsSlideButton xButton left" id="searchPlayListScrollLeftBtn"
-                                    onclick="scrollContent('.x1', 'left')">
+                        <div class="searchAlbumsContainer">
+                            <h3 class="searchAlbumsContainerTitle">관련된 플레이리스트</h3>
+                            <button class="searchAlbumsSlideButton xButton left" onclick="scrollContent('.x1', 'left')">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                      alt="Like Button" width="30"
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
                             </button>
-                            <div class="searchRelatedPlaylists x1">
+                            <div class="searchAlbumsWrap x1">
                                 <c:forEach var="playlist" items="${relatedPlaylists}">
-                                    <div class="searchPlaylistItem" style="cursor: pointer;">
+                                    <div class="searchAlbumsItem" style="cursor: pointer;">
                                         <c:if test="${not empty playlist.images}">
                                             <img src="${playlist.images[0].url}" alt="${playlist.name}"
                                                  width="150" height="150" style="border-radius: 4px;"
@@ -399,8 +390,7 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <button class="searchAlbumsSlideButton xButton right" id="searchPlayListScrollRightBtn"
-                                    onclick="scrollContent('.x1', 'right')">
+                            <button class="searchAlbumsSlideButton xButton right" onclick="scrollContent('.x1', 'right')">
                                 <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                      alt="Like Button" width="30"
                                      height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -494,8 +484,7 @@
                                     </div>
                                     <div class="albumsContainer">
                                         <h3 class="albumsContainerTitle">앨범</h3>
-                                        <button class="artistDetailSlideButton xButton left" id="artistDetailScrollLeftBtn"
-                                                onclick="scrollContent('.x0', 'left')">
+                                        <button class="artistDetailSlideButton xButton left" onclick="scrollContent('.x0', 'left')">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                                  alt="Like Button" width="30"
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -517,8 +506,7 @@
                                                 </div>
                                             </c:forEach>
                                         </div>
-                                        <button class="artistDetailSlideButton xButton right" id="artistDetailScrollRightBtn"
-                                                onclick="scrollContent('.x0', 'right')">
+                                        <button class="artistDetailSlideButton xButton right" onclick="scrollContent('.x0', 'right')">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                                  alt="Like Button" width="30"
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -531,16 +519,15 @@
                                         <%--                                        </c:forEach>--%>
                                         <%--                                    </div>--%>
                                     <div class="playListContainer">
-                                        <h3 class="playListContainerTitle">관련된 플레이리스트</h3>
-                                        <button class="playListSlideButton xButton left" id="playListScrollLeftBtn"
-                                                onclick="scrollContent('.x1', 'left')">
+                                        <h3 class="albumsContainerTitle">관련된 플레이리스트</h3>
+                                        <button class="artistDetailSlideButton xButton left" onclick="scrollContent('.x1', 'left')">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/prev.png"
                                                  alt="Like Button" width="30"
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
                                         </button>
-                                        <div class="relatedPlaylists x1">
+                                        <div class="albumsWrap x1">
                                             <c:forEach var="playlist" items="${relatedPlaylists}">
-                                                <div class="playlistItem" style="cursor: pointer;">
+                                                <div class="albumItem" style="cursor: pointer;">
                                                     <c:if test="${not empty playlist.images}">
                                                         <img src="${playlist.images[0].url}" alt="${playlist.name}"
                                                              width="150" height="150" style="border-radius: 4px;"
@@ -552,8 +539,7 @@
                                                 </div>
                                             </c:forEach>
                                         </div>
-                                        <button class="playListSlideButton xButton right" id="playListScrollRightBtn"
-                                                onclick="scrollContent('.x1', 'right')">
+                                        <button class="artistDetailSlideButton xButton right" onclick="scrollContent('.x1', 'right')">
                                             <img src="${pageContext.request.contextPath}/static/images/streaming/next.png"
                                                  alt="Like Button" width="30"
                                                  height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -854,7 +840,7 @@
             </div>
         </div>
     </div>
-    <div class="mainDetailFrame"></div>
+    <div class="mainDetailFrame flexCenter"></div>
 </div>
 <div class="footer"></div>
 </body>

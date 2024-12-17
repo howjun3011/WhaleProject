@@ -1,3 +1,4 @@
+<!-- 더미 데이터 -->
 <template>
     <div class="search-container">
         <h1>Search Home</h1>

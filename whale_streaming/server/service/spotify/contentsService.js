@@ -1,3 +1,4 @@
+// 메인 홈화면 정보를 요청하는 서비스
 const getUserTopItems = require('../../models/spotify/users/getUserTopItems');
 
 async function contentsService(req,res) {

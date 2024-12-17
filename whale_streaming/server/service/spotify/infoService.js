@@ -1,3 +1,4 @@
+// 디테일 뷰를 위한 정보를 요청하는 서비스
 const trackInfo = require('../../models/spotify/info/getTrackInfo');
 const artistInfo = require('../../models/spotify/info/getArtistInfo');
 const albumInfo = require('../../models/spotify/info/getAlbumInfo');

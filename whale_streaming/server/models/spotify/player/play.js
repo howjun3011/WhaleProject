@@ -1,3 +1,4 @@
+// 각기 다른 정보에 따라 재생 및 정지를 요청하는 함수
 const fetchSpotify = require('../dao/fetchSpotify');
 
 async function fetchWebApi(req, endpoint, method, body) {

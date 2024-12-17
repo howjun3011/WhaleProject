@@ -1,3 +1,4 @@
+// 검색 정보를 요청하는 함수
 const fetchSpotify = require('../dao/fetchSpotify');
 
 async function search(req,res){

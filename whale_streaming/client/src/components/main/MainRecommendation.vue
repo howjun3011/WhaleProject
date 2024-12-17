@@ -1,9 +1,11 @@
 <template>
+    <!-- 메인 홈화면 뷰 -->
     <div class="recommendationsHeader"></div>
+    <!-- 내가 즐겨 듣는 노래, 최근 재생한 항목 -->
     <div class="recommendations" v-for="i in 2" :key="i">
         <div v-if="recommendations[0] !== null">
             <!-- 왼쪽 버튼 -->
-            <button class="artistDetailSlideButton left" id="scrollLeftBtn" @click="scrollContent(`.x${i-1}`, 'left')">
+            <button class="artistDetailSlideButton left" @click="scrollContent(`.x${i-1}`, 'left')">
                 <img src="../../../public/images/main/prev.png"
                         alt="Left Button" width="30"
                         height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -37,9 +39,10 @@
             </button>
         </div>
     </div>
+    <!-- 추천 플레이리스트 -->
     <div class="recommendations" v-if="recommendations[0] !== null">
         <!-- 왼쪽 버튼 -->
-        <button class="artistDetailSlideButton left" id="scrollLeftBtn" @click="scrollContent(`.x2`, 'left')">
+        <button class="artistDetailSlideButton left" @click="scrollContent(`.x2`, 'left')">
             <img src="../../../public/images/main/prev.png"
                     alt="Left Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -62,9 +65,10 @@
                     height="30" style="border-radius: 8px; opacity: 0.75;">
         </button>
     </div>
+    <!-- 추천 아티스트 -->
     <div class="recommendations" v-if="recommendations[0] !== null" style="padding-bottom: 25px;">
         <!-- 왼쪽 버튼 -->
-        <button class="artistDetailSlideButton left" id="scrollLeftBtn" @click="scrollContent(`.x3`, 'left')">
+        <button class="artistDetailSlideButton left" @click="scrollContent(`.x3`, 'left')">
             <img src="../../../public/images/main/prev.png"
                     alt="Left Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -91,6 +95,11 @@
 
 <script>
 export default {
+    props: {
+        playPlayer: {type: Function, default() {return 'Default function'}},
+        scrollContent: {type: Function, default() {return 'Default function'}},
+        checkScroll: {type: Function, default() {return 'Default function'}},
+    },
     data() {
         return {
             recommendations: [],
@@ -135,47 +144,6 @@ export default {
         addIsShow(i,j) {
             this.isShow[i].push(false);
             return this.isShow[i][j];
-        },
-        async playPlayer(i) {
-            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
-        },
-        updateScrollButtons(containerSelector) {
-            const container = document.querySelector(containerSelector);
-            if (!container) return;
-
-            const scrollLeftBtn = container.parentNode.querySelector('.artistDetailSlideButton.left');
-            const scrollRightBtn = container.parentNode.querySelector('.artistDetailSlideButton.right');
-
-            if (container.scrollLeft > 0) {
-                scrollLeftBtn.classList.remove('hidden');
-            } else {
-                scrollLeftBtn.classList.add('hidden');
-            }
-
-            const maxScrollLeft = container.scrollWidth - container.clientWidth;
-            if (container.scrollLeft < maxScrollLeft) {
-                scrollRightBtn.classList.remove('hidden');
-            } else {
-                scrollRightBtn.classList.add('hidden');
-            }
-        },
-        scrollContent(containerSelector, direction) {
-            const container = document.querySelector(containerSelector);
-            if (!container) return;
-            
-            const scrollAmount = direction === 'left' ? -210 : 210;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
-            setTimeout(() => {
-                this.updateScrollButtons(containerSelector);
-            }, 300);
-        },
-        checkScroll(containerSelector) {
-            const container = document.querySelector(containerSelector);
-            if (container) {
-                this.updateScrollButtons(containerSelector);
-                container.addEventListener('scroll', () => this.updateScrollButtons(containerSelector));
-            }
         },
         redirectRouter(i,y) {
             this.$router.push(`/whale/streaming/detail/${i}/${y}`);

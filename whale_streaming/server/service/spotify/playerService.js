@@ -1,3 +1,4 @@
+// 재생 및 정지를 요청하는 서비스
 const play = require('../../models/spotify/player/play');
 
 async function playerService(req,res) {

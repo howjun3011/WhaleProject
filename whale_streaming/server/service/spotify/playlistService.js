@@ -1,3 +1,4 @@
+// 플레이리스트 정보를 요청하는 서비스
 const playlist = require('../../models/spotify/users/getPlaylist');
 
 async function playlistService(req,res) {

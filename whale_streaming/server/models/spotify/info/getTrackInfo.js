@@ -1,3 +1,4 @@
+// 트랙 정보를 요청하는 함수
 const fetchSpotify = require('../dao/fetchSpotify');
 
 async function getTrackInfo(req,res) {

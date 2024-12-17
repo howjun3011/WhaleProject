@@ -54,6 +54,10 @@
 
 <script>
 export default {
+    props: {
+        changeBackground: {type: Function, default() {return 'Default function'}},
+        playPlayer: {type: Function, default() {return 'Default function'}},
+    },
     data() {
         return {
             track: null,
@@ -88,21 +92,6 @@ export default {
                     this.getTrackLikeInfo(this.track.id);
 
                 });
-        },
-        async playPlayer(i) {
-            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
-        },
-        getRandomColor() {
-            // 랜덤 RGB 색상 생성 함수
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
-            console.log("Generated RGB values:", r, g, b);
-            return `rgb(${r}, ${g}, ${b})`;
-        },
-        changeBackground() {
-            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(17, 18, 17) 100%)`;}
-            else {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(249, 250, 249) 100%)`;}
         },
         redirectRouter(i,y) {
             this.$router.push(`/whale/streaming/detail/${i}/${y}`);

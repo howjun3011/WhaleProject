@@ -23,7 +23,7 @@ export default {
     this.getDarkMode();
   },
   methods: {
-    // [ Resize ]
+    // [ Resize 함수 ]
 		executeResize() {
       document.addEventListener("DOMContentLoaded", this.resize);
       window.addEventListener("resize", this.resize);
@@ -58,7 +58,7 @@ export default {
       }
     },
     
-    // [ Get the Data from the Parent Window ]
+    // [ 부모 창으로부터 데이터를 받는 함수 ]
     receiveMessageMain() {window.addEventListener("message", this.receiveMessage, false);},
 
     async receiveMessage(event) {
@@ -69,6 +69,7 @@ export default {
       else {await this.sendDeviceId(event);}
     },
 
+    // 디바이스 아이디를 Node.js 서버에 보내는 함수
     async sendDeviceId(event) {
         sessionStorage.device_id = event.data;
 
@@ -92,6 +93,7 @@ export default {
         .catch((error) => console.error("Failed to fetch the device_id: ", error));
     },
 
+    // 부모 창에서 Node.js 스트리밍 서비스를 열 때 원하는 창의 타입을 확인하는 함수
     checktype() {
       let type;
       let id;
@@ -115,6 +117,7 @@ export default {
         })
     },
 
+    // 다크 모드 정보를 확인하는 함수
     getDarkMode() {
       fetch(`http://localhost:9002/whale/main/getDarkMode?userId=${ sessionStorage.userId }`, {
             headers: {

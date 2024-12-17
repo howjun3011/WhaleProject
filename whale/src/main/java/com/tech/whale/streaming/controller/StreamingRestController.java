@@ -24,6 +24,7 @@ public class StreamingRestController {
 		this.streamingService = streamingService;
 	}
 	
+	// 현재 재생 중인 트랙 Whale DB에 입력하는 메서드
 	@PostMapping(value = "/streaming/currentTrackInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public HashMap<String, Object> currentTrackInfo(@RequestBody HashMap<String, Object> map, HttpSession session) {
 		HashMap<String, Object> response = new HashMap<>();
@@ -44,6 +45,19 @@ public class StreamingRestController {
     	else {response.put("result", "no"); return response;}
     }
 	
+	// 특정 트랙을 Whale DB에 입력하는 메서드
+    @PostMapping(value = "/streaming/insertTrackInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void insertTrackInfo(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	String artistName = map.get("artistName").toString();
+    	String trackName = map.get("trackName").toString();
+    	String albumName = map.get("albumName").toString();
+    	String albumCover = map.get("trackCover").toString();
+    	String trackSpotifyId = map.get("trackSpotifyId").toString();
+    	
+    	streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
+    }
+	
+	// Whale DB에 트랙 좋아요 입력 메서드
 	@PostMapping(value = "/streaming/insertTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
     public void insertTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	String artistName = map.get("artistName").toString();
@@ -56,6 +70,7 @@ public class StreamingRestController {
     	streamingService.insertTrackLikeService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 	
+	// Whale DB에 트랙 재생횟수 입력 메서드
 	@PostMapping(value = "/streaming/insertTrackCnt", produces = MediaType.APPLICATION_JSON_VALUE)
     public void insertTrackCnt(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	String artistName = map.get("artistName").toString();
@@ -64,10 +79,11 @@ public class StreamingRestController {
     	String albumCover = map.get("trackCover").toString();
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
     	
-    	// 트랙 아이디 반환 및 트랙 좋아요 테이블 삽입
+    	// 트랙 아이디 반환 및 트랙 재생횟수 테이블 삽입
     	streamingService.updateTrackCntService(session, trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 	
+	// Whale DB에 트랙 좋아요 삭제 메서드
 	@PostMapping(value = "/streaming/deleteTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deleteTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	String trackSpotifyId = map.get("trackSpotifyId").toString();
@@ -75,7 +91,7 @@ public class StreamingRestController {
     	streamingService.deleteTrackLikeService(session, trackSpotifyId);
     }
     
-	// 트랙 좋아요 숫자 반환
+	// 트랙 좋아요 숫자 반환 메서드
     @GetMapping(value = "/streaming/likeCnt", produces = MediaType.APPLICATION_JSON_VALUE)
     public HashMap<String, Object> LikeCnt(@RequestParam("userId") String userId) {
     	HashMap<String, Object> response = new HashMap<>();
@@ -83,20 +99,39 @@ public class StreamingRestController {
     	return response;
     }
     
-    // 트랙 좋아요 테이블 반환
+    // 트랙 좋아요 정보 반환 메서드
     @GetMapping(value = "/streaming/userLikeInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TrackDto> userLikeInfo(@RequestParam("userId") String userId) {
     	List<TrackDto> result = streamingService.getLikedTracks(userId);
     	return result;
     }
     
-    // 트랙 좋아요 확인
+    // 트랙 좋아요 확인 메서드
     @GetMapping(value = "/streaming/userLikeBoolInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public Boolean userLikeBoolInfo(@RequestParam("userId") String userId, @RequestParam("trackId") String trackId) {
     	return streamingService.getTrackLikeBoolService(userId, trackId);
     }
     
-    // 노드용
+    // 플레이리스트 추가 메서드
+    @GetMapping(value = "/streaming/followPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void followPlaylist(@RequestParam("id") String playlistId) {
+    	streamingService.followPlaylistService(playlistId);
+    }
+    
+    // 플레이리스트 삭제 메서드
+    @GetMapping(value = "/streaming/unfollowPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void unfollowPlaylist(@RequestParam("id") String playlistId) {
+    	streamingService.unfollowPlaylistService(playlistId);
+    }
+    
+    // 좋아요 전체 트랙 재생 메서드
+    @PostMapping(value = "/streaming/playAllLikeTrack", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void playAllLikeTrack(@RequestBody HashMap<String, Object> map, HttpSession session) {
+    	streamingService.playAllLikeTrackService(session, map.get("uris").toString());
+    }
+    
+    
+    // 노드용 메서드
     @PostMapping(value = "/streaming/insertTrackLikeNode", produces = MediaType.APPLICATION_JSON_VALUE)
     public void insertTrackLikeNode(@RequestBody HashMap<String, Object> map, HttpSession session) {
     	String userId = map.get("userId").toString();
@@ -114,35 +149,5 @@ public class StreamingRestController {
     public void deleteTrackLikeNode(@RequestParam("userId") String userId, @RequestParam("trackId") String trackId) {
     	// 트랙 좋아요 테이블 삭제
     	streamingService.deleteTrackLikeNodeService(userId, trackId);
-    }
-    
-    // 플레이리스트 추가 및 삭제
-    @GetMapping(value = "/streaming/followPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void followPlaylist(@RequestParam("id") String playlistId) {
-    	streamingService.followPlaylistService(playlistId);
-    }
-    
-    // 플레이리스트 추가 및 삭제
-    @GetMapping(value = "/streaming/unfollowPlaylist", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void unfollowPlaylist(@RequestParam("id") String playlistId) {
-    	streamingService.unfollowPlaylistService(playlistId);
-    }
-    
-    // 좋아요 전체 트랙 재생
-    @PostMapping(value = "/streaming/playAllLikeTrack", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void playAllLikeTrack(@RequestBody HashMap<String, Object> map, HttpSession session) {
-    	streamingService.playAllLikeTrackService(session, map.get("uris").toString());
-    }
-    
-    // 트랙 아이디 인서트
-    @PostMapping(value = "/streaming/insertTrackInfo", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void insertTrackInfo(@RequestBody HashMap<String, Object> map, HttpSession session) {
-    	String artistName = map.get("artistName").toString();
-    	String trackName = map.get("trackName").toString();
-    	String albumName = map.get("albumName").toString();
-    	String albumCover = map.get("trackCover").toString();
-    	String trackSpotifyId = map.get("trackSpotifyId").toString();
-    	
-    	streamingService.selectTrackIdService(trackSpotifyId, artistName, trackName, albumName, albumCover);
     }
 }

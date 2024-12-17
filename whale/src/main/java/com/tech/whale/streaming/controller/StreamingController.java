@@ -90,38 +90,9 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
-
-	// getDeviceId POST 요청 처리 메서드
-	@PostMapping("/streaming/getDeviceId")
-	public ResponseEntity<String> getDeviceId(HttpSession session) {
-		// 임시로 예시 ID 반환 또는 원하는 처리를 여기에 작성
-		return ResponseEntity.ok("Device ID가 성공적으로 생성되었습니다.");
-	}
-
-	// 음악 재생 메서드
-	@PostMapping("/streaming/playTrack")
-	public ResponseEntity<String> playTrack(HttpSession session, @RequestBody Map<String, String> body) {
-		String trackId = body.get("trackId");
-
-		// 트랙 재생 메서드 호출
-		boolean isPlayed = streamingService.playTrack(session, trackId);
-		if (isPlayed) {
-			return ResponseEntity.ok("Track is playing");
-		} else {
-			return ResponseEntity.status(500).body("Failed to play track");
-		}
-	}
-
-	// pauseTrack POST 요청 처리 메서드 추가
-	@PostMapping("/streaming/pauseTrack")
-	public ResponseEntity<Map<String, Boolean>> pauseTrack(HttpSession session) {
-		boolean isPaused = streamingService.pauseTrack(session);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("success", isPaused);
-		return isPaused ? ResponseEntity.ok(response) : ResponseEntity.status(500).body(response);
-	}
-
-
+	
+	
+	// [ 특정 페이지로 이동하는 메서드 ]
 	// 음악 상세 페이지로 이동
 	@RequestMapping("/streaming/detail")
 	public String musicDetail(@RequestParam("trackId") String trackId, HttpSession session, Model model) {
@@ -367,52 +338,7 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
-
-	// 전체 플레이리스트 재생 메서드
-	@PostMapping("/streaming/playAllPlaylist")
-	public ResponseEntity<String> playAllPlaylist(HttpSession session, @RequestBody Map<String, String> body) {
-		String playlistId = body.get("playlistId");
-
-		// 전체 재생 메서드 호출
-		boolean isPlayed = streamingService.playAllPlaylist(session, playlistId);
-		if (isPlayed) {
-			return ResponseEntity.ok("Playlist is playing");
-		} else {
-			return ResponseEntity.status(500).body("Failed to play playlist");
-		}
-	}
-
-	// 앨범 전체 재생 메서드
-	@PostMapping("/streaming/playAllAlbum")
-	@ResponseBody
-	public boolean playAllAlbum(@RequestParam String albumId, HttpSession session) {
-		return streamingService.playAllAlbum(session, albumId);
-	}
-
-
-	// 스트리밍 메인 좋아요 버튼
-	@PostMapping(value = "/streaming/toggleTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public HashMap<String, Object> toggleTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
-		HashMap<String, Object> response = new HashMap<>();
-		String trackSpotifyId = map.get("trackSpotifyId").toString();
-
-		boolean isLiked = streamingService.selectTrackLikeService(session, trackSpotifyId);
-
-		if (isLiked) {
-			streamingService.deleteTrackLikeService(session, trackSpotifyId);
-			response.put("result", "deleted");
-		} else {
-			streamingService.insertTrackLikeService(session, trackSpotifyId,
-					map.get("artistName").toString(),
-					map.get("trackName").toString(),
-					map.get("albumName").toString(),
-					map.get("trackCover").toString());
-			response.put("result", "inserted");
-		}
-		return response;
-	}
-
+	
 	// 좋아요 표시한 곡 페이지 메서드
 	@RequestMapping("/streaming/likedTracks")
 	public String likedTracks(HttpSession session, Model model) {
@@ -468,6 +394,84 @@ public class StreamingController {
 		System.out.println("page :" + model.getAttribute("page"));
 		return "streaming/streamingHome";
 	}
+	
+	
+	// [ 재생을 위한 메서드 ]
+	// 음악 재생 메서드
+	@PostMapping("/streaming/playTrack")
+	public ResponseEntity<String> playTrack(HttpSession session, @RequestBody Map<String, String> body) {
+		String trackId = body.get("trackId");
+
+		// 트랙 재생 메서드 호출
+		boolean isPlayed = streamingService.playTrack(session, trackId);
+		if (isPlayed) {
+			return ResponseEntity.ok("Track is playing");
+		} else {
+			return ResponseEntity.status(500).body("Failed to play track");
+		}
+	}
+
+	// pauseTrack POST 요청 처리 메서드 추가
+	@PostMapping("/streaming/pauseTrack")
+	public ResponseEntity<Map<String, Boolean>> pauseTrack(HttpSession session) {
+		boolean isPaused = streamingService.pauseTrack(session);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("success", isPaused);
+		return isPaused ? ResponseEntity.ok(response) : ResponseEntity.status(500).body(response);
+	}
+
+	// 전체 플레이리스트 재생 메서드
+	@PostMapping("/streaming/playAllPlaylist")
+	public ResponseEntity<String> playAllPlaylist(HttpSession session, @RequestBody Map<String, String> body) {
+		String playlistId = body.get("playlistId");
+
+		// 전체 재생 메서드 호출
+		boolean isPlayed = streamingService.playAllPlaylist(session, playlistId);
+		if (isPlayed) {
+			return ResponseEntity.ok("Playlist is playing");
+		} else {
+			return ResponseEntity.status(500).body("Failed to play playlist");
+		}
+	}
+
+	// 앨범 전체 재생 메서드
+	@PostMapping("/streaming/playAllAlbum")
+	@ResponseBody
+	public boolean playAllAlbum(@RequestParam String albumId, HttpSession session) {
+		return streamingService.playAllAlbum(session, albumId);
+	}
+	
+	
+	// [ 기타 ]
+	// getDeviceId POST 요청 처리 메서드
+	@PostMapping("/streaming/getDeviceId")
+	public ResponseEntity<String> getDeviceId(HttpSession session) {
+		// 임시로 예시 ID 반환 또는 원하는 처리를 여기에 작성
+		return ResponseEntity.ok("Device ID가 성공적으로 생성되었습니다.");
+	}
+
+	// 스트리밍 메인 좋아요 버튼
+	@PostMapping(value = "/streaming/toggleTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public HashMap<String, Object> toggleTrackLike(@RequestBody HashMap<String, Object> map, HttpSession session) {
+		HashMap<String, Object> response = new HashMap<>();
+		String trackSpotifyId = map.get("trackSpotifyId").toString();
+
+		boolean isLiked = streamingService.selectTrackLikeService(session, trackSpotifyId);
+
+		if (isLiked) {
+			streamingService.deleteTrackLikeService(session, trackSpotifyId);
+			response.put("result", "deleted");
+		} else {
+			streamingService.insertTrackLikeService(session, trackSpotifyId,
+					map.get("artistName").toString(),
+					map.get("trackName").toString(),
+					map.get("albumName").toString(),
+					map.get("trackCover").toString());
+			response.put("result", "inserted");
+		}
+		return response;
+	}
 
 	// 좋아요 상태 확인 메서드
 	@PostMapping(value = "/streaming/checkTrackLike", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -485,6 +489,5 @@ public class StreamingController {
 
 		return ResponseEntity.ok(response);
 	}
-
 
 }

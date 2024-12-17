@@ -51,6 +51,7 @@ public class StreamingService {
     @Autowired
     private StreamingDao streamingDao;
 
+    // [ Spotify API 관련 메서드 ]
     // Spotify API 초기화 메서드
     private void initializeSpotifyApi(HttpSession session) {
         String accessToken = (String) session.getAttribute("accessToken");
@@ -97,7 +98,9 @@ public class StreamingService {
             return false;
         }
     }
-
+    
+    
+    // [ Spotify API를 통해 정보를 가져오는 메서드 ]
     // Top 트랙 가져오기 비동기 메서드
     public CompletableFuture<Paging<Track>> getUsersTopTracksAsync(HttpSession session) {
         initializeSpotifyApi(session);
@@ -112,56 +115,7 @@ public class StreamingService {
             return null;
         });
     }
-
-    // 음악 재생 메서드
-    public boolean playTrack(HttpSession session, String trackId) {
-        initializeSpotifyApi(session);
-
-        try {
-            JsonArray uris = new JsonArray();
-            uris.add(new JsonPrimitive("spotify:track:" + trackId));
-
-            var playRequest = spotifyApi.startResumeUsersPlayback()
-                    .uris(uris);
-
-            // 재생 위치가 저장되어 있다면 해당 위치에서 재생 시작
-            if (currentPositionMs != null) {
-                playRequest = playRequest.position_ms(currentPositionMs);
-            }
-
-            playRequest.build().execute();
-
-            // 재생이 시작되면 위치 초기화
-            currentPositionMs = null;
-            return true;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to play track: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // 현재 재생 위치를 저장할 변수
-    private Integer currentPositionMs = null;
-
-    // 음악 일시정지 메서드 추가
-    public boolean pauseTrack(HttpSession session) {
-        initializeSpotifyApi(session);
-
-        try {
-            // 현재 재생 상태를 가져와 재생 위치 저장
-            var playbackState = spotifyApi.getInformationAboutUsersCurrentPlayback().build().execute();
-            if (playbackState != null && playbackState.getProgress_ms() != null) {
-                currentPositionMs = playbackState.getProgress_ms();
-            }
-
-            spotifyApi.pauseUsersPlayback().build().execute();
-            return true;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to pause track: " + e.getMessage());
-            return false;
-        }
-    }
-
+    
     // 트랙 세부정보 가져오는 메서드
     public Track getTrackDetail(HttpSession session, String trackId) {
         initializeSpotifyApi(session);
@@ -229,15 +183,15 @@ public class StreamingService {
     }
 
     // 연관된 아티스트 가져오기
-//    public Artist[] getRelatedArtists(HttpSession session, String artistId) {
-//        initializeSpotifyApi(session);
-//        try {
-//            return spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
-//        } catch (IOException | SpotifyWebApiException | ParseException e) {
-//            System.out.println("Failed to fetch related artists: " + e.getMessage());
-//            return null;
-//        }
-//    }
+    // public Artist[] getRelatedArtists(HttpSession session, String artistId) {
+    //     initializeSpotifyApi(session);
+    //     try {
+    //         return spotifyApi.getArtistsRelatedArtists(artistId).build().execute();
+    //     } catch (IOException | SpotifyWebApiException | ParseException e) {
+    //         System.out.println("Failed to fetch related artists: " + e.getMessage());
+    //         return null;
+    //     }
+    // }
 
     // 아티스트 관련 플레이리스트 가져오는 메서드
     public List<PlaylistSimplified> getRelatedPlaylists(String artistName, HttpSession session) {
@@ -347,215 +301,7 @@ public class StreamingService {
             return Collections.emptyList();
         }
     }
-
-    // 전체 플레이리스트 재생 메서드
-    public boolean playAllPlaylist(HttpSession session, String playlistId) {
-        initializeSpotifyApi(session);
-
-        try {
-            // 플레이리스트의 모든 트랙 가져오기
-            Playlist playlistDetail = spotifyApi.getPlaylist(playlistId).build().execute();
-            List<PlaylistTrack> playlistTracks = Arrays.asList(playlistDetail.getTracks().getItems());
-
-            // 각 PlaylistTrack의 실제 TrackSimplified 정보를 가져와 URI 배열 생성
-            JsonArray uris = new JsonArray();
-            for (PlaylistTrack playlistTrack : playlistTracks) {
-                if (playlistTrack.getTrack() instanceof Track) {
-                    Track track = (Track) playlistTrack.getTrack();
-                    uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
-                }
-            }
-
-            // 전체 재생 요청
-            var playRequest = spotifyApi.startResumeUsersPlayback()
-                    .uris(uris) // 전체 트랙 URI 리스트 전달
-                    .build();
-            playRequest.execute();
-
-            return true;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to play playlist: " + e.getMessage());
-            return false;
-        }
-    }
-
-
-    //-----------------------------------------------------------------------------------------------------
     
-    // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
-    public String selectTrackIdService(String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
-    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
-    	
-    	if(trackId != null) {return trackId;}
-    	else {
-    		streamingDao.insertTrack(trackSpotifyId, track_artist, track_name, track_album, track_cover);
-    		trackId = streamingDao.selectTrackId(trackSpotifyId);
-    		return trackId;
-    	}
-    }
-    
-    public TrackDto selectTrackDtoService(String trackSpotifyId) {
-    	TrackDto trackDto = streamingDao.selectTrackDto(trackSpotifyId);
-    	return trackDto;
-    }
-  
-    // 데이터 베이스에 트랙 좋아요 정보 입력 유무 확인
-    public boolean selectTrackLikeService(HttpSession session, String trackSpotifyId) {
-    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
-    	
-    	if(trackId != null) {
-    		Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
-    		
-    		if(trackLikeId != null) {return true;}
-        	else {return false;}
-    	} else {
-    		return false;
-    	}
-    }
-    
-    // 트랙 좋아요 인서트
-    public void insertTrackLikeService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
-    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
-    	streamingDao.insertTrackLike(trackId, (String) session.getAttribute("user_id"));
-    }
-    
-    // 트랙 좋아요 삭제
-    public void deleteTrackLikeService(HttpSession session, String trackSpotifyId) {
-    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
-    	Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
-    	streamingDao.deleteTrackLike(trackLikeId);
-    }
-    
-    // 트랙 재생횟수 인서트
-    public void updateTrackCntService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
-    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
-    	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
-    }
-    
-    // 좋아요 표시한 곡의 숫자
-    public Integer getLikeCountInfoService(String userId) {
-        return streamingDao.getLikeCountInfo(userId);
-    }
-    
-    // 해당 유저의 트랙 좋아요 확인
-    public Boolean getTrackLikeBoolService(String userId, String trackId) {
-    	Integer result = streamingDao.getTrackLikeCountInfo(userId, trackId);
-    	if (result > 0) {return true;}
-    	else {return false;}
-    }
-    
-    // 트랙 좋아요 인서트 노드용
-    public void insertTrackLikeNodeService(String userId, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
-    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
-    	streamingDao.insertTrackLike(trackId, userId);
-    }
-    
-    // 트랙 좋아요 삭제 노드용
-    public void deleteTrackLikeNodeService(String userId, String trackSpotifyId) {
-    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
-    	Integer trackLikeId = streamingDao.selectTrackLikeId(userId, trackId);
-    	streamingDao.deleteTrackLike(trackLikeId);
-    }
-    
-    // 플레이리스트 추가 및 삭제
-    public void followPlaylistService(String playlistId) {
-    	try {
-    		spotifyApi.followPlaylist(playlistId, true).build().execute();
-		} catch (Exception e) {
-		}
-    }
-    
-    public void unfollowPlaylistService(String playlistId) {
-    	try {
-    		spotifyApi.unfollowPlaylist(playlistId).build().execute();
-		} catch (Exception e) {
-		}
-    }
-    
-    // 좋아요 전체 재생
-    public void playAllLikeTrackService(HttpSession session, String uris) {
-        initializeSpotifyApi(session);
-        String[] urisArray = uris.split(",");
-
-        try {
-            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
-            JsonArray result = new JsonArray();
-            for (String track : urisArray) {
-            	result.add(new JsonPrimitive(track));
-            }
-
-            // 전체 재생 요청
-            var playRequest = spotifyApi.startResumeUsersPlayback()
-                    .uris(result) // 전체 트랙 URI 리스트 전달
-                    .build();
-            playRequest.execute();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to play album: " + e.getMessage());
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------------------
-
-    // 좋아요 표시한 곡
-    public List<TrackDto> getLikedTracks(String userId) {
-        return streamingDao.selectLikedTracks(userId);
-    }
-
-    // 최근 재생한 항목
-    public List<PlayHistory> getRecentlyPlayedTracks(HttpSession session) {
-        try {
-            SpotifyApi spotifyApi = new SpotifyApi.Builder()
-                    .setAccessToken((String) session.getAttribute("accessToken"))
-                    .build();
-
-            GetCurrentUsersRecentlyPlayedTracksRequest recentlyPlayedRequest = spotifyApi.getCurrentUsersRecentlyPlayedTracks()
-                    .limit(50) // 충분한 양의 데이터를 가져와서 필터링
-                    .build();
-
-            PagingCursorbased<PlayHistory> recentlyPlayedPaging = recentlyPlayedRequest.execute();
-
-            // 중복을 제거하기 위해 LinkedHashSet을 사용하여 순서를 유지하면서 중복 제거
-            Set<String> trackIds = new LinkedHashSet<>();
-            List<PlayHistory> uniqueRecentlyPlayed = Arrays.stream(recentlyPlayedPaging.getItems())
-                    .filter(playHistory -> trackIds.add(playHistory.getTrack().getId())) // track ID 기준 중복 제거
-                    .limit(10) // 상위 10개 항목만 가져옴
-                    .collect(Collectors.toList());
-
-            return uniqueRecentlyPlayed;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-    }
-
-    // 전체 앨범 재생 메서드
-    public boolean playAllAlbum(HttpSession session, String albumId) {
-        initializeSpotifyApi(session);
-
-        try {
-            // 앨범의 모든 트랙 가져오기
-            Paging<TrackSimplified> albumTracksPaging = spotifyApi.getAlbumsTracks(albumId).build().execute();
-            TrackSimplified[] albumTracks = albumTracksPaging.getItems();
-
-            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
-            JsonArray uris = new JsonArray();
-            for (TrackSimplified track : albumTracks) {
-                uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
-            }
-
-            // 전체 재생 요청
-            var playRequest = spotifyApi.startResumeUsersPlayback()
-                    .uris(uris) // 전체 트랙 URI 리스트 전달
-                    .build();
-            playRequest.execute();
-
-            return true;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Failed to play album: " + e.getMessage());
-            return false;
-        }
-    }
-
     // 추천 플레이리스트 가져오기
     public List<PlaylistSimplified> getFeaturedPlaylists(HttpSession session) {
         initializeSpotifyApi(session);
@@ -623,6 +369,33 @@ public class StreamingService {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    // 최근 재생한 항목
+    public List<PlayHistory> getRecentlyPlayedTracks(HttpSession session) {
+        try {
+            SpotifyApi spotifyApi = new SpotifyApi.Builder()
+                    .setAccessToken((String) session.getAttribute("accessToken"))
+                    .build();
+
+            GetCurrentUsersRecentlyPlayedTracksRequest recentlyPlayedRequest = spotifyApi.getCurrentUsersRecentlyPlayedTracks()
+                    .limit(50) // 충분한 양의 데이터를 가져와서 필터링
+                    .build();
+
+            PagingCursorbased<PlayHistory> recentlyPlayedPaging = recentlyPlayedRequest.execute();
+
+            // 중복을 제거하기 위해 LinkedHashSet을 사용하여 순서를 유지하면서 중복 제거
+            Set<String> trackIds = new LinkedHashSet<>();
+            List<PlayHistory> uniqueRecentlyPlayed = Arrays.stream(recentlyPlayedPaging.getItems())
+                    .filter(playHistory -> trackIds.add(playHistory.getTrack().getId())) // track ID 기준 중복 제거
+                    .limit(10) // 상위 10개 항목만 가져옴
+                    .collect(Collectors.toList());
+
+            return uniqueRecentlyPlayed;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     // 검색에서 가장 연관된 아티스트 가져오는 메서드
@@ -718,4 +491,236 @@ public class StreamingService {
             return -1;
         }
     }
+    
+    
+    // [ 음악 재생과 같은 상호작용을 위한 메서드 ]
+    // 음악 재생 메서드
+    public boolean playTrack(HttpSession session, String trackId) {
+        initializeSpotifyApi(session);
+
+        try {
+            JsonArray uris = new JsonArray();
+            uris.add(new JsonPrimitive("spotify:track:" + trackId));
+
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(uris);
+
+            // 재생 위치가 저장되어 있다면 해당 위치에서 재생 시작
+            if (currentPositionMs != null) {
+                playRequest = playRequest.position_ms(currentPositionMs);
+            }
+
+            playRequest.build().execute();
+
+            // 재생이 시작되면 위치 초기화
+            currentPositionMs = null;
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play track: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // 현재 재생 위치를 저장할 변수
+    private Integer currentPositionMs = null;
+
+    // 음악 일시정지 메서드 추가
+    public boolean pauseTrack(HttpSession session) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 현재 재생 상태를 가져와 재생 위치 저장
+            var playbackState = spotifyApi.getInformationAboutUsersCurrentPlayback().build().execute();
+            if (playbackState != null && playbackState.getProgress_ms() != null) {
+                currentPositionMs = playbackState.getProgress_ms();
+            }
+
+            spotifyApi.pauseUsersPlayback().build().execute();
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to pause track: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // 전체 플레이리스트 재생 메서드
+    public boolean playAllPlaylist(HttpSession session, String playlistId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 플레이리스트의 모든 트랙 가져오기
+            Playlist playlistDetail = spotifyApi.getPlaylist(playlistId).build().execute();
+            List<PlaylistTrack> playlistTracks = Arrays.asList(playlistDetail.getTracks().getItems());
+
+            // 각 PlaylistTrack의 실제 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray uris = new JsonArray();
+            for (PlaylistTrack playlistTrack : playlistTracks) {
+                if (playlistTrack.getTrack() instanceof Track) {
+                    Track track = (Track) playlistTrack.getTrack();
+                    uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
+                }
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(uris) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play playlist: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // 전체 앨범 재생 메서드
+    public boolean playAllAlbum(HttpSession session, String albumId) {
+        initializeSpotifyApi(session);
+
+        try {
+            // 앨범의 모든 트랙 가져오기
+            Paging<TrackSimplified> albumTracksPaging = spotifyApi.getAlbumsTracks(albumId).build().execute();
+            TrackSimplified[] albumTracks = albumTracksPaging.getItems();
+
+            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray uris = new JsonArray();
+            for (TrackSimplified track : albumTracks) {
+                uris.add(new JsonPrimitive("spotify:track:" + track.getId()));
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(uris) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+
+            return true;
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play album: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // 좋아요 전체 재생 메서드
+    public void playAllLikeTrackService(HttpSession session, String uris) {
+        initializeSpotifyApi(session);
+        String[] urisArray = uris.split(",");
+
+        try {
+            // 각 TrackSimplified 정보를 가져와 URI 배열 생성
+            JsonArray result = new JsonArray();
+            for (String track : urisArray) {
+            	result.add(new JsonPrimitive(track));
+            }
+
+            // 전체 재생 요청
+            var playRequest = spotifyApi.startResumeUsersPlayback()
+                    .uris(result) // 전체 트랙 URI 리스트 전달
+                    .build();
+            playRequest.execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Failed to play album: " + e.getMessage());
+        }
+    }
+    
+    // 플레이리스트 추가 및 삭제
+    public void followPlaylistService(String playlistId) {
+    	try {
+    		spotifyApi.followPlaylist(playlistId, true).build().execute();
+		} catch (Exception e) {
+		}
+    }
+    
+    public void unfollowPlaylistService(String playlistId) {
+    	try {
+    		spotifyApi.unfollowPlaylist(playlistId).build().execute();
+		} catch (Exception e) {
+		}
+    }
+    
+    
+    // [ Whale DB와 관련된 메서드 ]
+    // 데이터 베이스에 해당 트랙의 정보 입력 유무 확인 및 프라이머리 키 및 DTO 리턴
+    public String selectTrackIdService(String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
+    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	
+    	if(trackId != null) {return trackId;}
+    	else {
+    		streamingDao.insertTrack(trackSpotifyId, track_artist, track_name, track_album, track_cover);
+    		trackId = streamingDao.selectTrackId(trackSpotifyId);
+    		return trackId;
+    	}
+    }
+    
+    public TrackDto selectTrackDtoService(String trackSpotifyId) {
+    	TrackDto trackDto = streamingDao.selectTrackDto(trackSpotifyId);
+    	return trackDto;
+    }
+  
+    // 데이터 베이스에 트랙 좋아요 정보 입력 유무 확인
+    public boolean selectTrackLikeService(HttpSession session, String trackSpotifyId) {
+    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	
+    	if(trackId != null) {
+    		Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
+    		
+    		if(trackLikeId != null) {return true;}
+        	else {return false;}
+    	} else {
+    		return false;
+    	}
+    }
+    
+    // 트랙 좋아요 인서트
+    public void insertTrackLikeService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
+    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
+    	streamingDao.insertTrackLike(trackId, (String) session.getAttribute("user_id"));
+    }
+    
+    // 트랙 좋아요 삭제
+    public void deleteTrackLikeService(HttpSession session, String trackSpotifyId) {
+    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	Integer trackLikeId = streamingDao.selectTrackLikeId((String) session.getAttribute("user_id"), trackId);
+    	streamingDao.deleteTrackLike(trackLikeId);
+    }
+    
+    // 트랙 재생횟수 인서트
+    public void updateTrackCntService(HttpSession session, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
+    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
+    	streamingDao.insertTrackCnt(trackId, (String) session.getAttribute("user_id"));
+    }
+    
+    // 좋아요 표시한 곡의 숫자
+    public Integer getLikeCountInfoService(String userId) {
+        return streamingDao.getLikeCountInfo(userId);
+    }
+    
+    // 해당 유저의 트랙 좋아요 확인
+    public Boolean getTrackLikeBoolService(String userId, String trackId) {
+    	Integer result = streamingDao.getTrackLikeCountInfo(userId, trackId);
+    	if (result > 0) {return true;}
+    	else {return false;}
+    }
+    
+    // 좋아요 표시한 곡
+    public List<TrackDto> getLikedTracks(String userId) {
+        return streamingDao.selectLikedTracks(userId);
+    }
+    
+    
+    // [ 노드 스트리밍 서비스를 위한 메서드 ]
+    // 트랙 좋아요 인서트 노드용
+    public void insertTrackLikeNodeService(String userId, String trackSpotifyId, String track_artist, String track_name, String track_album, String track_cover) {
+    	String trackId = selectTrackIdService(trackSpotifyId, track_artist, track_name, track_album, track_cover);
+    	streamingDao.insertTrackLike(trackId, userId);
+    }
+    
+    // 트랙 좋아요 삭제 노드용
+    public void deleteTrackLikeNodeService(String userId, String trackSpotifyId) {
+    	String trackId = streamingDao.selectTrackId(trackSpotifyId);
+    	Integer trackLikeId = streamingDao.selectTrackLikeId(userId, trackId);
+    	streamingDao.deleteTrackLike(trackLikeId);
+    }
+
 }

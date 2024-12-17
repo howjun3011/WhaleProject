@@ -69,9 +69,11 @@ export default {
         this.getUserLikeCnt();
     },
     methods: {
+        // 라이브러리 창 확장 및 축소 함수
         expandLibrary() {
             this.isExpanded = !this.isExpanded;
         },
+        // Whale DB에 좋아요를 누른 트랙 수 확인 함수
         getUserLikeCnt() {
             fetch(`http://localhost:9002/whale/streaming/likeCnt?userId=${ sessionStorage.userId }`)
                 .then((response) => response.json())
@@ -79,6 +81,7 @@ export default {
                     this.likeCnt = data;
                 })
         },
+        // 플레이리스트 디테일 뷰로 이동하는 함수
         redirectPlaylist(i) {
             this.$router.push(`/whale/streaming/playlist/${ i }`);
         },

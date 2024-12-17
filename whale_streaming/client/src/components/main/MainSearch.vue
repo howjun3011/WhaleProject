@@ -86,6 +86,11 @@
 
 <script>
 export default {
+    props: {
+        playPlayer: {type: Function, default() {return 'Default function'}},
+        scrollContent: {type: Function, default() {return 'Default function'}},
+        checkScroll: {type: Function, default() {return 'Default function'}},
+    },
     data() {
         return {
             search: null,
@@ -106,47 +111,6 @@ export default {
                 });
             } else {
                 console.error('Failed to fetch user search items:', result.statusText);
-            }
-        },
-        async playPlayer(i) {
-            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
-        },
-        updateScrollButtons(containerSelector) {
-            const container = document.querySelector(containerSelector);
-            if (!container) return;
-
-            const scrollLeftBtn = container.parentNode.querySelector('.artistDetailSlideButton.left');
-            const scrollRightBtn = container.parentNode.querySelector('.artistDetailSlideButton.right');
-
-            if (container.scrollLeft > 0) {
-                scrollLeftBtn.classList.remove('hidden');
-            } else {
-                scrollLeftBtn.classList.add('hidden');
-            }
-
-            const maxScrollLeft = container.scrollWidth - container.clientWidth;
-            if (container.scrollLeft < maxScrollLeft) {
-                scrollRightBtn.classList.remove('hidden');
-            } else {
-                scrollRightBtn.classList.add('hidden');
-            }
-        },
-        scrollContent(containerSelector, direction) {
-            const container = document.querySelector(containerSelector);
-            if (!container) return;
-            
-            const scrollAmount = direction === 'left' ? -210 : 210;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
-            setTimeout(() => {
-                this.updateScrollButtons(containerSelector);
-            }, 300);
-        },
-        checkScroll(containerSelector) {
-            const container = document.querySelector(containerSelector);
-            if (container) {
-                this.updateScrollButtons(containerSelector);
-                container.addEventListener('scroll', () => this.updateScrollButtons(containerSelector));
             }
         },
         redirectRouter(i,y) {

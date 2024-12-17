@@ -64,27 +64,23 @@
     <div class="artistContainer" style="margin-top: 60px;" v-if="album !== null">
         <h3 class="artistFont">앨범</h3>
         <!-- 왼쪽 버튼 -->
-        <button class="artistDetailSlideButton left" id="artistDetailScrollLeftBtn"
-                @click="scrollLeftArtistDetailContent()">
+        <button class="artistDetailSlideButton left" @click="scrollContent(`.x0`, 'left')">
             <img src="../../../public/images/main/prev.png"
                     alt="Prev Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
         </button>
         <!-- 앨범 목록 -->
-        <div class="albums">
-            <div class="albumsWrap">
-                <div class="albumItem" v-for="(item, i) in album.items" :key="i">
-                    <img :src="item.images[0].url" :alt="item.name"
-                            width="150"
-                            height="150" style="border-radius: 4px; cursor: pointer;" @click="redirectRouter('album',item.id)">
-                    <p class="trackName" style="font-size: 14px; cursor: pointer;" @click="redirectRouter('album',item.id)">{{ item.name }}</p>
-                    <p class="trackName" style="font-size: 13px;">{{ item.release_date }}</p>
-                </div>
+        <div :class="`albumsWrap x0`">
+            <div class="albumItem" v-for="(item, i) in album.items" :key="i">
+                <img :src="item.images[0].url" :alt="item.name"
+                        width="150"
+                        height="150" style="border-radius: 4px; cursor: pointer;" @click="redirectRouter('album',item.id)">
+                <p class="trackName" style="font-size: 14px; cursor: pointer;" @click="redirectRouter('album',item.id)">{{ item.name }}</p>
+                <p class="trackName" style="font-size: 13px;">{{ item.release_date }}</p>
             </div>
         </div>
         <!-- 오른쪽 버튼 -->
-        <button class="artistDetailSlideButton right" id="artistDetailScrollRightBtn"
-                @click="scrollRightArtistDetailContent()">
+        <button class="artistDetailSlideButton right" @click="scrollContent(`.x0`, 'right')">
             <img src="../../../public/images/main/next.png"
                     alt="Next Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -93,13 +89,12 @@
     <div class="artistContainer" style="margin-top: 60px; padding-bottom: 50px;" v-if="playlist !== null">
         <h3 class="artistFont">관련된 플레이리스트</h3>
         <!-- 왼쪽 버튼 -->
-        <button class="artistDetailSlideButton left" id="playListScrollLeftBtn"
-                @click="scrollLeftPlayListContent()">
+        <button class="artistDetailSlideButton left" @click="scrollContent(`.x1`, 'left')">
             <img src="../../../public/images/main/prev.png"
                     alt="Prev Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
         </button>
-        <div class="relatedPlaylists">
+        <div :class="`relatedPlaylists x1`">
             <div class="playlistItem" v-for="(item, i) in playlist.playlists.items" :key="i">
                 <img :src="item.images[0].url" :alt="item.name"
                         width="150" height="150" style="border-radius: 4px; cursor: pointer;" @click="redirectPlaylistRouter(item.id)">
@@ -107,8 +102,7 @@
             </div>
         </div>
         <!-- 오른쪽 버튼 -->
-        <button class="artistDetailSlideButton right" id="playListScrollRightBtn"
-                @click="scrollRightPlayListContent()">
+        <button class="artistDetailSlideButton right" @click="scrollContent(`.x1`, 'right')">
             <img src="../../../public/images/main/next.png"
                     alt="Next Button" width="30"
                     height="30" style="border-radius: 8px; opacity: 0.75;">
@@ -118,6 +112,13 @@
 
 <script>
 export default {
+    props: {
+        playPlayer: {type: Function, default() {return 'Default function'}},
+        changeBackground: {type: Function, default() {return 'Default function'}},
+        updateScrollButtons: {type: Function, default() {return 'Default function'}},
+        scrollContent: {type: Function, default() {return 'Default function'}},
+        checkScroll: {type: Function, default() {return 'Default function'}},
+    },
     data() {
         return {
             track: null,
@@ -154,7 +155,7 @@ export default {
                     .then((data) => {
                         this.album = data;
                         this.$nextTick(() => {
-                            this.checkArtistDetailScroll();
+                            this.checkScroll('.x0');
                         });
                     })
                 fetch(`/whale/streaming/getArtistPlaylist?q=${ this.artist.name }&t=playlist`)
@@ -162,7 +163,7 @@ export default {
                     .then((data) => {
                         this.playlist = data;
                         this.$nextTick(() => {
-                            this.checkArtistDetailPlaylistScroll();
+                            this.checkScroll('.x1');
                         });
                     })
 
@@ -170,104 +171,11 @@ export default {
                 console.error('Failed to fetch user top items:', result.statusText);
             }
         },
-        async playPlayer(i) {
-            await fetch(`/whale/streaming/play?uri=${ i }&device_id=${ sessionStorage.device_id }`);
-        },
-        getRandomColor() {
-            // 랜덤 RGB 색상 생성 함수
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
-            console.log("Generated RGB values:", r, g, b);
-            return `rgb(${r}, ${g}, ${b})`;
-        },
-        changeBackground() {
-            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(17, 18, 17) 100%)`;}
-            else {document.querySelector('.mainContent').style.backgroundImage = `linear-gradient(${this.getRandomColor()} 0%, rgb(249, 250, 249) 100%)`;}
-        },
         addIsShow(i) {
             this.isPlayed.push(false);
             this.isShow.push(false);
             this.position.push(0);
             return this.isShow[i];
-        },
-        updateArtistDetailScrollButtons() {
-            const container = document.querySelector('.albumsWrap');
-            const scrollLeftBtn = document.getElementById('artistDetailScrollLeftBtn');
-            const scrollRightBtn = document.getElementById('artistDetailScrollRightBtn');
-
-            if (container) {
-                // 왼쪽 버튼 보이기/숨기기
-                if (container.scrollLeft > 0) {
-                    scrollLeftBtn.classList.remove('hidden');
-                } else {
-                    scrollLeftBtn.classList.add('hidden');
-                }
-
-                // 오른쪽 버튼 보이기/숨기기
-                const maxScrollLeft = container.scrollWidth - container.clientWidth;
-                if (container.scrollLeft < maxScrollLeft) {
-                    scrollRightBtn.classList.remove('hidden');
-                } else {
-                    scrollRightBtn.classList.add('hidden');
-                }
-            }
-        },
-        scrollLeftArtistDetailContent() {
-            const container = document.querySelector('.albumsWrap');
-            container.scrollBy({ left: -210, behavior: 'smooth' });
-            setTimeout(this.updateArtistDetailScrollButtons, 300); // 스크롤 후 버튼 업데이트
-        },
-        scrollRightArtistDetailContent() {
-            const container = document.querySelector('.albumsWrap');
-            container.scrollBy({ left: 210, behavior: 'smooth' });
-            setTimeout(this.updateArtistDetailScrollButtons, 300); // 스크롤 후 버튼 업데이트
-        },
-        checkArtistDetailScroll() {
-            this.updateArtistDetailScrollButtons();
-            const container = document.querySelector('.albumsWrap');
-            if (container) {
-                container.addEventListener('scroll', this.updateArtistDetailScrollButtons); // 스크롤 이벤트 감지
-            }
-        },
-        updatePlayListScrollButtons() {
-            const container = document.querySelector('.relatedPlaylists');
-            const scrollLeftBtn = document.getElementById('playListScrollLeftBtn');
-            const scrollRightBtn = document.getElementById('playListScrollRightBtn');
-
-            if (container) {
-                // 왼쪽 버튼 보이기/숨기기
-                if (container.scrollLeft > 0) {
-                    scrollLeftBtn.classList.remove('hidden');
-                } else {
-                    scrollLeftBtn.classList.add('hidden');
-                }
-
-                // 오른쪽 버튼 보이기/숨기기
-                const maxScrollLeft = container.scrollWidth - container.clientWidth;
-                if (container.scrollLeft < maxScrollLeft) {
-                    scrollRightBtn.classList.remove('hidden');
-                } else {
-                    scrollRightBtn.classList.add('hidden');
-                }
-            }
-        },
-        scrollLeftPlayListContent() {
-            const container = document.querySelector('.relatedPlaylists');
-            container.scrollBy({ left: -210, behavior: 'smooth' });
-            setTimeout(this.updatePlayListScrollButtons, 300); // 스크롤 후 버튼 업데이트
-        },
-        scrollRightPlayListContent() {
-            const container = document.querySelector('.relatedPlaylists');
-            container.scrollBy({ left: 210, behavior: 'smooth' });
-            setTimeout(this.updatePlayListScrollButtons, 300); // 스크롤 후 버튼 업데이트
-        },
-        checkArtistDetailPlaylistScroll() {
-            this.updatePlayListScrollButtons();
-            const container = document.querySelector('.relatedPlaylists');
-            if (container) {
-                container.addEventListener('scroll', this.updatePlayListScrollButtons); // 스크롤 이벤트 감지
-            }
         },
         redirectRouter(i,y) {
             this.$router.push(`/whale/streaming/detail/${i}/${y}`);

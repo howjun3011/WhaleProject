@@ -28,15 +28,14 @@ export default {
         this.checkEnter();
     },
     methods: {
+        // 메인 화면으로 이동하는 함수
         goMain() {this.$router.push('/whale/streaming/recommend'); this.changeBackground();},
+        // 검색 홈화면으로 이동하는 함수
         // goSearchHome() {this.$router.push(`/whale/streaming/searchHome`); this.changeBackground();},
+        // 검색 결과 화면으로 이동하는 함수
         goSearch() {this.$router.push(`/whale/streaming/search/${ this.query }`); this.changeBackground();},
-        changeBackground() {
-            document.querySelector('.mainContent').style.backgroundImage = '';
-            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundColor = '#2e2e2e';}
-            else {document.querySelector('.mainContent').style.backgroundColor = '#fff';}
-        },
-        // 엔터 키 입력 시 검색 실행
+
+        // 엔터 키 입력 시 검색 실행하는 함수
         checkEnter() {
             const headerInput = document.querySelector('.headerInput');
 
@@ -46,7 +45,15 @@ export default {
                 }
             });
         },
+        // 뒤로 이동시키는 함수
         backRouter() {this.$router.go(-1)},
+
+        // 메인 화면 및 검색 화면으로 이동할시 배경 색을 변경시키는 함수
+        changeBackground() {
+            document.querySelector('.mainContent').style.backgroundImage = '';
+            if (localStorage.getItem('darkmodeOn') === "1") {document.querySelector('.mainContent').style.backgroundColor = '#2e2e2e';}
+            else {document.querySelector('.mainContent').style.backgroundColor = '#fff';}
+        },
     },
 };
 </script>

@@ -1,3 +1,4 @@
+// 유저 관련 트랙 정보를 요청하는 함수
 const fetchSpotify = require('../dao/fetchSpotify');
 
 async function getUserTopItems(req,res) {
